@@ -1,0 +1,16 @@
+{
+    "name": "{{ appointmentsVersion }}",
+    "config": {
+        "main" : "fr.openent.appointments.Appointments",
+        "port" : 8483,
+        "app-name" : "Appointments",
+        "app-address" : "/appointments",
+        "app-icon" : "Appointments-large",
+        "host": "https://{{ host }}",
+        "ssl" : true,
+        "sql" : true,
+        "auto-redeploy": false,
+        "integration-mode" : "HTTP",
+        "app-registry.port" : 8012
+    }
+}

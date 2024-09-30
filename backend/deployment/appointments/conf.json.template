@@ -1,0 +1,19 @@
+{
+  "name": "fr.openent~appointments~0.1-SNAPSHOT",
+    "config": {
+      "main":"fr.openent.appointments.Appointments",
+      "port": 8364,
+      "app-name" : "Appointments",
+      "app-address" : "/appointments",
+      "app-icon" : "${host}/appointments/public/img/logo-appointments.svg",
+      "host": "${host}",
+      "ssl" : $ssl,
+      "sql" : true,
+      "auto-redeploy": false,
+      "userbook-host": "${host}",
+      "integration-mode" : "HTTP",
+      "app-registry.port" : 8012,
+      "mode": "${mode}",
+      "entcore.port" : 8009
+    }
+}
