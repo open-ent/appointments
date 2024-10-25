@@ -52,10 +52,10 @@ public class GridPayload implements IModel<GridPayload> {
 
         this.dailySlots = IModelHelper.toList(grid.getJsonArray(Fields.CAMEL_DAILY_SLOTS, new JsonArray()), DailySlot.class);
 
-        this.visioLink = grid.getString(Fields.CAMEL_VISIO_LINK);
-        this.place = grid.getString(Fields.PLACE);
-        this.documentId = grid.getString(Fields.CAMEL_DOCUMENT_ID);
-        this.publicComment = grid.getString(Fields.CAMEL_PUBLIC_COMMENT);
+        this.visioLink = grid.getString(Fields.CAMEL_VISIO_LINK, "");
+        this.place = grid.getString(Fields.PLACE, "");
+        this.documentId = grid.getString(Fields.CAMEL_DOCUMENT_ID, "");
+        this.publicComment = grid.getString(Fields.CAMEL_PUBLIC_COMMENT, "");
     }
 
     public boolean isValid() {

@@ -9,15 +9,15 @@ import java.time.LocalTime;
 import io.vertx.core.json.JsonObject;
 
 public class DailySlot implements IModel<DailySlot> {
-    
+
     private Day day;
     private LocalTime beginTime;
     private LocalTime endTime;
 
     public DailySlot(JsonObject dailySlot){
         this.day = Day.getDay(dailySlot.getString(Fields.DAY, ""));
-        this.beginTime = LocalTime.parse(dailySlot.getString(Fields.CAMEL_BEGIN_TIME, ""));
-        this.endTime = LocalTime.parse(dailySlot.getString(Fields.CAMEL_END_TIME, ""));
+        this.beginTime = DateHelper.parseTime(dailySlot.getString(Fields.CAMEL_BEGIN_TIME, ""));
+        this.endTime = DateHelper.parseTime(dailySlot.getString(Fields.CAMEL_END_TIME, ""));
     }
 
     public boolean isValid() {

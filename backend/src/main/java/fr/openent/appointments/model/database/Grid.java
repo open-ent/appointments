@@ -1,4 +1,4 @@
-package fr.openent.appointments.model.bdd;
+package fr.openent.appointments.model.database;
 
 import java.util.stream.Collectors;
 import java.util.List;
@@ -162,7 +162,7 @@ public class Grid implements IModel<Grid> {
     public Grid setPublicComment(String publicComment) {
         this.publicComment = publicComment;
         return this;
-    } 
+    }
 
     public JsonObject toJson() {
         return IModelHelper.toJson(this, true, true);

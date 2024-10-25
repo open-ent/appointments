@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(VertxUnitRunner.class)
-public class AppointmentsControllerTest {
+public class MainControllerTest {
     @Test
     public void test(TestContext ctx) {
         Async async = ctx.async();

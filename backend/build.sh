@@ -65,6 +65,16 @@ function publish() {
   echo "Publish done!"
 }
 
+function test() {
+  echo "Testing..."
+  if [ "$NO_DOCKER" = "true" ] ; then
+    gradle test
+  else
+    docker-compose run --rm -u "$USER_UID:$GROUP_GID" gradle gradle test
+  fi
+  echo "Test done!"
+}
+
 for param in "$@"
 do
   case $param in
@@ -76,6 +86,9 @@ do
       ;;
     publish)
       publish
+      ;;
+    test)
+      test
       ;;
     *)
       echo "Invalid argument : $param"

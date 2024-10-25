@@ -26,6 +26,7 @@ public class Fields {
     public static final String TARGET_PUBLIC_LIST_ID = "target_public_list_id";
     public static final String TIME_SLOT_ID = "time_slot_id";
     public static final String VISIO_LINK = "visio_link";
+    public static final String USER_ID = "user_id";
 
     public static final String CAMEL_ACTOR_ID = "actorId";
     public static final String CAMEL_BEGIN_DATE = "beginDate";
@@ -42,7 +43,10 @@ public class Fields {
     public static final String CAMEL_TARGET_PUBLIC_LIST_ID = "targetPublicListId";
     public static final String CAMEL_TIME_SLOT_ID = "timeSlotId";
     public static final String CAMEL_VISIO_LINK = "visioLink";
+    public static final String CAMEL_USER_ID = "userId";
 
+    public static final String APPOINTMENTS_ADRESS = "fr.openent.appointments";
+    public static final String PREPARDED = "prepared";
     public static final String ACTION = "action";
     public static final String STATEMENT = "statement";
     public static final String VALUES = "values";
