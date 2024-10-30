@@ -231,7 +231,7 @@ public class DefaultGridRepositoryTest {
             ctx.assertEquals(expectedQuery, queryResult);
             ctx.assertEquals(expectedParams.toString(), paramsResult.toString());
             return null;
-        }).when(sql).prepared(anyString(), any(JsonArray.class), any());
+        }).when(sql).prepared(anyString(), any(JsonArray.class), any(Handler.class));
 
         try {
             Whitebox.invokeMethod(gridRepository, "insert", grid, USER_ID);
@@ -287,7 +287,7 @@ public class DefaultGridRepositoryTest {
                 ctx.assertEquals(expectedParamsList.get(i).toString(), paramsResult.toString());
             }
             return null;
-        }).when(sql).prepared(anyString(), any(JsonArray.class), any());
+        }).when(sql).prepared(anyString(), any(JsonArray.class), any(Handler.class));
 
         try {
             Whitebox.invokeMethod(gridRepository, "insertDailySlots", gridId, dailySlots);

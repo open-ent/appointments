@@ -6,6 +6,7 @@ import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.service.ServiceFactory;
 import fr.openent.appointments.controller.CommunicationController;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.Promise;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.neo4j.Neo4j;
 import org.entcore.common.http.BaseServer;
@@ -13,8 +14,8 @@ import org.entcore.common.http.BaseServer;
 public class Appointments extends BaseServer {
 
     @Override
-    public void start() throws Exception {
-        super.start();
+    public void start(Promise<Void> startPromise) throws Exception {
+        super.start(startPromise);
 
         EventBus eb = getEventBus(vertx);
 
@@ -27,5 +28,7 @@ public class Appointments extends BaseServer {
         addController(new MainController());
         addController(new GridController(serviceFactory));
         addController(new CommunicationController(serviceFactory));
+        startPromise.tryComplete();
+		startPromise.tryFail("[Appointments@Appointments::start] Fail to start Appointments");
     }
 }

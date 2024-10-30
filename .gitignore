@@ -19,6 +19,9 @@ cacerts
 coverage/
 /package-lock.json
 /yarn.lock
+.env
+target
+dependency-reduced-pom.xml
 
 # BACKEND
 /backend/.DS_Store
