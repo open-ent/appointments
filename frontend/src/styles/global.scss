@@ -1,0 +1,14 @@
+body {
+  min-width: inherit;
+  width: auto;
+}
+
+main {
+  &.container-fluid {
+    max-width: none;
+    margin: 0;
+    --edifice-container-width: 100%;
+    padding: 3rem 5rem;
+    background-color: #eef0f3 !important;
+  }
+}

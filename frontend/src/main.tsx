@@ -2,6 +2,9 @@ import React from "react";
 
 import "~/i18n";
 import { OdeClientProvider, ThemeProvider } from "@edifice-ui/react";
+import { ThemeProvider as ThemeProviderMUI } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   QueryCache,
   QueryClient,
@@ -12,8 +15,11 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 
+import { GlobalProvider } from "./providers/GlobalProvider";
+import { GridModalProvider } from "./providers/GridModalProvider";
 import { router } from "./routes";
 import { setupStore } from "./store";
+import theme from "./styles/theme";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement!);
@@ -50,7 +56,15 @@ root.render(
         }}
       >
         <ThemeProvider>
-          <RouterProvider router={router} />
+          <ThemeProviderMUI theme={theme}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
+              <GlobalProvider>
+                <GridModalProvider>
+                  <RouterProvider router={router} />
+                </GridModalProvider>
+              </GlobalProvider>
+            </LocalizationProvider>
+          </ThemeProviderMUI>
         </ThemeProvider>
       </OdeClientProvider>
     </Provider>
