@@ -24,19 +24,20 @@ public class DefaultCommunicationService implements CommunicationService {
         this.communicationRepository = repositoryFactory.communicationRepository();
     }
 
+
     @Override
-    public Future<JsonArray> getVisibleGroups(String userId) {
+    public Future<JsonArray> getGroupsCanCommunicateWithMe(String userId, String structureId){
         Promise<JsonArray> promise = Promise.promise();
 
-        communicationRepository.getVisibleGroups(userId)
+        communicationRepository.getGroupsCanCommunicateWithMe(userId, structureId)
             .onSuccess(groups -> promise.complete(groups))
             .onFailure(err -> {
-                String errorMessage = String.format("[Appointments@DefaultCommunicationService::getVisibleGroups] %s", err.getMessage());
+                String errorMessage = String.format("[Appointments@DefaultCommunicationService::getGroupsCanCommunicateWithMe] %s", err.getMessage());
                 log.error(errorMessage);
                 promise.fail(err);
             });
-    
-        
+
+
         return promise.future();
     }
 }

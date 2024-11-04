@@ -1,33 +1,26 @@
-package fr.openent.appointments.repository.impl;
+package fr.openent.appointments.repository;
 
 import fr.openent.appointments.core.constants.Fields;
 import fr.openent.appointments.core.constants.SqlTables;
 import fr.openent.appointments.enums.GridState;
-import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.repository.impl.DefaultGridRepository;
 import fr.openent.appointments.model.payload.GridPayload;
 import fr.openent.appointments.enums.Periodicity;
-import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.enums.Day;
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.model.DailySlot;
 import fr.openent.appointments.model.TransactionElement;
 
 import io.vertx.core.Handler;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.entcore.common.neo4j.Neo4j;
-import org.entcore.common.neo4j.Neo4jRest;
 import org.entcore.common.sql.Sql;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.stubbing.Answer;
 import org.powermock.reflect.Whitebox;
 

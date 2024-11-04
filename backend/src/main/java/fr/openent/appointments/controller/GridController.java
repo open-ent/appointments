@@ -18,11 +18,8 @@ import org.entcore.common.http.filter.ResourceFilter;
 import fr.openent.appointments.model.payload.GridPayload;
 import fr.openent.appointments.service.GridService;
 import fr.openent.appointments.service.ServiceFactory;
-import fr.openent.appointments.service.impl.DefaultGridService;
 import fr.openent.appointments.security.ManageRight;
 import fr.openent.appointments.security.ViewRight;
-import fr.openent.appointments.repository.impl.DefaultGridRepository;
-import fr.openent.appointments.repository.RepositoryFactory;
 
 public class GridController extends ControllerHelper {
     private final GridService gridService;

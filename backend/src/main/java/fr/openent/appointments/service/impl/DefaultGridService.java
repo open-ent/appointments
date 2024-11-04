@@ -10,7 +10,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import fr.openent.appointments.model.payload.GridPayload;
 import fr.openent.appointments.repository.GridRepository;
-import fr.openent.appointments.repository.impl.DefaultGridRepository;
 import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.service.GridService;
 import fr.openent.appointments.service.ServiceFactory;

@@ -10,5 +10,5 @@ public interface CommunicationRepository {
      * @param userId The ID of the user whose groups are to be retrieved.
      * @return A Future containing a JsonArray of groups.
      */
-    Future<JsonArray> getVisibleGroups(String userId);
+    Future<JsonArray> getGroupsCanCommunicateWithMe(String userId, String structureId);
 }
