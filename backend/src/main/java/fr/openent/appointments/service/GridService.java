@@ -19,6 +19,13 @@ public interface GridService {
     Future<JsonArray> getMyGrids();
 
     /**
+     * Retrieves all grids name associated with the current user.
+     *
+     * @return A Future containing a JsonArray of grids name.
+     */
+    Future<JsonArray> getGridsName(String userId);
+
+    /**
      * Retrieves a specific grid by its ID.
      *
      * @param gridId The ID of the grid to retrieve.

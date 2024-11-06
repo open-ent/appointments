@@ -31,7 +31,6 @@ public class CommunicationController extends BaseController {
             badRequest(request);
             return;
         }
-        log.info(structureId);
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> communicationService.getGroupsCanCommunicateWithMe(user.getUserId(), structureId))
             .onSuccess(groups -> renderJson(request, groups))

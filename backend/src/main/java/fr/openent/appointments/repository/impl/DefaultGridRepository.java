@@ -59,6 +59,24 @@ public class DefaultGridRepository implements GridRepository {
         return promise.future();
     }
 
+    public Future<JsonArray> getGridsName (String userId) {
+        Promise<JsonArray> promise = Promise.promise();
+
+        String query = "SELECT " + Fields.NAME + " FROM " + SqlTables.DB_GRID_TABLE + " WHERE " + Fields.OWNER_ID + " = ? AND " + Fields.STATE + " IN (?, ?)";
+        JsonArray params = new JsonArray()
+                .add(userId)
+                .add(GridState.OPEN.getValue())
+                .add(GridState.SUSPENDED.getValue());
+
+        String errorMessage = "[Appointments@DefaultGridRepository::getGridsName] Fail to get grids name : ";
+        sql.prepared(query, params, SqlResult.validResultHandler(FutureHelper.handlerEither(promise, errorMessage)));
+
+        return promise.future().map(jsonArray -> {
+            JsonArray names = new JsonArray();
+            jsonArray.forEach(grid -> names.add(((JsonObject) grid).getString(Fields.NAME)));
+            return names;
+        });
+    }
 
     private Future<JsonObject> insert(GridPayload grid, String userId) {
         Promise<JsonObject> promise = Promise.promise();

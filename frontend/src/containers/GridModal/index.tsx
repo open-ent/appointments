@@ -29,6 +29,7 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
 
   const {
     inputs,
+    publicOptions,
     blurGridModalInputs: {
       newNameError,
       newVisioLinkError,
@@ -37,6 +38,7 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
       newSlotsError,
     },
     setErrorInputs,
+    resetInputs,
   } = useGridModalProvider();
 
   const isDisplayFirstPage =
@@ -86,8 +88,14 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
     )
       return;
 
-    const payload: GridPayload = gridInputsToGridPayload(inputs);
-    await createGrid(payload);
+    const payload: GridPayload = gridInputsToGridPayload(inputs, publicOptions);
+    try {
+      await createGrid(payload);
+    } catch (error) {
+      console.error(error);
+    }
+    resetInputs();
+    setPage(PAGE_TYPE.FIRST);
     handleDisplayModal(MODAL_TYPE.GRID);
   };
 

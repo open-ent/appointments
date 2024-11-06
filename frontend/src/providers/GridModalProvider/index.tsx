@@ -19,7 +19,6 @@ import {
 import {
   initialErrorInputs,
   initialGridModalInputs,
-  mockPublicList,
   periodicityOptions,
   slotDurationOptions,
   userStructures,
@@ -30,6 +29,8 @@ import {
 } from "~/hooks/types";
 import { useBlurGridInputs } from "~/hooks/useBlurGridInputs";
 import { useUpdateGridInputs } from "~/hooks/useUpdateGridInputs";
+import { useGetCommunicationGroupsQuery } from "~/services/api/communication.service";
+import { useGetMyGridsNameQuery } from "~/services/api/grid.service";
 
 const GridModalProviderContext =
   createContext<GridModalProviderContextProps | null>(null);
@@ -52,21 +53,44 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
     initialGridModalInputs(structures),
   );
 
+  const { data: groups, refetch: refetchGroups } =
+    useGetCommunicationGroupsQuery(inputs.structure.id, {
+      skip: !inputs.structure.id,
+    });
+
+  const { data: existingGridsNames } = useGetMyGridsNameQuery();
+
   const [errorInputs, setErrorInputs] =
     useState<InputsErrors>(initialErrorInputs);
 
   const updateGridModalInputs: useUpdateGridInputsReturnType =
-    useUpdateGridInputs(inputs, setInputs, setErrorInputs, structures);
+    useUpdateGridInputs(
+      inputs,
+      setInputs,
+      setErrorInputs,
+      structures,
+      existingGridsNames ?? [],
+    );
 
   const blurGridModalInputs: useBlurGridInputsReturnType = useBlurGridInputs(
     inputs,
     setErrorInputs,
+    existingGridsNames ?? [],
   );
 
   const updateFirstPageErrors = () => {
     blurGridModalInputs.handleNameBlur();
     blurGridModalInputs.handleVisioLinkBlur();
   };
+
+  const resetInputs = () => {
+    setInputs(initialGridModalInputs(structures));
+    setErrorInputs(initialErrorInputs);
+  };
+
+  useEffect(() => {
+    if (inputs.structure.id) refetchGroups();
+  }, [inputs.structure]);
 
   useEffect(() => {
     setInputs((prev) => ({
@@ -81,22 +105,17 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       setInputs,
       errorInputs,
       setErrorInputs,
+      existingGridsNames: existingGridsNames ?? [],
       structureOptions: structures,
-      publicOptions: mockPublicList,
+      publicOptions: groups ?? [],
       slotDurationOptions,
       periodicityOptions,
       updateGridModalInputs,
       blurGridModalInputs,
       updateFirstPageErrors,
+      resetInputs,
     }),
-    [
-      inputs,
-      setInputs,
-      errorInputs,
-      setErrorInputs,
-      structures,
-      mockPublicList,
-    ],
+    [inputs, errorInputs, structures, groups, existingGridsNames],
   );
 
   return (

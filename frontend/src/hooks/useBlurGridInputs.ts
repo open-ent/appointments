@@ -4,6 +4,7 @@ import {
   FIELD_REQUIRED_ERROR,
   INVALID_SLOT_ERROR,
   ONE_SLOT_REQUIRED_ERROR,
+  SAME_GRID_ALREADY_EXISTS_ERROR,
 } from "~/core/i18nKeys";
 import {
   GridModalInputs,
@@ -13,6 +14,7 @@ import {
 export const useBlurGridInputs = (
   inputs: GridModalInputs,
   setErrorInputs: Dispatch<SetStateAction<InputsErrors>>,
+  existingGridsNames: string[],
 ) => {
   const updateErrorInputs = useCallback(
     <K extends keyof InputsErrors>(field: K, value: InputsErrors[K]) => {
@@ -24,7 +26,11 @@ export const useBlurGridInputs = (
     [setErrorInputs],
   );
 
-  const newNameError = inputs.name ? "" : FIELD_REQUIRED_ERROR;
+  const newNameError = inputs.name
+    ? existingGridsNames.includes(inputs.name)
+      ? SAME_GRID_ALREADY_EXISTS_ERROR
+      : ""
+    : FIELD_REQUIRED_ERROR;
 
   const newVisioLinkError =
     inputs.isVisio && !inputs.visioLink ? FIELD_REQUIRED_ERROR : "";

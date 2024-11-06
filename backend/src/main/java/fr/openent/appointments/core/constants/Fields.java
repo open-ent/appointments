@@ -36,6 +36,7 @@ public class Fields {
     public static final String CAMEL_END_DATE = "endDate";
     public static final String CAMEL_END_TIME = "endTime";
     public static final String CAMEL_GRID_ID = "gridId";
+    public static final String CAMEL_GRIDS_NAME = "gridsName";
     public static final String CAMEL_OWNER_ID = "ownerId";
     public static final String CAMEL_PUBLIC_COMMENT = "publicComment";
     public static final String CAMEL_REQUESTER_ID = "requesterId";

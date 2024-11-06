@@ -42,6 +42,12 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
+    public Future<JsonArray> getGridsName(String userId) {
+        return gridRepository.getGridsName(userId);
+    }
+
+
+    @Override
     public Future<JsonArray> getGridById(Integer gridId) {
         // TODO: Implement the logic to retrieve a specific grid by its ID.
         return Future.succeededFuture(new JsonArray());

@@ -10,7 +10,10 @@ export const gridApi = emptySplitApi.injectEndpoints({
         body,
       }),
     }),
+    getMyGridsName: builder.query<string[], void>({
+      query: () => "/grids/names",
+    }),
   }),
 });
 
-export const { useCreateGridMutation } = gridApi;
+export const { useCreateGridMutation, useGetMyGridsNameQuery } = gridApi;

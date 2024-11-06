@@ -66,14 +66,6 @@ export const initialErrorInputs: InputsErrors = {
   },
 };
 
-export const mockPublicList: Public[] = [
-  { name: "Public 1", id: "1" },
-  { name: "Public 2", id: "2" },
-  { name: "Public 3", id: "3" },
-  { name: "Public 4", id: "4" },
-  { name: "Public 5", id: "5" },
-];
-
 export const slotDurationOptions: SLOT_DURATION[] = [
   SLOT_DURATION.FIVETEEN_MINUTES,
   SLOT_DURATION.THIRTY_MINUTES,
@@ -88,6 +80,7 @@ export const periodicityOptions: PERIODICITY[] = [
 
 export const gridInputsToGridPayload = (
   inputs: GridModalInputs,
+  publicOptions: Public[],
 ): GridPayload => {
   return {
     name: inputs.name,
@@ -97,7 +90,9 @@ export const gridInputsToGridPayload = (
     structureId: inputs.structure.id,
     duration: formatSlotDurationToString(inputs.slotDuration),
     periodicity: inputs.periodicity,
-    targetPublicListId: inputs.public.map((p) => p.id),
+    targetPublicListId: inputs.public.length
+      ? inputs.public.map((item) => item.id)
+      : publicOptions.map((item) => item.id), // If no public is selected, all publics are selected
     dailySlots: Object.entries(inputs.weekSlots).reduce(
       (acc, [day, slots]) => {
         return [

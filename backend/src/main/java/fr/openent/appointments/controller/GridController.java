@@ -20,6 +20,7 @@ import fr.openent.appointments.service.GridService;
 import fr.openent.appointments.service.ServiceFactory;
 import fr.openent.appointments.security.ManageRight;
 import fr.openent.appointments.security.ViewRight;
+import org.entcore.common.user.UserUtils;
 
 public class GridController extends ControllerHelper {
     private final GridService gridService;
@@ -34,6 +35,21 @@ public class GridController extends ControllerHelper {
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getMyGrids(final HttpServerRequest request) {
         renderJson(request, new JsonObject());
+    }
+
+    @Get("/grids/names")
+    @ApiDoc("Get my grids name")
+    @ResourceFilter(ManageRight.class)
+    @SecuredAction(value = "", type = ActionType.RESOURCE)
+    public void getMyGridsName(final HttpServerRequest request) {
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+                .compose(user -> gridService.getGridsName(user.getUserId()))
+                .onSuccess(response -> renderJson(request, response))
+                .onFailure(error -> {
+                    String errorMessage = String.format("[Appointments@GridController::getMyGridsName] Failed to get my grids name " , error.getMessage());
+                    log.error(errorMessage);
+                    badRequest(request);
+                });
     }
 
     @Get("/grids/:id")

@@ -31,7 +31,17 @@ public interface GridRepository {
      *         with the specified user that match the provided name and state.
      */
     Future<JsonArray> getGrids(String userId, String gridName, List<GridState> gridStates);
-    
+
+    /**
+     * Retrieves the name of all grids associated with a specific user.
+     *
+     * @param userId the unique identifier of the user whose grids are to be retrieved.
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *         return a {@link JsonArray} containing the names of the grids associated
+     *         with the specified user.
+     */
+    Future<JsonArray> getGridsName(String userId);
+
     /**
      * Creates a new grid based on the provided {@link GridPayload} and associates it with a specific user.
      *

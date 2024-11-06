@@ -14,7 +14,10 @@ import { v4 as uuidv4 } from "uuid";
 import { useUpdateGridInputsType } from "./types";
 import { HexaColor } from "~/components/ColorPicker/types";
 import { DAY, PERIODICITY, SLOT_DURATION } from "~/core/enums";
-import { INVALID_SLOT_ERROR } from "~/core/i18nKeys";
+import {
+  INVALID_SLOT_ERROR,
+  SAME_GRID_ALREADY_EXISTS_ERROR,
+} from "~/core/i18nKeys";
 import { TimeObject } from "~/core/types";
 import { formatTimeToDayjs } from "~/core/utils";
 import {
@@ -33,6 +36,7 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   setInputs: Dispatch<SetStateAction<GridModalInputs>>,
   setErrorInputs: Dispatch<SetStateAction<InputsErrors>>,
   structureOptions: Structure[],
+  existingGridsNames: string[],
 ) => {
   const updateInputField = useCallback(
     <K extends keyof GridModalInputs>(field: K, value: GridModalInputs[K]) => {
@@ -55,7 +59,12 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   );
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateInputField("name", e.target.value);
+    const newName = e.target.value;
+    updateInputField("name", newName);
+    if (existingGridsNames.includes(newName)) {
+      updateErrorInputs("name", SAME_GRID_ALREADY_EXISTS_ERROR);
+      return;
+    }
     updateErrorInputs("name", "");
   };
 

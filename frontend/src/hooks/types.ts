@@ -52,6 +52,7 @@ export type useUpdateGridInputsType = (
   setInputs: Dispatch<SetStateAction<GridModalInputs>>,
   setErrorInputs: Dispatch<SetStateAction<InputsErrors>>,
   structureOptions: Structure[],
+  existingGridsNames: string[],
 ) => useUpdateGridInputsReturnType;
 
 export interface useBlurGridInputsReturnType {
