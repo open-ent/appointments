@@ -1,10 +1,15 @@
 package fr.openent.appointments.service;
 
+import fr.openent.appointments.enums.GridState;
+import fr.openent.appointments.model.response.ListGridsResponse;
+import fr.openent.appointments.model.database.Grid;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.http.HttpServerRequest;
 import fr.openent.appointments.model.payload.GridPayload;
+
+import java.util.List;
 
 /**
  * Interface for managing grid operations in the appointment service.
@@ -12,11 +17,18 @@ import fr.openent.appointments.model.payload.GridPayload;
 public interface GridService {
 
     /**
+     * Retrieves all minimized grids associated with the current user.
+     *
+     * @return A Future containing a JsonArray of grids.
+     */
+    Future<ListGridsResponse> getMyMinimalGrids(String userId, List<GridState> states, Long page, Long limit);
+
+    /**
      * Retrieves all grids associated with the current user.
      *
      * @return A Future containing a JsonArray of grids.
      */
-    Future<JsonArray> getMyGrids();
+    Future<List<Grid>> getMyGrids(String userId, List<GridState> states);
 
     /**
      * Retrieves all grids name associated with the current user.

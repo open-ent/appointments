@@ -12,10 +12,7 @@ import io.vertx.core.logging.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -61,8 +58,8 @@ public class IModelHelper {
      */
     public static JsonObject toJson(IModel<?> iModel, boolean ignoreNull, boolean snakeCase) {
         JsonObject statisticsData = new JsonObject();
-        final Field[] declaredFields = iModel.getClass().getDeclaredFields();
-        Arrays.stream(declaredFields).forEach(field -> {
+        final List<Field> declaredFields = getAllFields(iModel);
+        declaredFields.forEach(field -> {
             boolean accessibility = field.isAccessible();
             field.setAccessible(true);
             try {
@@ -187,5 +184,17 @@ public class IModelHelper {
             log.error("Failure occurred while creating instance of type " + modelClass, e);
             return Optional.empty();
         }
+    }
+
+    private static List<Field> getAllFields(IModel<?> iModel) {
+        List<Field> fields = new ArrayList<>();
+        Class<?> clazz = iModel.getClass();
+
+        while (clazz != null) {
+            Collections.addAll(fields, clazz.getDeclaredFields());
+            clazz = clazz.getSuperclass();
+        }
+
+        return fields;
     }
 }

@@ -1,6 +1,10 @@
 package fr.openent.appointments.repository.impl;
 
+import fr.openent.appointments.core.constants.Fields;
+import fr.openent.appointments.core.constants.SqlTables;
+import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.model.DailySlot;
+import fr.openent.appointments.model.database.Grid;
 import fr.openent.appointments.model.payload.GridPayload;
 import fr.openent.appointments.model.TransactionElement;
 import fr.openent.appointments.repository.GridRepository;
@@ -19,9 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static fr.openent.appointments.enums.GridState.CLOSED;
+import static fr.openent.appointments.core.constants.Constants.CAMEL_GRID_ID;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.SqlTables.*;
-import static fr.openent.appointments.enums.GridState.CLOSED;
 
 public class DefaultGridRepository implements GridRepository {
 
@@ -31,11 +36,27 @@ public class DefaultGridRepository implements GridRepository {
         this.sql = repositoryFactory.sql();
     }
 
-    public Future<JsonArray> getGrids(String userId) {
-        return getGrids(userId, null, null);
+    public Future<List<Grid>> getMyGrids(String userId, List<GridState> gridStates) {
+        Promise<List<Grid>> promise = Promise.promise();
+
+        String query = "SELECT * FROM " + DB_GRID_TABLE + " WHERE " + OWNER_ID + " = ? ";
+        JsonArray params = new JsonArray().add(userId);
+
+        // Filtering by states
+        if (gridStates != null && !gridStates.isEmpty()) {
+            query += " AND " + STATE + " IN " + Sql.listPrepared(gridStates);
+            params.addAll(new JsonArray(gridStates.stream().map(GridState::getValue).collect(Collectors.toList())));
+        }
+
+        query += "ORDER BY " + CREATION_DATE;
+
+        String errorMessage = String.format("[Appointments@DefaultGridRepository::getMyGrids] Fail to get grids for userId %s : ", userId);
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
+
+        return promise.future();
     }
 
-    public Future<JsonArray> getGrids(String userId, String gridName, List<GridState> gridStates) {
+    public Future<JsonArray> getMyGridsByName(String userId, String gridName, List<GridState> gridStates) {
         Promise<JsonArray> promise = Promise.promise();
 
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM " + DB_GRID_TABLE + " WHERE " + OWNER_ID + " = ?");
@@ -54,7 +75,7 @@ public class DefaultGridRepository implements GridRepository {
 
 
         String query = queryBuilder.toString();
-        String errorMessage = "[Appointments@DefaultGridRepository::getGrids] Fail to get grids : ";
+        String errorMessage = "[Appointments@DefaultGridRepository::getMyGridsByName] Fail to get grids : ";
         sql.prepared(query, params, SqlResult.validResultHandler(FutureHelper.handlerEither(promise, errorMessage)));
 
         return promise.future();
@@ -88,6 +109,7 @@ public class DefaultGridRepository implements GridRepository {
             STRUCTURE_ID + ", " +
             BEGIN_DATE + ", " +
             END_DATE + ", " +
+            CREATION_DATE + ", " +
             COLOR + ", " +
             DURATION + ", " +
             PERIODICITY + ", " +
@@ -97,13 +119,14 @@ public class DefaultGridRepository implements GridRepository {
             DOCUMENT_ID + ", " +
             PUBLIC_COMMENT + ", " +
             STATE + ") " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
         String name = grid.getGridName();
         String ownerId = userId;
         String structureId = grid.getStructureId();
         String begin = DateHelper.formatDate(grid.getBeginDate());
         String end = DateHelper.formatDate(grid.getEndDate());
+        String creation = "NOW()";
         String color = grid.getColor();
         String duration = DateHelper.formatDuration(grid.getDuration());
         Integer periodicity = grid.getPeriodicity().getValue();
@@ -120,6 +143,7 @@ public class DefaultGridRepository implements GridRepository {
                 .add(structureId)
                 .add(begin)
                 .add(end)
+                .add(creation)
                 .add(color)
                 .add(duration)
                 .add(periodicity)
@@ -171,11 +195,11 @@ public class DefaultGridRepository implements GridRepository {
 
     public Future<JsonObject> create(GridPayload grid, String userId) {
         return insert(grid, userId)
-                    .compose(insertedGridId -> {
-                        Long gridId = insertedGridId.getLong(ID, null);
-                        return insertDailySlots(gridId, grid.getDailySlots())
-                            .map(inserted -> new JsonObject().put(CAMEL_GRID_ID, gridId));
-                    });
+            .compose(insertedGridId -> {
+                Long gridId = insertedGridId.getLong(Fields.ID, null);
+                return insertDailySlots(gridId, grid.getDailySlots())
+                    .map(inserted -> new JsonObject().put(CAMEL_GRID_ID, gridId));
+            });
     }
 
     @Override

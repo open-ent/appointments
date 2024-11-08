@@ -1,5 +1,6 @@
 package fr.openent.appointments.repository;
 
+import fr.openent.appointments.model.database.Grid;
 import fr.openent.appointments.model.payload.GridPayload;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
@@ -14,11 +15,12 @@ public interface GridRepository {
      * Retrieves all grids associated with a specific user.
      *
      * @param userId the unique identifier of the user whose grids are to be retrieved.
+     * @param gridStates the states of the grids the user wants to retrieve.
      * @return a {@link Future} representing the asynchronous operation, which will
      *         return a {@link JsonArray} containing the details of the grids associated
      *         with the specified user.
      */
-    Future<JsonArray> getGrids(String userId);
+    Future<List<Grid>> getMyGrids(String userId, List<GridState> gridStates);
 
     /**
      * Retrieves all grids associated with a specific user that match the provided grid name and state.
@@ -30,7 +32,7 @@ public interface GridRepository {
      *         return a {@link JsonArray} containing the details of the grids associated
      *         with the specified user that match the provided name and state.
      */
-    Future<JsonArray> getGrids(String userId, String gridName, List<GridState> gridStates);
+    Future<JsonArray> getMyGridsByName(String userId, String gridName, List<GridState> gridStates);
 
     /**
      * Retrieves the name of all grids associated with a specific user.

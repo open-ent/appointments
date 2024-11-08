@@ -1,61 +1,79 @@
 package fr.openent.appointments.model.database;
 
-import java.util.stream.Collectors;
+import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.Duration;
 
-import fr.openent.appointments.core.constants.Fields;
+import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.enums.Periodicity;
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.model.IModel;
 
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+
+import static fr.openent.appointments.core.constants.Fields.*;
 
 public class Grid implements IModel<Grid> {
 
-    private String gridName;
+    private Long id;
+    private String name;
+    private String ownerId;
+    private String structureId;
     private LocalDate beginDate;
     private LocalDate endDate;
+    private LocalDate creationDate;
     private String color;
-    private String structureId;
     private Duration duration;
     private Periodicity periodicity;
-    private List<String> targetPublicIds;
+    private List<String> targetPublicListId;
     private String visioLink;
     private String place;
     private String documentId;
     private String publicComment;
+    private GridState state;
+
+    // Constructor
 
     public Grid(JsonObject grid) {
-        this.gridName = grid.getString(Fields.NAME, "");
+        this.id = grid.getLong(ID, null);
+        this.name = grid.getString(NAME, null);
+        this.ownerId = grid.getString(OWNER_ID, null);
+        this.structureId = grid.getString(STRUCTURE_ID, null);
+        this.beginDate = DateHelper.parseDate(grid.getString(BEGIN_DATE, null).substring(0, 10));
+        this.endDate = DateHelper.parseDate(grid.getString(END_DATE, null).substring(0, 10));
+        this.creationDate = DateHelper.parseDate(grid.getString(CREATION_DATE, null).substring(0, 10));
+        this.color = grid.getString(COLOR, null);
+        this.duration = DateHelper.parseDuration(grid.getString(DURATION,null));
+        this.periodicity = Periodicity.getPeriodicity(grid.getInteger(PERIODICITY,0));
+        this.visioLink = grid.getString(VISIO_LINK, null);
+        this.place = grid.getString(PLACE, null);
+        this.documentId = grid.getString(DOCUMENT_ID, null);
+        this.publicComment = grid.getString(PUBLIC_COMMENT, null);
+        this.state = GridState.getGridState(grid.getString(STATE, null));
 
-        this.beginDate = DateHelper.parseDate(grid.getString(Fields.BEGIN_DATE, ""));
-        this.endDate = DateHelper.parseDate(grid.getString(Fields.END_DATE, ""));
-
-        this.color = grid.getString(Fields.COLOR);
-        this.structureId = grid.getString(Fields.STRUCTURE_ID,"");
-
-        this.duration = DateHelper.parseDuration(grid.getString(Fields.DURATION,""));
-
-        this.periodicity = Periodicity.getPeriodicity(grid.getInteger(Fields.PERIODICITY,0));
-
-        this.targetPublicIds = grid
-            .getJsonArray(Fields.TARGET_PUBLIC_LIST_ID, new JsonArray())
-            .stream()
-            .map(Object::toString)
-            .collect(Collectors.toList());
-
-        this.visioLink = grid.getString(Fields.VISIO_LINK);
-        this.place = grid.getString(Fields.PLACE);
-        this.documentId = grid.getString(Fields.DOCUMENT_ID);
-        this.publicComment = grid.getString(Fields.PUBLIC_COMMENT);
+        String stringTargetPublicListId = grid.getString(TARGET_PUBLIC_LIST_ID, "");
+        String cleanedTargetPublicListId = stringTargetPublicListId.substring(1, stringTargetPublicListId.length() - 1);
+        this.targetPublicListId = Arrays.asList(cleanedTargetPublicListId.split(",\\s*"));
     }
 
-    public String getGridName() {
-        return gridName;
+    // Getter
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public String getStructureId() {
+        return structureId;
     }
 
     public LocalDate getBeginDate() {
@@ -66,12 +84,12 @@ public class Grid implements IModel<Grid> {
         return endDate;
     }
 
-    public String getColor() {
-        return color;
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
-    public String getStructureId() {
-        return structureId;
+    public String getColor() {
+        return color;
     }
 
     public Duration getDuration() {
@@ -82,8 +100,8 @@ public class Grid implements IModel<Grid> {
         return periodicity;
     }
 
-    public List<String> getTargetPublicIds() {
-        return targetPublicIds;
+    public List<String> getTargetPublicListId() {
+        return targetPublicListId;
     }
 
     public String getVisioLink() {
@@ -102,10 +120,29 @@ public class Grid implements IModel<Grid> {
         return publicComment;
     }
 
-    // setters
+    public GridState getState() {
+        return state;
+    }
 
-    public Grid setGridName(String gridName) {
-        this.gridName = gridName;
+    // Setter
+
+    public Grid setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Grid setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Grid setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+        return this;
+    }
+
+    public Grid setStructureId(String structureId) {
+        this.structureId = structureId;
         return this;
     }
 
@@ -119,13 +156,13 @@ public class Grid implements IModel<Grid> {
         return this;
     }
 
-    public Grid setColor(String color) {
-        this.color = color;
+    public Grid setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
         return this;
     }
 
-    public Grid setStructureId(String structureId) {
-        this.structureId = structureId;
+    public Grid setColor(String color) {
+        this.color = color;
         return this;
     }
 
@@ -139,8 +176,8 @@ public class Grid implements IModel<Grid> {
         return this;
     }
 
-    public Grid setTargetPublicIds(List<String> targetPublicIds) {
-        this.targetPublicIds = targetPublicIds;
+    public Grid setTargetPublicListId(List<String> targetPublicListId) {
+        this.targetPublicListId = targetPublicListId;
         return this;
     }
 
@@ -163,6 +200,13 @@ public class Grid implements IModel<Grid> {
         this.publicComment = publicComment;
         return this;
     }
+
+    public Grid setState(GridState state) {
+        this.state = state;
+        return this;
+    }
+
+    // Functions
 
     public JsonObject toJson() {
         return IModelHelper.toJson(this, true, true);

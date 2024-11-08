@@ -1,4 +1,4 @@
-package fr.openent.appointments.controller.test;
+package fr.openent.appointments.controller;
 
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;

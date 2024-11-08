@@ -5,7 +5,6 @@ import java.util.List;
 import java.time.LocalDate;
 import java.time.Duration;
 
-import fr.openent.appointments.core.constants.Fields;
 import fr.openent.appointments.enums.Periodicity;
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.IModelHelper;
@@ -14,6 +13,9 @@ import fr.openent.appointments.model.IModel;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+
+import static fr.openent.appointments.core.constants.Constants.*;
+import static fr.openent.appointments.core.constants.Fields.*;
 
 public class GridPayload implements IModel<GridPayload> {
 
@@ -32,30 +34,30 @@ public class GridPayload implements IModel<GridPayload> {
     private String publicComment;
 
     public GridPayload(JsonObject grid){
-        this.gridName = grid.getString(Fields.NAME, "");
+        this.gridName = grid.getString(NAME, "");
 
-        this.beginDate = DateHelper.parseDate(grid.getString(Fields.CAMEL_BEGIN_DATE, ""));
-        this.endDate = DateHelper.parseDate(grid.getString(Fields.CAMEL_END_DATE, ""));
+        this.beginDate = DateHelper.parseDate(grid.getString(CAMEL_BEGIN_DATE, ""));
+        this.endDate = DateHelper.parseDate(grid.getString(CAMEL_END_DATE, ""));
 
-        this.color = grid.getString(Fields.COLOR);
-        this.structureId = grid.getString(Fields.CAMEL_STRUCTURE_ID,"");
+        this.color = grid.getString(COLOR);
+        this.structureId = grid.getString(CAMEL_STRUCTURE_ID,"");
 
-        this.duration = DateHelper.parseDuration(grid.getString(Fields.DURATION,""));
+        this.duration = DateHelper.parseDuration(grid.getString(DURATION,""));
 
-        this.periodicity = Periodicity.getPeriodicity(grid.getInteger(Fields.PERIODICITY,0));
+        this.periodicity = Periodicity.getPeriodicity(grid.getInteger(PERIODICITY,0));
 
         this.targetPublicIds = grid
-            .getJsonArray(Fields.CAMEL_TARGET_PUBLIC_LIST_ID, new JsonArray())
+            .getJsonArray(CAMEL_TARGET_PUBLIC_LIST_ID, new JsonArray())
             .stream()
             .map(Object::toString)
             .collect(Collectors.toList());
 
-        this.dailySlots = IModelHelper.toList(grid.getJsonArray(Fields.CAMEL_DAILY_SLOTS, new JsonArray()), DailySlot.class);
+        this.dailySlots = IModelHelper.toList(grid.getJsonArray(CAMEL_DAILY_SLOTS, new JsonArray()), DailySlot.class);
 
-        this.visioLink = grid.getString(Fields.CAMEL_VISIO_LINK, "");
-        this.place = grid.getString(Fields.PLACE, "");
-        this.documentId = grid.getString(Fields.CAMEL_DOCUMENT_ID, "");
-        this.publicComment = grid.getString(Fields.CAMEL_PUBLIC_COMMENT, "");
+        this.visioLink = grid.getString(CAMEL_VISIO_LINK, "");
+        this.place = grid.getString(PLACE, "");
+        this.documentId = grid.getString(CAMEL_DOCUMENT_ID, "");
+        this.publicComment = grid.getString(CAMEL_PUBLIC_COMMENT, "");
     }
 
     public boolean isValid() {
@@ -194,19 +196,19 @@ public class GridPayload implements IModel<GridPayload> {
 
     public String toString() {
         return new JsonObject()
-            .put(Fields.NAME, this.gridName)
-            .put(Fields.CAMEL_BEGIN_DATE, DateHelper.formatDate(this.beginDate))
-            .put(Fields.CAMEL_END_DATE, DateHelper.formatDate(this.endDate))
-            .put(Fields.COLOR, this.color)
-            .put(Fields.CAMEL_STRUCTURE_ID, this.structureId)
-            .put(Fields.DURATION, DateHelper.formatDuration(this.duration))
-            .put(Fields.PERIODICITY, this.periodicity.getValue())
-            .put(Fields.CAMEL_TARGET_PUBLIC_LIST_ID, new JsonArray(this.targetPublicIds))
-            .put(Fields.CAMEL_DAILY_SLOTS, new JsonArray(this.dailySlots.stream().map(DailySlot::toString).collect(Collectors.toList())))
-            .put(Fields.CAMEL_VISIO_LINK, this.visioLink)
-            .put(Fields.PLACE, this.place)
-            .put(Fields.CAMEL_DOCUMENT_ID, this.documentId)
-            .put(Fields.CAMEL_PUBLIC_COMMENT, this.publicComment)
+            .put(NAME, this.gridName)
+            .put(CAMEL_BEGIN_DATE, DateHelper.formatDate(this.beginDate))
+            .put(CAMEL_END_DATE, DateHelper.formatDate(this.endDate))
+            .put(COLOR, this.color)
+            .put(CAMEL_STRUCTURE_ID, this.structureId)
+            .put(DURATION, DateHelper.formatDuration(this.duration))
+            .put(PERIODICITY, this.periodicity.getValue())
+            .put(CAMEL_TARGET_PUBLIC_LIST_ID, new JsonArray(this.targetPublicIds))
+            .put(CAMEL_DAILY_SLOTS, new JsonArray(this.dailySlots.stream().map(DailySlot::toString).collect(Collectors.toList())))
+            .put(CAMEL_VISIO_LINK, this.visioLink)
+            .put(PLACE, this.place)
+            .put(CAMEL_DOCUMENT_ID, this.documentId)
+            .put(CAMEL_PUBLIC_COMMENT, this.publicComment)
             .toString();
     }
 

@@ -1,5 +1,7 @@
 package fr.openent.appointments.controller;
 
+import fr.openent.appointments.enums.GridState;
+import fr.openent.appointments.helper.LogHelper;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Get;
 import fr.wseduc.rs.Post;
@@ -10,6 +12,7 @@ import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
 
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 import org.entcore.common.controller.ControllerHelper;
@@ -22,6 +25,12 @@ import fr.openent.appointments.security.ManageRight;
 import fr.openent.appointments.security.ViewRight;
 import org.entcore.common.user.UserUtils;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static fr.openent.appointments.core.constants.Constants.*;
+
 public class GridController extends ControllerHelper {
     private final GridService gridService;
 
@@ -31,10 +40,31 @@ public class GridController extends ControllerHelper {
 
     @Get("/grids")
     @ApiDoc("Get my grids")
-    @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
+    @ResourceFilter(ManageRight.class)
     public void getMyGrids(final HttpServerRequest request) {
-        renderJson(request, new JsonObject());
+        Long page = Optional.ofNullable(request.params().get(PAGE))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        Long limit = Optional.ofNullable(request.params().get(LIMIT))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        List<GridState> states = new JsonArray(request.params().get(STATES)).stream()
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .map(GridState::getGridState)
+                .collect(Collectors.toList());
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user -> gridService.getMyMinimalGrids(user.getUserId(), states, page, limit))
+            .onSuccess(listGridsResponse -> renderJson(request, listGridsResponse.toJson()))
+            .onFailure(error -> {
+                String errorMessage = "Failed to get my grids";
+                LogHelper.logError(this, "getMyGrids", errorMessage, error.getMessage());
+                renderError(request);
+            });
     }
 
     @Get("/grids/names")
@@ -46,7 +76,7 @@ public class GridController extends ControllerHelper {
                 .compose(user -> gridService.getGridsName(user.getUserId()))
                 .onSuccess(response -> renderJson(request, response))
                 .onFailure(error -> {
-                    String errorMessage = String.format("[Appointments@GridController::getMyGridsName] Failed to get my grids name " , error.getMessage());
+                    String errorMessage = String.format("[Appointments@%s::getMyGridsName] Failed to get my grids name : %s", this.getClass().getSimpleName(), error.getMessage());
                     log.error(errorMessage);
                     badRequest(request);
                 });
@@ -86,7 +116,7 @@ public class GridController extends ControllerHelper {
             gridService.createGrid(request, grid)
                 .onSuccess(response -> renderJson(request, response))
                 .onFailure(error -> {
-                    String errorMessage = String.format("[Appointments@GridController::createGrid] Failed to create grid " , error.getMessage());
+                    String errorMessage = String.format("[Appointments@GridController::createGrid] Failed to create grid : %s", error.getMessage());
                     log.error(errorMessage);
                     badRequest(request);
                 });

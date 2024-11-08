@@ -18,6 +18,8 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
 
+import static fr.openent.appointments.core.constants.Constants.*;
+
 @RunWith(VertxUnitRunner.class)
 public class DefaultCommunicationRepositoryTest {
 
@@ -64,8 +66,8 @@ public class DefaultCommunicationRepositoryTest {
                 "     g.name as name";
 
         JsonObject params = new JsonObject()
-                .put(Fields.CAMEL_USER_ID, userId)
-                .put(Fields.CAMEL_STRUCTURE_ID, structureId);
+                .put(CAMEL_USER_ID, userId)
+                .put(CAMEL_STRUCTURE_ID, structureId);
 
         doAnswer((Answer<Void>) invocation -> {
             String queryResult = invocation.getArgument(0);

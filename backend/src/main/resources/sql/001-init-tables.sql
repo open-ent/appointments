@@ -37,6 +37,7 @@ CREATE TABLE appointments.grid (
     structure_id varchar(255) NOT NULL,
     begin_date date NOT NULL,
     end_date date NOT NULL,
+    creation_date date NOT NULL,
     color varchar(255) NOT NULL,
     duration interval NOT NULL,
     periodicity integer NOT NULL,

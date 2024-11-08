@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.openent.appointments.core.constants.Constants.APPOINTMENTS_ADDRESS;
 import static org.mockito.Mockito.*;
 
 @RunWith(VertxUnitRunner.class)
@@ -62,7 +63,7 @@ public class DefaultGridRepositoryTest {
     @Before
     public void setUp() {
         vertx = Vertx.vertx();
-        Sql.getInstance().init(vertx.eventBus(), Fields.APPOINTMENTS_ADRESS);
+        Sql.getInstance().init(vertx.eventBus(), APPOINTMENTS_ADDRESS);
         this.gridRepository = new DefaultGridRepository(new RepositoryFactory(sql, neo4j));
     }
 

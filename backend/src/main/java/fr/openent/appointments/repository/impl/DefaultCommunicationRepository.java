@@ -7,10 +7,11 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import fr.wseduc.webutils.Either;
 import org.entcore.common.neo4j.Neo4j;
 import org.entcore.common.neo4j.Neo4jResult;
-import fr.openent.appointments.core.constants.Fields;
+
+import static fr.openent.appointments.core.constants.Constants.CAMEL_STRUCTURE_ID;
+import static fr.openent.appointments.core.constants.Constants.CAMEL_USER_ID;
 
 public class DefaultCommunicationRepository implements CommunicationRepository {
 
@@ -49,8 +50,8 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
                 "     g.name as name";
 
         JsonObject params = new JsonObject()
-                .put(Fields.CAMEL_USER_ID, userId)
-                .put(Fields.CAMEL_STRUCTURE_ID, structureId);
+                .put(CAMEL_USER_ID, userId)
+                .put(CAMEL_STRUCTURE_ID, structureId);
 
         String errorMessage = "[Appointments@DefaultCommunicationRepository::getGroupsCanCommunicateWithMe] Fail to retrieve visible groups : ";
         neo4j.execute(query, params, Neo4jResult.validResultHandler(FutureHelper.handlerEither(promise, errorMessage)));

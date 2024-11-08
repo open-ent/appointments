@@ -1,6 +1,5 @@
 package fr.openent.appointments.controller;
 
-import fr.openent.appointments.core.constants.Fields;
 import fr.openent.appointments.service.CommunicationService;
 import fr.openent.appointments.service.ServiceFactory;
 import fr.wseduc.rs.ApiDoc;
@@ -12,6 +11,8 @@ import org.entcore.common.http.filter.ResourceFilter;
 import io.vertx.core.http.HttpServerRequest;
 import fr.openent.appointments.security.ManageRight;
 import org.entcore.common.user.UserUtils;
+
+import static fr.openent.appointments.core.constants.Constants.CAMEL_STRUCTURE_ID;
 
 
 public class CommunicationController extends BaseController {
@@ -26,7 +27,7 @@ public class CommunicationController extends BaseController {
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getGroupsCanCommunicateWithMe(final HttpServerRequest request) {
-        String structureId = request.getParam(Fields.CAMEL_STRUCTURE_ID);
+        String structureId = request.getParam(CAMEL_STRUCTURE_ID);
         if (structureId == null || structureId.isEmpty()) {
             badRequest(request);
             return;

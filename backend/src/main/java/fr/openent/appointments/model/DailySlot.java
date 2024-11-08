@@ -8,6 +8,8 @@ import fr.openent.appointments.helper.IModelHelper;
 import java.time.LocalTime;
 import io.vertx.core.json.JsonObject;
 
+import static fr.openent.appointments.core.constants.Constants.*;
+
 public class DailySlot implements IModel<DailySlot> {
 
     private Day day;
@@ -16,8 +18,8 @@ public class DailySlot implements IModel<DailySlot> {
 
     public DailySlot(JsonObject dailySlot){
         this.day = Day.getDay(dailySlot.getString(Fields.DAY, ""));
-        this.beginTime = DateHelper.parseTime(dailySlot.getString(Fields.CAMEL_BEGIN_TIME, ""));
-        this.endTime = DateHelper.parseTime(dailySlot.getString(Fields.CAMEL_END_TIME, ""));
+        this.beginTime = DateHelper.parseTime(dailySlot.getString(CAMEL_BEGIN_TIME, ""));
+        this.endTime = DateHelper.parseTime(dailySlot.getString(CAMEL_END_TIME, ""));
     }
 
     public boolean isValid() {

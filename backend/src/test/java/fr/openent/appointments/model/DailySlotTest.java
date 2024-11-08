@@ -1,7 +1,6 @@
 package fr.openent.appointments.model;
 
 import fr.openent.appointments.enums.Day;
-import fr.openent.appointments.core.constants.Fields;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -10,27 +9,30 @@ import org.junit.runner.RunWith;
 
 import java.time.LocalTime;
 
+import static fr.openent.appointments.core.constants.Fields.*;
+import static fr.openent.appointments.core.constants.Constants.*;
+
 @RunWith(VertxUnitRunner.class)
 public class DailySlotTest {
 
     // Valid JSON objects for testing
     JsonObject validDailySlotJson = new JsonObject()
-            .put(Fields.DAY, "MONDAY")
-            .put(Fields.CAMEL_BEGIN_TIME, "09:00")
-            .put(Fields.CAMEL_END_TIME, "17:00");
+            .put(DAY, "MONDAY")
+            .put(CAMEL_BEGIN_TIME, "09:00")
+            .put(CAMEL_END_TIME, "17:00");
 
     JsonObject invalidDailySlotJson = new JsonObject()
-            .put(Fields.DAY, "MONDAY")
-            .put(Fields.CAMEL_BEGIN_TIME, "18:00")  // Invalid: end time is before start time
-            .put(Fields.CAMEL_END_TIME, "09:00");
+            .put(DAY, "MONDAY")
+            .put(CAMEL_BEGIN_TIME, "18:00")  // Invalid: end time is before start time
+            .put(CAMEL_END_TIME, "09:00");
 
     JsonObject missingFieldDailySlotJson = new JsonObject()
-            .put(Fields.DAY, "WEDNESDAY");
+            .put(DAY, "WEDNESDAY");
 
     JsonObject sameBeginAndEndTimeJson = new JsonObject()
-            .put(Fields.DAY, "FRIDAY")
-            .put(Fields.CAMEL_BEGIN_TIME, "12:00")
-            .put(Fields.CAMEL_END_TIME, "12:00"); // Edge case: begin and end time are the same
+            .put(DAY, "FRIDAY")
+            .put(CAMEL_BEGIN_TIME, "12:00")
+            .put(CAMEL_END_TIME, "12:00"); // Edge case: begin and end time are the same
 
     @Test
     public void testDailySlotHasBeenInstantiated(TestContext ctx) {

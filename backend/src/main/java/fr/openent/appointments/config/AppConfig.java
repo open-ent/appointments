@@ -2,7 +2,7 @@ package fr.openent.appointments.config;
 
 import io.vertx.core.json.JsonObject;
 
-import static fr.openent.appointments.core.constants.Fields.*;
+import static fr.openent.appointments.core.constants.Constants.*;
 
 public class AppConfig {
 

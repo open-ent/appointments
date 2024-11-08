@@ -1,5 +1,8 @@
 package fr.openent.appointments.service.impl;
 
+import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.model.response.ListGridsResponse;
+import fr.openent.appointments.model.database.Grid;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -14,12 +17,14 @@ import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.service.GridService;
 import fr.openent.appointments.service.ServiceFactory;
 import fr.openent.appointments.enums.GridState;
-import fr.openent.appointments.core.constants.Fields;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.entcore.common.user.UserUtils;
+
+import static fr.openent.appointments.core.constants.Constants.CAMEL_GRID_ID;
 
 /**
  * Default implementation of the GridService interface.
@@ -36,9 +41,23 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
-    public Future<JsonArray> getMyGrids() {
-        // TODO: Implement the logic to retrieve all grids associated with the current user.
-        return Future.succeededFuture(new JsonArray());
+    public Future<ListGridsResponse> getMyMinimalGrids(String userId, List<GridState> states, Long page, Long limit) {
+        Promise<ListGridsResponse> promise = Promise.promise();
+
+        gridRepository.getMyGrids(userId, states)
+            .onSuccess(grids -> promise.complete(this.buildListGridsResponse(grids, page, limit)))
+            .onFailure(error -> {
+                String errorMessage = "Failed to get my grids";
+                LogHelper.logError(this, "getMyMinimalGrids", errorMessage, error.getMessage());
+                promise.fail(error.getMessage());
+            });
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<List<Grid>> getMyGrids(String userId, List<GridState> states) {
+        return gridRepository.getMyGrids(userId, states);
     }
 
     @Override
@@ -61,11 +80,12 @@ public class DefaultGridService implements GridService {
 
     private Future<Boolean> isGridAlreadyExists(String gridName, String userId) {
         Promise<Boolean> promise = Promise.promise();
+
         List<GridState> gridStates = new ArrayList<>();
         gridStates.add(GridState.OPEN);
         gridStates.add(GridState.SUSPENDED);
 
-        gridRepository.getGrids(userId, gridName, gridStates)
+        gridRepository.getMyGridsByName(userId, gridName, gridStates)
             .onSuccess(grids -> promise.complete(!grids.isEmpty()))
             .onFailure(err -> {
                 String errorMessage = String.format("[Appointments@DefaultGridService::isGridAlreadyExists] %s", err.getMessage());
@@ -88,7 +108,7 @@ public class DefaultGridService implements GridService {
                     }
                     return gridRepository.create(grid, user.getUserId());
                 }))
-            .onSuccess(gridId -> promise.complete(new JsonObject().put(Fields.CAMEL_GRID_ID, gridId)))
+            .onSuccess(gridId -> promise.complete(new JsonObject().put(CAMEL_GRID_ID, gridId)))
             .onFailure(err -> {
                 String errorMessage = String.format("[Appointments@DefaultGridService::createGrid] %s", err.getMessage());
                 log.error(errorMessage);
@@ -126,5 +146,13 @@ public class DefaultGridService implements GridService {
     @Override
     public Future<JsonObject> closeAllPassedGrids() {
         return gridRepository.closeAllPassedGrids();
+    }
+
+    private ListGridsResponse buildListGridsResponse(List<Grid> grids, Long page, Long limit) {
+        List<Grid> paginatedGrids = grids.stream()
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .collect(Collectors.toList());
+        return new ListGridsResponse((long) grids.size(), paginatedGrids);
     }
 }
