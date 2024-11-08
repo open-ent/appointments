@@ -1,7 +1,5 @@
 package fr.openent.appointments.repository.impl;
 
-import fr.openent.appointments.core.constants.Fields;
-import fr.openent.appointments.core.constants.SqlTables;
 import fr.openent.appointments.model.DailySlot;
 import fr.openent.appointments.model.payload.GridPayload;
 import fr.openent.appointments.model.TransactionElement;
@@ -15,12 +13,15 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import org.entcore.common.user.UserInfos;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.sql.SqlResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static fr.openent.appointments.core.constants.Fields.*;
+import static fr.openent.appointments.core.constants.SqlTables.*;
+import static fr.openent.appointments.enums.GridState.CLOSED;
 
 public class DefaultGridRepository implements GridRepository {
 
@@ -37,16 +38,16 @@ public class DefaultGridRepository implements GridRepository {
     public Future<JsonArray> getGrids(String userId, String gridName, List<GridState> gridStates) {
         Promise<JsonArray> promise = Promise.promise();
 
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM " + SqlTables.DB_GRID_TABLE + " WHERE " + Fields.OWNER_ID + " = ?");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM " + DB_GRID_TABLE + " WHERE " + OWNER_ID + " = ?");
         JsonArray params = new JsonArray().add(userId);
 
         if (gridName != null) {
-            queryBuilder.append(" AND ").append(Fields.NAME).append(" = ?");
+            queryBuilder.append(" AND ").append(NAME).append(" = ?");
             params.add(gridName);
         }
 
         if (gridStates != null && !gridStates.isEmpty()) {
-            queryBuilder.append(" AND ").append(Fields.STATE).append(" IN ")
+            queryBuilder.append(" AND ").append(STATE).append(" IN ")
                         .append(Sql.listPrepared(gridStates.toArray()));
             params.addAll(new JsonArray(gridStates.stream().map(GridState::getValue).collect(Collectors.toList())));
         }
@@ -62,7 +63,7 @@ public class DefaultGridRepository implements GridRepository {
     public Future<JsonArray> getGridsName (String userId) {
         Promise<JsonArray> promise = Promise.promise();
 
-        String query = "SELECT " + Fields.NAME + " FROM " + SqlTables.DB_GRID_TABLE + " WHERE " + Fields.OWNER_ID + " = ? AND " + Fields.STATE + " IN (?, ?)";
+        String query = "SELECT " + NAME + " FROM " + DB_GRID_TABLE + " WHERE " + OWNER_ID + " = ? AND " + STATE + " IN (?, ?)";
         JsonArray params = new JsonArray()
                 .add(userId)
                 .add(GridState.OPEN.getValue())
@@ -73,7 +74,7 @@ public class DefaultGridRepository implements GridRepository {
 
         return promise.future().map(jsonArray -> {
             JsonArray names = new JsonArray();
-            jsonArray.forEach(grid -> names.add(((JsonObject) grid).getString(Fields.NAME)));
+            jsonArray.forEach(grid -> names.add(((JsonObject) grid).getString(NAME)));
             return names;
         });
     }
@@ -81,21 +82,21 @@ public class DefaultGridRepository implements GridRepository {
     private Future<JsonObject> insert(GridPayload grid, String userId) {
         Promise<JsonObject> promise = Promise.promise();
 
-        String query = "INSERT INTO "+ SqlTables.DB_GRID_TABLE +" (" +
-            Fields.NAME + ", " +
-            Fields.OWNER_ID + ", " +
-            Fields.STRUCTURE_ID + ", " +
-            Fields.BEGIN_DATE + ", " +
-            Fields.END_DATE + ", " +
-            Fields.COLOR + ", " +
-            Fields.DURATION + ", " +
-            Fields.PERIODICITY + ", " +
-            Fields.TARGET_PUBLIC_LIST_ID + ", " +
-            Fields.VISIO_LINK + ", " +
-            Fields.PLACE + ", " +
-            Fields.DOCUMENT_ID + ", " +
-            Fields.PUBLIC_COMMENT + ", " +
-            Fields.STATE + ") " +
+        String query = "INSERT INTO "+ DB_GRID_TABLE +" (" +
+            NAME + ", " +
+            OWNER_ID + ", " +
+            STRUCTURE_ID + ", " +
+            BEGIN_DATE + ", " +
+            END_DATE + ", " +
+            COLOR + ", " +
+            DURATION + ", " +
+            PERIODICITY + ", " +
+            TARGET_PUBLIC_LIST_ID + ", " +
+            VISIO_LINK + ", " +
+            PLACE + ", " +
+            DOCUMENT_ID + ", " +
+            PUBLIC_COMMENT + ", " +
+            STATE + ") " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
         String name = grid.getGridName();
@@ -142,11 +143,11 @@ public class DefaultGridRepository implements GridRepository {
             return promise.future();
         }
 
-        String query = "INSERT INTO " + SqlTables.DB_DAILY_SLOT_TABLE + " (" +
-            Fields.DAY + ", " +
-            Fields.BEGIN_TIME + ", " +
-            Fields.END_TIME + ", " +
-            Fields.GRID_ID + ") VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO " + DB_DAILY_SLOT_TABLE + " (" +
+            DAY + ", " +
+            BEGIN_TIME + ", " +
+            END_TIME + ", " +
+            GRID_ID + ") VALUES (?, ?, ?, ?)";
 
         List<TransactionElement> transactionElements = new ArrayList<>();
 
@@ -167,14 +168,26 @@ public class DefaultGridRepository implements GridRepository {
             
         return promise.future();
     }
-    
 
     public Future<JsonObject> create(GridPayload grid, String userId) {
         return insert(grid, userId)
                     .compose(insertedGridId -> {
-                        Long gridId = insertedGridId.getLong(Fields.ID, null);
+                        Long gridId = insertedGridId.getLong(ID, null);
                         return insertDailySlots(gridId, grid.getDailySlots())
-                            .map(inserted -> new JsonObject().put(Fields.CAMEL_GRID_ID, gridId));
+                            .map(inserted -> new JsonObject().put(CAMEL_GRID_ID, gridId));
                     });
+    }
+
+    @Override
+    public Future<JsonObject> closeAllPassedGrids() {
+        Promise<JsonObject> promise = Promise.promise();
+        
+        String query = "UPDATE " + DB_GRID_TABLE + " SET " + STATE + " = ? WHERE " + END_DATE + " < ?;";
+        JsonArray params = new JsonArray().add(CLOSED).add("NOW()");
+
+        String errorMessage = "[Appointments@DefaultGridRepository::closeAllPassedGrids] Fail to close passed grids : ";
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(FutureHelper.handlerEither(promise, errorMessage)));
+
+        return promise.future();
     }
 }

@@ -81,4 +81,11 @@ public interface GridService {
      * @return A Future that will complete when the grid has been deleted.
      */
     Future<Void> deleteGrid(Integer gridId);
+
+    /**
+     * Close all the grid with an ending date in the past
+     *
+     * @return A Future that will complete when the grids have been updated.
+     */
+    Future<JsonObject> closeAllPassedGrids();
 }

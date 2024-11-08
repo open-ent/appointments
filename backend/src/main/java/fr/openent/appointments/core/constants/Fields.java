@@ -28,6 +28,7 @@ public class Fields {
     public static final String VISIO_LINK = "visio_link";
     public static final String USER_ID = "user_id";
 
+    // camelCase constants
     public static final String CAMEL_ACTOR_ID = "actorId";
     public static final String CAMEL_BEGIN_DATE = "beginDate";
     public static final String CAMEL_BEGIN_TIME = "beginTime";
@@ -46,9 +47,15 @@ public class Fields {
     public static final String CAMEL_VISIO_LINK = "visioLink";
     public static final String CAMEL_USER_ID = "userId";
 
-    public static final String APPOINTMENTS_ADRESS = "fr.openent.appointments";
-    public static final String PREPARDED = "prepared";
+    // kebab-case constants
+    public static final String KEBAB_CLOSING_CRON = "closing-cron";
+
+    // Other constants
     public static final String ACTION = "action";
+    public static final String APPOINTMENTS_ADRESS = "fr.openent.appointments";
+    public static final String HOST = "host";
+    public static final String MODE = "mode";
+    public static final String PREPARDED = "prepared";
     public static final String STATEMENT = "statement";
     public static final String VALUES = "values";
 

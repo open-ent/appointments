@@ -54,4 +54,13 @@ public interface GridRepository {
      */
     Future<JsonObject> create(GridPayload grid, String userId);
 
+    /**
+     * Update grids with passed ending dates with the state CLOSED (see {@link GridState})
+     *
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *         return a {@link JsonObject} containing the result of the operation.
+     *         This object may include the updated grids' details or an error message
+     *         if the operation fails.
+     */
+    Future<JsonObject> closeAllPassedGrids();
 }

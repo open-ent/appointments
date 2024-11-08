@@ -122,4 +122,9 @@ public class DefaultGridService implements GridService {
         // TODO: Implement the logic to delete a specific grid.
         return Future.succeededFuture();
     }
+
+    @Override
+    public Future<JsonObject> closeAllPassedGrids() {
+        return gridRepository.closeAllPassedGrids();
+    }
 }
