@@ -4,7 +4,10 @@ import isBetween from "dayjs/plugin/isBetween";
 
 import { SLOT_DURATION } from "~/core/enums";
 import { Slot, Time, TimeObject } from "~/core/types";
-import { formatSlotDurationToMinutes, formatTimeToDayjs } from "~/core/utils";
+import {
+  formatSlotDurationToMinutes,
+  formatTimeToDayjs,
+} from "~/core/utils/date.utils";
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);

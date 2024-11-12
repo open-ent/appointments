@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material";
 
-import { BLACK, GREY, PURPLE } from "./constants";
+import { BLACK, GREY, PURPLE } from "./color.constants";
 
 const theme = createTheme({
   palette: {
@@ -99,17 +99,6 @@ const theme = createTheme({
           props: { variant: "outlined" },
           style: {
             fontSize: "1.4rem",
-            color: PURPLE,
-            fontFamily: "Roboto",
-            backgroundColor: "white",
-            textTransform: "none",
-            padding: "0.8rem 1.6rem",
-            borderRadius: "0.5rem",
-            border: "1px solid #4D32A3",
-            "&:hover": {
-              backgroundColor: "#F2F2F2",
-              border: "none",
-            },
           },
         },
         {
@@ -148,6 +137,28 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: "1.2rem",
+        },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontSize: "1.2rem",
+        },
+      },
+    },
+    MuiPagination: {
+      styleOverrides: {
+        root: {
+          "& .MuiPaginationItem-root": {
+            "&.Mui-selected": {
+              backgroundColor: PURPLE,
+              color: "white",
+              "&:hover": {
+                backgroundColor: PURPLE,
+              },
+            },
+          },
         },
       },
     },

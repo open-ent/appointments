@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from "dayjs";
 
-import { DAY, PERIODICITY, SLOT_DURATION } from "./enums";
-import { Time, TimeObject } from "./types";
+import { SLOT_DURATION, DAY, PERIODICITY } from "../enums";
+import { TimeObject, Time } from "../types";
 
 export const formatSlotDurationToMinutes = (
   duration: SLOT_DURATION,
@@ -63,6 +63,10 @@ export const formatPeriodicityToI18n = (periodicity: PERIODICITY): string => {
     default:
       return "";
   }
+};
+
+export const formatDayjsToString = (date: Dayjs): string => {
+  return date.format("DD/MM/YYYY");
 };
 
 export const formatTimeToDayjs = (time: TimeObject): Dayjs => {

@@ -7,27 +7,24 @@ import {
   useState,
 } from "react";
 
-import { useUser } from "@edifice-ui/react";
-
 import {
   GridModalInputs,
   GridModalProviderContextProps,
   GridModalProviderProps,
   InputsErrors,
-  Structure,
 } from "./types";
 import {
   initialErrorInputs,
   initialGridModalInputs,
   periodicityOptions,
   slotDurationOptions,
-  userStructures,
 } from "./utils";
 import {
   useBlurGridInputsReturnType,
   useUpdateGridInputsReturnType,
 } from "~/hooks/types";
 import { useBlurGridInputs } from "~/hooks/useBlurGridInputs";
+import { useStructure } from "~/hooks/useStructure";
 import { useUpdateGridInputs } from "~/hooks/useUpdateGridInputs";
 import { useGetCommunicationGroupsQuery } from "~/services/api/communication.service";
 import { useGetMyGridsNameQuery } from "~/services/api/grid.service";
@@ -46,8 +43,7 @@ export const useGridModalProvider = () => {
 };
 
 export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
-  const { user } = useUser();
-  const structures: Structure[] = user ? userStructures(user) : [];
+  const { structures } = useStructure();
 
   const [inputs, setInputs] = useState<GridModalInputs>(
     initialGridModalInputs(structures),
@@ -91,13 +87,6 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   useEffect(() => {
     if (inputs.structure.id) refetchGroups();
   }, [inputs.structure]);
-
-  useEffect(() => {
-    setInputs((prev) => ({
-      ...prev,
-      structure: structures.length ? structures[0] : { id: "", name: "" },
-    }));
-  }, [user]);
 
   const value = useMemo<GridModalProviderContextProps>(
     () => ({

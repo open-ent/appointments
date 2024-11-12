@@ -18,3 +18,9 @@ export enum PERIODICITY {
   WEEKLY = 1,
   BIWEEKLY = 2,
 }
+
+export enum GRID_STATE {
+  OPEN = "OPEN",
+  SUSPENDED = "SUSPENDED",
+  CLOSED = "CLOSED",
+}

@@ -1,29 +1,12 @@
-import { IUserInfo } from "edifice-ts-client";
-
-import {
-  GridModalInputs,
-  GridPayload,
-  InputsErrors,
-  Public,
-  Structure,
-} from "./types";
+import { GridModalInputs, GridPayload, InputsErrors, Public } from "./types";
 import { DAY, PERIODICITY, SLOT_DURATION } from "~/core/enums";
 import { INVALID_SLOT_ERROR } from "~/core/i18nKeys";
 import { WeekSlotsModel } from "~/core/types";
-import { formatSlotDurationToString, formatTimeToString } from "~/core/utils";
-
-export const userStructures = (userInfo: IUserInfo): Structure[] => {
-  if (userInfo.structures.length !== userInfo.structureNames.length) {
-    throw new Error(
-      "Structures and structureNames arrays must have the same length",
-    );
-  }
-
-  return userInfo.structures.map((structureId, index) => ({
-    id: structureId,
-    name: userInfo.structureNames[index],
-  }));
-};
+import {
+  formatSlotDurationToString,
+  formatTimeToString,
+} from "~/core/utils/date.utils";
+import { Structure } from "~/hooks/types";
 
 export const initialPublic: Public[] = [];
 export const initialWeekSlots: WeekSlotsModel = {

@@ -1,5 +1,5 @@
 import { columnBoxStyle, flexStartBoxStyle } from "~/styles/boxStyles";
-import { PURPLE } from "~/styles/constants";
+import { PURPLE } from "~/styles/color.constants";
 
 export const dayBoxStyle = {
   ...flexStartBoxStyle,

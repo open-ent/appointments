@@ -18,7 +18,7 @@ import {
 import { pageGridModalStyle } from "../GridModal/style";
 import { RangeDatePicker } from "~/components/RangeDatePicker";
 import { WeekSlots } from "~/components/WeekSlots";
-import { formatPeriodicityToI18n } from "~/core/utils";
+import { formatPeriodicityToI18n } from "~/core/utils/date.utils";
 import { useGridModalProvider } from "~/providers/GridModalProvider";
 
 export const SecondPageGridModal: FC = () => {
@@ -42,11 +42,6 @@ export const SecondPageGridModal: FC = () => {
           <Typography>
             {t("appointments.grid.validity.period") + " *"}
           </Typography>
-          {errorInputs.validityPeriod && (
-            <FormHelperText error>
-              {t(errorInputs.validityPeriod)}
-            </FormHelperText>
-          )}
         </Box>
         <RangeDatePicker />
       </Box>

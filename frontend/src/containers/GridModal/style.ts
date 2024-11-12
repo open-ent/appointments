@@ -1,4 +1,7 @@
+import { SxProps } from "@mui/material";
+
 import { columnBoxStyle } from "~/styles/boxStyles";
+import { ITALIC_FONT } from "~/styles/fontStyle.constants";
 
 export const pageGridModalStyle = {
   ...columnBoxStyle,
@@ -6,7 +9,7 @@ export const pageGridModalStyle = {
   height: "100%",
 };
 
-export const modalBoxStyle = {
+export const modalBoxStyle: SxProps = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -15,9 +18,10 @@ export const modalBoxStyle = {
   height: "calc(90vh)",
   maxHeight: "fit-content",
   background: "white",
+  borderRadius: ".5rem",
 };
 
-export const contentBoxStyle = {
+export const contentBoxStyle: SxProps = {
   borderRadius: ".2rem",
   padding: "2rem 3rem",
   display: "flex",
@@ -25,4 +29,23 @@ export const contentBoxStyle = {
   gap: "1rem",
   maxHeight: "100%",
   overflowY: "auto",
+  "&::-webkit-scrollbar": {
+    width: "0.8rem",
+    height: "0.8rem",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "rgba(170,170,170,1)",
+    borderRadius: "0.3rem",
+  },
+};
+
+export const closeIconStyle = {
+  "& > .MuiSvgIcon-root": {
+    fontSize: "2.4rem",
+  },
+};
+
+export const instructionStyle: SxProps = {
+  ...ITALIC_FONT,
+  marginBottom: "1rem",
 };

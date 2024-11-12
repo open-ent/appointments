@@ -29,8 +29,8 @@ i18n
     supportedLngs: ["fr", "en"],
     interpolation: {
       escapeValue: false,
-      prefix: "[[",
-      suffix: "]]",
+      prefix: "{{",
+      suffix: "}}",
     },
     debug: false,
   });

@@ -11,7 +11,7 @@ import { SelectChangeEvent } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 
-import { useUpdateGridInputsType } from "./types";
+import { Structure, useUpdateGridInputsType } from "./types";
 import { HexaColor } from "~/components/ColorPicker/types";
 import { DAY, PERIODICITY, SLOT_DURATION } from "~/core/enums";
 import {
@@ -19,12 +19,11 @@ import {
   SAME_GRID_ALREADY_EXISTS_ERROR,
 } from "~/core/i18nKeys";
 import { TimeObject } from "~/core/types";
-import { formatTimeToDayjs } from "~/core/utils";
+import { formatTimeToDayjs } from "~/core/utils/date.utils";
 import {
   GridModalInputs,
   InputsErrors,
   Public,
-  Structure,
 } from "~/providers/GridModalProvider/types";
 import {
   initialPublic,
@@ -72,7 +71,7 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
     updateInputField("color", color);
   };
 
-  const handleStructureChange = (event: SelectChangeEvent) => {
+  const handleStructureChange = (event: SelectChangeEvent<unknown>) => {
     const structure = structureOptions.find(
       (structure) => structure.id === event.target.value,
     );

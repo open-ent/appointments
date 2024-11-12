@@ -54,12 +54,17 @@
     "appointments.grid.in.progress.empty.state": "Vous n’avez pas encore défini de grille horaire pour les jours à venir.",
     "appointments.grid.in.progress": "Grille en cours",
     "appointments.grid.passed": "Grilles passées",
+    
+    "appointments.grid.from.date.to.date": "Du {{beginDate}} au {{endDate}}",
+    "appointments.grid.state.open": "Ouverte",
+    "appointments.grid.state.suspended": "Suspendue",
+    "appointments.grid.state.closed": "Fermée",
 
     "appointments.cancel": "Annuler",
     "appointments.save": "Enregistrer",
     "appointments.back": "Retour",
     "appointments.next": "Suivant",
-    "appointments.modify": "Modifier",
+    "appointments.edit": "Modifier",
     "appointments.suspend": "Suspendre",
     "appointments.resume": "Reprendre",
     "appointments.delete": "Supprimer",

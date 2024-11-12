@@ -2,7 +2,7 @@ import { Box, styled } from "@mui/material";
 
 import { StyledBoxProps } from "./types";
 import { centerBoxStyle, flexStartBoxStyle } from "~/styles/boxStyles";
-import { PURPLE } from "~/styles/constants";
+import { PURPLE } from "~/styles/color.constants";
 
 export const StyledDailySlotBox = styled(Box)<StyledBoxProps>(
   ({ isSlotError }) => ({

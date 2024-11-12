@@ -15,6 +15,7 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 
+import { AvailabilityProvider } from "./providers/AvailabilityProvider";
 import { GlobalProvider } from "./providers/GlobalProvider";
 import { GridModalProvider } from "./providers/GridModalProvider";
 import { router } from "./routes";
@@ -59,9 +60,11 @@ root.render(
           <ThemeProviderMUI theme={theme}>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
               <GlobalProvider>
-                <GridModalProvider>
-                  <RouterProvider router={router} />
-                </GridModalProvider>
+                <AvailabilityProvider>
+                  <GridModalProvider>
+                    <RouterProvider router={router} />
+                  </GridModalProvider>
+                </AvailabilityProvider>
               </GlobalProvider>
             </LocalizationProvider>
           </ThemeProviderMUI>

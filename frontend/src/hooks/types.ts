@@ -15,13 +15,12 @@ import {
   GridModalInputs,
   InputsErrors,
   Public,
-  Structure,
 } from "~/providers/GridModalProvider/types";
 
 export interface useUpdateGridInputsReturnType {
   handleNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleColorChange: (color: HexaColor) => void;
-  handleStructureChange: (event: SelectChangeEvent) => void;
+  handleStructureChange: (event: SelectChangeEvent<unknown>) => void;
   handleLocationChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handlePublicChange: (_: SyntheticEvent, value: Public[]) => void;
   handleIsVisioChange: () => void;
@@ -70,3 +69,8 @@ export type useBlurGridInputsType = (
   errorInputs: InputsErrors,
   setErrorInputs: Dispatch<SetStateAction<InputsErrors>>,
 ) => useBlurGridInputsReturnType;
+
+export interface Structure {
+  id: string;
+  name: string;
+}

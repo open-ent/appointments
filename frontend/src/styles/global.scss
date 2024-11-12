@@ -10,5 +10,8 @@ main {
     --edifice-container-width: 100%;
     padding: 3rem 5rem;
     background-color: #eef0f3 !important;
+    @media (max-width: 720px) {
+      padding: 0rem 0rem;
+    }
   }
 }

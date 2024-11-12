@@ -5,26 +5,23 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Select,
   Switch,
   TextField,
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { colorStyle, CustomSelect, firstLineStyle, nameStyle } from "./style";
 import { pageGridModalStyle } from "../GridModal/style";
 import { ColorPicker } from "~/components/ColorPicker";
 import { CustomMultiAutocomplete } from "~/components/CustomMultiAutocomplete";
+import { useStructure } from "~/hooks/useStructure";
 import { useGridModalProvider } from "~/providers/GridModalProvider";
-import {
-  flexEndBoxStyle,
-  flexStartBoxStyle,
-  spaceBetweenBoxStyle,
-} from "~/styles/boxStyles";
+import { flexStartBoxStyle } from "~/styles/boxStyles";
 
 export const FirstPageGridModal: FC = () => {
   const { t } = useTranslation("appointments");
-
+  const { isMultiStructure } = useStructure();
   const {
     inputs,
     errorInputs,
@@ -42,7 +39,7 @@ export const FirstPageGridModal: FC = () => {
 
   return (
     <Box sx={pageGridModalStyle}>
-      <Box sx={spaceBetweenBoxStyle}>
+      <Box sx={firstLineStyle}>
         <TextField
           id="grid-name"
           label={
@@ -51,14 +48,14 @@ export const FirstPageGridModal: FC = () => {
             t("appointments.grid.visible.all")
           }
           variant="outlined"
-          fullWidth
+          sx={nameStyle}
           value={inputs.name}
           onChange={handleNameChange}
           onBlur={handleNameBlur}
           error={!!errorInputs.name}
           helperText={t(errorInputs.name)}
         />
-        <Box sx={flexEndBoxStyle}>
+        <Box sx={colorStyle}>
           <Typography>{t("appointments.grid.color") + " * "}</Typography>
           <ColorPicker />
         </Box>
@@ -67,19 +64,21 @@ export const FirstPageGridModal: FC = () => {
         <InputLabel id="demo-simple-select-label">
           {t("appointments.grid.structure") + " * "}
         </InputLabel>
-        <Select
+        <CustomSelect
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           label={t("appointments.grid.structure")}
           value={inputs.structure.id}
           onChange={handleStructureChange}
+          disabled={!isMultiStructure}
+          isDisabled={!isMultiStructure}
         >
           {structureOptions.map((structure) => (
             <MenuItem key={structure.id} value={structure.id}>
               {structure.name}
             </MenuItem>
           ))}
-        </Select>
+        </CustomSelect>
       </FormControl>
       <TextField
         id="grid-location"

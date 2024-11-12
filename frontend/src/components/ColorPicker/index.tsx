@@ -1,9 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useState, KeyboardEvent } from "react";
 
 import { Box, ClickAwayListener } from "@mui/material";
 import { CirclePicker, ColorResult } from "react-color";
 
 import { circlePickerStyle, colorPickerIconStyle } from "./style";
+import { HexaColor } from "./types";
 import { ColorPickerIcon } from "~/components/SVG/ColorPickerIcon";
 import { useGridModalProvider } from "~/providers/GridModalProvider";
 
@@ -23,24 +24,30 @@ export const ColorPicker: FC = () => {
     setIsCirclePickerVisible(false);
   };
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handlePickerToggle();
+    }
+  };
+
   return (
     <ClickAwayListener onClickAway={handleClose}>
-      <Box sx={colorPickerIconStyle}>
+      <Box sx={colorPickerIconStyle} tabIndex={0} onKeyDown={handleKeyDown}>
         <ColorPickerIcon onClick={handlePickerToggle} fill={inputs.color} />
-        <Box sx={circlePickerStyle}>
-          {isCirclePickerVisible && (
+        {isCirclePickerVisible && (
+          <Box sx={circlePickerStyle}>
             <CirclePicker
               color={inputs.color}
               onChange={(newColor: ColorResult) => {
-                handleColorChange(newColor.hex);
+                handleColorChange(newColor.hex as HexaColor);
                 handleClose();
               }}
               circleSize={20}
               circleSpacing={5}
-              width="16rem"
+              width="15rem"
             />
-          )}
-        </Box>
+          </Box>
+        )}
       </Box>
     </ClickAwayListener>
   );

@@ -11,6 +11,11 @@ export const homeStyle = {
   minHeight: "calc(100vh - 13rem)",
 };
 
+export const appointmentsIconStyle = {
+  width: "5rem",
+  height: "5rem",
+};
+
 export const titleStyle = {
   ...flexStartBoxStyle,
   margin: "3rem 2rem",
@@ -19,6 +24,9 @@ export const titleStyle = {
 export const contentStyle = {
   ...columnBoxStyle,
   padding: "1rem 6rem",
+  "@media (max-width: 720px)": {
+    padding: "1rem 1rem",
+  },
 };
 
 export const tabsStyle = {

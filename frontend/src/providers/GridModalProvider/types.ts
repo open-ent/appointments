@@ -6,6 +6,7 @@ import { HexaColor } from "~/components/ColorPicker/types";
 import { DAY, PERIODICITY, SLOT_DURATION } from "~/core/enums";
 import { WeekSlotsModel } from "~/core/types";
 import {
+  Structure,
   useBlurGridInputsReturnType,
   useUpdateGridInputsReturnType,
 } from "~/hooks/types";
@@ -28,11 +29,6 @@ export interface GridModalProviderContextProps {
 
 export interface GridModalProviderProps {
   children: ReactNode;
-}
-
-export interface Structure {
-  id: string;
-  name: string;
 }
 
 export interface Public {

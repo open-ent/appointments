@@ -20,7 +20,7 @@ import {
 } from "./style";
 import { DailySlot } from "../DailySlot";
 import { DAY } from "~/core/enums";
-import { formatDayToI18n } from "~/core/utils";
+import { formatDayToI18n } from "~/core/utils/date.utils";
 import { useGridModalProvider } from "~/providers/GridModalProvider";
 
 export const WeekSlots: FC = () => {
