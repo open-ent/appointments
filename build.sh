@@ -94,28 +94,40 @@ install() {
     clean_frontend_folders
 }
 
-# Main function to orchestrate the build process
+# Main function to handle multiple arguments
 main() {
-    if [[ "$1" == "install" ]]; then
-        install
-    elif  [[ "$1" == "buildBack" ]]; then
-        build_backend
-    elif [[ "$1" == "buildFront" ]]; then
-        build_frontend
-    elif [[ "$1" == "clean" ]]; then
-        clean_backend
-    elif [[ "$1" == "testBack" ]]; then
-        test_backend
-    elif [[ "$1" == "testFront" ]]; then
-        test_frontend
-    elif [[ "$1" == "test" ]]; then
-        test_frontend
-        test_backend
-    else
-        echo "Usage: ./build.sh install"
-        exit 1
-    fi
+    for arg in "$@"; do
+        case "$arg" in
+            install)
+                install
+                ;;
+            buildBack)
+                build_backend
+                ;;
+            buildFront)
+                build_frontend
+                ;;
+            clean)
+                clean_backend
+                ;;
+            testBack)
+                test_backend
+                ;;
+            testFront)
+                test_frontend
+                ;;
+            test)
+                test_frontend
+                test_backend
+                ;;
+            *)
+                echo "Invalid argument: $arg"
+                echo "Usage: ./build.sh [install|buildBack|buildFront|clean|testBack|testFront|test]"
+                exit 1
+                ;;
+        esac
+    done
 }
 
-# Call the main function with arguments
+# Call the main function with all arguments
 main "$@"
