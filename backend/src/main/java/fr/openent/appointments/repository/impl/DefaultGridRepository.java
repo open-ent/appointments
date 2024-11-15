@@ -1,7 +1,6 @@
 package fr.openent.appointments.repository.impl;
 
 import fr.openent.appointments.core.constants.Fields;
-import fr.openent.appointments.core.constants.SqlTables;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.model.DailySlot;
 import fr.openent.appointments.model.database.Grid;

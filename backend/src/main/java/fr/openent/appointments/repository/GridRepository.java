@@ -17,7 +17,7 @@ public interface GridRepository {
      * @param userId the unique identifier of the user whose grids are to be retrieved.
      * @param gridStates the states of the grids the user wants to retrieve.
      * @return a {@link Future} representing the asynchronous operation, which will
-     *         return a {@link JsonArray} containing the details of the grids associated
+     *         return a {@link List} of {@link Grid} containing the details of the grids associated
      *         with the specified user.
      */
     Future<List<Grid>> getMyGrids(String userId, List<GridState> gridStates);

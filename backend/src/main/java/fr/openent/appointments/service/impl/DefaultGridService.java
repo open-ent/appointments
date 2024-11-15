@@ -149,10 +149,16 @@ public class DefaultGridService implements GridService {
     }
 
     private ListGridsResponse buildListGridsResponse(List<Grid> grids, Long page, Long limit) {
-        List<Grid> paginatedGrids = grids.stream()
+        List<Grid> paginatedGrids = grids;
+
+        if (page != null && page >= 1 && limit != null && limit >= 1) {
+            paginatedGrids = grids.stream()
                 .skip((page - 1) * limit)
                 .limit(limit)
                 .collect(Collectors.toList());
+        }
+
+
         return new ListGridsResponse((long) grids.size(), paginatedGrids);
     }
 }

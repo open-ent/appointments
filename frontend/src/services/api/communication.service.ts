@@ -5,7 +5,7 @@ export const communicationApi = emptySplitApi.injectEndpoints({
   endpoints: (builder) => ({
     getCommunicationGroups: builder.query<Public[], string>({
       query: (structureId: string) =>
-        `/structures/${structureId}/communication/groups`,
+        `/structures/${structureId}/communication/from/groups`,
     }),
   }),
 });

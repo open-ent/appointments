@@ -18,13 +18,17 @@ public class LogHelper {
         return LoggerFactory.getLogger(myClass);
     }
 
+    public static void logError(Object classObject, String methodName, String message) {
+        logError(classObject, methodName, message, null);
+    }
+
     public static void logError(Object classObject, String methodName, String message, String err) {
         Class<?> myClass = classObject.getClass();
         getLogger(myClass).error(String.format("%s %s : %s", getBaseLog(myClass, methodName), message, err));
     }
 
-    public static void logInfo(Object classObject, String methodName, String message, String err) {
+    public static void logInfo(Object classObject, String methodName, String message) {
         Class<?> myClass = classObject.getClass();
-        getLogger(myClass).info(String.format("%s %s : %s", getBaseLog(myClass, methodName), message, err));
+        getLogger(myClass).info(String.format("%s %s : %s", getBaseLog(myClass, methodName), message));
     }
 }
