@@ -38,8 +38,8 @@ public abstract class MinimalGrid {
         this.name = grid.getName();
         this.structureId = grid.getStructureId();
         this.beginDate = grid.getBeginDate();
-        this.endDate = grid.getBeginDate();
-        this.creationDate = grid.getBeginDate();
+        this.endDate = grid.getEndDate();
+        this.creationDate = grid.getCreationDate();
         this.color = grid.getColor();
         this.state = grid.getState();
     }
