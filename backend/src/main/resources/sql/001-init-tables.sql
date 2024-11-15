@@ -41,7 +41,7 @@ CREATE TABLE appointments.grid (
     color varchar(255) NOT NULL,
     duration interval NOT NULL,
     periodicity integer NOT NULL,
-    target_public_list_id varchar(255) NOT NULL,
+    target_public_list_id varchar(2000) NOT NULL,
     visio_link varchar(255) NOT NULL,
     place varchar(255) NOT NULL,
     document_id varchar(255) NOT NULL,
