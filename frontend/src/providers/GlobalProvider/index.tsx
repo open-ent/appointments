@@ -7,6 +7,7 @@ import {
   GlobalProviderProps,
 } from "./types";
 import { initialDisplayModalsState } from "./utils";
+import { useStructure } from "~/hooks/useStructure";
 
 const GlobalProviderContext = createContext<GlobalProviderContextProps | null>(
   null,
@@ -21,6 +22,8 @@ export const useGlobalProvider = () => {
 };
 
 export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
+  const { isMultiStructure, structures, getStructureNameById } = useStructure();
+
   const [displayModals, setDisplayModals] = useState<DisplayModalsState>(
     initialDisplayModalsState,
   );
@@ -34,11 +37,14 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
 
   const value = useMemo<GlobalProviderContextProps>(
     () => ({
+      isMultiStructure,
+      structures,
+      getStructureNameById,
       displayModals,
       setDisplayModals,
       handleDisplayModal,
     }),
-    [displayModals],
+    [displayModals, structures, isMultiStructure],
   );
 
   return (

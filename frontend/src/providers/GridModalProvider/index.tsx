@@ -19,12 +19,12 @@ import {
   periodicityOptions,
   slotDurationOptions,
 } from "./utils";
+import { useGlobalProvider } from "../GlobalProvider";
 import {
   useBlurGridInputsReturnType,
   useUpdateGridInputsReturnType,
 } from "~/hooks/types";
 import { useBlurGridInputs } from "~/hooks/useBlurGridInputs";
-import { useStructure } from "~/hooks/useStructure";
 import { useUpdateGridInputs } from "~/hooks/useUpdateGridInputs";
 import { useGetCommunicationGroupsQuery } from "~/services/api/communication.service";
 import { useGetMyGridsNameQuery } from "~/services/api/grid.service";
@@ -43,11 +43,19 @@ export const useGridModalProvider = () => {
 };
 
 export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
-  const { structures } = useStructure();
+  const { structures } = useGlobalProvider();
 
   const [inputs, setInputs] = useState<GridModalInputs>(
     initialGridModalInputs(structures),
   );
+
+  useEffect(() => {
+    if (structures.length)
+      setInputs((prev) => ({
+        ...prev,
+        structure: structures[0],
+      }));
+  }, [structures]);
 
   const { data: groups, refetch: refetchGroups } =
     useGetCommunicationGroupsQuery(inputs.structure.id, {

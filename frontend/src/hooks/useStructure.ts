@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import { useUser } from "@edifice-ui/react";
 
@@ -6,13 +6,16 @@ import { Structure } from "./types";
 
 export const useStructure = () => {
   const { user } = useUser();
-  const structureIds = user?.structures ?? [];
-  const structureNames = user?.structureNames ?? [];
+  const structureIds = useMemo(() => user?.structures ?? [], [user]);
+  const structureNames = useMemo(() => user?.structureNames ?? [], [user]);
 
-  const getStructureName = (id: string): string => {
-    const index = structureIds.indexOf(id);
-    return structureNames[index] ?? "";
-  };
+  const getStructureNameById = useCallback(
+    (id: string): string => {
+      const index = structureIds.indexOf(id);
+      return structureNames[index] ?? "";
+    },
+    [structureIds, structureNames],
+  );
 
   const structures: Structure[] = useMemo(() => {
     if (structureIds.length !== structureNames.length) {
@@ -26,7 +29,7 @@ export const useStructure = () => {
     }));
   }, [structureIds, structureNames]);
 
-  const isMultiStructure = structures.length > 1;
+  const isMultiStructure = useMemo(() => structures.length > 1, [structures]);
 
-  return { isMultiStructure, structures, getStructureName };
+  return { isMultiStructure, structures, getStructureNameById };
 };

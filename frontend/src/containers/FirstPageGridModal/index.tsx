@@ -15,13 +15,13 @@ import { colorStyle, CustomSelect, firstLineStyle, nameStyle } from "./style";
 import { pageGridModalStyle } from "../GridModal/style";
 import { ColorPicker } from "~/components/ColorPicker";
 import { CustomMultiAutocomplete } from "~/components/CustomMultiAutocomplete";
-import { useStructure } from "~/hooks/useStructure";
+import { useGlobalProvider } from "~/providers/GlobalProvider";
 import { useGridModalProvider } from "~/providers/GridModalProvider";
 import { flexStartBoxStyle } from "~/styles/boxStyles";
 
 export const FirstPageGridModal: FC = () => {
   const { t } = useTranslation("appointments");
-  const { isMultiStructure } = useStructure();
+  const { isMultiStructure } = useGlobalProvider();
   const {
     inputs,
     errorInputs,
