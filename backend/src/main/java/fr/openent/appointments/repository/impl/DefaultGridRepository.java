@@ -48,7 +48,7 @@ public class DefaultGridRepository implements GridRepository {
             params.addAll(new JsonArray(gridStates.stream().map(GridState::getValue).collect(Collectors.toList())));
         }
 
-        query += "ORDER BY " + CREATION_DATE;
+        query += "ORDER BY " + CREATION_DATE + " DESC";
 
         String errorMessage = String.format("[Appointments@DefaultGridRepository::getMyGrids] Fail to get grids for userId %s : ", userId);
         sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
