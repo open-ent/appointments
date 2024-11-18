@@ -63,34 +63,38 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
   useEffect(() => {
     const myInProgressGrids = myInProgressData?.grids;
     const myInProgressGridsLength = myInProgressData?.total;
+
     if (myInProgressGrids) {
-      setGrids({
-        ...grids,
+      setGrids((prevGrids) => ({
+        ...prevGrids,
         [GRID_TYPE.IN_PROGRESS]: myInProgressGrids,
-      });
+      }));
     }
+
     if (myInProgressGridsLength) {
-      setGridsLength({
-        ...gridsLength,
+      setGridsLength((prevGridsLength) => ({
+        ...prevGridsLength,
         [GRID_TYPE.IN_PROGRESS]: myInProgressGridsLength,
-      });
+      }));
     }
   }, [myInProgressData]);
 
   useEffect(() => {
     const myClosedGrids = myClosedData?.grids;
     const myClosedGridsLength = myClosedData?.total;
+
     if (myClosedGrids) {
-      setGrids({
-        ...grids,
+      setGrids((prevGrids) => ({
+        ...prevGrids,
         [GRID_TYPE.CLOSED]: myClosedGrids,
-      });
+      }));
     }
+
     if (myClosedGridsLength) {
-      setGridsLength({
-        ...gridsLength,
+      setGridsLength((prevGridsLength) => ({
+        ...prevGridsLength,
         [GRID_TYPE.CLOSED]: myClosedGridsLength,
-      });
+      }));
     }
   }, [myClosedData]);
 
@@ -101,7 +105,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
       currentGridList: grids,
       handleChangePage,
     }),
-    [gridsLength, grids],
+    [gridPages, gridsLength, grids],
   );
 
   return (
