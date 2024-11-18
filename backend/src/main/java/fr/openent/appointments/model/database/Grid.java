@@ -24,6 +24,7 @@ public class Grid implements IModel<Grid> {
     private LocalDate beginDate;
     private LocalDate endDate;
     private LocalDate creationDate;
+    private LocalDate updatingDate;
     private String color;
     private Duration duration;
     private Periodicity periodicity;
@@ -44,6 +45,7 @@ public class Grid implements IModel<Grid> {
         this.beginDate = DateHelper.parseDate(grid.getString(BEGIN_DATE, null).substring(0, 10));
         this.endDate = DateHelper.parseDate(grid.getString(END_DATE, null).substring(0, 10));
         this.creationDate = DateHelper.parseDate(grid.getString(CREATION_DATE, null).substring(0, 10));
+        this.updatingDate = DateHelper.parseDate(grid.getString(UPDATING_DATE, null).substring(0,10));
         this.color = grid.getString(COLOR, null);
         this.duration = DateHelper.parseDuration(grid.getString(DURATION,null));
         this.periodicity = Periodicity.getPeriodicity(grid.getInteger(PERIODICITY,0));
@@ -86,6 +88,10 @@ public class Grid implements IModel<Grid> {
 
     public LocalDate getCreationDate() {
         return creationDate;
+    }
+
+    public LocalDate getUpdatingDate() {
+        return updatingDate;
     }
 
     public String getColor() {
@@ -158,6 +164,11 @@ public class Grid implements IModel<Grid> {
 
     public Grid setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+        return this;
+    }
+
+    public Grid setUpdatingDate(LocalDate updatingDate) {
+        this.updatingDate = updatingDate;
         return this;
     }
 

@@ -28,6 +28,7 @@ public class Fields {
     public static final String TARGET_PUBLIC_LIST_ID = "target_public_list_id";
     public static final String TIME_SLOT_ID = "time_slot_id";
     public static final String VISIO_LINK = "visio_link";
+    public static final String UPDATING_DATE = "updating_date";
     public static final String USER_ID = "user_id";
 
     private Fields() {

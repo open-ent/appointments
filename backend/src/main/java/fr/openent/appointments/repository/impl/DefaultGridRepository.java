@@ -110,6 +110,7 @@ public class DefaultGridRepository implements GridRepository {
             BEGIN_DATE + ", " +
             END_DATE + ", " +
             CREATION_DATE + ", " +
+            UPDATING_DATE + ", " +
             COLOR + ", " +
             DURATION + ", " +
             PERIODICITY + ", " +
@@ -119,7 +120,7 @@ public class DefaultGridRepository implements GridRepository {
             DOCUMENT_ID + ", " +
             PUBLIC_COMMENT + ", " +
             STATE + ") " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
         String name = grid.getGridName();
         String ownerId = userId;
@@ -127,6 +128,7 @@ public class DefaultGridRepository implements GridRepository {
         String begin = DateHelper.formatDate(grid.getBeginDate());
         String end = DateHelper.formatDate(grid.getEndDate());
         String creation = "NOW()";
+        String updating = "NOW()";
         String color = grid.getColor();
         String duration = DateHelper.formatDuration(grid.getDuration());
         Integer periodicity = grid.getPeriodicity().getValue();
@@ -144,6 +146,7 @@ public class DefaultGridRepository implements GridRepository {
                 .add(begin)
                 .add(end)
                 .add(creation)
+                .add(updating)
                 .add(color)
                 .add(duration)
                 .add(periodicity)
