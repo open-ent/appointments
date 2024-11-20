@@ -41,17 +41,20 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
   const [gridsLength, setGridsLength] =
     useState<GridTypeLength>(initialGridsLength);
 
-  const { data: myInProgressData } = useGetMyGridsQuery({
-    states: [GRID_STATE.OPEN, GRID_STATE.SUSPENDED],
-    page: gridPages[GRID_TYPE.IN_PROGRESS],
-    limit: GRID_PER_PAGE,
-  });
+  const { data: myInProgressData, isLoading: isLoadingInProgress } =
+    useGetMyGridsQuery({
+      states: [GRID_STATE.OPEN, GRID_STATE.SUSPENDED],
+      page: gridPages[GRID_TYPE.IN_PROGRESS],
+      limit: GRID_PER_PAGE,
+    });
 
-  const { data: myClosedData } = useGetMyGridsQuery({
-    states: [GRID_STATE.CLOSED],
-    page: gridPages[GRID_TYPE.CLOSED],
-    limit: GRID_PER_PAGE,
-  });
+  const { data: myClosedData, isLoading: isLoadingClosed } = useGetMyGridsQuery(
+    {
+      states: [GRID_STATE.CLOSED],
+      page: gridPages[GRID_TYPE.CLOSED],
+      limit: GRID_PER_PAGE,
+    },
+  );
 
   const handleChangePage = (gridType: GRID_TYPE, newPage: number) => {
     setGridPages({
@@ -98,14 +101,17 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
     }
   }, [myClosedData]);
 
+  const isLoading = isLoadingInProgress || isLoadingClosed;
+
   const value = useMemo<AvailabilityProviderContextProps>(
     () => ({
       gridPages,
       gridTypeLengths: gridsLength,
       currentGridList: grids,
+      isLoading,
       handleChangePage,
     }),
-    [gridPages, gridsLength, grids],
+    [gridPages, gridsLength, grids, isLoadingInProgress, isLoadingClosed],
   );
 
   return (

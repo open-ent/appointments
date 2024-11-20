@@ -11,15 +11,15 @@ import { SelectChangeEvent } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 
-import { Structure, useUpdateGridInputsType } from "./types";
+import { handleConflictingSlot } from "./utils";
+import { Structure, useUpdateGridInputsType } from "../types";
 import { HexaColor } from "~/components/ColorPicker/types";
 import { DAY, PERIODICITY, SLOT_DURATION } from "~/core/enums";
 import {
   INVALID_SLOT_ERROR,
   SAME_GRID_ALREADY_EXISTS_ERROR,
 } from "~/core/i18nKeys";
-import { TimeObject } from "~/core/types";
-import { formatTimeToDayjs } from "~/core/utils/date.utils";
+import { Slot } from "~/core/types";
 import {
   GridModalInputs,
   InputsErrors,
@@ -181,31 +181,28 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
 
   const handleSlotChange = (
     day: DAY,
-    slotId: string,
+    slot: Slot,
     value: string,
     type: "begin" | "end",
   ) => {
     const [hour, minute] = value.split(":");
-    const time: TimeObject = { hour: parseInt(hour), minute: parseInt(minute) };
+    const updatedSlot = {
+      ...slot,
+      [type]: { hour, minute },
+    };
     updateInputField("weekSlots", {
       ...inputs.weekSlots,
       [day]: inputs.weekSlots[day].map((item) => {
-        if (item.id !== slotId) return item;
-
-        const updatedSlot = {
-          ...item,
-          [type]: { hour, minute },
-        };
-
-        if (type === "begin" && updatedSlot.end) {
-          const begin = formatTimeToDayjs(time);
-          const end = formatTimeToDayjs(updatedSlot.end);
-          if (begin.isAfter(end) || begin.isSame(end)) {
-            updatedSlot.end = null;
-          }
-        }
-
+        if (item.id !== slot.id) return item;
         return updatedSlot;
+      }),
+    });
+
+    updateInputField("weekSlots", {
+      ...inputs.weekSlots,
+      [day]: inputs.weekSlots[day].map((item) => {
+        if (item.id === slot.id) return updatedSlot;
+        return handleConflictingSlot(item, updatedSlot, type);
       }),
     });
   };

@@ -10,16 +10,29 @@ export const StyledDailySlotBox = styled(Box)<StyledBoxProps>(
     boxShadow: "0px 0px 4px 0px #0000001F",
     borderRadius: "0.5rem",
     gap: "1rem",
-    padding: "0 1rem",
+    padding: "1rem",
     margin: "0.5rem 1rem",
     width: "fit-content",
     border: isSlotError ? "1px solid #D32F2F" : "1px solid transparent",
   }),
 );
 
+export const beginAndEndWrapperStyle = {
+  ...flexStartBoxStyle,
+  gap: "1rem",
+  "@media (max-width: 500px)": {
+    flexDirection: "column",
+  },
+};
+
+export const beginAndEndBoxStyle = {
+  ...flexStartBoxStyle,
+  justifyContent: "space-between",
+  gap: "1rem",
+};
+
 export const formControlStyle = {
   height: "3rem",
-  margin: "1rem 0",
 };
 
 export const selectStyle = {
@@ -60,7 +73,7 @@ export const boxValueStyle = {
 };
 
 export const iconButtonStyle = {
-  padding: "0",
+  padding: ".5rem",
 };
 
 export const iconStyle = {

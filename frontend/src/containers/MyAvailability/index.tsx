@@ -1,5 +1,6 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 
+import { Loader } from "@cgi-learning-hub/ui";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, Button, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
@@ -32,7 +33,7 @@ export const MyAvailability: FC = () => {
     GRID_CARD_SIZE.LARGE,
   );
 
-  const { gridTypeLengths } = useAvailabilityProvider();
+  const { gridTypeLengths, isLoading } = useAvailabilityProvider();
   const isAllGridListEmpty = useMemo(
     () =>
       !gridTypeLengths[GRID_TYPE.IN_PROGRESS] &&
@@ -81,7 +82,9 @@ export const MyAvailability: FC = () => {
             {t("appointments.create.grid")}
           </Button>
         </Box>
-        {isAllGridListEmpty ? (
+        {isLoading ? (
+          <Loader />
+        ) : isAllGridListEmpty ? (
           <>
             <Typography sx={emptyStateStyle}>
               {t("appointments.grid.empty.state")}

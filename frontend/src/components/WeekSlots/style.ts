@@ -13,7 +13,6 @@ export const weekBoxStyle = {
 export const dayLabelStyle = {
   minWidth: "8rem",
   height: "100%",
-  marginTop: "1.5rem",
 };
 
 export const slotsBoxStyle = {

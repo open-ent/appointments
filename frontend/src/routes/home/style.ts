@@ -12,12 +12,14 @@ export const homeStyle = {
 };
 
 export const appointmentsIconStyle = {
-  width: "5rem",
-  height: "5rem",
+  width: "3.5rem",
+  height: "3.5rem",
 };
 
 export const titleStyle = {
   ...flexStartBoxStyle,
+  alignItems: "flex-end",
+  gap: "1.4rem",
   margin: "3rem 2rem",
 };
 

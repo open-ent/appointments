@@ -10,6 +10,7 @@ export interface AvailabilityProviderContextProps {
   gridPages: GridPages;
   gridTypeLengths: GridTypeLength;
   currentGridList: GridList;
+  isLoading: boolean;
   handleChangePage: (gridType: GRID_TYPE, newPage: number) => void;
 }
 

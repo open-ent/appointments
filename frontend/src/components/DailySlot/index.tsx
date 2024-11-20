@@ -14,6 +14,8 @@ import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 
 import {
+  beginAndEndBoxStyle,
+  beginAndEndWrapperStyle,
   boxValueStyle,
   formControlStyle,
   iconButtonStyle,
@@ -39,51 +41,59 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
 
   return (
     <StyledDailySlotBox isSlotError={isSlotError}>
-      <Typography>{t("appointments.from") + " :"}</Typography>
-      <FormControl variant="filled" sx={formControlStyle}>
-        <Select
-          onChange={(e) =>
-            handleSlotChange(day, slot.id, e.target.value, "begin")
-          }
-          sx={selectStyle}
-          value={formatTime(slot.begin)}
-          renderValue={(value: String) => (
-            <Box sx={boxValueStyle}>
-              <AccessTimeIcon sx={iconStyle} />
-              <Typography sx={timeInputStyle}>{value}</Typography>
-            </Box>
-          )}
-        >
-          {getStartOptions(weekSlots[day], slotDuration).map((time) => (
-            <MenuItem key={uuidv4()} value={formatTime(time)}>
-              {formatTime(time)}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Typography>{t("appointments.to") + " :"}</Typography>
-      <FormControl variant="filled" sx={formControlStyle}>
-        <Select
-          onChange={(e) =>
-            handleSlotChange(day, slot.id, e.target.value, "end")
-          }
-          sx={selectStyle}
-          value={formatTime(slot.end)}
-          label="test"
-          renderValue={(value) => (
-            <Box sx={boxValueStyle}>
-              <AccessTimeIcon sx={iconStyle} />
-              <Typography sx={timeInputStyle}>{value}</Typography>
-            </Box>
-          )}
-        >
-          {getEndOptions(weekSlots[day], slotDuration, slot).map((time) => (
-            <MenuItem key={uuidv4()} value={formatTime(time)}>
-              {formatTime(time)}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Box sx={beginAndEndWrapperStyle}>
+        <Box sx={beginAndEndBoxStyle}>
+          <Typography noWrap>{t("appointments.from") + " :"}</Typography>
+          <FormControl variant="filled" sx={formControlStyle}>
+            <Select
+              onChange={(e) =>
+                handleSlotChange(day, slot, e.target.value, "begin")
+              }
+              sx={selectStyle}
+              value={formatTime(slot.begin)}
+              renderValue={(value: String) => (
+                <Box sx={boxValueStyle}>
+                  <AccessTimeIcon sx={iconStyle} />
+                  <Typography sx={timeInputStyle}>{value}</Typography>
+                </Box>
+              )}
+            >
+              {getStartOptions(weekSlots[day], slotDuration, slot).map(
+                (time) => (
+                  <MenuItem key={uuidv4()} value={formatTime(time)}>
+                    {formatTime(time)}
+                  </MenuItem>
+                ),
+              )}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={beginAndEndBoxStyle}>
+          <Typography noWrap>{t("appointments.to") + " :"}</Typography>
+          <FormControl variant="filled" sx={formControlStyle}>
+            <Select
+              onChange={(e) =>
+                handleSlotChange(day, slot, e.target.value, "end")
+              }
+              sx={selectStyle}
+              value={formatTime(slot.end)}
+              label="test"
+              renderValue={(value) => (
+                <Box sx={boxValueStyle}>
+                  <AccessTimeIcon sx={iconStyle} />
+                  <Typography sx={timeInputStyle}>{value}</Typography>
+                </Box>
+              )}
+            >
+              {getEndOptions(weekSlots[day], slotDuration, slot).map((time) => (
+                <MenuItem key={uuidv4()} value={formatTime(time)}>
+                  {formatTime(time)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+      </Box>
       <IconButton
         onClick={() => handleDeleteSlot(day, slot.id)}
         sx={iconButtonStyle}

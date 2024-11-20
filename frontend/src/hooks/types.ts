@@ -11,6 +11,7 @@ import { Dayjs } from "dayjs";
 
 import { HexaColor } from "~/components/ColorPicker/types";
 import { DAY, PERIODICITY, SLOT_DURATION } from "~/core/enums";
+import { Slot } from "~/core/types";
 import {
   GridModalInputs,
   InputsErrors,
@@ -40,7 +41,7 @@ export interface useUpdateGridInputsReturnType {
   handleDeleteSlot: (day: DAY, slotId: string) => void;
   handleSlotChange: (
     day: DAY,
-    slotId: string,
+    slot: Slot,
     value: string,
     type: "begin" | "end",
   ) => void;
