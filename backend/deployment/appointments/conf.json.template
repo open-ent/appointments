@@ -1,5 +1,5 @@
 {
-  "name": "fr.openent~appointments~0.1-SNAPSHOT",
+  "name": "fr.openent~appointments~0.1.0",
     "config": {
       "main":"fr.openent.appointments.Appointments",
       "port": 8364,
