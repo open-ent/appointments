@@ -1,6 +1,7 @@
 package fr.openent.appointments.model.database;
 
 import fr.openent.appointments.helper.IModelHelper;
+import fr.openent.appointments.helper.UserFunctionHelper;
 import fr.openent.appointments.model.IModel;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -76,10 +77,11 @@ public class NeoUser implements IModel<NeoUser> {
     }
 
     public NeoUser setFunctions(JsonArray functions) {
-        this.functions = functions.stream()
+        List<String> stringFunctions = functions.stream()
                 .filter(String.class::isInstance)
                 .map(String.class::cast)
-                .collect(Collectors.toList()); // TODO format "...$...$..." -> "..."
+                .collect(Collectors.toList());
+        this.functions = UserFunctionHelper.format(stringFunctions);
         return this;
     }
 

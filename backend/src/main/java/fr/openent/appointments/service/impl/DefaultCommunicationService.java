@@ -6,15 +6,11 @@ import fr.openent.appointments.model.database.NeoGroup;
 import fr.openent.appointments.model.database.NeoUser;
 import fr.openent.appointments.service.CommunicationService;
 import fr.openent.appointments.repository.CommunicationRepository;
-import fr.openent.appointments.service.ServiceFactory;
 import fr.openent.appointments.repository.RepositoryFactory;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
