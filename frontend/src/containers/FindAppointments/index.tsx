@@ -1,5 +1,60 @@
-import { FC } from "react";
+import { FC, useCallback, useEffect, useRef } from "react";
+
+import { SearchInput } from "@cgi-learning-hub/ui";
+import { Box } from "@mui/material";
+
+import { containerStyle, listCardStyle, searchInputStyle } from "./style";
+import { UserCard } from "~/components/UserCard";
+import { useFindAppointmentsProvider } from "~/providers/FindAppointmentsProvider";
+import { NUMBER_MORE_USERS } from "~/providers/FindAppointmentsProvider/utils";
 
 export const FindAppointments: FC = () => {
-  return <>TODO</>;
+  const { users, hasMoreUsers, loadMoreUsers } = useFindAppointmentsProvider();
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const targetRef = useRef<HTMLDivElement | null>(null);
+
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      if (entries[0].isIntersecting && hasMoreUsers) {
+        loadMoreUsers();
+      }
+    },
+    [hasMoreUsers, loadMoreUsers],
+  );
+
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1.0,
+    });
+
+    const lastUser = targetRef.current;
+    if (lastUser) {
+      observerRef.current.observe(lastUser);
+    }
+
+    return () => {
+      if (observerRef.current && lastUser) {
+        observerRef.current.unobserve(lastUser);
+      }
+    };
+  }, [users, handleObserver]);
+
+  return (
+    <Box sx={containerStyle}>
+      <SearchInput sx={searchInputStyle} />
+      <Box sx={listCardStyle}>
+        {users.map((user, index) => (
+          <UserCard
+            key={user.userId}
+            infos={user}
+            ref={index === users.length - NUMBER_MORE_USERS ? targetRef : null}
+          />
+        ))}
+      </Box>
+    </Box>
+  );
 };

@@ -16,7 +16,7 @@ jobs:
         run: pnpm run format:check && pnpm run lint
       - name: Check Lint Fix and Typescript
         working-directory: ./frontend
-        run: pnpm run fix #&& pnpm run check-types
+        run: pnpm run fix && pnpm run check-types
       - name: Run Build Vite
         working-directory: ./frontend
         run: pnpm build

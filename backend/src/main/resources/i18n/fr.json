@@ -16,12 +16,12 @@
     "appointments.modify.grid.abandon.message": "Si vous confirmez, vous perdrez toutes les modifications en cours.",
 
     "appointments.suspend.grid.confirm.title": "Suspendre votre grille ?",
-    "appointments.suspend.grid.confirm.message1": "Si vous confirmez, votre grille sera suspendue et vous deviendrez indisponible sur les créneaux concernés.",
-    "appointments.suspend.grid.confirm.message2": "Souhaitez-vous conserver les rendez-vous déjà pris sur cette période ?",
+    "appointments.suspend.grid.confirm.description": "Si vous confirmez, votre grille sera suspendue et vous deviendrez indisponible sur les créneaux concernés.",
+    "appointments.suspend.grid.confirm.question": "Souhaitez-vous conserver les rendez-vous déjà pris sur cette période ?",
 
     "appointments.delete.grid.confirm.title": "Supprimer votre grille ?",
-    "appointments.delete.grid.confirm.message1": "Si vous confirmez, votre grille sera supprimée et n’apparaîtra plus dans votre liste.",
-    "appointments.delete.grid.confirm.message2": "Vous avez déjà des rendez-vous pris sur la période concernée. Souhaitez-vous les conserver ?",
+    "appointments.delete.grid.confirm.description": "Si vous confirmez, votre grille sera supprimée et n’apparaîtra plus dans votre liste.",
+    "appointments.delete.grid.confirm.question": "Vous avez déjà des rendez-vous pris sur la période concernée. Souhaitez-vous les conserver ?",
     
     "appointments.grid.required": "Les champs suivis d’un * sont obligatoires",
     "appointments.grid.name": "Nom de la grille horaire",
@@ -60,6 +60,9 @@
     "appointments.grid.state.suspended": "Suspendue",
     "appointments.grid.state.closed": "Fermée",
 
+    "appointments.find.empty.state.search.bar": "Utilisez la barre de recherche pour voir les personnes disponibles.",
+    "appointments.find.empty.state.no.user": "Aucune personne ne correspond à votre recherche.",
+
     "appointments.cancel": "Annuler",
     "appointments.save": "Enregistrer",
     "appointments.back": "Retour",
@@ -70,6 +73,8 @@
     "appointments.delete": "Supprimer",
     "appointments.confirm": "Confirmer",
     "appointments.consult": "Consulter",
+    "appointments.available": "Disponible",
+    "appointments.unavailable": "Indisponible",
 
     "appointments.from": "De",
     "appointments.to": "À",

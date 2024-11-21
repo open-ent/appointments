@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 
 import { AvailabilityProvider } from "./providers/AvailabilityProvider";
+import { FindAppointmentsProvider } from "./providers/FindAppointmentsProvider";
 import { GlobalProvider } from "./providers/GlobalProvider";
 import { GridModalProvider } from "./providers/GridModalProvider";
 import { router } from "./routes";
@@ -60,11 +61,13 @@ root.render(
           <ThemeProviderMUI theme={theme}>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
               <GlobalProvider>
-                <AvailabilityProvider>
-                  <GridModalProvider>
-                    <RouterProvider router={router} />
-                  </GridModalProvider>
-                </AvailabilityProvider>
+                <FindAppointmentsProvider>
+                  <AvailabilityProvider>
+                    <GridModalProvider>
+                      <RouterProvider router={router} />
+                    </GridModalProvider>
+                  </AvailabilityProvider>
+                </FindAppointmentsProvider>
               </GlobalProvider>
             </LocalizationProvider>
           </ThemeProviderMUI>

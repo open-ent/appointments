@@ -25,42 +25,44 @@ export const RangeDatePicker: FC = () => {
 
   return (
     <Box sx={boxStyle}>
-      <DatePicker
-        sx={datePickerStyle}
-        label={t("appointments.grid.validity.period.start")}
-        value={startDate}
-        onChange={handleStartDateChange}
-        shouldDisableDate={shouldDisableStartDate}
-        slotProps={{
-          day: { sx: { fontSize: "1.2rem" } },
-          textField: {
-            inputProps: {
-              readOnly: true,
+      <Box sx={datePickerStyle}>
+        <DatePicker
+          label={t("appointments.grid.validity.period.start")}
+          value={startDate}
+          onChange={handleStartDateChange}
+          shouldDisableDate={shouldDisableStartDate}
+          slotProps={{
+            day: { sx: { fontSize: "1.2rem" } },
+            textField: {
+              inputProps: {
+                readOnly: true,
+              },
+              error: isStartError,
+              helperText: isStartError && t(validityPeriodError),
             },
-            error: isStartError,
-            helperText: isStartError && t(validityPeriodError),
-          },
-        }}
-      />
+          }}
+        />
+      </Box>
       <RemoveIcon sx={removeIconStyle} />
-      <DatePicker
-        sx={datePickerStyle}
-        label={t("appointments.grid.validity.period.end")}
-        value={endDate}
-        onChange={handleEndDateChange}
-        minDate={startDate}
-        shouldDisableDate={shouldDisableEndDate}
-        slotProps={{
-          day: { sx: { fontSize: "1.2rem" } },
-          textField: {
-            inputProps: {
-              readOnly: true,
+      <Box sx={datePickerStyle}>
+        <DatePicker
+          label={t("appointments.grid.validity.period.end")}
+          value={endDate}
+          onChange={handleEndDateChange}
+          minDate={startDate}
+          shouldDisableDate={shouldDisableEndDate}
+          slotProps={{
+            day: { sx: { fontSize: "1.2rem" } },
+            textField: {
+              inputProps: {
+                readOnly: true,
+              },
+              error: isEndError,
+              helperText: isEndError && t(validityPeriodError),
             },
-            error: isEndError,
-            helperText: isEndError && t(validityPeriodError),
-          },
-        }}
-      />
+          }}
+        />
+      </Box>
     </Box>
   );
 };

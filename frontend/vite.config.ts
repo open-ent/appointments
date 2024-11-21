@@ -3,6 +3,7 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default ({ mode }: { mode: string }) => {
@@ -89,11 +90,20 @@ export default ({ mode }: { mode: string }) => {
     setupFiles: "./src/tests/setup.ts",
   };
 
+  const optimizeDeps = {
+    include: ["@cgi-learning-hub/ui", "@cgi-learning-hub/theme"],
+  };
   return defineConfig({
     base,
     build,
     plugins,
     server,
     test,
+    optimizeDeps,
+    resolve: {
+      alias: {
+        '@cgi-learning-hub': path.resolve(__dirname, 'node_modules/@cgi-learning-hub')
+      }
+    }
   });
 };
