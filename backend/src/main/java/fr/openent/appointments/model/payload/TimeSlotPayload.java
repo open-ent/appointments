@@ -1,10 +1,15 @@
 package fr.openent.appointments.model.payload;
 
+import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.model.IModel;
 import io.vertx.core.json.JsonObject;
 
 import java.time.LocalDateTime;
+
+import static fr.openent.appointments.core.constants.Constants.CAMEL_BEGIN_DATE;
+import static fr.openent.appointments.core.constants.Constants.CAMEL_END_DATE;
+import static fr.openent.appointments.core.constants.Fields.*;
 
 public class TimeSlotPayload implements IModel<TimeSlotPayload> {
 
@@ -43,11 +48,10 @@ public class TimeSlotPayload implements IModel<TimeSlotPayload> {
     // Functions
 
     public String toString() {
-        return this.getClass().getSimpleName() +
-                " {" +
-                    "begin=" + begin +
-                    ", end=" + end +
-                '}';
+        return new JsonObject()
+                .put(BEGIN, DateHelper.formatDateTime(this.begin))
+                .put(END, DateHelper.formatDateTime(this.end))
+                .toString();
     }
 
     public JsonObject toJson() {

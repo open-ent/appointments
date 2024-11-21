@@ -1,7 +1,6 @@
-package fr.openent.appointments.model;
+package fr.openent.appointments.model.payload;
 
 import fr.openent.appointments.enums.Day;
-import fr.openent.appointments.model.database.DailySlot;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -14,7 +13,7 @@ import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.Constants.*;
 
 @RunWith(VertxUnitRunner.class)
-public class DailySlotTest {
+public class DailySlotPayloadTest {
 
     // Valid JSON objects for testing
     JsonObject validDailySlotJson = new JsonObject()
@@ -38,21 +37,21 @@ public class DailySlotTest {
     @Test
     public void testDailySlotHasBeenInstantiated(TestContext ctx) {
         // Test with a valid DailySlot
-        DailySlot validSlot = new DailySlot(validDailySlotJson);
+        DailySlotPayload validSlot = new DailySlotPayload(validDailySlotJson);
         ctx.assertEquals(Day.MONDAY, validSlot.getDay());
         ctx.assertEquals(LocalTime.of(9, 0), validSlot.getBeginTime());
         ctx.assertEquals(LocalTime.of(17, 0), validSlot.getEndTime());
         ctx.assertTrue(validSlot.isValid());
 
         // Test with an invalid DailySlot
-        DailySlot invalidSlot = new DailySlot(invalidDailySlotJson);
+        DailySlotPayload invalidSlot = new DailySlotPayload(invalidDailySlotJson);
         ctx.assertEquals(Day.MONDAY, invalidSlot.getDay());
         ctx.assertEquals(LocalTime.of(18, 0), invalidSlot.getBeginTime());
         ctx.assertEquals(LocalTime.of(9, 0), invalidSlot.getEndTime());
         ctx.assertFalse(invalidSlot.isValid());
 
         // Test with a DailySlot missing fields
-        DailySlot missingFieldSlot = new DailySlot(missingFieldDailySlotJson);
+        DailySlotPayload missingFieldSlot = new DailySlotPayload(missingFieldDailySlotJson);
         ctx.assertEquals(Day.WEDNESDAY, missingFieldSlot.getDay());
         ctx.assertNull(missingFieldSlot.getBeginTime());
         ctx.assertNull(missingFieldSlot.getEndTime());
@@ -61,7 +60,7 @@ public class DailySlotTest {
 
     @Test
     public void testDailySlotHasContentWithObject(TestContext ctx) {
-        DailySlot slot = new DailySlot(validDailySlotJson);
+        DailySlotPayload slot = new DailySlotPayload(validDailySlotJson);
         boolean isNotEmpty =
                 slot.getDay() != null &&
                 slot.getBeginTime() != null &&
@@ -71,7 +70,7 @@ public class DailySlotTest {
 
     @Test
     public void testSameBeginAndEndTime(TestContext ctx) {
-        DailySlot slot = new DailySlot(sameBeginAndEndTimeJson);
+        DailySlotPayload slot = new DailySlotPayload(sameBeginAndEndTimeJson);
         ctx.assertEquals(Day.FRIDAY, slot.getDay());
         ctx.assertEquals(LocalTime.of(12, 0), slot.getBeginTime());
         ctx.assertEquals(LocalTime.of(12, 0), slot.getEndTime());
@@ -80,19 +79,19 @@ public class DailySlotTest {
 
     @Test
     public void testValidSlotCreation(TestContext ctx) {
-        DailySlot slot = new DailySlot(validDailySlotJson);
+        DailySlotPayload slot = new DailySlotPayload(validDailySlotJson);
         ctx.assertTrue(slot.isValid()); // Ensure valid slot is valid
     }
 
     @Test
     public void testInvalidTimeOrder(TestContext ctx) {
-        DailySlot slot = new DailySlot(invalidDailySlotJson);
+        DailySlotPayload slot = new DailySlotPayload(invalidDailySlotJson);
         ctx.assertFalse(slot.isValid()); // Ensure invalid slot is not valid
     }
 
     @Test
     public void testMissingRequiredFields(TestContext ctx) {
-        DailySlot slot = new DailySlot(missingFieldDailySlotJson);
+        DailySlotPayload slot = new DailySlotPayload(missingFieldDailySlotJson);
         ctx.assertFalse(slot.isValid()); // Ensure slot with missing fields is not valid
     }
 }
