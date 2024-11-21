@@ -7,7 +7,7 @@ export const formatSlotDurationToMinutes = (
   duration: SLOT_DURATION,
 ): number => {
   switch (duration) {
-    case SLOT_DURATION.FIVETEEN_MINUTES:
+    case SLOT_DURATION.FIFTEEN_MINUTES:
       return 15;
     case SLOT_DURATION.THIRTY_MINUTES:
       return 30;
@@ -22,7 +22,7 @@ export const formatSlotDurationToMinutes = (
 
 export const formatSlotDurationToString = (duration: SLOT_DURATION): string => {
   switch (duration) {
-    case SLOT_DURATION.FIVETEEN_MINUTES:
+    case SLOT_DURATION.FIFTEEN_MINUTES:
       return "00:15";
     case SLOT_DURATION.THIRTY_MINUTES:
       return "00:30";

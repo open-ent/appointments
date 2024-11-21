@@ -63,6 +63,14 @@
     "appointments.find.empty.state.search.bar": "Utilisez la barre de recherche pour voir les personnes disponibles.",
     "appointments.find.empty.state.no.user": "Aucune personne ne correspond à votre recherche.",
 
+    "appointments.take.appointment.modal.title": "Prendre un rendez-vous avec...",
+    "appointments.take.appointment.modal.time.grid": "Grille horaire",
+    "appointments.take.appointment.modal.visio.possible": "Rendez-vous en visio possibles",
+    "appointments.take.appointment.modal.visio.impossible": "Pas de rendez-vous en visio",
+    "appointments.take.appointment.modal.visio.option": "Je souhaite participer à ce rendez-vous en visioconférence",
+    "appointments.take.appointment.modal.submit": "Réserver ce créneau",
+    "appointments.take.appointment.modal.next.slot": "Prochain créneau disponible le",
+
     "appointments.cancel": "Annuler",
     "appointments.save": "Enregistrer",
     "appointments.back": "Retour",
@@ -75,6 +83,7 @@
     "appointments.consult": "Consulter",
     "appointments.available": "Disponible",
     "appointments.unavailable": "Indisponible",
+    "appointments.slots": "Créneaux",
 
     "appointments.from": "De",
     "appointments.to": "À",

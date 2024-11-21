@@ -4,12 +4,14 @@ import { SearchInput } from "@cgi-learning-hub/ui";
 import { Box } from "@mui/material";
 
 import { containerStyle, listCardStyle, searchInputStyle } from "./style";
+import { TakeAppointmentModal } from "../TakeAppointmentModal";
 import { UserCard } from "~/components/UserCard";
 import { useFindAppointmentsProvider } from "~/providers/FindAppointmentsProvider";
 import { NUMBER_MORE_USERS } from "~/providers/FindAppointmentsProvider/utils";
 
 export const FindAppointments: FC = () => {
-  const { users, hasMoreUsers, loadMoreUsers } = useFindAppointmentsProvider();
+  const { users, selectedUser, hasMoreUsers, loadMoreUsers } =
+    useFindAppointmentsProvider();
   const observerRef = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
 
@@ -44,17 +46,22 @@ export const FindAppointments: FC = () => {
   }, [users, handleObserver]);
 
   return (
-    <Box sx={containerStyle}>
-      <SearchInput sx={searchInputStyle} />
-      <Box sx={listCardStyle}>
-        {users.map((user, index) => (
-          <UserCard
-            key={user.userId}
-            infos={user}
-            ref={index === users.length - NUMBER_MORE_USERS ? targetRef : null}
-          />
-        ))}
+    <>
+      {selectedUser && <TakeAppointmentModal userInfos={selectedUser} />}
+      <Box sx={containerStyle}>
+        <SearchInput sx={searchInputStyle} />
+        <Box sx={listCardStyle}>
+          {users.map((user, index) => (
+            <UserCard
+              key={user.userId}
+              infos={user}
+              ref={
+                index === users.length - NUMBER_MORE_USERS ? targetRef : null
+              }
+            />
+          ))}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };

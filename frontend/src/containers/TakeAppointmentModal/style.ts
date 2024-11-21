@@ -1,15 +1,5 @@
 import { SxProps } from "@mui/material";
 
-import { columnBoxStyle } from "~/styles/boxStyles";
-import { BLACK } from "~/styles/color.constants";
-import { ITALIC_FONT } from "~/styles/fontStyle.constants";
-
-export const pageGridModalStyle = {
-  ...columnBoxStyle,
-  gap: "2rem",
-  height: "100%",
-};
-
 export const modalBoxStyle: SxProps = {
   position: "absolute",
   top: "50%",
@@ -38,16 +28,4 @@ export const contentBoxStyle: SxProps = {
     backgroundColor: "rgba(170,170,170,1)",
     borderRadius: "0.3rem",
   },
-};
-
-export const closeIconStyle = {
-  "& > .MuiSvgIcon-root": {
-    fontSize: "2.4rem",
-    color: BLACK,
-  },
-};
-
-export const instructionStyle: SxProps = {
-  ...ITALIC_FONT,
-  marginBottom: "1rem",
 };

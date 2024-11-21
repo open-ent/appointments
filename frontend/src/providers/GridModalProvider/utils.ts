@@ -33,7 +33,7 @@ export const initialGridModalInputs = (
     start: undefined,
     end: undefined,
   },
-  slotDuration: SLOT_DURATION.FIVETEEN_MINUTES,
+  slotDuration: SLOT_DURATION.FIFTEEN_MINUTES,
   periodicity: PERIODICITY.WEEKLY,
   weekSlots: initialWeekSlots,
 });
@@ -50,7 +50,7 @@ export const initialErrorInputs: InputsErrors = {
 };
 
 export const slotDurationOptions: SLOT_DURATION[] = [
-  SLOT_DURATION.FIVETEEN_MINUTES,
+  SLOT_DURATION.FIFTEEN_MINUTES,
   SLOT_DURATION.THIRTY_MINUTES,
   SLOT_DURATION.FOURTYFIVE_MINUTES,
   SLOT_DURATION.ONE_HOUR,
