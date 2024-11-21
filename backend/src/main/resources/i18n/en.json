@@ -32,6 +32,7 @@
     "appointments.grid.videoconference": "Visioconférence possible",
     "appointments.grid.videoconference.link": "Lien de la visioconférence",
     "appointments.grid.comment": "Commentaire",
+    "appointments.grid.comment.text.helper": "250 caractères max.",
     "appointments.grid.add.document": "AJOUTER UN DOCUMENT",
     "appointments.grid.visible.all": "(visible par tous)",
     "appointments.grid.validity.period": "Période de validité",

@@ -15,6 +15,7 @@ import { colorStyle, CustomSelect, firstLineStyle, nameStyle } from "./style";
 import { pageGridModalStyle } from "../GridModal/style";
 import { ColorPicker } from "~/components/ColorPicker";
 import { CustomMultiAutocomplete } from "~/components/CustomMultiAutocomplete";
+import { MAX_STRING_LENGTH } from "~/core/constants";
 import { useGlobalProvider } from "~/providers/GlobalProvider";
 import { useGridModalProvider } from "~/providers/GridModalProvider";
 import { flexStartBoxStyle } from "~/styles/boxStyles";
@@ -73,7 +74,7 @@ export const FirstPageGridModal: FC = () => {
           disabled={!isMultiStructure}
           isDisabled={!isMultiStructure}
         >
-          {structureOptions.map((structure) => (
+          {structureOptions.map((structure: { id: string; name: string }) => (
             <MenuItem key={structure.id} value={structure.id}>
               {structure.name}
             </MenuItem>
@@ -116,6 +117,11 @@ export const FirstPageGridModal: FC = () => {
         rows={4}
         value={inputs.publicComment}
         onChange={handlePublicCommentChange}
+        helperText={
+          inputs.publicComment.length === MAX_STRING_LENGTH &&
+          t("appointments.grid.comment.text.helper")
+        }
+        error={inputs.publicComment.length === MAX_STRING_LENGTH}
       />
     </Box>
   );

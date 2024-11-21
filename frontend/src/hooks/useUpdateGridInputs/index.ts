@@ -11,7 +11,7 @@ import { SelectChangeEvent } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 
-import { handleConflictingSlot } from "./utils";
+import { formatString, handleConflictingSlot } from "./utils";
 import { Structure, useUpdateGridInputsType } from "../types";
 import { HexaColor } from "~/components/ColorPicker/types";
 import { DAY, PERIODICITY, SLOT_DURATION } from "~/core/enums";
@@ -58,7 +58,7 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   );
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newName = e.target.value;
+    const newName = formatString(e.target.value);
     updateInputField("name", newName);
     if (existingGridsNames.includes(newName)) {
       updateErrorInputs("name", SAME_GRID_ALREADY_EXISTS_ERROR);
@@ -80,7 +80,7 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   };
 
   const handleLocationChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateInputField("location", e.target.value);
+    updateInputField("location", formatString(e.target.value));
   };
 
   const handlePublicChange = (_: SyntheticEvent, value: Public[]) => {
@@ -92,12 +92,12 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   };
 
   const handleVisioLinkChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateInputField("visioLink", e.target.value);
+    updateInputField("visioLink", formatString(e.target.value));
     updateErrorInputs("visioLink", "");
   };
 
   const handlePublicCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateInputField("publicComment", e.target.value);
+    updateInputField("publicComment", formatString(e.target.value));
   };
 
   const handleStartDateChange = (date: Dayjs | null) => {
