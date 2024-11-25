@@ -1,7 +1,9 @@
 package fr.openent.appointments.controller;
 
 import fr.openent.appointments.enums.GridState;
+import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.model.IModel;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Get;
 import fr.wseduc.rs.Post;
@@ -106,18 +108,20 @@ public class GridController extends ControllerHelper {
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void createGrid(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, body -> {
-            GridPayload grid = new GridPayload(body);
-            if (!grid.isValid()) {
-                String errorMessage = "[Appointments@GridController::createGrid] Invalid grid payload";
-                log.error(errorMessage);
+            GridPayload gridPayload = new GridPayload(body);
+            if (!gridPayload.isValid()) {
+                String errorMessage = "Invalid grid payload";
+                LogHelper.logError(this, "createGrid", errorMessage, gridPayload.toString());
                 badRequest(request);
                 return;
             }
-            gridService.createGrid(request, grid)
-                .onSuccess(response -> renderJson(request, response))
-                .onFailure(error -> {
-                    String errorMessage = String.format("[Appointments@GridController::createGrid] Failed to create grid : %s", error.getMessage());
-                    log.error(errorMessage);
+
+            gridPayload.buildTimeSlots();
+            gridService.createGrid(request, gridPayload)
+                .onSuccess(grid -> renderJson(request, grid.toJson()))
+                .onFailure(err -> {
+                    String errorMessage = "Failed to create grid";
+                    LogHelper.logError(this, "createGrid", errorMessage, err.getMessage());
                     badRequest(request);
                 });
         });

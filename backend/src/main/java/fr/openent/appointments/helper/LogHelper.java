@@ -19,7 +19,8 @@ public class LogHelper {
     }
 
     public static void logError(Object classObject, String methodName, String message) {
-        logError(classObject, methodName, message, null);
+        Class<?> myClass = classObject.getClass();
+        getLogger(myClass).error(String.format("%s %s", getBaseLog(myClass, methodName), message));
     }
 
     public static void logError(Object classObject, String methodName, String message, String err) {
@@ -27,8 +28,12 @@ public class LogHelper {
         getLogger(myClass).error(String.format("%s %s : %s", getBaseLog(myClass, methodName), message, err));
     }
 
+    public static void logInfo(Object classObject, String methodName, Object object) {
+        logInfo(classObject, methodName, object.toString());
+    }
+
     public static void logInfo(Object classObject, String methodName, String message) {
         Class<?> myClass = classObject.getClass();
-        getLogger(myClass).info(String.format("%s %s : %s", getBaseLog(myClass, methodName), message));
+        getLogger(myClass).info(String.format("%s : %s", getBaseLog(myClass, methodName), message));
     }
 }

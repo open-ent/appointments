@@ -1,6 +1,7 @@
 package fr.openent.appointments.model;
 
 import fr.openent.appointments.enums.Periodicity;
+import fr.openent.appointments.model.payload.DailySlotPayload;
 import fr.openent.appointments.model.payload.GridPayload;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -102,7 +103,7 @@ public class GridPayloadTest {
             .put(CAMEL_TARGET_PUBLIC_LIST_ID, new JsonArray(Arrays.asList("public-1")))
             .put(CAMEL_DAILY_SLOTS, new JsonArray(Collections.singletonList(dailySlotJson))));
 
-        ctx.assertTrue(gridPayload.getDailySlots().stream().allMatch(DailySlot::isValid));
+        ctx.assertTrue(gridPayload.getDailySlots().stream().allMatch(DailySlotPayload::isValid));
     }
 
     @Test

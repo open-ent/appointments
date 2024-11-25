@@ -8,7 +8,7 @@ import fr.openent.appointments.model.payload.GridPayload;
 import fr.openent.appointments.enums.Periodicity;
 import fr.openent.appointments.enums.Day;
 import fr.openent.appointments.helper.DateHelper;
-import fr.openent.appointments.model.DailySlot;
+import fr.openent.appointments.model.database.DailySlot;
 import fr.openent.appointments.model.TransactionElement;
 
 import io.vertx.core.Handler;

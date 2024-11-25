@@ -55,9 +55,7 @@ CREATE TABLE appointments.grid_state (
     state appointments.G_STATE NOT NULL,
     grid_id bigint NOT NULL,
     date timestamp NOT NULL,
-    CONSTRAINT fk_grid_state
-        FOREIGN KEY(grid_id) 
-        REFERENCES appointments.grid(id)
+    CONSTRAINT fk_grid_id FOREIGN KEY(grid_id) REFERENCES appointments.grid(id) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE appointments.daily_slot (
@@ -66,9 +64,7 @@ CREATE TABLE appointments.daily_slot (
     begin_time time NOT NULL,
     end_time time NOT NULL,
     grid_id bigint NOT NULL,
-    CONSTRAINT fk_grid_daily_slot
-        FOREIGN KEY(grid_id) 
-        REFERENCES appointments.grid(id)
+    CONSTRAINT fk_grid_id FOREIGN KEY(grid_id) REFERENCES appointments.grid(id) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE appointments.time_slot (
@@ -76,9 +72,7 @@ CREATE TABLE appointments.time_slot (
     begin_date timestamp NOT NULL,
     end_date timestamp NOT NULL,
     grid_id bigint NOT NULL,
-    CONSTRAINT fk_grid_time_slot
-        FOREIGN KEY(grid_id) 
-        REFERENCES appointments.grid(id)
+    CONSTRAINT fk_grid_id FOREIGN KEY(grid_id) REFERENCES appointments.grid(id) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE appointments.appointment (
@@ -86,9 +80,7 @@ CREATE TABLE appointments.appointment (
     requester_id varchar(255) NOT NULL,
     time_slot_id bigint NOT NULL,
     state appointments.A_STATE NOT NULL,
-    CONSTRAINT fk_time_slot
-        FOREIGN KEY (time_slot_id) 
-        REFERENCES appointments.time_slot (id)
+    CONSTRAINT fk_time_slot_id FOREIGN KEY (time_slot_id) REFERENCES appointments.time_slot (id) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE appointments.appointment_state (
@@ -97,9 +89,7 @@ CREATE TABLE appointments.appointment_state (
     state appointments.A_STATE NOT NULL,
     actor_id varchar(255) NOT NULL,
     date timestamp NOT NULL,
-    CONSTRAINT fk_appointment
-        FOREIGN KEY (appointment_id) 
-        REFERENCES appointments.appointment (id)
+    CONSTRAINT fk_appointment_id FOREIGN KEY (appointment_id) REFERENCES appointments.appointment (id) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 

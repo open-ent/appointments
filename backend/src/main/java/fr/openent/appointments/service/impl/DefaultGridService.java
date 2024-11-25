@@ -97,21 +97,19 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
-    public Future<JsonObject> createGrid(HttpServerRequest request, GridPayload grid) {
-        Promise<JsonObject> promise = Promise.promise();
+    public Future<Grid> createGrid(HttpServerRequest request, GridPayload gridPayload) {
+        Promise<Grid> promise = Promise.promise();
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
-            .compose(user -> isGridAlreadyExists(grid.getGridName(), user.getUserId())
-                .compose(isExists -> {
-                    if (isExists) {
-                        return Future.failedFuture("Grid already exists");
-                    }
-                    return gridRepository.create(grid, user.getUserId());
-                }))
-            .onSuccess(gridId -> promise.complete(new JsonObject().put(CAMEL_GRID_ID, gridId)))
+            .compose(user -> isGridAlreadyExists(gridPayload.getGridName(), user.getUserId())
+            .compose(isExists -> {
+                if (isExists) return Future.failedFuture("Grid already exists");
+                return gridRepository.create(gridPayload, user.getUserId());
+            }))
+            .onSuccess(promise::complete)
             .onFailure(err -> {
-                String errorMessage = String.format("[Appointments@DefaultGridService::createGrid] %s", err.getMessage());
-                log.error(errorMessage);
+                String errorMessage = "Failed to create grid";
+                LogHelper.logError(this, "createGrid", errorMessage, err.getMessage());
                 promise.fail(err);
             });
 
@@ -147,6 +145,8 @@ public class DefaultGridService implements GridService {
     public Future<JsonObject> closeAllPassedGrids() {
         return gridRepository.closeAllPassedGrids();
     }
+
+    // Private functions
 
     private ListGridsResponse buildListGridsResponse(List<Grid> grids, Long page, Long limit) {
         List<Grid> paginatedGrids = grids;

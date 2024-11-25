@@ -3,6 +3,7 @@ package fr.openent.appointments.core.constants;
 public class Fields {
     // SQL fields
     public static final String ACTOR_ID = "actor_id";
+    public static final String BEGIN = "begin";
     public static final String BEGIN_DATE = "begin_date";
     public static final String BEGIN_TIME = "begin_time";
     public static final String COLOR = "color";
@@ -12,6 +13,7 @@ public class Fields {
     public static final String DAY = "day";
     public static final String DOCUMENT_ID = "document_id";
     public static final String DURATION = "duration";
+    public static final String END = "end";
     public static final String END_DATE = "end_date";
     public static final String END_TIME = "end_time";
     public static final String ERROR = "error";

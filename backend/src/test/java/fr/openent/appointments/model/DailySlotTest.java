@@ -1,6 +1,7 @@
 package fr.openent.appointments.model;
 
 import fr.openent.appointments.enums.Day;
+import fr.openent.appointments.model.database.DailySlot;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;

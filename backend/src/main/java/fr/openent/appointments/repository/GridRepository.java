@@ -50,11 +50,11 @@ public interface GridRepository {
      * @param grid   the {@link GridPayload} object containing the details of the grid to be created.
      * @param userId the unique identifier of the user creating the grid.
      * @return a {@link Future} representing the asynchronous operation, which will
-     *         return a {@link JsonObject} containing the result of the creation
+     *         return a {@link Grid} containing the result of the creation
      *         operation. This object may include the newly created grid's details or 
      *         an error message if the operation fails.
      */
-    Future<JsonObject> create(GridPayload grid, String userId);
+    Future<Grid> create(GridPayload grid, String userId);
 
     /**
      * Update grids with passed ending dates with the state CLOSED (see {@link GridState})

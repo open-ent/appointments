@@ -1,14 +1,16 @@
 package fr.openent.appointments.model.payload;
 
+import java.time.*;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.List;
-import java.time.LocalDate;
-import java.time.Duration;
 
+import fr.openent.appointments.enums.Day;
 import fr.openent.appointments.enums.Periodicity;
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.IModelHelper;
-import fr.openent.appointments.model.DailySlot;
 import fr.openent.appointments.model.IModel;
 
 import io.vertx.core.json.JsonArray;
@@ -27,54 +29,35 @@ public class GridPayload implements IModel<GridPayload> {
     private Duration duration;
     private Periodicity periodicity;
     private List<String> targetPublicIds;
-    private List<DailySlot> dailySlots;
+    private List<DailySlotPayload> dailySlots;
+    private List<TimeSlotPayload> timeSlots;
     private String visioLink;
     private String place;
     private String documentId;
     private String publicComment;
 
-    public GridPayload(JsonObject grid){
-        this.gridName = grid.getString(NAME, "");
-
-        this.beginDate = DateHelper.parseDate(grid.getString(CAMEL_BEGIN_DATE, ""));
-        this.endDate = DateHelper.parseDate(grid.getString(CAMEL_END_DATE, ""));
-
+    public GridPayload(JsonObject grid) {
+        this.gridName = grid.getString(NAME, null);
+        this.beginDate = DateHelper.parseDate(grid.getString(CAMEL_BEGIN_DATE, null));
+        this.endDate = DateHelper.parseDate(grid.getString(CAMEL_END_DATE, null));
         this.color = grid.getString(COLOR);
-        this.structureId = grid.getString(CAMEL_STRUCTURE_ID,"");
-
-        this.duration = DateHelper.parseDuration(grid.getString(DURATION,""));
-
+        this.structureId = grid.getString(CAMEL_STRUCTURE_ID,null);
+        this.duration = DateHelper.parseDuration(grid.getString(DURATION,null));
         this.periodicity = Periodicity.getPeriodicity(grid.getInteger(PERIODICITY,0));
-
         this.targetPublicIds = grid
             .getJsonArray(CAMEL_TARGET_PUBLIC_LIST_ID, new JsonArray())
             .stream()
             .map(Object::toString)
             .collect(Collectors.toList());
-
-        this.dailySlots = IModelHelper.toList(grid.getJsonArray(CAMEL_DAILY_SLOTS, new JsonArray()), DailySlot.class);
-
-        this.visioLink = grid.getString(CAMEL_VISIO_LINK, "");
-        this.place = grid.getString(PLACE, "");
-        this.documentId = grid.getString(CAMEL_DOCUMENT_ID, "");
-        this.publicComment = grid.getString(CAMEL_PUBLIC_COMMENT, "");
+        this.dailySlots = IModelHelper.toList(grid.getJsonArray(CAMEL_DAILY_SLOTS, new JsonArray()), DailySlotPayload.class);
+        this.visioLink = grid.getString(CAMEL_VISIO_LINK, null);
+        this.place = grid.getString(PLACE, null);
+        this.documentId = grid.getString(CAMEL_DOCUMENT_ID, null);
+        this.publicComment = grid.getString(CAMEL_PUBLIC_COMMENT, null);
     }
 
-    public boolean isValid() {
-        return !this.gridName.isEmpty() &&
-                this.beginDate != null &&
-                this.endDate != null &&
-                this.beginDate.isBefore(this.endDate) &&
-                !this.color.isEmpty() &&
-                !this.structureId.isEmpty() &&
-                this.duration != null &&
-                this.periodicity != null &&
-                !this.targetPublicIds.isEmpty() &&
-                !this.dailySlots.isEmpty() &&
-                this.dailySlots.stream().allMatch(DailySlot::isValid);
-    }
+    // Getters
 
-    // getters
     public String getGridName() {
         return gridName;
     }
@@ -107,8 +90,12 @@ public class GridPayload implements IModel<GridPayload> {
         return targetPublicIds;
     }
 
-    public List<DailySlot> getDailySlots() {
+    public List<DailySlotPayload> getDailySlots() {
         return dailySlots;
+    }
+
+    public List<TimeSlotPayload> getTimeSlots() {
+        return timeSlots;
     }
 
     public String getVisioLink() {
@@ -127,7 +114,7 @@ public class GridPayload implements IModel<GridPayload> {
         return publicComment;
     }
 
-    // setters
+    // Setters
 
     public GridPayload setGridName(String gridName) {
         this.gridName = gridName;
@@ -169,8 +156,13 @@ public class GridPayload implements IModel<GridPayload> {
         return this;
     }
 
-    public GridPayload setDailySlots(List<DailySlot> dailySlots) {
+    public GridPayload setDailySlots(List<DailySlotPayload> dailySlots) {
         this.dailySlots = dailySlots;
+        return this;
+    }
+
+    public GridPayload setTimeSlots(List<TimeSlotPayload> timeSlots) {
+        this.timeSlots = timeSlots;
         return this;
     }
 
@@ -194,6 +186,64 @@ public class GridPayload implements IModel<GridPayload> {
         return this;
     }
 
+    // Functions
+
+    public boolean isValid() {
+        return !this.gridName.isEmpty() &&
+                this.beginDate != null &&
+                this.endDate != null &&
+                this.beginDate.isBefore(this.endDate) &&
+                !this.color.isEmpty() &&
+                !this.structureId.isEmpty() &&
+                this.duration != null &&
+                this.duration != Duration.ZERO &&
+                this.duration.compareTo(Duration.ofDays(1)) < 0 &&
+                this.periodicity != null &&
+                !this.targetPublicIds.isEmpty() &&
+                !this.dailySlots.isEmpty() && this.dailySlots.stream().allMatch(DailySlotPayload::isValid);
+    }
+
+    public void buildTimeSlots() {
+        this.timeSlots = new ArrayList<>();
+        LocalDate currentMonday = this.beginDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        List<Day> days = this.dailySlots.stream()
+                .map(DailySlotPayload::getDay)
+                .distinct()
+                .sorted(Comparator.comparingInt(Enum::ordinal))
+                .collect(Collectors.toList());
+
+        // We run through the weeks (by 1 or 2)
+        while (!currentMonday.isAfter(this.endDate)) {
+
+            // We run through the wanted days of the current week and ignore the other days
+            for (Day day : days) {
+                LocalDate currentDate  = currentMonday.with(TemporalAdjusters.nextOrSame(DayOfWeek.valueOf(day.getValue())));
+                if (currentDate.isBefore(this.beginDate) || currentDate.isAfter(this.endDate)) continue;
+
+                List<DailySlotPayload> currentDayDailySlots = this.dailySlots.stream()
+                        .filter(dailySlot -> dailySlot.getDay() == day)
+                        .collect(Collectors.toList());
+
+                // We run through the dailySlot existing in this day
+                for (DailySlotPayload dailySlot : currentDayDailySlots) {
+                    LocalTime currentTime = dailySlot.getBeginTime();
+                    LocalTime endTime = dailySlot.getEndTime();
+
+                    // We calculate the timeSlots dividing the current dailySlot
+                    while (!currentTime.plus(this.duration).isAfter(endTime)) { // We checked if there is still room for another timeslot
+                        LocalDateTime begin = currentDate.atTime(currentTime);
+                        LocalDateTime end = currentDate.atTime(currentTime).plus(this.duration);
+                        this.timeSlots.add(new TimeSlotPayload(begin, end));
+
+                        currentTime = currentTime.plus(this.duration);
+                    }
+                }
+            }
+
+            currentMonday = currentMonday.plusWeeks(this.periodicity.getValue());
+        }
+    }
+
     public String toString() {
         return new JsonObject()
             .put(NAME, this.gridName)
@@ -204,7 +254,8 @@ public class GridPayload implements IModel<GridPayload> {
             .put(DURATION, DateHelper.formatDuration(this.duration))
             .put(PERIODICITY, this.periodicity.getValue())
             .put(CAMEL_TARGET_PUBLIC_LIST_ID, new JsonArray(this.targetPublicIds))
-            .put(CAMEL_DAILY_SLOTS, new JsonArray(this.dailySlots.stream().map(DailySlot::toString).collect(Collectors.toList())))
+            .put(CAMEL_DAILY_SLOTS, new JsonArray(this.dailySlots.stream().map(DailySlotPayload::toString).collect(Collectors.toList())))
+            .put(CAMEL_TIME_SLOTS, new JsonArray(this.timeSlots.stream().map(TimeSlotPayload::toString).collect(Collectors.toList())))
             .put(CAMEL_VISIO_LINK, this.visioLink)
             .put(PLACE, this.place)
             .put(CAMEL_DOCUMENT_ID, this.documentId)

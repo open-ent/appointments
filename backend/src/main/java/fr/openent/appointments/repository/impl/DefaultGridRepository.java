@@ -1,38 +1,39 @@
 package fr.openent.appointments.repository.impl;
 
-import fr.openent.appointments.core.constants.Fields;
-import fr.openent.appointments.helper.IModelHelper;
-import fr.openent.appointments.model.DailySlot;
+import fr.openent.appointments.helper.*;
 import fr.openent.appointments.model.database.Grid;
 import fr.openent.appointments.model.payload.GridPayload;
-import fr.openent.appointments.model.TransactionElement;
+import fr.openent.appointments.repository.DailySlotRepository;
 import fr.openent.appointments.repository.GridRepository;
 import fr.openent.appointments.enums.GridState;
-import fr.openent.appointments.helper.DateHelper;
-import fr.openent.appointments.helper.FutureHelper;
-import fr.openent.appointments.helper.TransactionHelper;
 import fr.openent.appointments.repository.RepositoryFactory;
+import fr.openent.appointments.repository.TimeSlotRepository;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.sql.SqlResult;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fr.openent.appointments.enums.GridState.CLOSED;
-import static fr.openent.appointments.core.constants.Constants.CAMEL_GRID_ID;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.SqlTables.*;
 
 public class DefaultGridRepository implements GridRepository {
 
     private final Sql sql;
+    private final DailySlotRepository dailySlotRepository;
+    private final TimeSlotRepository timeSlotRepository;
 
     public DefaultGridRepository(RepositoryFactory repositoryFactory) {
         this.sql = repositoryFactory.sql();
+        this.dailySlotRepository = repositoryFactory.dailySlotRepository();
+        this.timeSlotRepository = repositoryFactory.timeSlotRepository();
     }
 
     public Future<List<Grid>> getMyGrids(String userId, List<GridState> gridStates) {
@@ -99,109 +100,34 @@ public class DefaultGridRepository implements GridRepository {
         });
     }
 
-    private Future<JsonObject> insert(GridPayload grid, String userId) {
-        Promise<JsonObject> promise = Promise.promise();
+    @Override
+    public Future<Grid> create(GridPayload gridPayload, String userId) {
+        Promise<Grid> promise = Promise.promise();
 
-        String query = "INSERT INTO "+ DB_GRID_TABLE +" (" +
-            NAME + ", " +
-            OWNER_ID + ", " +
-            STRUCTURE_ID + ", " +
-            BEGIN_DATE + ", " +
-            END_DATE + ", " +
-            CREATION_DATE + ", " +
-            UPDATING_DATE + ", " +
-            COLOR + ", " +
-            DURATION + ", " +
-            PERIODICITY + ", " +
-            TARGET_PUBLIC_LIST_ID + ", " +
-            VISIO_LINK + ", " +
-            PLACE + ", " +
-            DOCUMENT_ID + ", " +
-            PUBLIC_COMMENT + ", " +
-            STATE + ") " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
+        insert(gridPayload, userId)
+            .compose(optionalGrid -> {
+                if (!optionalGrid.isPresent()) {
+                    String errorMessage = "No content returned by database after creation of the grid";
+                    LogHelper.logError(this, "create", errorMessage);
+                    return Future.failedFuture(errorMessage);
+                }
 
-        String name = grid.getGridName();
-        String ownerId = userId;
-        String structureId = grid.getStructureId();
-        String begin = DateHelper.formatDate(grid.getBeginDate());
-        String end = DateHelper.formatDate(grid.getEndDate());
-        String creation = "NOW()";
-        String updating = "NOW()";
-        String color = grid.getColor();
-        String duration = DateHelper.formatDuration(grid.getDuration());
-        Integer periodicity = grid.getPeriodicity().getValue();
-        String targetPublicListId = grid.getTargetPublicIds().toString();
-        String visioLink = grid.getVisioLink();
-        String place = grid.getPlace();
-        String documentId = grid.getDocumentId();
-        String publicComment = grid.getPublicComment();
-        String state = GridState.OPEN.getValue();
-
-        JsonArray params = new JsonArray()
-                .add(name)
-                .add(ownerId)
-                .add(structureId)
-                .add(begin)
-                .add(end)
-                .add(creation)
-                .add(updating)
-                .add(color)
-                .add(duration)
-                .add(periodicity)
-                .add(targetPublicListId)
-                .add(visioLink)
-                .add(place)
-                .add(documentId)
-                .add(publicComment)
-                .add(state);
-
-        String errorMessage = "[Appointments@DefaultGridRepository::insert] Fail to insert grid : ";
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(FutureHelper.handlerEither(promise, errorMessage)));
-        return promise.future();
-    }
-
-    private Future<JsonArray> insertDailySlots(Long gridId, List<DailySlot> dailySlots) {
-        Promise<JsonArray> promise = Promise.promise();
-
-        if (dailySlots == null || dailySlots.isEmpty()) {
-            promise.complete(new JsonArray());
-            return promise.future();
-        }
-
-        String query = "INSERT INTO " + DB_DAILY_SLOT_TABLE + " (" +
-            DAY + ", " +
-            BEGIN_TIME + ", " +
-            END_TIME + ", " +
-            GRID_ID + ") VALUES (?, ?, ?, ?)";
-
-        List<TransactionElement> transactionElements = new ArrayList<>();
-
-        dailySlots.forEach(dailySlot -> {
-            JsonArray params = new JsonArray()
-                    .add(dailySlot.getDay().toString())
-                    .add(DateHelper.formatTime(dailySlot.getBeginTime()))
-                    .add(DateHelper.formatTime(dailySlot.getEndTime()))
-                    .add(gridId);
-
-            transactionElements.add(new TransactionElement(query, params));
-        });
-
-        String errorMessage = "[Appointments@DefaultGridRepository::insertDailySlots] Fail to insert daily slot : ";
-        TransactionHelper.executeTransactionAndGetJsonObjectResults(transactionElements, errorMessage)
+                Grid createdGrid = optionalGrid.get();
+                try {
+                    return createSlots(createdGrid, gridPayload);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return Future.failedFuture(e.getMessage());
+                }
+            })
             .onSuccess(promise::complete)
-            .onFailure(promise::fail);
-            
-        return promise.future();
-    }
-
-    public Future<JsonObject> create(GridPayload grid, String userId) {
-        return insert(grid, userId)
-            .compose(insertedGridId -> {
-                Long gridId = insertedGridId.getLong(Fields.ID, null);
-                return insertDailySlots(gridId, grid.getDailySlots())
-                    .map(inserted -> new JsonObject().put(CAMEL_GRID_ID, gridId));
+            .onFailure(err -> {
+                String errorMessage = "Failed to create grid";
+                LogHelper.logError(this, "create", errorMessage, err.getMessage());
+                promise.fail(err.getMessage());
             });
+
+        return promise.future();
     }
 
     @Override
@@ -213,6 +139,55 @@ public class DefaultGridRepository implements GridRepository {
 
         String errorMessage = "[Appointments@DefaultGridRepository::closeAllPassedGrids] Fail to close passed grids : ";
         sql.prepared(query, params, SqlResult.validUniqueResultHandler(FutureHelper.handlerEither(promise, errorMessage)));
+
+        return promise.future();
+    }
+
+    // Private functions
+
+    private Future<Optional<Grid>> insert(GridPayload grid, String userId) {
+        Promise<Optional<Grid>> promise = Promise.promise();
+
+        List<String> sqlColumns = Arrays.asList(NAME, OWNER_ID, STRUCTURE_ID, BEGIN_DATE, END_DATE,  CREATION_DATE, UPDATING_DATE,
+                COLOR, DURATION, PERIODICITY, TARGET_PUBLIC_LIST_ID, VISIO_LINK, PLACE, DOCUMENT_ID, PUBLIC_COMMENT, STATE);
+
+        String query = "INSERT INTO "+ DB_GRID_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
+                "VALUES " + Sql.listPrepared(sqlColumns) + " RETURNING *";
+
+        JsonArray params = new JsonArray()
+                .add(grid.getGridName())
+                .add(userId)
+                .add(grid.getStructureId())
+                .add(DateHelper.formatDate(grid.getBeginDate()))
+                .add(DateHelper.formatDate(grid.getEndDate()))
+                .add("NOW()")
+                .add("NOW()")
+                .add(grid.getColor())
+                .add(DateHelper.formatDuration(grid.getDuration()))
+                .add(grid.getPeriodicity().getValue())
+                .add(grid.getTargetPublicIds().toString())
+                .add(grid.getVisioLink())
+                .add(grid.getPlace())
+                .add(grid.getDocumentId())
+                .add(grid.getPublicComment())
+                .add(GridState.OPEN.getValue());
+
+        String errorMessage = "[Appointments@DefaultGridRepository::insert] Fail to insert grid : ";
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Grid.class, errorMessage)));
+        return promise.future();
+    }
+
+    public Future<Grid> createSlots(Grid grid, GridPayload gridPayload) {
+        Promise<Grid> promise = Promise.promise();
+
+        dailySlotRepository.create(grid.getId(), gridPayload.getDailySlots())
+            .compose(createdDailySlots -> timeSlotRepository.create(grid.getId(), gridPayload.getTimeSlots()))
+            .onSuccess(timeSlots -> promise.complete(grid))
+            .onFailure(err -> {
+                String errorMessage = "Failed to create grid";
+                LogHelper.logError(this, "createSlots", errorMessage, err.getMessage());
+                promise.fail(err.getMessage());
+            });
 
         return promise.future();
     }

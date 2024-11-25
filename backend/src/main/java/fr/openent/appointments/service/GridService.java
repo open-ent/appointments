@@ -57,9 +57,9 @@ public interface GridService {
      * Creates a new grid.
      *
      * @param grid A JsonArray containing the data of the grid to be created.
-     * @return A Future that will complete when the grid has been created.
+     * @return A Future containing {@Link Grid} that will complete when the grid has been created.
      */
-    Future<JsonObject> createGrid(HttpServerRequest request, GridPayload grid);
+    Future<Grid> createGrid(HttpServerRequest request, GridPayload grid);
 
     /**
      * Updates an existing grid.
