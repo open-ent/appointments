@@ -34,6 +34,6 @@ public class LogHelper {
 
     public static void logInfo(Object classObject, String methodName, String message) {
         Class<?> myClass = classObject.getClass();
-        getLogger(myClass).info(String.format("%s : %s", getBaseLog(myClass, methodName), message));
+        getLogger(myClass).info(String.format("%s %s", getBaseLog(myClass, methodName), message));
     }
 }

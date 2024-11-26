@@ -17,6 +17,9 @@ import java.util.List;
 
 import static fr.openent.appointments.core.constants.Constants.*;
 
+/**
+ * Default implementation of the CommunicationRepository interface.
+ */
 public class DefaultCommunicationRepository implements CommunicationRepository {
 
     private final Neo4j neo4j;

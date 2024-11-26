@@ -13,6 +13,7 @@ public class DateHelper {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
     private static final DateTimeFormatter TIME_FORMATTER_2 = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DB_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     // Date
 
@@ -66,8 +67,13 @@ public class DateHelper {
         }
         try {
             return LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
-        } catch (DateTimeParseException e) {
-            return null;
+        } catch (DateTimeParseException e1) {
+
+            try {
+                return LocalDateTime.parse(dateTime, DB_DATE_TIME_FORMATTER);
+            } catch (DateTimeParseException e2) {
+                return null;
+            }
         }
     }
 

@@ -35,6 +35,26 @@ public interface GridRepository {
     Future<JsonArray> getMyGridsByName(String userId, String gridName, List<GridState> gridStates);
 
     /**
+     * Retrieves all grids associated to a list of a specific user.
+     *
+     * @param usersIds list of unique identifier of the users whose grids are to be retrieved.
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *         return a {@link List<Grid>} containing the details of the grids associated
+     *         with the specified users.
+     */
+    Future<List<Grid>> getGridsByUserIds(List<String> usersIds);
+
+    /**
+     * Retrieves all the grids from the list with at least one available time slot.
+     *
+     * @param gridsIds List of IDs of the grids to check.
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *         return a {@link List<Grid>} containing the {@link Grid} of the given list
+     *         having at least one available time slot.
+     */
+    Future<List<Grid>> getGridsWithAvailableTimeSlots(List<Long> gridsIds);
+
+    /**
      * Retrieves the name of all grids associated with a specific user.
      *
      * @param userId the unique identifier of the user whose grids are to be retrieved.

@@ -74,9 +74,7 @@ public class CommunicationController extends BaseController {
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> communicationService.getUsersICanCommunicateWith(user.getUserId(), search, page, limit))
-            .onSuccess(listUserAppointmentResponse -> {
-                renderJson(request, IModelHelper.toJsonArray(listUserAppointmentResponse));
-            })
+            .onSuccess(listUserAppointmentResponse -> renderJson(request, IModelHelper.toJsonArray(listUserAppointmentResponse)))
             .onFailure(err -> {
                 String errorMessage = "Failed to retrieve users I can communicate with";
                 LogHelper.logError(this, "getUsersICanCommunicateWith", errorMessage, err.getMessage());

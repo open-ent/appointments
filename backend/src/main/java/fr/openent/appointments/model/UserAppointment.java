@@ -18,13 +18,13 @@ public class UserAppointment implements IModel<UserAppointment> {
 
     // Constructor
 
-    public UserAppointment(NeoUser user) {
+    public UserAppointment(NeoUser user, LocalDate lastAppointmentDate, Boolean availability) {
         this.setUserId(user.getId());
         this.setDisplayName(user.getDisplayName());
         this.setPicture(user.getPicture());
         this.setFunctions(user.getFunctions());
-//        this.setLastAppointmentDate(someInfo);
-//        this.setIsAvailable(someInfo);
+        this.setLastAppointmentDate(lastAppointmentDate);
+        this.setIsAvailable(availability);
     }
 
     // Getter

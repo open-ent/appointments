@@ -15,15 +15,20 @@ import io.vertx.core.json.JsonObject;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.sql.SqlResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static fr.openent.appointments.enums.AppointmentState.ACCEPTED;
 import static fr.openent.appointments.enums.GridState.CLOSED;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.SqlTables.*;
 
+/**
+ * Default implementation of the GridRepository interface.
+ */
 public class DefaultGridRepository implements GridRepository {
 
     private final Sql sql;
@@ -36,6 +41,7 @@ public class DefaultGridRepository implements GridRepository {
         this.timeSlotRepository = repositoryFactory.timeSlotRepository();
     }
 
+    @Override
     public Future<List<Grid>> getMyGrids(String userId, List<GridState> gridStates) {
         Promise<List<Grid>> promise = Promise.promise();
 
@@ -56,6 +62,7 @@ public class DefaultGridRepository implements GridRepository {
         return promise.future();
     }
 
+    @Override
     public Future<JsonArray> getMyGridsByName(String userId, String gridName, List<GridState> gridStates) {
         Promise<JsonArray> promise = Promise.promise();
 
@@ -81,6 +88,51 @@ public class DefaultGridRepository implements GridRepository {
         return promise.future();
     }
 
+    @Override
+    public Future<List<Grid>> getGridsByUserIds(List<String> usersIds) {
+        Promise<List<Grid>> promise = Promise.promise();
+
+        if (usersIds == null || usersIds.isEmpty()) {
+            promise.complete(new ArrayList<>());
+            return promise.future();
+        }
+
+        String query = "SELECT * FROM " + DB_GRID_TABLE + " WHERE " + OWNER_ID + " IN " + Sql.listPrepared(usersIds);
+        JsonArray params = new JsonArray(usersIds);
+
+        String errorMessage = String.format("[Appointments@DefaultGridRepository::getGridsByUserIds] Fail to get grids for usersIds %s : ", usersIds);
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<List<Grid>> getGridsWithAvailableTimeSlots(List<Long> gridsIds) {
+        Promise<List<Grid>> promise = Promise.promise();
+
+        if (gridsIds == null || gridsIds.isEmpty()) {
+            promise.complete(new ArrayList<>());
+            return promise.future();
+        }
+
+        String query = "SELECT DISTINCT g.* FROM " + DB_GRID_TABLE + " g " +
+                "JOIN " + DB_TIME_SLOT_TABLE + " ts ON ts.grid_id = g.id " +
+                "LEFT JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
+                "WHERE g.id IN " + Sql.listPrepared(gridsIds) +
+                "AND ts.begin_date > NOW() " +
+                "AND (a.id IS NULL OR a.state != ?);";
+
+        JsonArray params = new JsonArray()
+                .addAll(new JsonArray(gridsIds))
+                .add(ACCEPTED);
+
+        String errorMessage = String.format("[Appointments@DefaultGridRepository::getGridsWithAvailableTimeSlots] Failed to get grids with available timeslots from grid ids %s : ", gridsIds);
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
+
+        return promise.future();
+    }
+
+    @Override
     public Future<JsonArray> getGridsName (String userId) {
         Promise<JsonArray> promise = Promise.promise();
 

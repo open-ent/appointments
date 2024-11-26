@@ -20,6 +20,9 @@ import java.util.List;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.SqlTables.DB_DAILY_SLOT_TABLE;
 
+/**
+ * Default implementation of the DailySlotRepository interface.
+ */
 public class DefaultDailySlotRepository implements DailySlotRepository {
 
     private final Sql sql;

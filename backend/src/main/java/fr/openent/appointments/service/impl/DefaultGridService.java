@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 
 import org.entcore.common.user.UserUtils;
 
-import static fr.openent.appointments.core.constants.Constants.CAMEL_GRID_ID;
-
 /**
  * Default implementation of the GridService interface.
  */
@@ -76,6 +74,21 @@ public class DefaultGridService implements GridService {
     public Future<JsonArray> getUserGrids(Integer userId) {
         // TODO: Implement the logic to retrieve all grids associated with a specific user.
         return Future.succeededFuture(new JsonArray());
+    }
+
+    @Override
+    public Future<List<Long>> getGridsIdsWithAvailableTimeSlots(List<Long> gridsIds) {
+        Promise<List<Long>> promise = Promise.promise();
+
+        gridRepository.getGridsWithAvailableTimeSlots(gridsIds)
+            .onSuccess(grids -> promise.complete(grids.stream().map(Grid::getId).distinct().collect(Collectors.toList())))
+            .onFailure(err -> {
+                String errorMessage = "Failed to get grids with available timeslots from grid ids " + gridsIds;
+                LogHelper.logError(this, "getGridsIdsWithAvailableTimeSlots", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();
     }
 
     private Future<Boolean> isGridAlreadyExists(String gridName, String userId) {
@@ -157,7 +170,6 @@ public class DefaultGridService implements GridService {
                 .limit(limit)
                 .collect(Collectors.toList());
         }
-
 
         return new ListGridsResponse((long) grids.size(), paginatedGrids);
     }

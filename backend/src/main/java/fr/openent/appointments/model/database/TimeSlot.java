@@ -13,21 +13,21 @@ public class TimeSlot implements IModel<TimeSlot> {
 
     private Long id;
     private Long gridId;
-    private LocalDateTime begin;
-    private LocalDateTime end;
+    private LocalDateTime beginDate;
+    private LocalDateTime endDate;
 
     // Constructor
 
     public TimeSlot(JsonObject timeslot) {
         this.id = timeslot.getLong(ID, null);
         this.gridId = timeslot.getLong(GRID_ID, null);
-        this.begin = DateHelper.parseDateTime(timeslot.getString(BEGIN, null));
-        this.end = DateHelper.parseDateTime(timeslot.getString(END, null));
+        this.beginDate = DateHelper.parseDateTime(timeslot.getString(BEGIN_DATE, null));
+        this.endDate = DateHelper.parseDateTime(timeslot.getString(END_DATE, null));
     }
 
     public TimeSlot(LocalDateTime begin, LocalDateTime end) {
-        this.begin = begin;
-        this.end = end;
+        this.beginDate = begin;
+        this.endDate = end;
     }
 
     // Getter
@@ -40,12 +40,12 @@ public class TimeSlot implements IModel<TimeSlot> {
         return gridId;
     }
 
-    public LocalDateTime getBegin() {
-        return begin;
+    public LocalDateTime getBeginDate() {
+        return beginDate;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
     // Setter
@@ -60,13 +60,13 @@ public class TimeSlot implements IModel<TimeSlot> {
         return this;
     }
 
-    public TimeSlot setBegin(LocalDateTime begin) {
-        this.begin = begin;
+    public TimeSlot setBeginDate(LocalDateTime beginDate) {
+        this.beginDate = beginDate;
         return this;
     }
 
-    public TimeSlot setEnd(LocalDateTime end) {
-        this.end = end;
+    public TimeSlot setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
         return this;
     }
 
@@ -76,8 +76,8 @@ public class TimeSlot implements IModel<TimeSlot> {
         return "TimeSlot{" +
                 "id=" + id +
                 ", gridId=" + gridId +
-                ", begin=" + begin +
-                ", end=" + end +
+                ", beginDate=" + beginDate +
+                ", endDate=" + endDate +
                 '}';
     }
 

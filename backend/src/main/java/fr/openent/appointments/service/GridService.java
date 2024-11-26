@@ -10,6 +10,7 @@ import io.vertx.core.http.HttpServerRequest;
 import fr.openent.appointments.model.payload.GridPayload;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for managing grid operations in the appointment service.
@@ -54,10 +55,19 @@ public interface GridService {
     Future<JsonArray> getUserGrids(Integer userId);
 
     /**
+     * Count the number of available timeslots for the specified grids.
+     *
+     * @param gridsIds A {@link List<Long>} of grid ids for which we count the available timeslots.
+     * @return A {@link Future} representing the asynchronous operation, which will
+     *         return a {@link List<Long>} containing ths IDs of the grids having a timeslot available.
+     */
+    Future<List<Long>> getGridsIdsWithAvailableTimeSlots(List<Long> gridsIds);
+
+    /**
      * Creates a new grid.
      *
      * @param grid A JsonArray containing the data of the grid to be created.
-     * @return A Future containing {@Link Grid} that will complete when the grid has been created.
+     * @return A Future containing {@link Grid} that will complete when the grid has been created.
      */
     Future<Grid> createGrid(HttpServerRequest request, GridPayload grid);
 

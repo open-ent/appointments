@@ -3,6 +3,7 @@ package fr.openent.appointments.core.constants;
 public class Constants {
     // camelCase constants
     public static final String CAMEL_ACTOR_ID = "actorId";
+    public static final String CAMEL_AVAILABLE_GRIDS_IDS = "availableGridsIds";
     public static final String CAMEL_BEGIN_DATE = "beginDate";
     public static final String CAMEL_BEGIN_TIME = "beginTime";
     public static final String CAMEL_CREATION_DATE = "creationDate";

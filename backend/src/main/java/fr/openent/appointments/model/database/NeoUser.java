@@ -19,23 +19,14 @@ public class NeoUser implements IModel<NeoUser> {
     private String displayName;
     private List<String> functions;
     private String picture;
-    private LocalDate lastAppointmentDate;
-    private Boolean isAvailable;
 
     // Constructor
 
     public NeoUser(JsonObject neoUser) {
-        this.setId(neoUser.getString(ID));
-        this.setDisplayName(neoUser.getString(CAMEL_DISPLAY_NAME));
-        this.setFunctions(neoUser.getJsonArray(FUNCTIONS));
-        this.setPicture(neoUser.getString(PICTURE));
-    }
-
-    public NeoUser(JsonObject neoUser, LocalDate lastAppointmentDate, Boolean isAvailable) {
-        this(neoUser);
-        this.setLastAppointmentDate(lastAppointmentDate);
-        this.setIsAvailable(isAvailable);
-
+        this.setId(neoUser.getString(ID, null));
+        this.setDisplayName(neoUser.getString(CAMEL_DISPLAY_NAME, null));
+        this.setFunctions(neoUser.getJsonArray(FUNCTIONS, new JsonArray()));
+        this.setPicture(neoUser.getString(PICTURE, null));
     }
 
     // Getter
@@ -54,14 +45,6 @@ public class NeoUser implements IModel<NeoUser> {
 
     public String getPicture() {
         return picture;
-    }
-
-    public LocalDate getLastAppointmentDate() {
-        return lastAppointmentDate;
-    }
-
-    public Boolean getIsAvailable() {
-        return isAvailable;
     }
 
     // Setter
@@ -87,16 +70,6 @@ public class NeoUser implements IModel<NeoUser> {
 
     public NeoUser setPicture(String picture) {
         this.picture = picture;
-        return this;
-    }
-
-    public NeoUser setLastAppointmentDate(LocalDate lastAppointmentDate) {
-        this.lastAppointmentDate = lastAppointmentDate;
-        return this;
-    }
-
-    public NeoUser setIsAvailable(Boolean isAvailable) {
-        this.isAvailable = isAvailable;
         return this;
     }
 
