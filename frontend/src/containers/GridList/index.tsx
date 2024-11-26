@@ -15,7 +15,7 @@ import {
 import { GridListProps } from "./types";
 import { GridCard } from "~/components/GridCard";
 import { GRID_PER_PAGE } from "~/core/constants";
-import { useAvailabilityProvider } from "~/providers/AvailabilityProvider";
+import { useAvailability } from "~/providers/AvailabilityProvider";
 import { GRID_TYPE } from "~/providers/AvailabilityProvider/enum";
 
 export const GridList: FC<GridListProps> = ({ gridType, cardSize }) => {
@@ -28,7 +28,7 @@ export const GridList: FC<GridListProps> = ({ gridType, cardSize }) => {
     },
     currentGridList: { [gridType]: grids },
     handleChangePage,
-  } = useAvailabilityProvider();
+  } = useAvailability();
 
   const isGridListEmpty = !gridsLength;
 

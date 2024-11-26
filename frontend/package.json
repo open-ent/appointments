@@ -46,9 +46,9 @@
     ]
   },
   "dependencies": {
-    "@cgi-learning-hub/icons": "1.2.0",
-    "@cgi-learning-hub/theme": "1.2.0",
-    "@cgi-learning-hub/ui": "1.2.0",
+    "@cgi-learning-hub/icons": "latest",
+    "@cgi-learning-hub/theme": "latest",
+    "@cgi-learning-hub/ui": "latest",
     "@edifice-ui/icons": "1.5.14",
     "@edifice-ui/react": "1.5.14",
     "@react-spring/web": "9.7.3",

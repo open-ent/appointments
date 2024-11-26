@@ -12,8 +12,8 @@ import {
   AvailabilityProviderContextProps,
   AvailabilityProviderProps,
   GridList,
-  GridTypeLength,
   GridPages,
+  GridTypeLength,
 } from "./types";
 import { initialGrids, initialGridsLength, initialPages } from "./utils";
 import { GRID_PER_PAGE } from "~/core/constants";
@@ -23,11 +23,11 @@ import { useGetMyGridsQuery } from "~/services/api/grid.service";
 const AvailabilityProviderContext =
   createContext<AvailabilityProviderContextProps | null>(null);
 
-export const useAvailabilityProvider = () => {
+export const useAvailability = () => {
   const context = useContext(AvailabilityProviderContext);
   if (!context) {
     throw new Error(
-      "useAvailabilityProvider must be used within a AvailabilityProvider",
+      "useAvailability must be used within a AvailabilityProvider",
     );
   }
   return context;

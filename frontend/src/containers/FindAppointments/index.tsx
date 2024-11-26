@@ -6,12 +6,13 @@ import { Box } from "@mui/material";
 import { containerStyle, listCardStyle, searchInputStyle } from "./style";
 import { TakeAppointmentModal } from "../TakeAppointmentModal";
 import { UserCard } from "~/components/UserCard";
-import { useFindAppointmentsProvider } from "~/providers/FindAppointmentsProvider";
+import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { NUMBER_MORE_USERS } from "~/providers/FindAppointmentsProvider/utils";
+import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
 
 export const FindAppointments: FC = () => {
-  const { users, selectedUser, hasMoreUsers, loadMoreUsers } =
-    useFindAppointmentsProvider();
+  const { users, hasMoreUsers, loadMoreUsers } = useFindAppointments();
+  const { selectedUser } = useTakeAppointmentModal();
   const observerRef = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
 

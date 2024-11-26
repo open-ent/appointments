@@ -21,7 +21,7 @@ import {
 import { DailySlot } from "../DailySlot";
 import { DAY } from "~/core/enums";
 import { formatDayToI18n } from "~/core/utils/date.utils";
-import { useGridModalProvider } from "~/providers/GridModalProvider";
+import { useGridModal } from "~/providers/GridModalProvider";
 
 export const WeekSlots: FC = () => {
   const { t } = useTranslation("appointments");
@@ -29,7 +29,7 @@ export const WeekSlots: FC = () => {
     inputs,
     errorInputs: { slots },
     updateGridModalInputs: { handleAddSlot },
-  } = useGridModalProvider();
+  } = useGridModal();
 
   const dayErrors = useMemo(() => {
     const errors: Record<DAY, boolean> = {} as Record<DAY, boolean>;

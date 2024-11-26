@@ -18,8 +18,8 @@ import {
 } from "./style";
 import { UserCardProps } from "./types";
 import { NoAvatar } from "../SVG/NoAvatar";
-import { useFindAppointmentsProvider } from "~/providers/FindAppointmentsProvider";
 import { USER_STATUS } from "~/providers/FindAppointmentsProvider/enums";
+import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
 import { GREY } from "~/styles/color.constants";
 
 export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
@@ -30,7 +30,8 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
     const [isElipsisProfession, setIsElipsisProfession] = useState(false);
 
     const { t } = useTranslation("appointments");
-    const { handleOnClickCard } = useFindAppointmentsProvider();
+    const { handleOnClickCard } = useTakeAppointmentModal();
+
     const displayNameRef = useRef<HTMLDivElement>(null);
     const professionRef = useRef<HTMLDivElement>(null);
 

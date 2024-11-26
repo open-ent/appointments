@@ -19,7 +19,7 @@ import { pageGridModalStyle } from "../GridModal/style";
 import { RangeDatePicker } from "~/components/RangeDatePicker";
 import { WeekSlots } from "~/components/WeekSlots";
 import { formatPeriodicityToI18n } from "~/core/utils/date.utils";
-import { useGridModalProvider } from "~/providers/GridModalProvider";
+import { useGridModal } from "~/providers/GridModalProvider";
 
 export const SecondPageGridModal: FC = () => {
   const { t } = useTranslation("appointments");
@@ -33,7 +33,7 @@ export const SecondPageGridModal: FC = () => {
       handleSlotDurationChange,
       handlePeriodicityChange,
     },
-  } = useGridModalProvider();
+  } = useGridModal();
 
   return (
     <Box sx={pageGridModalStyle}>

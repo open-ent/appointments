@@ -1,25 +1,53 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
-import { Box, Modal } from "@mui/material";
+import { Button, IconButton } from "@cgi-learning-hub/ui";
+import CloseIcon from "@mui/icons-material/Close";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import { Box, Divider, Modal, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
-import { contentBoxStyle, modalBoxStyle } from "./style";
+import { MODAL_SIZE } from "./enum";
+import {
+  closeIconStyle,
+  contentBoxStyle,
+  ContentWrapper,
+  dividerStyle,
+  modalBoxStyle,
+  submitButtonStyle,
+} from "./style";
 import { TakeAppointmentModalProps } from "./types";
 import { TakeAppointmentGridInfos } from "../TakeAppointmentGridInfos";
-import { SLOT_DURATION } from "~/core/enums";
-import { useFindAppointmentsProvider } from "~/providers/FindAppointmentsProvider";
+import { TakeAppointmentWeekSlotsDesktop } from "../TakeAppointmentWeekSlotsDesktop";
+import { TakeAppointmentWeekSlotsMobile } from "../TakeAppointmentWeekSlotsMobile";
+import { TAKE_APPOINTMENT_MODAL_BREAKPOINT } from "~/core/breakpoints";
+import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
+import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
 
 export const TakeAppointmentModal: FC<TakeAppointmentModalProps> = ({
   userInfos,
 }) => {
-  const { isModalOpen, setIsModalOpen } = useFindAppointmentsProvider();
+  const { isModalOpen, setIsModalOpen, selectedSlotId } =
+    useTakeAppointmentModal();
+  const { t } = useTranslation("appointments");
+  const [modalSize, setModalSize] = useState<MODAL_SIZE>(MODAL_SIZE.LARGE);
 
-  const gridsName = ["grid1", "grid2", "grid3"];
-  const gridInfo = {
-    visio: true,
-    slotDuration: SLOT_DURATION.FIFTEEN_MINUTES,
-    location: "Paris",
-    publicComment: "Public comment",
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setModalSize(
+        window.innerWidth <= TAKE_APPOINTMENT_MODAL_BREAKPOINT
+          ? MODAL_SIZE.SMALL
+          : MODAL_SIZE.LARGE,
+      );
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <Modal
       open={isModalOpen}
@@ -28,11 +56,39 @@ export const TakeAppointmentModal: FC<TakeAppointmentModalProps> = ({
     >
       <Box sx={modalBoxStyle}>
         <Box sx={contentBoxStyle}>
-          <TakeAppointmentGridInfos
-            userInfos={userInfos}
-            gridsName={gridsName}
-            gridInfo={gridInfo}
-          />
+          <Box sx={spaceBetweenBoxStyle}>
+            <Typography variant="h3">
+              {t("appointments.take.appointment.modal.title")}
+            </Typography>
+            <IconButton
+              sx={closeIconStyle}
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <ContentWrapper modalSize={modalSize}>
+            <TakeAppointmentGridInfos userInfos={userInfos} />
+            {modalSize === MODAL_SIZE.SMALL ? (
+              <TakeAppointmentWeekSlotsMobile />
+            ) : (
+              <>
+                <Divider sx={dividerStyle} orientation="vertical" flexItem />
+                <TakeAppointmentWeekSlotsDesktop />
+              </>
+            )}
+          </ContentWrapper>
+          <Box sx={submitButtonStyle}>
+            <Button
+              disabled={!selectedSlotId}
+              variant="contained"
+              startIcon={<EventAvailableIcon />}
+            >
+              {t("appointments.take.appointment.modal.submit")}
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Modal>

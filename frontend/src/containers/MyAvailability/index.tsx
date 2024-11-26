@@ -15,25 +15,25 @@ import { GridList } from "../GridList";
 import { GridModal } from "../GridModal";
 import { GRID_MODAL_TYPE } from "../GridModal/enum";
 import { AvailabilityEmptyState } from "~/components/SVG/AvailabilityEmptyState";
-import { useAvailabilityProvider } from "~/providers/AvailabilityProvider";
+import { useAvailability } from "~/providers/AvailabilityProvider";
 import {
   GRID_CARD_SIZE,
   GRID_TYPE,
 } from "~/providers/AvailabilityProvider/enum";
-import { useGlobalProvider } from "~/providers/GlobalProvider";
+import { useGlobal } from "~/providers/GlobalProvider";
 import { MODAL_TYPE } from "~/providers/GlobalProvider/enum";
 import { PURPLE } from "~/styles/color.constants";
 
 export const MyAvailability: FC = () => {
   const { t } = useTranslation("appointments");
-  const { handleDisplayModal } = useGlobalProvider();
+  const { handleDisplayModal } = useGlobal();
 
   const [gridModalType] = useState<GRID_MODAL_TYPE>(GRID_MODAL_TYPE.CREATION);
   const [gridCardSize, setGridCardSize] = useState<GRID_CARD_SIZE>(
     GRID_CARD_SIZE.LARGE,
   );
 
-  const { gridTypeLengths, isLoading } = useAvailabilityProvider();
+  const { gridTypeLengths, isLoading } = useAvailability();
   const isAllGridListEmpty = useMemo(
     () =>
       !gridTypeLengths[GRID_TYPE.IN_PROGRESS] &&

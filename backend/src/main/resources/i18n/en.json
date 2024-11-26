@@ -44,12 +44,6 @@
     "appointments.grid.periodicity.biweekly": "Bimensuelle",
     "appointments.grid.available.slots": "Plages horaires",
     "appointments.grid.available.slots.warning": "Veuillez ajouter au moins un créneau.",
-    "appointments.grid.monday": "Lundi",
-    "appointments.grid.tuesday": "Mardi",
-    "appointments.grid.wednesday": "Mercredi",
-    "appointments.grid.thursday": "Jeudi",
-    "appointments.grid.friday": "Vendredi",
-    "appointments.grid.saturday": "Samedi",
     
     "appointments.grid.empty.state": "Vous n’avez pas encore défini de grille horaire.",
     "appointments.grid.in.progress.empty.state": "Vous n’avez pas encore défini de grille horaire pour les jours à venir.",
@@ -60,10 +54,10 @@
     "appointments.grid.state.open": "Ouverte",
     "appointments.grid.state.suspended": "Suspendue",
     "appointments.grid.state.closed": "Fermée",
-
+    
     "appointments.find.empty.state.search.bar": "Utilisez la barre de recherche pour voir les personnes disponibles.",
     "appointments.find.empty.state.no.user": "Aucune personne ne correspond à votre recherche.",
-
+    
     "appointments.take.appointment.modal.title": "Prendre un rendez-vous avec...",
     "appointments.take.appointment.modal.time.grid": "Grille horaire",
     "appointments.take.appointment.modal.visio.possible": "Rendez-vous en visio possibles",
@@ -71,7 +65,7 @@
     "appointments.take.appointment.modal.visio.option": "Je souhaite participer à ce rendez-vous en visioconférence",
     "appointments.take.appointment.modal.submit": "Réserver ce créneau",
     "appointments.take.appointment.modal.next.slot": "Prochain créneau disponible le",
-
+    
     "appointments.cancel": "Annuler",
     "appointments.save": "Enregistrer",
     "appointments.back": "Retour",
@@ -85,10 +79,17 @@
     "appointments.available": "Disponible",
     "appointments.unavailable": "Indisponible",
     "appointments.slots": "Créneaux",
+    
+    "appointments.monday": "Lundi",
+    "appointments.tuesday": "Mardi",
+    "appointments.wednesday": "Mercredi",
+    "appointments.thursday": "Jeudi",
+    "appointments.friday": "Vendredi",
+    "appointments.saturday": "Samedi",
 
     "appointments.from": "De",
     "appointments.to": "À",
-
+    
     "appointments.everyone": "Tout le monde",
 
     "appointments.error.same.grid.already.exists": "Ce nom est déjà utilisé.",

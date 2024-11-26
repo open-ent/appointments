@@ -1,17 +1,18 @@
-import { createTheme } from "@mui/material";
+import { CssVarsThemeOptions } from "@mui/material";
 
 import { BLACK, GREY, PURPLE } from "./color.constants";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: PURPLE,
-    },
-    background: {
-      default: "#F9F9F9",
-    },
-    text: {
-      primary: GREY,
+export const options: CssVarsThemeOptions = {
+  colorSchemes: {
+    light: {
+      palette: {
+        background: {
+          default: "#F9F9F9",
+        },
+        text: {
+          primary: GREY,
+        },
+      },
     },
   },
   typography: {
@@ -77,6 +78,15 @@ const theme = createTheme({
         root: {
           fontSize: "1.4rem",
           fontWeight: "bold",
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          "& .MuiSvgIcon-root": {
+            fontSize: "2.1rem",
+          },
         },
       },
     },
@@ -163,6 +173,4 @@ const theme = createTheme({
       },
     },
   },
-});
-
-export default theme;
+};

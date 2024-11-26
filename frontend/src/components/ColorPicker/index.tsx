@@ -1,4 +1,4 @@
-import { FC, useState, KeyboardEvent } from "react";
+import { FC, KeyboardEvent, useState } from "react";
 
 import { Box, ClickAwayListener } from "@mui/material";
 import { CirclePicker, ColorResult } from "react-color";
@@ -6,7 +6,7 @@ import { CirclePicker, ColorResult } from "react-color";
 import { circlePickerStyle, colorPickerIconStyle } from "./style";
 import { HexaColor } from "./types";
 import { ColorPickerIcon } from "~/components/SVG/ColorPickerIcon";
-import { useGridModalProvider } from "~/providers/GridModalProvider";
+import { useGridModal } from "~/providers/GridModalProvider";
 
 export const ColorPicker: FC = () => {
   const [isCirclePickerVisible, setIsCirclePickerVisible] = useState(false);
@@ -14,7 +14,7 @@ export const ColorPicker: FC = () => {
   const {
     inputs,
     updateGridModalInputs: { handleColorChange },
-  } = useGridModalProvider();
+  } = useGridModal();
 
   const handlePickerToggle = () => {
     setIsCirclePickerVisible((prev) => !prev);

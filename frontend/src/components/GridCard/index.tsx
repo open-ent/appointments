@@ -37,12 +37,12 @@ import { GridCardProps } from "./types";
 import { GRID_STATE } from "~/core/enums";
 import { formatDayjsToString } from "~/core/utils/date.utils";
 import { GRID_CARD_SIZE } from "~/providers/AvailabilityProvider/enum";
-import { useGlobalProvider } from "~/providers/GlobalProvider";
+import { useGlobal } from "~/providers/GlobalProvider";
 
 export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
   const { t } = useTranslation("appointments");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { isMultiStructure, getStructureNameById } = useGlobalProvider();
+  const { isMultiStructure, getStructureNameById } = useGlobal();
 
   const handleClickedMoreButton = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -65,6 +65,7 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
               <Tooltip
                 title={getStructureNameById(grid.structureId)}
                 placement="top"
+                arrow
               >
                 <BusinessIcon sx={structureIconStyle} />
               </Tooltip>

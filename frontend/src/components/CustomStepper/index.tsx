@@ -1,8 +1,9 @@
 import { FC } from "react";
 
+import { Button } from "@cgi-learning-hub/ui";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import SaveIcon from "@mui/icons-material/Save";
-import { Button, MobileStepper } from "@mui/material";
+import { MobileStepper } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -32,13 +33,14 @@ export const CustomStepper: FC<CustomStepperProps> = ({
       sx={stepperStyle}
       backButton={
         page === PAGE_TYPE.FIRST ? (
-          <Button onClick={handleCancel} sx={backButtonStyle}>
+          <Button onClick={handleCancel} sx={backButtonStyle} variant="text">
             {t("appointments.cancel")}
           </Button>
         ) : (
           <Button
             onClick={handlePrev}
             startIcon={<KeyboardArrowLeft />}
+            variant="text"
             sx={backButtonStyle}
           >
             {t("appointments.back")}
@@ -47,7 +49,7 @@ export const CustomStepper: FC<CustomStepperProps> = ({
       }
       nextButton={
         page === PAGE_TYPE.FIRST ? (
-          <Button onClick={handleNext} sx={nextButtonStyle}>
+          <Button onClick={handleNext} sx={nextButtonStyle} variant="text">
             {t("appointments.next")}
           </Button>
         ) : (

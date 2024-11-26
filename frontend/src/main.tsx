@@ -1,8 +1,7 @@
 import React from "react";
 
-import "~/i18n";
+import { ThemeProvider as ThemeProviderCGI } from "@cgi-learning-hub/theme";
 import { OdeClientProvider, ThemeProvider } from "@edifice-ui/react";
-import { ThemeProvider as ThemeProviderMUI } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
@@ -14,14 +13,16 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
+import "~/i18n";
 
 import { AvailabilityProvider } from "./providers/AvailabilityProvider";
 import { FindAppointmentsProvider } from "./providers/FindAppointmentsProvider";
 import { GlobalProvider } from "./providers/GlobalProvider";
 import { GridModalProvider } from "./providers/GridModalProvider";
+import { TakeAppointmentModalProvider } from "./providers/TakeAppointmentModalProvider";
 import { router } from "./routes";
 import { setupStore } from "./store";
-import theme from "./styles/theme";
+import { options } from "./styles/theme";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement!);
@@ -58,19 +59,21 @@ root.render(
         }}
       >
         <ThemeProvider>
-          <ThemeProviderMUI theme={theme}>
+          <ThemeProviderCGI themeId={"default"} options={options}>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
               <GlobalProvider>
                 <FindAppointmentsProvider>
-                  <AvailabilityProvider>
-                    <GridModalProvider>
-                      <RouterProvider router={router} />
-                    </GridModalProvider>
-                  </AvailabilityProvider>
+                  <TakeAppointmentModalProvider>
+                    <AvailabilityProvider>
+                      <GridModalProvider>
+                        <RouterProvider router={router} />
+                      </GridModalProvider>
+                    </AvailabilityProvider>
+                  </TakeAppointmentModalProvider>
                 </FindAppointmentsProvider>
               </GlobalProvider>
             </LocalizationProvider>
-          </ThemeProviderMUI>
+          </ThemeProviderCGI>
         </ThemeProvider>
       </OdeClientProvider>
     </Provider>

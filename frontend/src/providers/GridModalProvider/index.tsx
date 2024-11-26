@@ -19,7 +19,7 @@ import {
   periodicityOptions,
   slotDurationOptions,
 } from "./utils";
-import { useGlobalProvider } from "../GlobalProvider";
+import { useGlobal } from "../GlobalProvider";
 import {
   useBlurGridInputsReturnType,
   useUpdateGridInputsReturnType,
@@ -32,18 +32,16 @@ import { useGetMyGridsNameQuery } from "~/services/api/grid.service";
 const GridModalProviderContext =
   createContext<GridModalProviderContextProps | null>(null);
 
-export const useGridModalProvider = () => {
+export const useGridModal = () => {
   const context = useContext(GridModalProviderContext);
   if (!context) {
-    throw new Error(
-      "useGridModalProvider must be used within a GridModalProvider",
-    );
+    throw new Error("useGridModal must be used within a GridModalProvider");
   }
   return context;
 };
 
 export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
-  const { structures } = useGlobalProvider();
+  const { structures } = useGlobal();
 
   const [inputs, setInputs] = useState<GridModalInputs>(
     initialGridModalInputs(structures),

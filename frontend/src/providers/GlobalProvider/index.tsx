@@ -13,10 +13,10 @@ const GlobalProviderContext = createContext<GlobalProviderContextProps | null>(
   null,
 );
 
-export const useGlobalProvider = () => {
+export const useGlobal = () => {
   const context = useContext(GlobalProviderContext);
   if (!context) {
-    throw new Error("useGlobalProvider must be used within a GlobalProvider");
+    throw new Error("useGlobal must be used within a GlobalProvider");
   }
   return context;
 };

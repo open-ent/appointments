@@ -7,14 +7,14 @@ import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 
 import { chipStyle, TextFieldStyle } from "./style";
-import { useGridModalProvider } from "~/providers/GridModalProvider";
+import { useGridModal } from "~/providers/GridModalProvider";
 
 export const CustomMultiAutocomplete: FC = () => {
   const {
     publicOptions,
     inputs,
     updateGridModalInputs: { handlePublicChange },
-  } = useGridModalProvider();
+  } = useGridModal();
 
   const selectedPublic = inputs.public;
   const { t } = useTranslation("appointments");

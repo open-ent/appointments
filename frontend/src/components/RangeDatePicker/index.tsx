@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { boxStyle, datePickerStyle, removeIconStyle } from "./style";
 import { shouldDisableEndDate, shouldDisableStartDate } from "./utils";
-import { useGridModalProvider } from "~/providers/GridModalProvider";
+import { useGridModal } from "~/providers/GridModalProvider";
 
 export const RangeDatePicker: FC = () => {
   const { t } = useTranslation("appointments");
@@ -18,7 +18,7 @@ export const RangeDatePicker: FC = () => {
     },
     errorInputs: { validityPeriod: validityPeriodError },
     updateGridModalInputs: { handleStartDateChange, handleEndDateChange },
-  } = useGridModalProvider();
+  } = useGridModal();
 
   const isStartError = !!validityPeriodError && !startDate;
   const isEndError = !!validityPeriodError && !endDate;

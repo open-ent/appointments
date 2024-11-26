@@ -22,10 +22,10 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "~/*": ["./src/*"],
-      "@cgi-learning-hub/ui": [
-        "node_modules/@cgi-learning-hub/ui"
-      ],
-    },
+      "@cgi-learning-hub/ui": ["node_modules/@cgi-learning-hub/ui"],
+      "@cgi-learning-hub/theme": ["node_modules/@cgi-learning-hub/theme"],
+      "@cgi-learning-hub/icons": ["node_modules/@cgi-learning-hub/icons"]
+    }
 
     /* Test */
     // "types": ["vitest/globals", "@testing-library/jest-dom"] // à remettre si on veut tester

@@ -5,3 +5,5 @@ export const ITALIC_FONT = {
 export const BOLD_FONT = {
   fontWeight: "bold",
 };
+
+export const IMPORTANT = "!important";

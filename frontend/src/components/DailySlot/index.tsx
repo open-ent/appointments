@@ -26,7 +26,7 @@ import {
 } from "./style";
 import { DailySlotProps } from "./types";
 import { formatTime, getEndOptions, getStartOptions } from "./utils";
-import { useGridModalProvider } from "~/providers/GridModalProvider";
+import { useGridModal } from "~/providers/GridModalProvider";
 
 export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
   const { t } = useTranslation("appointments");
@@ -34,7 +34,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
     inputs: { weekSlots, slotDuration },
     errorInputs: { slots },
     updateGridModalInputs: { handleDeleteSlot, handleSlotChange },
-  } = useGridModalProvider();
+  } = useGridModal();
 
   const isSlotError =
     slots.ids.some((item) => item === slot.id) && (!slot.begin || !slot.end);

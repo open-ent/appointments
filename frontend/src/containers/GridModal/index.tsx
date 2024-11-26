@@ -16,9 +16,9 @@ import { FirstPageGridModal } from "../FirstPageGridModal";
 import { SecondPageGridModal } from "../SecondPageGridModal";
 import { CustomStepper } from "~/components/CustomStepper";
 import { DialogModal } from "~/components/DialogModal";
-import { useGlobalProvider } from "~/providers/GlobalProvider";
+import { useGlobal } from "~/providers/GlobalProvider";
 import { MODAL_TYPE } from "~/providers/GlobalProvider/enum";
-import { useGridModalProvider } from "~/providers/GridModalProvider";
+import { useGridModal } from "~/providers/GridModalProvider";
 import { GridPayload } from "~/providers/GridModalProvider/types";
 import { gridInputsToGridPayload } from "~/providers/GridModalProvider/utils";
 import { useCreateGridMutation } from "~/services/api/grid.service";
@@ -31,7 +31,7 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
   const {
     displayModals: { [MODAL_TYPE.GRID]: grid },
     handleDisplayModal,
-  } = useGlobalProvider();
+  } = useGlobal();
   const [createGrid] = useCreateGridMutation();
 
   const {
@@ -46,7 +46,7 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
     },
     setErrorInputs,
     resetInputs,
-  } = useGridModalProvider();
+  } = useGridModal();
 
   const isDisplayFirstPage =
     gridModalType === GRID_MODAL_TYPE.EDIT || page === PAGE_TYPE.FIRST;
