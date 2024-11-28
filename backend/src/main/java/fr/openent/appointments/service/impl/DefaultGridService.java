@@ -3,6 +3,7 @@ package fr.openent.appointments.service.impl;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.response.ListGridsResponse;
 import fr.openent.appointments.model.database.Grid;
+import fr.openent.appointments.repository.TimeSlotRepository;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -32,10 +33,12 @@ public class DefaultGridService implements GridService {
 
     private final EventBus eb;
     private final GridRepository gridRepository;
+    private final TimeSlotRepository timeSlotRepository;
 
     public DefaultGridService(ServiceFactory serviceFactory, RepositoryFactory repositoryFactory) {
         this.eb = serviceFactory.eventBus();
         this.gridRepository = repositoryFactory.gridRepository();
+        this.timeSlotRepository = repositoryFactory.timeSlotRepository();
     }
 
     @Override
@@ -68,6 +71,28 @@ public class DefaultGridService implements GridService {
     public Future<JsonArray> getGridById(Integer gridId) {
         // TODO: Implement the logic to retrieve a specific grid by its ID.
         return Future.succeededFuture(new JsonArray());
+    }
+
+    @Override
+    public Future<Grid> getGridByTimeSlotId(Long timeSlotId) {
+        Promise<Grid> promise = Promise.promise();
+
+        timeSlotRepository.get(timeSlotId)
+            .compose(timeSlot -> {
+                if (!timeSlot.isPresent()) return Future.failedFuture("Time slot not found");
+                return gridRepository.get(timeSlot.get().getGridId());
+            })
+            .onSuccess(grid -> {
+                if (grid.isPresent()) promise.complete(grid.get());
+                else promise.fail("Grid not found");
+            }
+            ).onFailure(err -> {
+                String errorMessage = "Failed to get grid by time slot id";
+                LogHelper.logError(this, "getGridByTimeSlotId", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();
     }
 
     @Override

@@ -20,6 +20,7 @@ import org.entcore.common.sql.SqlResult;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.SqlTables.*;
@@ -102,6 +103,19 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
         String errorMessage = "[Appointments@DefaultTimeSlotRepository::getLastAppointmentDateByGridOwner] Fail to get last appointment date for grid owners : " + ownersIds;
         sql.prepared(query, params, SqlResult.validResultHandler(FutureHelper.handlerEither(promise, errorMessage)));
 
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<Optional<TimeSlot>> get(Long timeSlotId) {
+        Promise<Optional<TimeSlot>> promise = Promise.promise();
+
+        String query = "SELECT * FROM " + DB_TIME_SLOT_TABLE + " WHERE id = ?";
+        JsonArray params = new JsonArray().add(timeSlotId);
+
+        String errorMessage = "[Appointments@DefaultTimeSlotRepository::getTimeSlotById] Fail to get time slot by id : " + timeSlotId;
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, TimeSlot.class, errorMessage)));
 
         return promise.future();
     }

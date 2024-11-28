@@ -6,6 +6,7 @@ import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TimeSlotRepository {
     /**
@@ -27,4 +28,14 @@ public interface TimeSlotRepository {
      *         last appointment for the connected user.
      */
     Future<JsonArray> getLastAppointmentDateByGridOwner(String userId, List<String> ownersIds);
+
+
+    /**
+     * Retrieve time slot by its ID
+     *
+     * @param timeSlotId The ID of the time slot
+     * @return A {@link Future} representing the asynchronous operation, which will
+     *        return an {@link Optional<TimeSlot>} containing the time slot if it exists.
+     */
+    Future<Optional<TimeSlot>> get(Long timeSlotId);
 }

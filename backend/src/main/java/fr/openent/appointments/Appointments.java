@@ -1,6 +1,7 @@
 package fr.openent.appointments;
 
 import fr.openent.appointments.config.AppConfig;
+import fr.openent.appointments.controller.AppointmentController;
 import fr.openent.appointments.controller.MainController;
 import fr.openent.appointments.controller.GridController;
 import fr.openent.appointments.cron.ClosingCron;
@@ -10,6 +11,7 @@ import fr.openent.appointments.controller.CommunicationController;
 import fr.wseduc.cron.CronTrigger;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.Promise;
+import org.entcore.common.notification.TimelineHelper;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.neo4j.Neo4j;
 import org.entcore.common.http.BaseServer;
@@ -22,6 +24,7 @@ public class Appointments extends BaseServer {
 
         EventBus eb = getEventBus(vertx);
         AppConfig appConfig = new AppConfig(config);
+        TimelineHelper timelineHelper = new TimelineHelper(vertx, eb, config);
 
         // BDD
         final Sql sql = Sql.getInstance();
@@ -29,12 +32,13 @@ public class Appointments extends BaseServer {
 
         // Factory
         RepositoryFactory repositoryFactory = new RepositoryFactory(sql, neo4j);
-        ServiceFactory serviceFactory = new ServiceFactory(vertx, appConfig, repositoryFactory);
+        ServiceFactory serviceFactory = new ServiceFactory(vertx, appConfig, repositoryFactory, timelineHelper);
 
         // Controller
         addController(new MainController());
         addController(new GridController(serviceFactory));
         addController(new CommunicationController(serviceFactory));
+        addController(new AppointmentController(serviceFactory));
 
         // CRON
         ClosingCron closingCron = new ClosingCron(serviceFactory);

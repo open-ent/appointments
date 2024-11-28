@@ -8,6 +8,7 @@ import io.vertx.core.json.JsonArray;
 import fr.openent.appointments.enums.GridState;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GridRepository {
 
@@ -63,6 +64,16 @@ public interface GridRepository {
      *         with the specified user.
      */
     Future<JsonArray> getGridsName(String userId);
+
+    /**
+     * Retrieves the grid with the specified unique identifier.
+     *
+     * @param gridId the unique identifier of the grid to be retrieved.
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *         return a {@link Grid} containing the details of the grid associated
+     *         with the specified unique identifier.
+     */
+    Future<Optional<Grid>> get(Long gridId);
 
     /**
      * Creates a new grid based on the provided {@link GridPayload} and associates it with a specific user.

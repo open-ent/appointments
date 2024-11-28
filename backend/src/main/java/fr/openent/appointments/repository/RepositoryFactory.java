@@ -1,12 +1,8 @@
 package fr.openent.appointments.repository;
 
-import fr.openent.appointments.repository.impl.DefaultDailySlotRepository;
-import fr.openent.appointments.repository.impl.DefaultTimeSlotRepository;
+import fr.openent.appointments.repository.impl.*;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.neo4j.Neo4j;
-
-import fr.openent.appointments.repository.impl.DefaultGridRepository;
-import fr.openent.appointments.repository.impl.DefaultCommunicationRepository;
 
 public class RepositoryFactory {
 
@@ -17,6 +13,7 @@ public class RepositoryFactory {
     private final DailySlotRepository dailySlotRepository;
     private final GridRepository gridRepository;
     private final CommunicationRepository communicationRepository;
+    private final AppointmentRepository appointmentRepository;
 
     public RepositoryFactory(Sql sql, Neo4j neo4j) {
         this.sql = sql;
@@ -25,6 +22,7 @@ public class RepositoryFactory {
         this.dailySlotRepository = new DefaultDailySlotRepository(this);
         this.gridRepository = new DefaultGridRepository(this);
         this.communicationRepository = new DefaultCommunicationRepository(this);
+        this.appointmentRepository = new DefaultAppointmentRepository(this);
     }
 
     public Sql sql() {
@@ -50,4 +48,6 @@ public class RepositoryFactory {
     public CommunicationRepository communicationRepository() {
         return this.communicationRepository;
     }
+
+    public AppointmentRepository appointmentRepository() { return this.appointmentRepository; }
 }

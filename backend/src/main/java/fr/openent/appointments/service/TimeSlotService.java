@@ -23,4 +23,18 @@ public interface TimeSlotService {
      */
     Future<Map<String,LocalDate>> getLastAppointmentDateByGridOwner(String userId, List<String> ownersIds);
 
+    /**
+     * Retrieve if slotId is linked to a grid that user is in groups of the grid
+     *
+     * @param userId The ID of the connected user
+     * @param timeSlotId The ID of the time slot
+     */
+    Future<Boolean> checkIfUserCanAccessTimeSlot(Long timeSlotId, String userId, List<String> userGroupsIds);
+
+    /**
+     * Retrieve if slot is available (not already booked)
+     *
+     * @param timeSlotId The ID of the time slot
+     */
+    Future<Boolean> checkIfTimeSlotIsAvailable(Long timeSlotId);
 }

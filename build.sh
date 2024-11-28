@@ -48,6 +48,7 @@ copy_frontend_files() {
     mkdir -p ./src/main/resources/public/img
     mkdir -p ./src/main/resources/public/js
     mv ./src/main/resources/*.html ./src/main/resources/view
+    cp -R ./src/main/resources/view-src/notify/ ./src/main/resources/view/notify
 
     # Copy all public files from frontend into Backend
     cp -R ../frontend/public/* ./src/main/resources/public

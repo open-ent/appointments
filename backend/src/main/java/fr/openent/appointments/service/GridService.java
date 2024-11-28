@@ -47,6 +47,14 @@ public interface GridService {
     Future<JsonArray> getGridById(Integer gridId);
 
     /**
+     * Retrieves a specific grid by timeSlotId.
+     *
+     * @param timeSlotId The ID of the timeSlot to retrieve.
+     * @return A Future containing a {@link Grid} with the grid data.
+     */
+    Future<Grid> getGridByTimeSlotId(Long timeSlotId);
+
+    /**
      * Retrieves all grids associated with a specific user.
      *
      * @param userId The ID of the user whose grids are to be retrieved.
