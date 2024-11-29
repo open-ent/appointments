@@ -6,6 +6,8 @@ import { Structure } from "~/hooks/types";
 export interface GlobalProviderContextProps {
   isMultiStructure: boolean;
   structures: Structure[];
+  hasAccessRight: boolean;
+  hasManageRight: boolean;
   getStructureNameById: (id: string) => string;
   displayModals: DisplayModalsState;
   setDisplayModals: Dispatch<SetStateAction<DisplayModalsState>>;

@@ -15,6 +15,7 @@ import { AppointmentsIcon } from "~/components/SVG/AppointmentsIcon";
 import { FindAppointments } from "~/containers/FindAppointments";
 import { MyAppointments } from "~/containers/MyAppointments";
 import { MyAvailability } from "~/containers/MyAvailability";
+import { useGlobal } from "~/providers/GlobalProvider";
 import { PURPLE } from "~/styles/color.constants";
 
 export interface AppProps {
@@ -30,16 +31,17 @@ export interface AppProps {
 }
 
 export const Home: FC = () => {
+  const { hasManageRight } = useGlobal();
+
   const [tabValue, setTabValue] = useState(
     parseInt(sessionStorage.getItem("tabValue")!) | 0,
   );
+  const { t } = useTranslation("appointments");
 
   const handleChange = (_: SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
     sessionStorage.setItem("tabValue", newValue.toString());
   };
-
-  const { t } = useTranslation("appointments");
 
   return (
     <Box sx={homeStyle}>
@@ -59,7 +61,7 @@ export const Home: FC = () => {
         >
           <Tab label={t("appointments.find.appointment")} />
           <Tab label={t("appointments.my.appointments")} />
-          <Tab label={t("appointments.my.availability")} />
+          {hasManageRight && <Tab label={t("appointments.my.availability")} />}
         </Tabs>
         {tabValue === 0 && <FindAppointments />}
         {tabValue === 1 && <MyAppointments />}
