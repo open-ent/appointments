@@ -18,9 +18,9 @@ import { useTranslation } from "react-i18next";
 import {
   bottomUserInfoStyle,
   displayNameStyle,
+  functionsStyle,
   itemStyle,
   pictureStyle,
-  professionStyle,
   StatusCircle,
   topUserInfoStyle,
   wrapperUserInfoStyle,
@@ -41,12 +41,12 @@ export const TakeAppointmentGridInfos: FC<TakeAppointmentGridInfosProps> = ({
     <Box sx={wrapperUserInfoStyle}>
       <Box sx={topUserInfoStyle}>
         <Box sx={pictureStyle}>
-          {!userInfos.profilePicture && <NoAvatar fill={GREY} />}
+          {!userInfos.picture && <NoAvatar fill={GREY} />}
           <StatusCircle status={userInfos.status} />
         </Box>
         <Box>
           <Typography sx={displayNameStyle}>{userInfos.displayName}</Typography>
-          <Typography sx={professionStyle}>{userInfos.profession}</Typography>
+          <Typography sx={functionsStyle}>{userInfos.functions}</Typography>
         </Box>
       </Box>
       <Box sx={bottomUserInfoStyle}>

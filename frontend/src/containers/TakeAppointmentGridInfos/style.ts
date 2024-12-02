@@ -71,7 +71,7 @@ export const displayNameStyle: SxProps = {
   color: BLACK,
 };
 
-export const professionStyle: SxProps = {
+export const functionsStyle: SxProps = {
   fontSize: "1.3rem",
   color: BLACK,
 };

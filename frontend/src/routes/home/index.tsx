@@ -65,7 +65,7 @@ export const Home: FC = () => {
         </Tabs>
         {tabValue === 0 && <FindAppointments />}
         {tabValue === 1 && <MyAppointments />}
-        {tabValue === 2 && <MyAvailability />}
+        {tabValue === 2 && hasManageRight && <MyAvailability />}
       </Box>
     </Box>
   );

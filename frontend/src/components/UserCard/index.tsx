@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 
 import {
   displayNameStyle,
-  lastAppointmentStyle,
-  noAvatarStyle,
-  professionStyle,
+  functionsStyle,
+  lastAppointmentDateStyle,
+  pictureStyle,
   statusBoxStyle,
   StatusColor,
   statusStyle,
@@ -24,16 +24,16 @@ import { GREY } from "~/styles/color.constants";
 
 export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
   ({ infos }, ref) => {
-    const { profilePicture, displayName, profession, lastAppointment, status } =
+    const { picture, displayName, functions, lastAppointmentDate, status } =
       infos;
     const [isElipsisDisplayName, setIsElipsisDisplayName] = useState(false);
-    const [isElipsisProfession, setIsElipsisProfession] = useState(false);
+    const [isElipsisfunctions, setIsElipsisfunctions] = useState(false);
 
     const { t } = useTranslation("appointments");
     const { handleOnClickCard } = useTakeAppointmentModal();
 
     const displayNameRef = useRef<HTMLDivElement>(null);
-    const professionRef = useRef<HTMLDivElement>(null);
+    const functionsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       if (displayNameRef.current) {
@@ -43,15 +43,17 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
     }, [displayName]);
 
     useEffect(() => {
-      if (professionRef.current) {
-        const { scrollWidth, clientWidth } = professionRef.current;
-        setIsElipsisProfession(scrollWidth > clientWidth);
+      if (functionsRef.current) {
+        const { scrollWidth, clientWidth } = functionsRef.current;
+        setIsElipsisfunctions(scrollWidth > clientWidth);
       }
-    }, [profession]);
+    }, [functions]);
 
     const userLanguage = navigator.language.split("-")[0] || "en";
-    const lastAppointmentDisplayFormat = lastAppointment
-      ? dayjs(infos.lastAppointment).locale(userLanguage).format("D MMMM YYYY")
+    const lastAppointmentDateDisplayFormat = lastAppointmentDate
+      ? dayjs(infos.lastAppointmentDate)
+          .locale(userLanguage)
+          .format("D MMMM YYYY")
       : null;
 
     return (
@@ -62,8 +64,12 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
           handleOnClickCard(status === USER_STATUS.AVAILABLE ? infos : null)
         }
       >
-        <Box sx={noAvatarStyle}>
-          {!profilePicture && <NoAvatar fill={GREY} />}
+        <Box sx={pictureStyle}>
+          {!(picture && picture.startsWith("/userbook/avatar/")) ? (
+            <NoAvatar fill={GREY} />
+          ) : (
+            <Box alt="user picture" component="img" src={picture} />
+          )}
         </Box>
         <Box sx={textWrapperStyle}>
           <Box sx={topTextWrapperStyle}>
@@ -80,15 +86,15 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               </Typography>
             </Tooltip>
             <Tooltip
-              title={isElipsisProfession ? profession : ""}
+              title={isElipsisfunctions ? functions : ""}
               placement="bottom"
             >
-              <Typography sx={professionStyle} ref={professionRef}>
-                {profession}
+              <Typography sx={functionsStyle} ref={functionsRef}>
+                {functions}
               </Typography>
             </Tooltip>
-            <Typography sx={lastAppointmentStyle}>
-              {lastAppointmentDisplayFormat}
+            <Typography sx={lastAppointmentDateStyle}>
+              {lastAppointmentDateDisplayFormat}
             </Typography>
           </Box>
           <Box sx={statusBoxStyle}>

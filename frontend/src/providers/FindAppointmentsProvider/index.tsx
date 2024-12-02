@@ -1,10 +1,19 @@
-import { createContext, FC, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  FC,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import {
   FindAppointmentsProviderContextProps,
   FindAppointmentsProviderProps,
+  UserCardInfos,
 } from "./types";
-import { initialUsers, mock, NUMBER_MORE_USERS } from "./utils";
+import { NUMBER_MORE_USERS } from "./utils";
+import { useGetCommunicationUsersQuery } from "~/services/api/communication.service";
 
 const FindAppointmentsProviderContext =
   createContext<FindAppointmentsProviderContextProps | null>(null);
@@ -22,24 +31,47 @@ export const useFindAppointments = () => {
 export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   children,
 }) => {
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState<UserCardInfos[]>([]);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
+  const { data: newUsers } = useGetCommunicationUsersQuery({
+    search,
+    page,
+    limit: NUMBER_MORE_USERS,
+  });
+
+  // first load
+  useEffect(() => {
+    if (!users.length && newUsers && search) {
+      setUsers(newUsers);
+      setPage((prev) => prev + 1);
+    }
+  }, [newUsers]);
 
   const loadMoreUsers = () => {
-    setUsers((prev) => {
-      const newUsers = mock.slice(prev.length, prev.length + NUMBER_MORE_USERS);
-      if (newUsers.length < NUMBER_MORE_USERS) {
-        setHasMoreUsers(false);
-      }
-      return [...prev, ...newUsers];
-    });
+    setPage((prev) => prev + 1);
+    if (!newUsers) {
+      setHasMoreUsers(false);
+      return;
+    }
+    setUsers((prev) => [...prev, ...newUsers]);
+  };
+
+  const handleSearch = (newSearch: string) => {
+    setSearch(newSearch);
+    setPage(1);
+    setUsers([]);
+    setHasMoreUsers(true);
   };
 
   const value = useMemo<FindAppointmentsProviderContextProps>(
     () => ({
       users,
       hasMoreUsers,
+      search,
       loadMoreUsers,
+      handleSearch,
     }),
     [users, hasMoreUsers],
   );

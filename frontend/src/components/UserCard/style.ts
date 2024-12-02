@@ -53,7 +53,7 @@ export const statusBoxStyle: SxProps = {
   gap: "0.5rem",
 };
 
-export const noAvatarStyle: SxProps = {
+export const pictureStyle: SxProps = {
   minWidth: "6rem",
   maxWidth: "6rem",
   minHeight: "6rem",
@@ -77,7 +77,7 @@ export const displayNameStyle: SxProps = {
   textOverflow: "ellipsis",
 };
 
-export const professionStyle: SxProps = {
+export const functionsStyle: SxProps = {
   fontSize: "1.3rem",
   color: BLACK,
   whiteSpace: "nowrap",
@@ -85,7 +85,7 @@ export const professionStyle: SxProps = {
   textOverflow: "ellipsis",
 };
 
-export const lastAppointmentStyle: SxProps = {
+export const lastAppointmentDateStyle: SxProps = {
   ...ITALIC_FONT,
   fontSize: "1.3rem",
   color: BLACK,

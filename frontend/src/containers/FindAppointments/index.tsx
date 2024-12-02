@@ -1,18 +1,29 @@
 import { FC, useCallback, useEffect, useRef } from "react";
 
 import { SearchInput } from "@cgi-learning-hub/ui";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
-import { containerStyle, listCardStyle, searchInputStyle } from "./style";
+import {
+  containerStyle,
+  emptyStateBoxStyle,
+  emptyStateSVGStyle,
+  emptyStateTextStyle,
+  listCardStyle,
+  searchInputStyle,
+} from "./style";
 import { TakeAppointmentModal } from "../TakeAppointmentModal";
+import { FindAppointmentsEmptyState } from "~/components/SVG/FindAppointmentsEmptyState";
 import { UserCard } from "~/components/UserCard";
 import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { NUMBER_MORE_USERS } from "~/providers/FindAppointmentsProvider/utils";
 import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
 
 export const FindAppointments: FC = () => {
-  const { users, hasMoreUsers, loadMoreUsers } = useFindAppointments();
+  const { users, hasMoreUsers, search, loadMoreUsers, handleSearch } =
+    useFindAppointments();
   const { selectedUser } = useTakeAppointmentModal();
+  const { t } = useTranslation("appointments");
   const observerRef = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
 
@@ -25,6 +36,7 @@ export const FindAppointments: FC = () => {
     [hasMoreUsers, loadMoreUsers],
   );
 
+  // Infinite scroll
   useEffect(() => {
     if (observerRef.current) observerRef.current.disconnect();
 
@@ -50,7 +62,22 @@ export const FindAppointments: FC = () => {
     <>
       {selectedUser && <TakeAppointmentModal userInfos={selectedUser} />}
       <Box sx={containerStyle}>
-        <SearchInput sx={searchInputStyle} />
+        <SearchInput
+          sx={searchInputStyle}
+          onChange={(event) => handleSearch(event.target.value)}
+        />
+        {(!search || !users.length) && (
+          <Box sx={emptyStateBoxStyle}>
+            <Typography variant="body1" sx={emptyStateTextStyle}>
+              {!search
+                ? t("appointments.find.empty.state.search.bar")
+                : t("appointments.find.empty.state.no.user")}
+            </Typography>
+            <Box sx={emptyStateSVGStyle}>
+              <FindAppointmentsEmptyState />
+            </Box>
+          </Box>
+        )}
         <Box sx={listCardStyle}>
           {users.map((user, index) => (
             <UserCard
