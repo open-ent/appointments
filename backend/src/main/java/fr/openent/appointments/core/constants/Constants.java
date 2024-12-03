@@ -22,6 +22,7 @@ public class Constants {
     public static final String CAMEL_REQUESTER_ID = "requesterId";
     public static final String CAMEL_STRUCTURE_ID = "structureId";
     public static final String CAMEL_STRUCTURES_EXTERNAL_IDS = "structuresExternalIds";
+    public static final String CAMEL_STRUCTURES_IDS = "structuresIds";
     public static final String CAMEL_TARGET_PUBLIC_LIST_ID = "targetPublicListId";
     public static final String CAMEL_TIME_SLOTS = "timeSlots";
     public static final String CAMEL_TIME_SLOT_ID = "timeSlotId";

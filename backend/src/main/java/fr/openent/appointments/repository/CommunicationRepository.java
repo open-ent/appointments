@@ -18,14 +18,6 @@ public interface CommunicationRepository {
     Future<JsonArray> getGroupsCanCommunicateWithMe(String userId, String structureId);
 
     /**
-     * Retrieves all structures external ids of the current user.
-     *
-     * @param userId The ID of the user whose groups are to be retrieved.
-     * @return A Future containing a JsonArray of groups.
-     */
-    Future<JsonArray> getUserStructuresExternalIds(String userId);
-
-    /**
      * Retrieves all groups the current user can communicate with.
      *
      * @param userId The ID of the user whose groups are to be retrieved.

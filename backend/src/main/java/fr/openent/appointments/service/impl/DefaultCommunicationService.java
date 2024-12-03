@@ -16,6 +16,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -60,19 +61,19 @@ public class DefaultCommunicationService implements CommunicationService {
     }
 
     @Override
-    public Future<List<UserAppointment>> getUsersICanCommunicateWith(String userId, String search, Long page, Long limit) {
+    public Future<List<UserAppointment>> getUsersICanCommunicateWith(UserInfos userInfos, String search, Long page, Long limit) {
         Promise<List<UserAppointment>> promise = Promise.promise();
 
-        communicationRepository.getGroupsICanCommunicateWith(userId)
+        communicationRepository.getGroupsICanCommunicateWith(userInfos.getUserId())
             .compose(groups -> {
                 List<String> groupsIds = groups.stream()
                         .map(NeoGroup::getId)
                         .collect(Collectors.toList());
-                return getUsersFromGroupsIds(userId, groupsIds);
+                return getUsersFromGroupsIds(userInfos, groupsIds);
             })
             .compose(users -> {
                 List<NeoUser> filteredUsers = filterNeoUsersBySearchAndPagination(users, search, page, limit);
-                return getGridsAndBuildListUserAppointementResponse(userId, filteredUsers);
+                return getGridsAndBuildListUserAppointementResponse(userInfos.getUserId(), filteredUsers);
             })
             .onSuccess(promise::complete)
             .onFailure(err -> {
@@ -86,20 +87,10 @@ public class DefaultCommunicationService implements CommunicationService {
 
     // Private functions
 
-    private Future<List<NeoUser>> getUsersFromGroupsIds(String userId, List<String> groupsIds) {
+    private Future<List<NeoUser>> getUsersFromGroupsIds(UserInfos userInfos, List<String> groupsIds) {
         Promise<List<NeoUser>> promise = Promise.promise();
 
-        communicationRepository.getUserStructuresExternalIds(userId)
-            .compose(structures -> {
-                List<String> structuresIds = structures
-                        .getJsonObject(0)
-                        .getJsonArray(STRUCTURES)
-                        .stream()
-                        .filter(String.class::isInstance)
-                        .map(String.class::cast)
-                        .collect(Collectors.toList());
-                return communicationRepository.getUsersFromGroupsIds(groupsIds, structuresIds);
-            })
+        communicationRepository.getUsersFromGroupsIds(groupsIds, userInfos.getStructures())
             .onSuccess(promise::complete)
             .onFailure(err -> {
                 String errorMessage = "Failed to retrieve users from groupsIds and current user id ";
@@ -111,23 +102,29 @@ public class DefaultCommunicationService implements CommunicationService {
     }
 
     private List<NeoUser> filterNeoUsersBySearchAndPagination(List<NeoUser> users, String search, Long page, Long limit) {
-        List<NeoUser> filteredUsers = users;
+        List<NeoUser> uniqueAndFilteredUsers = new ArrayList<>(users.stream()
+                .collect(Collectors.toMap(
+                        NeoUser::getId,
+                        user -> user,
+                        (existing, replacement) -> existing
+                ))
+                .values());
 
         if (search != null && !search.isEmpty()) {
-            filteredUsers = filteredUsers.stream()
+            uniqueAndFilteredUsers = uniqueAndFilteredUsers.stream()
                 .filter(user -> user.getDisplayName().toLowerCase().contains(search.toLowerCase()) ||
                                 user.getFunctions().stream().anyMatch(fn -> fn.toLowerCase().contains(search.toLowerCase())))
                 .collect(Collectors.toList());
         }
 
         if (page != null && page >= 1 && limit != null && limit >= 1) {
-            filteredUsers = filteredUsers.stream()
+            uniqueAndFilteredUsers = uniqueAndFilteredUsers.stream()
                 .skip((page - 1) * limit)
                 .limit(limit)
                 .collect(Collectors.toList());
         }
 
-        return filteredUsers;
+        return uniqueAndFilteredUsers;
     }
 
     private Future<List<UserAppointment>> getGridsAndBuildListUserAppointementResponse(String userId, List<NeoUser> users) {

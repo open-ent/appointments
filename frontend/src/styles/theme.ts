@@ -1,18 +1,16 @@
-import { CssVarsThemeOptions } from "@mui/material";
+// import { CreateThemeOptions } from "@cgi-learning-hub/theme";
+
+import { ThemeOptions } from "@mui/material";
 
 import { BLACK, GREY, PURPLE } from "./color.constants";
 
-export const options: CssVarsThemeOptions = {
-  colorSchemes: {
-    light: {
-      palette: {
-        background: {
-          default: "#F9F9F9",
-        },
-        text: {
-          primary: GREY,
-        },
-      },
+export const options: ThemeOptions = {
+  palette: {
+    background: {
+      default: "#F9F9F9",
+    },
+    text: {
+      primary: GREY,
     },
   },
   typography: {
