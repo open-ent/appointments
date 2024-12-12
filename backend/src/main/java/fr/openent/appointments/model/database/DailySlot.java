@@ -99,6 +99,6 @@ public class DailySlot implements IModel<DailySlot> {
     }
 
     public JsonObject toJson() {
-        return IModelHelper.toJson(this, true, false);
+        return IModelHelper.toJson(this, false, false);
     }
 }

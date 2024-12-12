@@ -117,6 +117,9 @@ public class DefaultCommunicationService implements CommunicationService {
                 .collect(Collectors.toList());
         }
 
+        // sort by displayName
+        uniqueAndFilteredUsers.sort((user1, user2) -> user1.getDisplayName().compareTo(user2.getDisplayName()));
+
         if (page != null && page >= 1 && limit != null && limit >= 1) {
             uniqueAndFilteredUsers = uniqueAndFilteredUsers.stream()
                 .skip((page - 1) * limit)

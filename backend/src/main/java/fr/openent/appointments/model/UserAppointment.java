@@ -88,6 +88,6 @@ public class UserAppointment implements IModel<UserAppointment> {
     // Functions
 
     public JsonObject toJson() {
-        return IModelHelper.toJson(this, true, false);
+        return IModelHelper.toJson(this, false, false);
     }
 }

@@ -3,7 +3,6 @@ package fr.openent.appointments.controller;
 import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.helper.LogHelper;
-import fr.openent.appointments.model.IModel;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Get;
 import fr.wseduc.rs.Post;
@@ -75,31 +74,72 @@ public class GridController extends ControllerHelper {
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getMyGridsName(final HttpServerRequest request) {
         UserUtils.getAuthenticatedUserInfos(eb, request)
-                .compose(user -> gridService.getGridsName(user.getUserId()))
-                .onSuccess(response -> renderJson(request, response))
-                .onFailure(error -> {
-                    String errorMessage = String.format("[Appointments@%s::getMyGridsName] Failed to get my grids name : %s", this.getClass().getSimpleName(), error.getMessage());
-                    log.error(errorMessage);
-                    badRequest(request);
-                });
+            .compose(user -> gridService.getGridsName(user.getUserId()))
+            .onSuccess(response -> renderJson(request, response))
+            .onFailure(error -> {
+                String errorMessage = String.format("[Appointments@%s::getMyGridsName] Failed to get my grids name : %s", this.getClass().getSimpleName(), error.getMessage());
+                log.error(errorMessage);
+                badRequest(request);
+            });
     }
 
-    @Get("/grids/:id")
+    @Get("/grids/:gridId")
     @ApiDoc("Get grid by id")
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getGridById(final HttpServerRequest request) {
-        
+
         renderJson(request, new JsonObject());
     }
 
-    @Get("/users/:id/grids")
+    @Get("/grids/:gridId/minimal/infos")
+    @ApiDoc("Get minimal grid infos by grid id")
+    @ResourceFilter(ViewRight.class)
+    @SecuredAction(value = "", type = ActionType.RESOURCE)
+    public void getMinimalGridInfosById(final HttpServerRequest request) {
+        Long gridId = Optional.ofNullable(request.getParam(CAMEL_GRID_ID))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        if (gridId == null) {
+            String errorMessage = "Grid id should be valid";
+            LogHelper.logError(this, "getMinimalGridInfosById", errorMessage);
+            badRequest(request);
+            return;
+        }
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user -> gridService.getMinimalGridInfosById(user, gridId))
+            .onSuccess(minimalGridsInfos -> renderJson(request, minimalGridsInfos.toJson()))
+            .onFailure(err -> {
+                String errorMessage = "Failed to get minimal grids infos for grid with id " + gridId;
+                LogHelper.logError(this, "getMinimalGridInfosById", errorMessage, err.getMessage());
+                badRequest(request);
+            });
+    }
+
+    @Get("/users/:userId/grids/minimal")
     @ApiDoc("Get user grids")
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
-    public void getUserGrids(final HttpServerRequest request) {
-        
-        renderJson(request, new JsonObject());
+    public void getAvailableUserMinimalGrids(final HttpServerRequest request) {
+        String userId = request.getParam(CAMEL_USER_ID, "");
+
+        if (userId.isEmpty()) {
+            String errorMessage = "User id should be valid";
+            LogHelper.logError(this, "getUserGrids", errorMessage);
+            badRequest(request);
+            return;
+        }
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(gridService::getAvailableUserMinimalGrids)
+            .onSuccess(minimalGrids -> renderJson(request, IModelHelper.toJsonArray(minimalGrids)))
+            .onFailure(err -> {
+                String errorMessage = "Failed to get available grids for user with id " + userId;
+                LogHelper.logError(this, "getAvailableUserMinimalGrids", errorMessage, err.getMessage());
+                badRequest(request);
+            });
     }
 
     @Post("/grids")

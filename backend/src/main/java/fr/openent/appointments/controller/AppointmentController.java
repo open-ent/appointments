@@ -82,6 +82,7 @@ public class AppointmentController extends ControllerHelper {
             .onFailure(err -> {
                 String errorMessage = "Failed to create appointment";
                 LogHelper.logError(this, "createAppointment", errorMessage, err.getMessage());
+                renderError(request, new JsonObject().put("error", errorMessage));
             });
     }
 }

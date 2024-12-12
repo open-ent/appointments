@@ -76,6 +76,6 @@ public class NeoUser implements IModel<NeoUser> {
     // Functions
 
     public JsonObject toJson() {
-        return IModelHelper.toJson(this, true, false);
+        return IModelHelper.toJson(this, false, false);
     }
 }

@@ -1,16 +1,18 @@
 package fr.openent.appointments.service;
 
 import fr.openent.appointments.enums.GridState;
+import fr.openent.appointments.model.response.MinimalGrid;
 import fr.openent.appointments.model.response.ListGridsResponse;
 import fr.openent.appointments.model.database.Grid;
+import fr.openent.appointments.model.response.MinimalGridInfos;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.http.HttpServerRequest;
 import fr.openent.appointments.model.payload.GridPayload;
+import org.entcore.common.user.UserInfos;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Interface for managing grid operations in the appointment service.
@@ -57,10 +59,19 @@ public interface GridService {
     /**
      * Retrieves all grids associated with a specific user.
      *
-     * @param userId The ID of the user whose grids are to be retrieved.
+     * @param user The {@link UserInfos} of the user connected user.
      * @return A Future containing a JsonArray of grids associated with the user.
      */
-    Future<JsonArray> getUserGrids(Integer userId);
+    Future<List<MinimalGrid>> getAvailableUserMinimalGrids(UserInfos user);
+
+    /**
+     * Retrieves the minimal grid infos of the grid with the specified ID.
+     *
+     * @param user The {@link UserInfos} of the user connected user.
+     * @param gridId The ID of the grid we want retrieve minimal infos.
+     * @return A Future containing a JsonArray of grids associated with the user.
+     */
+    Future<MinimalGridInfos> getMinimalGridInfosById(UserInfos user, Long gridId);
 
     /**
      * Count the number of available timeslots for the specified grids.

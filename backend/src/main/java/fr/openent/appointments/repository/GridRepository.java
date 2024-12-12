@@ -46,6 +46,15 @@ public interface GridRepository {
     Future<List<Grid>> getGridsByUserIds(List<String> usersIds);
 
     /**
+     * Retrieves all grids a list of groups can access.
+     *
+     * @param groupsIds the unique identifier of the groups.
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *         return a {@link List} of {@link Grid} containing the details of the grids.
+     */
+    Future<List<Grid>> getGridsGroupsCanAccess(List<String> groupsIds);
+
+    /**
      * Retrieves all the grids from the list with at least one available time slot.
      *
      * @param gridsIds List of IDs of the grids to check.

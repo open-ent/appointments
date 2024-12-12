@@ -107,6 +107,25 @@ public class DefaultGridRepository implements GridRepository {
     }
 
     @Override
+    public Future<List<Grid>> getGridsGroupsCanAccess(List<String> groupsIds) {
+        Promise<List<Grid>> promise = Promise.promise();
+
+        if (groupsIds == null || groupsIds.isEmpty()) {
+            promise.complete(new ArrayList<>());
+            return promise.future();
+        }
+
+        // The '~' annotation allows to execute a REGEX with case sensitivity
+        String query = "SELECT * FROM " + DB_GRID_TABLE + " WHERE " + TARGET_PUBLIC_LIST_ID + " ~ '" + String.join("|", groupsIds) + "';";
+        JsonArray params = new JsonArray();
+
+        String errorMessage = String.format("[Appointments@DefaultGridRepository::getGridsGroupsCanAccess] Fail to get grids the groups %s can access : ", groupsIds);
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
+
+        return promise.future();
+    }
+
+    @Override
     public Future<List<Grid>> getGridsWithAvailableTimeSlots(List<Long> gridsIds) {
         Promise<List<Grid>> promise = Promise.promise();
 

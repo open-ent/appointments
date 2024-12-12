@@ -1,13 +1,10 @@
 package fr.openent.appointments;
 
 import fr.openent.appointments.config.AppConfig;
-import fr.openent.appointments.controller.AppointmentController;
-import fr.openent.appointments.controller.MainController;
-import fr.openent.appointments.controller.GridController;
+import fr.openent.appointments.controller.*;
 import fr.openent.appointments.cron.ClosingCron;
 import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.service.ServiceFactory;
-import fr.openent.appointments.controller.CommunicationController;
 import fr.wseduc.cron.CronTrigger;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.Promise;
@@ -37,6 +34,7 @@ public class Appointments extends BaseServer {
         // Controller
         addController(new MainController());
         addController(new GridController(serviceFactory));
+        addController(new TimeSlotController(serviceFactory));
         addController(new CommunicationController(serviceFactory));
         addController(new AppointmentController(serviceFactory));
 

@@ -2,6 +2,10 @@ package fr.openent.appointments.service.impl;
 
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.model.database.Grid;
+import fr.openent.appointments.model.database.TimeSlot;
+import fr.openent.appointments.model.response.MinimalGridInfos;
+import fr.openent.appointments.model.response.TimeSlotsAvailableResponse;
 import fr.openent.appointments.repository.AppointmentRepository;
 import fr.openent.appointments.repository.GridRepository;
 import fr.openent.appointments.repository.RepositoryFactory;
@@ -11,11 +15,13 @@ import fr.openent.appointments.service.ServiceFactory;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;
+import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Fields.END_DATE;
 import static fr.openent.appointments.core.constants.Fields.OWNER_ID;
@@ -105,6 +111,53 @@ public class DefaultTimeSlotService implements TimeSlotService {
             .onFailure(err -> {
                 String errorMessage = "Failed to check if timeSlot with id " + timeSlotId + " is available";
                 LogHelper.logError(this, "checkIfTimeSlotIsAvailable", errorMessage, err.getMessage());
+                promise.fail(err.getMessage());
+            });
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<TimeSlotsAvailableResponse> getAvailableTimeSlotsByDates(UserInfos user, Long gridId, LocalDate beginDate, LocalDate endDate) {
+        Promise<TimeSlotsAvailableResponse> promise = Promise.promise();
+
+        gridRepository.getGridsGroupsCanAccess(user.getGroupsIds())
+            .compose(userGrids -> {
+                if (!userGrids.stream().map(Grid::getId).collect(Collectors.toList()).contains(gridId)) {
+                    String errorMessage = String.format("The grid with id %s is not shared to the connected user", gridId);
+                    return Future.failedFuture(errorMessage);
+                }
+
+                return timeSlotRepository.getAvailableByGridAndDates(gridId, beginDate, endDate);
+            })
+            .compose(timeslots -> buildTimeslotsAvailableResponse(timeslots, gridId, endDate))
+            .onSuccess(promise::complete)
+            .onFailure(err -> {
+                String errorMessage = String.format("Failed to get timeslots for grid with id %s between %s and %s", gridId, beginDate, endDate);
+                LogHelper.logError(this, "getAvailableTimeSlotsByDates", errorMessage, err.getMessage());
+                promise.fail(err.getMessage());
+            });
+
+        return promise.future();
+    }
+
+    // Private functions
+
+    public Future<TimeSlotsAvailableResponse> buildTimeslotsAvailableResponse(List<TimeSlot> timeslots, Long gridId, LocalDate endDate) {
+        Promise<TimeSlotsAvailableResponse> promise = Promise.promise();
+
+        // If timeslots were present we return them
+        if (timeslots != null && !timeslots.isEmpty()) {
+            promise.complete(new TimeSlotsAvailableResponse(timeslots));
+            return promise.future();
+        }
+
+        // If not we return the next one available
+        timeSlotRepository.getNextAvailableTimeslot(gridId, endDate)
+            .onSuccess(optionalTimeslot -> promise.complete(optionalTimeslot.map(TimeSlotsAvailableResponse::new).orElseGet(TimeSlotsAvailableResponse::new)))
+            .onFailure(err -> {
+                String errorMessage = String.format("Fail to get next available timeslot for grid with id %s ", gridId);
+                LogHelper.logError(this, "buildTimeslotsAvailableResponse", errorMessage, err.getMessage());
                 promise.fail(err.getMessage());
             });
 

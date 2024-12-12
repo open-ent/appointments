@@ -2,7 +2,6 @@ package fr.openent.appointments.model.response;
 
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.model.IModel;
-import fr.openent.appointments.model.MinimalCreatorGrid;
 import fr.openent.appointments.model.database.Grid;
 import io.vertx.core.json.JsonObject;
 
@@ -19,8 +18,8 @@ public class ListGridsResponse implements IModel<ListGridsResponse> {
     public ListGridsResponse(Long total, List<Grid> grids) {
         this.total = total;
         this.minimalCreatorGrids = grids.stream()
-                .map(MinimalCreatorGrid::new)
-                .collect(Collectors.toList());
+            .map(MinimalCreatorGrid::new)
+            .collect(Collectors.toList());
     }
 
     // Getter
@@ -48,6 +47,6 @@ public class ListGridsResponse implements IModel<ListGridsResponse> {
     // Functions
 
     public JsonObject toJson() {
-        return IModelHelper.toJson(this, true, true);
+        return IModelHelper.toJson(this, false, false);
     }
 }

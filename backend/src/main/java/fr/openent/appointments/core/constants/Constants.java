@@ -2,24 +2,19 @@ package fr.openent.appointments.core.constants;
 
 public class Constants {
     // camelCase constants
-    public static final String CAMEL_ACTOR_ID = "actorId";
     public static final String CAMEL_APPOINTMENT_URI = "appointmentUri";
     public static final String CAMEL_AVAILABLE_GRIDS_IDS = "availableGridsIds";
     public static final String CAMEL_BEGIN_DATE = "beginDate";
     public static final String CAMEL_BEGIN_TIME = "beginTime";
-    public static final String CAMEL_CREATION_DATE = "creationDate";
     public static final String CAMEL_DAILY_SLOTS = "dailySlots";
     public static final String CAMEL_DISPLAY_NAME = "displayName";
     public static final String CAMEL_DOCUMENT_ID = "documentId";
     public static final String CAMEL_END_DATE = "endDate";
     public static final String CAMEL_END_TIME = "endTime";
     public static final String CAMEL_GRID_ID = "gridId";
-    public static final String CAMEL_GRIDS_NAME = "gridsName";
     public static final String CAMEL_GROUPS_IDS = "groupsIds";
-    public static final String CAMEL_OWNER_ID = "ownerId";
     public static final String CAMEL_PUBLIC_COMMENT = "publicComment";
     public static final String CAMEL_PUSH_NOTIF = "pushNotif";
-    public static final String CAMEL_REQUESTER_ID = "requesterId";
     public static final String CAMEL_STRUCTURE_ID = "structureId";
     public static final String CAMEL_STRUCTURES_EXTERNAL_IDS = "structuresExternalIds";
     public static final String CAMEL_STRUCTURES_IDS = "structuresIds";
@@ -46,7 +41,6 @@ public class Constants {
     public static final String MODE = "mode";
     public static final String PAGE = "page";
     public static final String PICTURE = "picture";
-    public static final String PREPARED = "prepared";
     public static final String SEARCH = "search";
     public static final String STATEMENT = "statement";
     public static final String STRUCTURES = "structures";

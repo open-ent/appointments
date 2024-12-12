@@ -55,6 +55,6 @@ public class TimeSlotPayload implements IModel<TimeSlotPayload> {
     }
 
     public JsonObject toJson() {
-        return IModelHelper.toJson(this, true, false);
+        return IModelHelper.toJson(this, false, false);
     }
 }

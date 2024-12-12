@@ -264,6 +264,6 @@ public class GridPayload implements IModel<GridPayload> {
     }
 
     public JsonObject toJson() {
-        return IModelHelper.toJson(this, true, true);
+        return IModelHelper.toJson(this, false, false);
     }
 }

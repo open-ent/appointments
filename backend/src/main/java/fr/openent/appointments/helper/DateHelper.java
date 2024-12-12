@@ -68,7 +68,6 @@ public class DateHelper {
         try {
             return LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
         } catch (DateTimeParseException e1) {
-
             try {
                 return LocalDateTime.parse(dateTime, DB_DATE_TIME_FORMATTER);
             } catch (DateTimeParseException e2) {
@@ -87,17 +86,26 @@ public class DateHelper {
     // Duration
 
     public static Duration parseDuration(String duration) {
-        Pattern DURATION_PATTERN = Pattern.compile("^\\d+:\\d{2}$");
-        if (duration == null || duration.isEmpty() || !DURATION_PATTERN.matcher(duration).matches()) {
-            return null;
-        }
+        if (duration == null || duration.isEmpty()) return null;
+
         try {
+            // Case parse from front (ex : '01:00')
+            Pattern DURATION_PATTERN = Pattern.compile("^\\d+:\\d{2}$");
+            if (!DURATION_PATTERN.matcher(duration).matches()) throw new NumberFormatException();
             String[] parts = duration.split(":");
             long hours = Long.parseLong(parts[0]);
             long minutes = Long.parseLong(parts[1]);
             return Duration.ofHours(hours).plusMinutes(minutes);
-        } catch (NumberFormatException e) {
-            return null;
+        } catch (NumberFormatException e1) {
+            try {
+                // Case parse from database (ex : '0 years 0 mons 0 days 1 hours 0 mins 0.0 secs')
+                String[] parts = duration.split(" ");
+                long hours = Long.parseLong(parts[6]); // Extract hours
+                long minutes = Long.parseLong(parts[8]); // Extract minutes
+                return Duration.ofHours(hours).plusMinutes(minutes);
+            } catch (NumberFormatException e2) {
+                return null;
+            }
         }
     }
 

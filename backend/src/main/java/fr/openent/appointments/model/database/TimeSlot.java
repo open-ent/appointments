@@ -82,6 +82,6 @@ public class TimeSlot implements IModel<TimeSlot> {
     }
 
     public JsonObject toJson() {
-        return IModelHelper.toJson(this, true, false);
+        return IModelHelper.toJson(this, false, false);
     }
 }

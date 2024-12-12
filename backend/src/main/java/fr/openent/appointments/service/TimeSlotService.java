@@ -1,7 +1,11 @@
 package fr.openent.appointments.service;
 
+import fr.openent.appointments.model.database.Grid;
+import fr.openent.appointments.model.database.TimeSlot;
+import fr.openent.appointments.model.response.TimeSlotsAvailableResponse;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
+import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,4 +41,16 @@ public interface TimeSlotService {
      * @param timeSlotId The ID of the time slot
      */
     Future<Boolean> checkIfTimeSlotIsAvailable(Long timeSlotId);
+
+    /**
+     * Retrieve all the timeslots of a specified grid between two dates (included)
+     *
+     * @param user The {@link UserInfos} of the user connected user.
+     * @param gridId The ID of the {@link Grid} of which we retrieve timeslots
+     * @param beginDate The date from which we start retrieving timeslots
+     * @param endDate The limit date we stop retrieving timeslots
+     * @return A {@link Future} representing the asynchronous operation, which will
+     *         return a {@link TimeSlotsAvailableResponse} containing all the available timeslots for the specified interval.
+     */
+    Future<TimeSlotsAvailableResponse> getAvailableTimeSlotsByDates(UserInfos user, Long gridId, LocalDate beginDate, LocalDate endDate);
 }

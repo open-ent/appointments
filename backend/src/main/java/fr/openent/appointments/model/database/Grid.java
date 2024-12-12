@@ -220,6 +220,6 @@ public class Grid implements IModel<Grid> {
     // Functions
 
     public JsonObject toJson() {
-        return IModelHelper.toJson(this, true, false);
+        return IModelHelper.toJson(this, false, false);
     }
 }

@@ -1,7 +1,9 @@
-package fr.openent.appointments.model;
+package fr.openent.appointments.model.response;
 
 import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.helper.DateHelper;
+import fr.openent.appointments.helper.IModelHelper;
+import fr.openent.appointments.model.IModel;
 import fr.openent.appointments.model.database.Grid;
 import io.vertx.core.json.JsonObject;
 
@@ -9,10 +11,7 @@ import java.time.LocalDate;
 
 import static fr.openent.appointments.core.constants.Fields.*;
 
-public abstract class MinimalGrid {
-
-    private Long id;
-    private String name;
+public class MinimalCreatorGrid extends BaseMinimalGrid implements IModel<MinimalCreatorGrid> {
     private String structureId;
     private LocalDate beginDate;
     private LocalDate endDate;
@@ -21,9 +20,8 @@ public abstract class MinimalGrid {
 
     // Constructor
 
-    public MinimalGrid(JsonObject grid) {
-        this.id = grid.getLong(ID, null);
-        this.name = grid.getString(NAME, null);
+    public MinimalCreatorGrid(JsonObject grid) {
+        super(grid);
         this.structureId = grid.getString(STRUCTURE_ID, null);
         this.beginDate = DateHelper.parseDate(grid.getString(BEGIN_DATE, null).substring(0, 10));
         this.endDate = DateHelper.parseDate(grid.getString(END_DATE, null).substring(0, 10));
@@ -31,9 +29,8 @@ public abstract class MinimalGrid {
         this.state = GridState.getGridState(grid.getString(STATE, null));
     }
 
-    public MinimalGrid(Grid grid) {
-        this.id = grid.getId();
-        this.name = grid.getName();
+    public MinimalCreatorGrid(Grid grid) {
+        super(grid);
         this.structureId = grid.getStructureId();
         this.beginDate = grid.getBeginDate();
         this.endDate = grid.getEndDate();
@@ -42,14 +39,6 @@ public abstract class MinimalGrid {
     }
 
     // Getter
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     public String getStructureId() {
         return structureId;
@@ -73,38 +62,34 @@ public abstract class MinimalGrid {
 
     // Setter
 
-    public MinimalGrid setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public MinimalGrid setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public MinimalGrid setStructureId(String structureId) {
+    public MinimalCreatorGrid setStructureId(String structureId) {
         this.structureId = structureId;
         return this;
     }
 
-    public MinimalGrid setBeginDate(LocalDate beginDate) {
+    public MinimalCreatorGrid setBeginDate(LocalDate beginDate) {
         this.beginDate = beginDate;
         return this;
     }
 
-    public MinimalGrid setEndDate(LocalDate endDate) {
+    public MinimalCreatorGrid setEndDate(LocalDate endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public MinimalGrid setColor(String color) {
+    public MinimalCreatorGrid setColor(String color) {
         this.color = color;
         return this;
     }
 
-    public MinimalGrid setState(GridState state) {
+    public MinimalCreatorGrid setState(GridState state) {
         this.state = state;
         return this;
+    }
+
+    // Functions
+
+    public JsonObject toJson() {
+        return IModelHelper.toJson(this, false, false);
     }
 }

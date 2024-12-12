@@ -12,6 +12,7 @@ import io.vertx.core.logging.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
@@ -73,13 +74,15 @@ public class IModelHelper {
                 } else if (validJsonClasses.stream().anyMatch(aClass -> aClass.isInstance(object))) {
                     statisticsData.put(fieldName, object);
                 } else if (object instanceof Enum) {
-                    statisticsData.put(fieldName, (Enum) object);
+                    statisticsData.put(fieldName, object);
                 } else if (object instanceof List) {
                     statisticsData.put(fieldName, listToJsonArray(((List<?>)object)));
                 } else if (object instanceof LocalDate) {
                     statisticsData.put(fieldName, DateHelper.formatDate((LocalDate) object));
                 } else if (object instanceof LocalTime) {
                     statisticsData.put(fieldName, DateHelper.formatTime((LocalTime) object));
+                } else if (object instanceof LocalDateTime) {
+                    statisticsData.put(fieldName, DateHelper.formatDateTime((LocalDateTime) object));
                 } else if (object instanceof Duration) {
                     statisticsData.put(fieldName, DateHelper.formatDuration((Duration) object));
                 }

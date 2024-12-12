@@ -1,8 +1,10 @@
 package fr.openent.appointments.service.impl;
 
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.model.response.MinimalGrid;
 import fr.openent.appointments.model.response.ListGridsResponse;
 import fr.openent.appointments.model.database.Grid;
+import fr.openent.appointments.model.response.MinimalGridInfos;
 import fr.openent.appointments.repository.TimeSlotRepository;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.Future;
@@ -20,9 +22,12 @@ import fr.openent.appointments.service.ServiceFactory;
 import fr.openent.appointments.enums.GridState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 
 /**
@@ -96,9 +101,50 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
-    public Future<JsonArray> getUserGrids(Integer userId) {
-        // TODO: Implement the logic to retrieve all grids associated with a specific user.
-        return Future.succeededFuture(new JsonArray());
+    public Future<List<MinimalGrid>> getAvailableUserMinimalGrids(UserInfos user) {
+        Promise<List<MinimalGrid>> promise = Promise.promise();
+
+        gridRepository.getGridsGroupsCanAccess(user.getGroupsIds())
+            .compose(userGrids -> gridRepository.getGridsWithAvailableTimeSlots(userGrids.stream().map(Grid::getId).collect(Collectors.toList())))
+            .onSuccess(grids -> promise.complete(grids.stream().map(MinimalGrid::new).collect(Collectors.toList())))
+            .onFailure(err -> {
+                String errorMessage = "Failed to get available grids for user with id " + user.getUserId();
+                LogHelper.logError(this, "getAvailableUserMinimalGrids", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<MinimalGridInfos> getMinimalGridInfosById(UserInfos user, Long gridId) {
+        Promise<MinimalGridInfos> promise = Promise.promise();
+
+        gridRepository.getGridsGroupsCanAccess(user.getGroupsIds())
+            .compose(userGrids -> {
+                if (!userGrids.stream().map(Grid::getId).collect(Collectors.toList()).contains(gridId)) {
+                    String errorMessage = String.format("The grid with id %s is not shared to the connected user", gridId);
+                    return Future.failedFuture(errorMessage);
+                }
+
+                return gridRepository.get(gridId);
+            })
+            .onSuccess(optionalGrid -> {
+                if (!optionalGrid.isPresent()) {
+                    String errorMessage = "No grid found for id " + gridId;
+                    promise.fail(errorMessage);
+                }
+                else {
+                    promise.complete(new MinimalGridInfos(optionalGrid.get()));
+                }
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to get grid with id " + gridId;
+                LogHelper.logError(this, "getMinimalGridInfosById", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();
     }
 
     @Override
