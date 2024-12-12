@@ -1,8 +1,8 @@
-export enum SLOT_DURATION {
-  FIFTEEN_MINUTES = "15 MIN",
-  THIRTY_MINUTES = "30 MIN",
-  FOURTYFIVE_MINUTES = "45 MIN",
-  ONE_HOUR = "1 H",
+export enum DURATION {
+  FIFTEEN_MINUTES = "00:15",
+  THIRTY_MINUTES = "00:30",
+  FOURTYFIVE_MINUTES = "00:45",
+  ONE_HOUR = "01:00",
 }
 
 export enum DAY {
@@ -15,8 +15,8 @@ export enum DAY {
 }
 
 export enum PERIODICITY {
-  WEEKLY = 1,
-  BIWEEKLY = 2,
+  WEEKLY = "WEEKLY",
+  BIWEEKLY = "BIWEEKLY",
 }
 
 export enum GRID_STATE {

@@ -19,9 +19,9 @@ import { DialogModal } from "~/components/DialogModal";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { MODAL_TYPE } from "~/providers/GlobalProvider/enum";
 import { useGridModal } from "~/providers/GridModalProvider";
-import { GridPayload } from "~/providers/GridModalProvider/types";
 import { gridInputsToGridPayload } from "~/providers/GridModalProvider/utils";
-import { useCreateGridMutation } from "~/services/api/grid.service";
+import { useCreateGridMutation } from "~/services/api/GridService";
+import { CreateGridPayload } from "~/services/api/GridService/types";
 import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
 
 export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
@@ -99,7 +99,10 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
     )
       return;
 
-    const payload: GridPayload = gridInputsToGridPayload(inputs, publicOptions);
+    const payload: CreateGridPayload = gridInputsToGridPayload(
+      inputs,
+      publicOptions,
+    );
     try {
       await createGrid(payload);
     } catch (error) {

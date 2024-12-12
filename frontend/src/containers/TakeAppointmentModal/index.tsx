@@ -1,18 +1,17 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 
 import { Button, IconButton } from "@cgi-learning-hub/ui";
 import CloseIcon from "@mui/icons-material/Close";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import { Box, Divider, Modal, Typography } from "@mui/material";
+import { Box, Divider, Modal, Typography, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { MODAL_SIZE } from "./enum";
 import {
   closeIconStyle,
   contentBoxStyle,
   ContentWrapper,
   dividerStyle,
-  modalBoxStyle,
+  ModalContainer,
   submitButtonStyle,
 } from "./style";
 import { TakeAppointmentModalProps } from "./types";
@@ -29,24 +28,9 @@ export const TakeAppointmentModal: FC<TakeAppointmentModalProps> = ({
   const { isModalOpen, setIsModalOpen, selectedSlotId } =
     useTakeAppointmentModal();
   const { t } = useTranslation("appointments");
-  const [modalSize, setModalSize] = useState<MODAL_SIZE>(MODAL_SIZE.LARGE);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setModalSize(
-        window.innerWidth <= TAKE_APPOINTMENT_MODAL_BREAKPOINT
-          ? MODAL_SIZE.SMALL
-          : MODAL_SIZE.LARGE,
-      );
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const isMobile = useMediaQuery(
+    `(max-width: ${TAKE_APPOINTMENT_MODAL_BREAKPOINT}px)`,
+  );
 
   return (
     <Modal
@@ -54,7 +38,7 @@ export const TakeAppointmentModal: FC<TakeAppointmentModalProps> = ({
       onClose={() => setIsModalOpen(false)}
       disableAutoFocus
     >
-      <Box sx={modalBoxStyle}>
+      <ModalContainer isMobile={isMobile}>
         <Box sx={contentBoxStyle}>
           <Box sx={spaceBetweenBoxStyle}>
             <Typography variant="h3">
@@ -69,9 +53,9 @@ export const TakeAppointmentModal: FC<TakeAppointmentModalProps> = ({
               <CloseIcon />
             </IconButton>
           </Box>
-          <ContentWrapper modalSize={modalSize}>
+          <ContentWrapper isMobile={isMobile}>
             <TakeAppointmentGridInfos userInfos={userInfos} />
-            {modalSize === MODAL_SIZE.SMALL ? (
+            {isMobile ? (
               <TakeAppointmentWeekSlotsMobile />
             ) : (
               <>
@@ -90,7 +74,7 @@ export const TakeAppointmentModal: FC<TakeAppointmentModalProps> = ({
             </Button>
           </Box>
         </Box>
-      </Box>
+      </ModalContainer>
     </Modal>
   );
 };

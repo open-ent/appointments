@@ -1,18 +1,10 @@
 import { DAY } from "./enums";
-
-export interface TimeObject {
-  hour: number;
-  minute: number;
-}
-
-export type Time = TimeObject | null;
+import { Time } from "./models/Time";
 
 export interface Slot {
-  id: string;
+  id: number;
   begin: Time;
   end: Time;
 }
 
-export type WeekSlotsModel = {
-  [key in DAY]: Slot[];
-};
+export type WeekSlotsModel = Record<DAY, Slot[]>;

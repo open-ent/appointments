@@ -34,6 +34,7 @@ export const MyAvailability: FC = () => {
   );
 
   const { gridTypeLengths, isLoading } = useAvailability();
+
   const isAllGridListEmpty = useMemo(
     () =>
       !gridTypeLengths[GRID_TYPE.IN_PROGRESS] &&

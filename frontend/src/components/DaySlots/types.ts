@@ -1,9 +1,8 @@
-import { MODAL_SIZE } from "~/containers/TakeAppointmentModal/enum";
 import { Slot } from "~/core/types";
 
 export interface DaySlotsProps {
-  slots: Slot[];
-  modalSize: MODAL_SIZE;
+  slots: Slot[] | null;
+  isMobile: boolean;
 }
 
 export interface TimeSlotProps {
@@ -11,5 +10,5 @@ export interface TimeSlotProps {
 }
 
 export interface TimeSlotWrapperProps {
-  modalSize: MODAL_SIZE;
+  isMobile: boolean;
 }

@@ -49,8 +49,11 @@ export const useBlurGridInputs = (
   const newSlotsError = {
     ids: Object.values(inputs.weekSlots)
       .flatMap((slots) => slots)
-      .filter((slots) => !slots.begin || !slots.end)
-      .map((slots) => slots.id),
+      .reduce(
+        (acc, slot) =>
+          !slot.begin.time || !slot.end.time ? [...acc, slot.id] : acc,
+        [] as number[],
+      ),
     error: INVALID_SLOT_ERROR,
   };
 

@@ -34,8 +34,8 @@ import {
   structureIconStyle,
 } from "./style";
 import { GridCardProps } from "./types";
+import { DISPLAY_DATE_FORMAT } from "~/core/constants";
 import { GRID_STATE } from "~/core/enums";
-import { formatDayjsToString } from "~/core/utils/date.utils";
 import { GRID_CARD_SIZE } from "~/providers/AvailabilityProvider/enum";
 import { useGlobal } from "~/providers/GlobalProvider";
 
@@ -74,8 +74,8 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
           <Box sx={secondLineBoxStyle}>
             <Typography variant="body1">
               {t("appointments.grid.from.date.to.date", {
-                beginDate: formatDayjsToString(grid.beginDate),
-                endDate: formatDayjsToString(grid.endDate),
+                beginDate: grid.beginDate.format(DISPLAY_DATE_FORMAT),
+                endDate: grid.endDate.format(DISPLAY_DATE_FORMAT),
               })}
             </Typography>
             <Box sx={stateStyle}>

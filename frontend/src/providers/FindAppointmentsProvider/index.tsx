@@ -10,10 +10,10 @@ import {
 import {
   FindAppointmentsProviderContextProps,
   FindAppointmentsProviderProps,
-  UserCardInfos,
 } from "./types";
 import { NUMBER_MORE_USERS } from "./utils";
-import { useGetCommunicationUsersQuery } from "~/services/api/communication.service";
+import { useGetCommunicationUsersQuery } from "~/services/api/CommunicationService";
+import { UserCardInfos } from "~/services/api/CommunicationService/types";
 
 const FindAppointmentsProviderContext =
   createContext<FindAppointmentsProviderContextProps | null>(null);
@@ -35,11 +35,14 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
-  const { data: newUsers } = useGetCommunicationUsersQuery({
-    search,
-    page,
-    limit: NUMBER_MORE_USERS,
-  });
+  const { data: newUsers } = useGetCommunicationUsersQuery(
+    {
+      search,
+      page,
+      limit: NUMBER_MORE_USERS,
+    },
+    { skip: !search },
+  );
 
   // first load
   useEffect(() => {

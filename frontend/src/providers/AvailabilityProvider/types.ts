@@ -1,10 +1,7 @@
 import { ReactNode } from "react";
 
-import { Dayjs } from "dayjs";
-
 import { GRID_TYPE } from "./enum";
-import { HexaColor } from "~/components/ColorPicker/types";
-import { GRID_STATE } from "~/core/enums";
+import { MinimalGrid } from "~/services/api/GridService/types";
 
 export interface AvailabilityProviderContextProps {
   gridPages: GridPages;
@@ -16,27 +13,6 @@ export interface AvailabilityProviderContextProps {
 
 export interface AvailabilityProviderProps {
   children: ReactNode;
-}
-
-export interface MinimalGrid {
-  id: string;
-  name: string;
-  color: HexaColor;
-  beginDate: Dayjs;
-  endDate: Dayjs;
-  state: GRID_STATE;
-  structureId: string;
-}
-
-export interface MyGridsResponse {
-  grids: MinimalGrid[];
-  total: number;
-}
-
-export interface GetMyGridsPayload {
-  states: GRID_STATE[];
-  page: number;
-  limit: number;
 }
 
 export interface GridList {

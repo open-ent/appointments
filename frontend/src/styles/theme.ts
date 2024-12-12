@@ -2,17 +2,9 @@
 
 import { ThemeOptions } from "@mui/material";
 
-import { BLACK, GREY, PURPLE } from "./color.constants";
+import { PURPLE } from "./color.constants";
 
 export const options: ThemeOptions = {
-  palette: {
-    background: {
-      default: "#F9F9F9",
-    },
-    text: {
-      primary: GREY,
-    },
-  },
   typography: {
     fontFamily: "Roboto",
     h1: {
@@ -23,35 +15,21 @@ export const options: ThemeOptions = {
     },
     h2: {
       fontSize: "2.2rem",
-      color: PURPLE,
-      fontWeight: "bold",
-      fontFamily: "Roboto",
     },
     h3: {
       fontSize: "2rem",
-      color: PURPLE,
-      fontWeight: "bold",
-      fontFamily: "Roboto",
     },
     h4: {
       fontSize: "2rem",
-      color: GREY,
-      fontFamily: "Roboto",
     },
     h5: {
       fontSize: "1.6rem",
-      color: BLACK,
-      fontFamily: "Roboto",
     },
     body1: {
       fontSize: "1.4rem",
-      color: GREY,
-      fontFamily: "Roboto",
     },
     body2: {
       fontSize: "1.4rem",
-      color: PURPLE,
-      fontFamily: "Roboto",
     },
   },
   components: {
@@ -152,6 +130,13 @@ export const options: ThemeOptions = {
       styleOverrides: {
         tooltip: {
           fontSize: "1.2rem",
+        },
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          fontSize: "2.4rem",
         },
       },
     },

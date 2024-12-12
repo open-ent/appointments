@@ -19,8 +19,9 @@ import {
   weekBoxStyle,
 } from "./style";
 import { DailySlot } from "../DailySlot";
+import { DAY_VALUES } from "~/core/constants";
 import { DAY } from "~/core/enums";
-import { formatDayToI18n } from "~/core/utils/date.utils";
+import { Slot } from "~/core/types";
 import { useGridModal } from "~/providers/GridModalProvider";
 
 export const WeekSlots: FC = () => {
@@ -31,43 +32,48 @@ export const WeekSlots: FC = () => {
     updateGridModalInputs: { handleAddSlot },
   } = useGridModal();
 
+  const entries = Object.entries(inputs.weekSlots) as [DAY, Slot[]][];
+
   const dayErrors = useMemo(() => {
     const errors: Record<DAY, boolean> = {} as Record<DAY, boolean>;
-    for (const day of Object.keys(inputs.weekSlots) as DAY[]) {
-      errors[day] = inputs.weekSlots[day].some(
-        (slot) => slots.ids.includes(slot.id) && (!slot.begin || !slot.end),
+    entries.map(([day, timeSlots]) => {
+      errors[day] = timeSlots.some(
+        (slot) =>
+          slots.ids.includes(slot.id) && (!slot.begin.time || !slot.end.time),
       );
-    }
+    });
     return errors;
   }, [inputs.weekSlots, slots]);
 
   return (
     <Box sx={weekBoxStyle}>
-      {Object.keys(inputs.weekSlots).map((day) => (
-        <>
-          <Box sx={dayBoxStyle} key={day}>
-            <Typography sx={dayLabelStyle}>
-              {t(formatDayToI18n(DAY[day as keyof typeof DAY]))}
-            </Typography>
-            <Divider flexItem variant="middle" orientation="vertical" />
-            <Box>
-              <Box sx={slotsBoxStyle}>
-                {inputs.weekSlots[day as DAY].map((slot) => (
-                  <DailySlot key={slot.id} day={day as DAY} slot={slot} />
-                ))}
-                <IconButton onClick={() => handleAddSlot(day as DAY)}>
-                  <AddCircleIcon sx={iconStyle} />
-                </IconButton>
+      {entries.map(([day, timeSlots]) => {
+        return (
+          <>
+            <Box sx={dayBoxStyle} key={day}>
+              <Typography sx={dayLabelStyle}>
+                {t(DAY_VALUES[day].i18nKey)}
+              </Typography>
+              <Divider flexItem variant="middle" orientation="vertical" />
+              <Box>
+                <Box sx={slotsBoxStyle}>
+                  {timeSlots.map((slot) => (
+                    <DailySlot key={slot.id} day={day} slot={slot} />
+                  ))}
+                  <IconButton onClick={() => handleAddSlot(day)}>
+                    <AddCircleIcon sx={iconStyle} />
+                  </IconButton>
+                </Box>
+                {dayErrors[day] && (
+                  <FormHelperText sx={errorStyle} error>
+                    {t(slots.error)}
+                  </FormHelperText>
+                )}
               </Box>
-              {dayErrors[day as DAY] && (
-                <FormHelperText sx={errorStyle} error>
-                  {t(slots.error)}
-                </FormHelperText>
-              )}
             </Box>
-          </Box>
-        </>
-      ))}
+          </>
+        );
+      })}
     </Box>
   );
 };

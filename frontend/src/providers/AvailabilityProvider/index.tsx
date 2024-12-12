@@ -16,9 +16,10 @@ import {
   GridTypeLength,
 } from "./types";
 import { initialGrids, initialGridsLength, initialPages } from "./utils";
+import { useGlobal } from "../GlobalProvider";
 import { GRID_PER_PAGE } from "~/core/constants";
 import { GRID_STATE } from "~/core/enums";
-import { useGetMyGridsQuery } from "~/services/api/grid.service";
+import { useGetMyGridsQuery } from "~/services/api/GridService";
 
 const AvailabilityProviderContext =
   createContext<AvailabilityProviderContextProps | null>(null);
@@ -36,17 +37,21 @@ export const useAvailability = () => {
 export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
   children,
 }) => {
+  const { hasManageRight } = useGlobal();
   const [gridPages, setGridPages] = useState<GridPages>(initialPages);
   const [grids, setGrids] = useState<GridList>(initialGrids);
   const [gridsLength, setGridsLength] =
     useState<GridTypeLength>(initialGridsLength);
 
   const { data: myInProgressData, isLoading: isLoadingInProgress } =
-    useGetMyGridsQuery({
-      states: [GRID_STATE.OPEN, GRID_STATE.SUSPENDED],
-      page: gridPages[GRID_TYPE.IN_PROGRESS],
-      limit: GRID_PER_PAGE,
-    });
+    useGetMyGridsQuery(
+      {
+        states: [GRID_STATE.OPEN, GRID_STATE.SUSPENDED],
+        page: gridPages[GRID_TYPE.IN_PROGRESS],
+        limit: GRID_PER_PAGE,
+      },
+      { skip: !hasManageRight },
+    );
 
   const { data: myClosedData, isLoading: isLoadingClosed } = useGetMyGridsQuery(
     {
@@ -54,6 +59,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
       page: gridPages[GRID_TYPE.CLOSED],
       limit: GRID_PER_PAGE,
     },
+    { skip: !hasManageRight },
   );
 
   const handleChangePage = (gridType: GRID_TYPE, newPage: number) => {

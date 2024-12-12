@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-import { emptySplitApi } from "./services/api/emptySplitApi.service";
+import { emptySplitApi } from "./services/api/EmptySplitService";
 
 const rootReducer = combineReducers({
   [emptySplitApi.reducerPath]: emptySplitApi.reducer,

@@ -1,7 +1,7 @@
 import { HexaColor } from "../ColorPicker/types";
 import { GRID_STATE } from "~/core/enums";
 import { GRID_CARD_SIZE } from "~/providers/AvailabilityProvider/enum";
-import { MinimalGrid } from "~/providers/AvailabilityProvider/types";
+import { MinimalGrid } from "~/services/api/GridService/types";
 
 export interface GridCardProps {
   grid: MinimalGrid;

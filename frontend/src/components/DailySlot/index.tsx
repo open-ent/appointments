@@ -25,19 +25,20 @@ import {
   timeInputStyle,
 } from "./style";
 import { DailySlotProps } from "./types";
-import { formatTime, getEndOptions, getStartOptions } from "./utils";
+import { getEndOptions, getStartOptions } from "./utils";
 import { useGridModal } from "~/providers/GridModalProvider";
 
 export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
   const { t } = useTranslation("appointments");
   const {
-    inputs: { weekSlots, slotDuration },
+    inputs: { weekSlots, duration },
     errorInputs: { slots },
     updateGridModalInputs: { handleDeleteSlot, handleSlotChange },
   } = useGridModal();
 
   const isSlotError =
-    slots.ids.some((item) => item === slot.id) && (!slot.begin || !slot.end);
+    slots.ids.some((item) => item === slot.id) &&
+    (!slot.begin.time || !slot.end.time);
 
   return (
     <StyledDailySlotBox isSlotError={isSlotError}>
@@ -50,7 +51,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
                 handleSlotChange(day, slot, e.target.value, "begin")
               }
               sx={selectStyle}
-              value={formatTime(slot.begin)}
+              value={slot.begin.parseToString()}
               renderValue={(value: String) => (
                 <Box sx={boxValueStyle}>
                   <AccessTimeIcon sx={iconStyle} />
@@ -58,13 +59,11 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
                 </Box>
               )}
             >
-              {getStartOptions(weekSlots[day], slotDuration, slot).map(
-                (time) => (
-                  <MenuItem key={uuidv4()} value={formatTime(time)}>
-                    {formatTime(time)}
-                  </MenuItem>
-                ),
-              )}
+              {getStartOptions(weekSlots[day], duration, slot).map((time) => (
+                <MenuItem key={uuidv4()} value={time.parseToString()}>
+                  {time.parseToString()}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
@@ -76,7 +75,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
                 handleSlotChange(day, slot, e.target.value, "end")
               }
               sx={selectStyle}
-              value={formatTime(slot.end)}
+              value={slot.end.parseToString()}
               label="test"
               renderValue={(value) => (
                 <Box sx={boxValueStyle}>
@@ -85,9 +84,9 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
                 </Box>
               )}
             >
-              {getEndOptions(weekSlots[day], slotDuration, slot).map((time) => (
-                <MenuItem key={uuidv4()} value={formatTime(time)}>
-                  {formatTime(time)}
+              {getEndOptions(weekSlots[day], duration, slot).map((time) => (
+                <MenuItem key={uuidv4()} value={time.parseToString()}>
+                  {time.parseToString()}
                 </MenuItem>
               ))}
             </Select>

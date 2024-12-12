@@ -2,26 +2,13 @@ import dayjs, { Dayjs } from "dayjs";
 import duration from "dayjs/plugin/duration";
 import isBetween from "dayjs/plugin/isBetween";
 
-import { SLOT_DURATION } from "~/core/enums";
-import { Slot, Time, TimeObject } from "~/core/types";
-import {
-  formatSlotDurationToMinutes,
-  formatTimeToDayjs,
-} from "~/core/utils/date.utils";
+import { DURATION_VALUES } from "~/core/constants";
+import { DURATION } from "~/core/enums";
+import { Time } from "~/core/models/Time";
+import { Slot } from "~/core/types";
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
-
-export const formatTime = (time: Time): string => {
-  if (!time) {
-    return "--:--";
-  }
-
-  const hour = time.hour.toString().padStart(2, "0");
-  const minute = time.minute.toString().padStart(2, "0");
-
-  return `${hour}:${minute}`;
-};
 
 export const isTimeInRange = (
   time: Dayjs,
@@ -37,7 +24,7 @@ export const isTimeInRange = (
 export const generateTimeSlots = (
   intervalInMinutes: number,
   isEnd: boolean,
-): TimeObject[] => {
+): Time[] => {
   const start = dayjs().startOf("day").add(7, "hour");
   const end = dayjs().startOf("day").add(22, "hour");
 
@@ -49,50 +36,50 @@ export const generateTimeSlots = (
       (isEnd ? i + 1 : i) * intervalInMinutes,
       "minute",
     );
-    return {
+    return new Time({
       hour: currentTime.hour(),
       minute: currentTime.minute(),
-    } as TimeObject;
+    });
   });
 };
 
 export const getStartOptions = (
   slots: Slot[],
-  slotDuration: SLOT_DURATION,
+  duration: DURATION,
   currentSlot: Slot,
 ): Time[] => {
-  const intervalMinutes: number = formatSlotDurationToMinutes(slotDuration);
+  const intervalMinutes: number = DURATION_VALUES[duration].numberOfMinutes;
 
-  const possibleTimes: TimeObject[] = generateTimeSlots(intervalMinutes, false);
+  const possibleTimes: Time[] = generateTimeSlots(intervalMinutes, false);
 
   const endTime = currentSlot.end;
   const minBeginTimes = endTime
     ? slots
         .filter((slot) => {
           return (
-            slot.begin &&
-            slot.end &&
-            endTime &&
-            formatTimeToDayjs(slot.end).isBefore(formatTimeToDayjs(endTime))
+            slot.begin.time &&
+            slot.end.time &&
+            endTime.time &&
+            slot.end.parseToDayjs().isBefore(endTime.parseToDayjs())
           );
         })
         .reduce<Dayjs | null>((acc: Dayjs | null, slot) => {
-          if (!slot.end) {
+          if (!slot.end.time) {
             return acc;
           }
-          const slotEnd = formatTimeToDayjs(slot.end);
+          const slotEnd = slot.end.parseToDayjs();
           return acc === null || slotEnd.isAfter(acc) ? slotEnd : acc;
         }, null)
     : null;
 
-  const availableTimes = possibleTimes.filter((time: TimeObject) => {
+  const availableTimes = possibleTimes.filter((time: Time) => {
     return !slots.some((slot) => {
-      if (!slot.begin || !slot.end) return false;
+      if (!slot.begin.time || !slot.end.time) return false;
 
       if (slot.id === currentSlot.id) return false;
-      const currentTime = formatTimeToDayjs(time);
-      const startTime = formatTimeToDayjs(slot.begin);
-      const localendTime = formatTimeToDayjs(slot.end);
+      const currentTime = time.parseToDayjs();
+      const startTime = slot.begin.parseToDayjs();
+      const localendTime = slot.end.parseToDayjs();
       return (
         isTimeInRange(currentTime, startTime, localendTime) ||
         currentTime.isSame(startTime)
@@ -100,18 +87,18 @@ export const getStartOptions = (
     });
   });
 
-  const availableTimes2 = availableTimes.filter((time: TimeObject) => {
-    const currentTime = formatTimeToDayjs(time);
+  const availableTimes2 = availableTimes.filter((time: Time) => {
+    const currentTime = time.parseToDayjs();
 
-    if (!endTime) return true;
+    if (!endTime.time) return true;
 
-    return currentTime.isBefore(formatTimeToDayjs(endTime));
+    return currentTime.isBefore(endTime.parseToDayjs());
   });
 
-  const availableTimes3 = availableTimes2.filter((time: TimeObject) => {
+  const availableTimes3 = availableTimes2.filter((time: Time) => {
     if (!minBeginTimes) return true;
 
-    const currentTime = formatTimeToDayjs(time);
+    const currentTime = time.parseToDayjs();
     return (
       minBeginTimes.isBefore(currentTime) || minBeginTimes.isSame(currentTime)
     );
@@ -122,45 +109,45 @@ export const getStartOptions = (
 
 export const getEndOptions = (
   slots: Slot[],
-  slotDuration: SLOT_DURATION,
+  duration: DURATION,
   currentSlot: Slot,
 ): Time[] => {
-  const intervalMinutes: number = formatSlotDurationToMinutes(slotDuration);
+  const intervalMinutes: number = DURATION_VALUES[duration].numberOfMinutes;
 
-  const possibleTimes: TimeObject[] = generateTimeSlots(intervalMinutes, true);
+  const possibleTimes: Time[] = generateTimeSlots(intervalMinutes, true);
 
   const beginTime = currentSlot.begin;
   const maxEndTimes = beginTime
     ? slots
         .filter((slot) => {
           return (
-            slot.begin &&
-            slot.end &&
-            beginTime &&
-            formatTimeToDayjs(slot.begin).isAfter(formatTimeToDayjs(beginTime))
+            slot.begin.time &&
+            slot.end.time &&
+            beginTime.time &&
+            slot.begin.parseToDayjs().isAfter(beginTime.parseToDayjs())
           );
         })
         .reduce<Dayjs | null>(
           (acc, slot) => {
-            if (!slot.begin) {
+            if (!slot.begin.time) {
               return acc;
             }
-            const slotBegin = formatTimeToDayjs(slot.begin);
+            const slotBegin = slot.begin.parseToDayjs();
             return acc === null || slotBegin.isBefore(acc) ? slotBegin : acc;
           },
           null as Dayjs | null,
         )
     : null;
 
-  const availableTimes = possibleTimes.filter((time: TimeObject) => {
+  const availableTimes = possibleTimes.filter((time: Time) => {
     return !slots.some((slot) => {
-      if (!slot.begin || !slot.end) return false;
+      if (!slot.begin.time || !slot.end.time) return false;
 
       if (slot.id === currentSlot.id) return false;
 
-      const currentTime = formatTimeToDayjs(time);
-      const startTime = formatTimeToDayjs(slot.begin);
-      const endTime = formatTimeToDayjs(slot.end);
+      const currentTime = time.parseToDayjs();
+      const startTime = slot.begin.parseToDayjs();
+      const endTime = slot.end.parseToDayjs();
       return (
         isTimeInRange(currentTime, startTime, endTime) ||
         currentTime.isSame(endTime)
@@ -168,18 +155,18 @@ export const getEndOptions = (
     });
   });
 
-  const availableTimes2 = availableTimes.filter((time: TimeObject) => {
-    const currentTime = formatTimeToDayjs(time);
+  const availableTimes2 = availableTimes.filter((time: Time) => {
+    const currentTime = time.parseToDayjs();
 
-    if (!beginTime) return true;
+    if (!beginTime.time) return true;
 
-    return currentTime.isAfter(formatTimeToDayjs(beginTime));
+    return currentTime.isAfter(beginTime.parseToDayjs());
   });
 
-  const availableTimes3 = availableTimes2.filter((time: TimeObject) => {
+  const availableTimes3 = availableTimes2.filter((time: Time) => {
     if (!maxEndTimes) return true;
 
-    const currentTime = formatTimeToDayjs(time);
+    const currentTime = time.parseToDayjs();
     return maxEndTimes.isAfter(currentTime) || maxEndTimes.isSame(currentTime);
   });
 

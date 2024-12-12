@@ -1,7 +1,6 @@
 import { isTimeInRange } from "~/components/DailySlot/utils";
 import { MAX_STRING_LENGTH } from "~/core/constants";
 import { Slot } from "~/core/types";
-import { formatTimeToDayjs } from "~/core/utils/date.utils";
 
 export const handleConflictingSlot = (
   item: Slot,
@@ -15,9 +14,9 @@ export const handleConflictingSlot = (
     updatedSlot.begin &&
     updatedSlot.end
   ) {
-    const beginItem = formatTimeToDayjs(item.begin);
-    const beginSlot = formatTimeToDayjs(updatedSlot.begin);
-    const endSlot = formatTimeToDayjs(updatedSlot.end);
+    const beginItem = item.begin.parseToDayjs();
+    const beginSlot = updatedSlot.begin.parseToDayjs();
+    const endSlot = updatedSlot.end.parseToDayjs();
 
     if (
       isTimeInRange(beginItem, beginSlot, endSlot) ||

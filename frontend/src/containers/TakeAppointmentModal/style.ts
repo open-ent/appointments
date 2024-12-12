@@ -1,6 +1,5 @@
 import { Box, styled, SxProps } from "@mui/material";
 
-import { MODAL_SIZE } from "./enum";
 import { ContentWrapperProps } from "./types";
 import {
   columnBoxStyle,
@@ -9,20 +8,20 @@ import {
 } from "~/styles/boxStyles";
 import { BLACK } from "~/styles/color.constants";
 
-export const modalBoxStyle: SxProps = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "calc( min(110rem, 95%))",
-  "@media (max-width: 1011px)": {
-    maxWidth: "60rem",
-  },
-  height: "80vh",
-  maxHeight: "fit-content",
-  background: "white",
-  borderRadius: ".5rem",
-};
+export const ModalContainer = styled(Box)<{ isMobile: boolean }>(
+  ({ isMobile }) => ({
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "calc( min(110rem, 95%))",
+    maxWidth: isMobile ? "60rem" : "default",
+    height: "80vh",
+    maxHeight: "fit-content",
+    background: "white",
+    borderRadius: ".5rem",
+  }),
+);
 
 export const contentBoxStyle: SxProps = {
   borderRadius: ".2rem",
@@ -55,9 +54,9 @@ export const dividerStyle: SxProps = {
 };
 
 export const ContentWrapper = styled(Box)<ContentWrapperProps>(
-  ({ modalSize }) => ({
-    ...(modalSize === MODAL_SIZE.SMALL ? columnBoxStyle : flexStartBoxStyle),
-    alignItems: modalSize === MODAL_SIZE.SMALL ? "center" : "flex-start",
+  ({ isMobile }) => ({
+    ...(isMobile ? columnBoxStyle : flexStartBoxStyle),
+    alignItems: isMobile ? "center" : "flex-start",
     gap: "3rem",
     height: "100%",
   }),
@@ -65,5 +64,4 @@ export const ContentWrapper = styled(Box)<ContentWrapperProps>(
 
 export const submitButtonStyle: SxProps = {
   ...flexEndBoxStyle,
-  filter: "blur(0)",
 };

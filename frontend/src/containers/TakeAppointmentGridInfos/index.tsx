@@ -11,6 +11,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
@@ -21,6 +22,7 @@ import {
   functionsStyle,
   itemStyle,
   pictureStyle,
+  skeletonStyle,
   StatusCircle,
   topUserInfoStyle,
   wrapperUserInfoStyle,
@@ -34,61 +36,77 @@ import { GREY } from "~/styles/color.constants";
 export const TakeAppointmentGridInfos: FC<TakeAppointmentGridInfosProps> = ({
   userInfos,
 }) => {
+  const { picture, displayName, functions, isAvailable } = userInfos;
   const { t } = useTranslation("appointments");
-  const { gridsName, gridInfo, selectedGridName, handleGridChange } =
+  const { grids, gridInfos, selectedGrid, handleGridChange } =
     useTakeAppointmentModal();
+
+  const { duration, visioLink, place, publicComment } = gridInfos || {};
+
   return (
     <Box sx={wrapperUserInfoStyle}>
       <Box sx={topUserInfoStyle}>
         <Box sx={pictureStyle}>
-          {!userInfos.picture && <NoAvatar fill={GREY} />}
-          <StatusCircle status={userInfos.status} />
+          {!(picture && picture.startsWith("/userbook/avatar/")) ? (
+            <NoAvatar fill={GREY} />
+          ) : (
+            <Box alt="user picture" component="img" src={picture} />
+          )}
+          <StatusCircle isAvailable={isAvailable} />
         </Box>
         <Box>
-          <Typography sx={displayNameStyle}>{userInfos.displayName}</Typography>
-          <Typography sx={functionsStyle}>{userInfos.functions}</Typography>
+          <Typography sx={displayNameStyle}>{displayName}</Typography>
+          <Typography sx={functionsStyle}>{functions}</Typography>
         </Box>
       </Box>
-      <Box sx={bottomUserInfoStyle}>
-        <FormControl variant="standard">
-          <InputLabel>
-            {t("appointments.take.appointment.modal.time.grid")}
-          </InputLabel>
-          <Select
-            variant="standard"
-            value={selectedGridName}
-            onChange={(e) => handleGridChange(e.target.value as string)}
-          >
-            {gridsName.map((gridName) => (
-              <MenuItem key={gridName} value={gridName}>
-                {gridName}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Box sx={itemStyle}>
-          {gridInfo.visio ? <VideoCameraFrontIcon /> : <VideocamOffIcon />}
-          <Typography>
-            {t(
-              `appointments.take.appointment.modal.visio.${
-                gridInfo.visio ? "possible" : "impossible"
-              }`,
-            )}
-          </Typography>
+      {!gridInfos ? (
+        <Skeleton variant="rectangular" sx={skeletonStyle} />
+      ) : (
+        <Box sx={bottomUserInfoStyle}>
+          <FormControl variant="standard">
+            <InputLabel>
+              {t("appointments.take.appointment.modal.time.grid")}
+            </InputLabel>
+            <Select
+              variant="standard"
+              value={selectedGrid?.name ?? ""}
+              onChange={(e) => handleGridChange(e.target.value as string)}
+            >
+              {grids?.map((grid) => (
+                <MenuItem key={grid.id} value={grid.name}>
+                  {grid.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Box sx={itemStyle}>
+            {visioLink ? <VideoCameraFrontIcon /> : <VideocamOffIcon />}
+            <Typography>
+              {t(
+                `appointments.take.appointment.modal.visio.${
+                  visioLink ? "possible" : "impossible"
+                }`,
+              )}
+            </Typography>
+          </Box>
+          <Box sx={itemStyle}>
+            <TimerIcon />
+            <Typography>{duration}</Typography>
+          </Box>
+          {!!place && (
+            <Box sx={itemStyle}>
+              <PlaceIcon />
+              <Typography>{place}</Typography>
+            </Box>
+          )}
+          {!!publicComment && (
+            <Box sx={itemStyle}>
+              <ChatIcon />
+              <Typography>{publicComment}</Typography>
+            </Box>
+          )}
         </Box>
-        <Box sx={itemStyle}>
-          <TimerIcon />
-          <Typography>{gridInfo.slotDuration.toLocaleLowerCase()}</Typography>
-        </Box>
-        <Box sx={itemStyle}>
-          <PlaceIcon />
-          <Typography>{gridInfo.location}</Typography>
-        </Box>
-        <Box sx={itemStyle}>
-          <ChatIcon />
-          <Typography>{gridInfo.publicComment}</Typography>
-        </Box>
-      </Box>
+      )}
     </Box>
   );
 };

@@ -3,13 +3,14 @@ import { Dispatch, ReactNode, SetStateAction } from "react";
 import { Dayjs } from "dayjs";
 
 import { HexaColor } from "~/components/ColorPicker/types";
-import { DAY, PERIODICITY, SLOT_DURATION } from "~/core/enums";
+import { DURATION, PERIODICITY } from "~/core/enums";
 import { WeekSlotsModel } from "~/core/types";
 import {
   Structure,
   useBlurGridInputsReturnType,
   useUpdateGridInputsReturnType,
 } from "~/hooks/types";
+import { Public } from "~/services/api/CommunicationService/types";
 
 export interface GridModalProviderContextProps {
   inputs: GridModalInputs;
@@ -19,7 +20,7 @@ export interface GridModalProviderContextProps {
   existingGridsNames: string[];
   structureOptions: Structure[];
   publicOptions: Public[];
-  slotDurationOptions: SLOT_DURATION[];
+  durationOptions: DURATION[];
   periodicityOptions: PERIODICITY[];
   updateGridModalInputs: useUpdateGridInputsReturnType;
   blurGridModalInputs: useBlurGridInputsReturnType;
@@ -29,11 +30,6 @@ export interface GridModalProviderContextProps {
 
 export interface GridModalProviderProps {
   children: ReactNode;
-}
-
-export interface Public {
-  id: string;
-  name: string;
 }
 
 export interface GridModalInputs {
@@ -49,7 +45,7 @@ export interface GridModalInputs {
     start: Dayjs | undefined;
     end: Dayjs | undefined;
   };
-  slotDuration: SLOT_DURATION;
+  duration: DURATION;
   periodicity: PERIODICITY;
   weekSlots: WeekSlotsModel;
 }
@@ -60,29 +56,7 @@ export interface InputsErrors {
   validityPeriod: string;
   weekSlots: string;
   slots: {
-    ids: string[];
+    ids: number[];
     error: string;
   };
-}
-
-interface DaylySlotPayload {
-  day: DAY;
-  beginTime: string;
-  endTime: string;
-}
-
-export interface GridPayload {
-  name: string;
-  color: string;
-  beginDate: string;
-  endDate: string;
-  structureId: string;
-  duration: string;
-  periodicity: number;
-  targetPublicListId: string[];
-  dailySlots: DaylySlotPayload[];
-  visioLink: string;
-  place: string;
-  documentId: string;
-  publicComment: string;
 }

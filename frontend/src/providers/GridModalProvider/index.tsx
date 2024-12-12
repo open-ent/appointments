@@ -14,10 +14,10 @@ import {
   InputsErrors,
 } from "./types";
 import {
+  durationOptions,
   initialErrorInputs,
   initialGridModalInputs,
   periodicityOptions,
-  slotDurationOptions,
 } from "./utils";
 import { useGlobal } from "../GlobalProvider";
 import {
@@ -26,8 +26,8 @@ import {
 } from "~/hooks/types";
 import { useBlurGridInputs } from "~/hooks/useBlurGridInputs";
 import { useUpdateGridInputs } from "~/hooks/useUpdateGridInputs";
-import { useGetCommunicationGroupsQuery } from "~/services/api/communication.service";
-import { useGetMyGridsNameQuery } from "~/services/api/grid.service";
+import { useGetCommunicationGroupsQuery } from "~/services/api/CommunicationService";
+import { useGetMyGridsNameQuery } from "~/services/api/GridService";
 
 const GridModalProviderContext =
   createContext<GridModalProviderContextProps | null>(null);
@@ -41,7 +41,7 @@ export const useGridModal = () => {
 };
 
 export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
-  const { structures } = useGlobal();
+  const { structures, hasManageRight } = useGlobal();
 
   const [inputs, setInputs] = useState<GridModalInputs>(
     initialGridModalInputs(structures),
@@ -57,10 +57,12 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
 
   const { data: groups, refetch: refetchGroups } =
     useGetCommunicationGroupsQuery(inputs.structure.id, {
-      skip: !inputs.structure.id,
+      skip: !(inputs.structure.id && hasManageRight),
     });
 
-  const { data: existingGridsNames } = useGetMyGridsNameQuery();
+  const { data: existingGridsNames } = useGetMyGridsNameQuery(undefined, {
+    skip: !hasManageRight,
+  });
 
   const [errorInputs, setErrorInputs] =
     useState<InputsErrors>(initialErrorInputs);
@@ -91,7 +93,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (inputs.structure.id) refetchGroups();
+    if (inputs.structure.id && hasManageRight) refetchGroups();
   }, [inputs.structure]);
 
   const value = useMemo<GridModalProviderContextProps>(
@@ -103,7 +105,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       existingGridsNames: existingGridsNames ?? [],
       structureOptions: structures,
       publicOptions: groups ?? [],
-      slotDurationOptions,
+      durationOptions,
       periodicityOptions,
       updateGridModalInputs,
       blurGridModalInputs,
