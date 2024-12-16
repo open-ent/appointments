@@ -118,7 +118,9 @@ public class DefaultCommunicationService implements CommunicationService {
         }
 
         // sort by displayName
-        uniqueAndFilteredUsers.sort((user1, user2) -> user1.getDisplayName().compareTo(user2.getDisplayName()));
+        uniqueAndFilteredUsers.sort(
+            (user1, user2) -> user1.getDisplayName().compareToIgnoreCase(user2.getDisplayName())
+        );
 
         if (page != null && page >= 1 && limit != null && limit >= 1) {
             uniqueAndFilteredUsers = uniqueAndFilteredUsers.stream()
@@ -191,6 +193,8 @@ public class DefaultCommunicationService implements CommunicationService {
                 boolean availability = availableGridsIds.stream().anyMatch(userGridIds::contains);
                 listUserAppointementResponse.add(new UserAppointment(user, lastAppointmentDate, availability));
             });
+
+        listUserAppointementResponse.sort((user1, user2) -> user1.getDisplayName().compareToIgnoreCase(user2.getDisplayName()));
 
         return listUserAppointementResponse;
     }

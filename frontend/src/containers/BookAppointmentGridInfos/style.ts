@@ -20,7 +20,6 @@ export const wrapperUserInfoStyle: SxProps = {
 export const topUserInfoStyle: SxProps = {
   ...flexStartBoxStyle,
   gap: "2rem",
-  position: "relative",
 };
 
 export const bottomUserInfoStyle: SxProps = {
@@ -57,12 +56,17 @@ export const itemStyle: SxProps = {
 };
 
 export const pictureStyle: SxProps = {
+  overflow: "hidden",
+  borderRadius: "50%",
+  objectFit: "cover",
+};
+
+export const pictureBoxStyle: SxProps = {
   minWidth: "6rem",
   maxWidth: "6rem",
   minHeight: "6rem",
   maxHeight: "6rem",
-  borderRadius: "50%",
-  overflow: "hidden",
+  position: "relative",
 };
 
 export const StatusCircle = styled(Box)<StatusCircleProps>(

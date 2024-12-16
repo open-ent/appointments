@@ -21,6 +21,7 @@ import {
   displayNameStyle,
   functionsStyle,
   itemStyle,
+  pictureBoxStyle,
   pictureStyle,
   skeletonStyle,
   StatusCircle,
@@ -46,12 +47,14 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   return (
     <Box sx={wrapperUserInfoStyle}>
       <Box sx={topUserInfoStyle}>
-        <Box sx={pictureStyle}>
-          {!(picture && picture.startsWith("/userbook/avatar/")) ? (
-            <NoAvatar fill={GREY} />
-          ) : (
-            <Box alt="user picture" component="img" src={picture} />
-          )}
+        <Box sx={pictureBoxStyle}>
+          <Box sx={pictureStyle}>
+            {!(picture && picture.startsWith("/userbook/avatar/")) ? (
+              <NoAvatar fill={GREY} />
+            ) : (
+              <Box alt="user picture" component="img" src={picture} />
+            )}
+          </Box>
           <StatusCircle isAvailable={isAvailable} />
         </Box>
         <Box>
