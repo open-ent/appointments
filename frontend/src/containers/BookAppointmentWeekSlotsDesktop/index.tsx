@@ -23,17 +23,17 @@ import {
   NoSlots,
   noSlotsStyle,
   noSlotsWrapperStyle,
-  visioOptionStyle,
+  videoCallOptionStyle,
   weekDayStyle,
   weekSlotsWrapperStyle,
 } from "./style";
 import { isToday } from "./utils";
 import { DaySlots } from "~/components/DaySlots";
 import { DAY_VALUES } from "~/core/constants";
-import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { flexStartBoxStyle } from "~/styles/boxStyles";
 
-export const TakeAppointmentWeekSlotsDesktop: FC = () => {
+export const BookAppointmentWeekSlotsDesktop: FC = () => {
   const { t } = useTranslation("appointments");
 
   const {
@@ -43,12 +43,14 @@ export const TakeAppointmentWeekSlotsDesktop: FC = () => {
     canGoPrev,
     hasNoSlots,
     nextAvailableTimeSlot,
+    isVideoCallOptionChecked,
     handlePreviousWeek,
     handleNextWeek,
     handleNextTimeSlot,
-  } = useTakeAppointmentModal();
+    handleVideoCallCheckboxChange,
+  } = useBookAppointmentModal();
 
-  const isVisioOptionVisible = !!gridInfos?.visioLink;
+  const isVideoCallOptionVisible = !!gridInfos?.videoCallLink;
 
   return (
     <Box sx={globalContainerStyle}>
@@ -84,14 +86,16 @@ export const TakeAppointmentWeekSlotsDesktop: FC = () => {
                   </Box>
                 ))}
               </Box>
-              <GoToNextTimeSlot isVisioOptionVisible={isVisioOptionVisible}>
+              <GoToNextTimeSlot
+                isVideoCallOptionVisible={isVideoCallOptionVisible}
+              >
                 <Button
                   variant="text"
                   sx={nextTimeSlotButtonStyle}
                   onClick={handleNextTimeSlot}
                 >
                   <Typography variant="body2" color={common.black}>
-                    {t("appointments.take.appointment.modal.next.slot")}&nbsp;
+                    {t("appointments.book.appointment.modal.next.slot")}&nbsp;
                   </Typography>
                   <Typography
                     variant="body2"
@@ -105,14 +109,14 @@ export const TakeAppointmentWeekSlotsDesktop: FC = () => {
               </GoToNextTimeSlot>
             </>
           ) : (
-            <NoSlots isVisioOptionVisible={isVisioOptionVisible}>
+            <NoSlots isVideoCallOptionVisible={isVideoCallOptionVisible}>
               <Box sx={emptyStateStyle}>
                 <Typography
                   variant="body2"
                   fontStyle={"italic"}
                   color={common.black}
                 >
-                  {t("appointments.take.appointment.modal.no.slot")}
+                  {t("appointments.book.appointment.modal.no.slot")}
                 </Typography>
               </Box>
             </NoSlots>
@@ -122,7 +126,7 @@ export const TakeAppointmentWeekSlotsDesktop: FC = () => {
             {currentSlots.map((daySlot: any) => (
               <ColumnSlotsWrapper
                 isEmpty={!!daySlot.slots && !daySlot.slots.length}
-                isVisioOptionVisible={isVisioOptionVisible}
+                isVideoCallOptionVisible={isVideoCallOptionVisible}
                 sx={daySlotsWrapperStyle}
                 key={uuidv4()}
               >
@@ -135,11 +139,14 @@ export const TakeAppointmentWeekSlotsDesktop: FC = () => {
             ))}
           </Box>
         )}
-        {isVisioOptionVisible && (
+        {isVideoCallOptionVisible && (
           <Box sx={flexStartBoxStyle}>
-            <Checkbox />
-            <Typography sx={visioOptionStyle}>
-              {t("appointments.take.appointment.modal.visio.option")}
+            <Checkbox
+              onChange={handleVideoCallCheckboxChange}
+              checked={isVideoCallOptionChecked}
+            />
+            <Typography sx={videoCallOptionStyle}>
+              {t("appointments.book.appointment.modal.video.call.option")}
             </Typography>
           </Box>
         )}

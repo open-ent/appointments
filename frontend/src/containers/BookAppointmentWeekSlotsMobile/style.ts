@@ -50,7 +50,7 @@ export const dayStyle: SxProps = {
   color: BLACK,
 };
 
-export const visioOptionStyle: SxProps = {
+export const videoCallOptionStyle: SxProps = {
   color: BLACK,
   fontSize: "1.4rem",
 };

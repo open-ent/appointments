@@ -18,7 +18,7 @@ import {
 } from "./style";
 import { UserCardProps } from "./types";
 import { NoAvatar } from "../SVG/NoAvatar";
-import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { GREY } from "~/styles/color.constants";
 
 export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
@@ -34,7 +34,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
     const [isElipsisfunctions, setIsElipsisfunctions] = useState(false);
 
     const { t } = useTranslation("appointments");
-    const { handleOnClickCard } = useTakeAppointmentModal();
+    const { handleOnClickCard } = useBookAppointmentModal();
 
     const displayNameRef = useRef<HTMLDivElement>(null);
     const functionsRef = useRef<HTMLDivElement>(null);

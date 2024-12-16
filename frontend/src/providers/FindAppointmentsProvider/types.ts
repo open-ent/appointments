@@ -8,6 +8,7 @@ export interface FindAppointmentsProviderContextProps {
   search: string;
   loadMoreUsers: () => void;
   handleSearch: (newSearch: string) => void;
+  refreshSearch: () => void;
 }
 
 export interface FindAppointmentsProviderProps {

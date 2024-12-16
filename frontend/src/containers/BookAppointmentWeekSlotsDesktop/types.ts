@@ -5,7 +5,7 @@ export interface ColumnHeaderProps {
 
 export interface ColumnSlotsWrapperProps {
   isEmpty: boolean;
-  isVisioOptionVisible: boolean;
+  isVideoCallOptionVisible: boolean;
 }
 
 export interface ArrowButtonProps {
@@ -13,5 +13,5 @@ export interface ArrowButtonProps {
 }
 
 export interface NoSlotsProps {
-  isVisioOptionVisible: boolean;
+  isVideoCallOptionVisible: boolean;
 }

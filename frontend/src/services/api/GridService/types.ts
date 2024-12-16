@@ -19,7 +19,7 @@ export interface CreateGridPayload {
   periodicity: number;
   targetPublicListId: string[];
   dailySlots: DailySlotPayload[];
-  visioLink: string;
+  videoCallLink: string;
   place: string;
   documentId: string;
   publicComment: string;
@@ -64,7 +64,7 @@ export interface NameWithId {
 
 export interface GridInfos {
   duration: DURATION;
-  visioLink: string;
+  videoCallLink: string;
   place: string;
   publicComment: string;
   documentId: string;

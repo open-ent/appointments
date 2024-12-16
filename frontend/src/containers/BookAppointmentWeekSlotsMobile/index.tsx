@@ -15,17 +15,17 @@ import {
   nextTimeSlotStyle,
   nextTimeSlotTextStyle,
   noSlotStyle,
-  visioOptionStyle,
+  videoCallOptionStyle,
   weekDayStyle,
   weekSlotsWrapperStyle,
 } from "./style";
-import { ArrowButton } from "../TakeAppointmentWeekSlotsDesktop/style";
+import { ArrowButton } from "../BookAppointmentWeekSlotsDesktop/style";
 import { DaySlots } from "~/components/DaySlots";
 import { DAY_VALUES } from "~/core/constants";
-import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { flexStartBoxStyle, spaceBetweenBoxStyle } from "~/styles/boxStyles";
 
-export const TakeAppointmentWeekSlotsMobile: FC = () => {
+export const BookAppointmentWeekSlotsMobile: FC = () => {
   const { t } = useTranslation("appointments");
 
   const {
@@ -35,12 +35,14 @@ export const TakeAppointmentWeekSlotsMobile: FC = () => {
     canGoPrev,
     hasNoSlots,
     nextAvailableTimeSlot,
+    isVideoCallOptionChecked,
     handlePreviousWeek,
     handleNextWeek,
     handleNextTimeSlot,
-  } = useTakeAppointmentModal();
+    handleVideoCallCheckboxChange,
+  } = useBookAppointmentModal();
 
-  const isVisioOptionVisible = !!gridInfos?.visioLink;
+  const isVideoCallOptionVisible = !!gridInfos?.videoCallLink;
 
   return (
     <Box sx={containerStyle}>
@@ -49,7 +51,7 @@ export const TakeAppointmentWeekSlotsMobile: FC = () => {
           <KeyboardArrowLeftIcon />
         </ArrowButton>
         <Typography variant="h5" fontWeight={"bold"}>
-          {t("appointments.take.appointment.modal.change.week")}
+          {t("appointments.book.appointment.modal.change.week")}
         </Typography>
         <ArrowButton isVisible={canGoNext} onClick={handleNextWeek}>
           <KeyboardArrowRightIcon />
@@ -85,7 +87,7 @@ export const TakeAppointmentWeekSlotsMobile: FC = () => {
             >
               <Box sx={nextTimeSlotTextStyle}>
                 <Typography variant="body2" color={common.black}>
-                  {t("appointments.take.appointment.modal.next.slot")}&nbsp;
+                  {t("appointments.book.appointment.modal.next.slot")}&nbsp;
                 </Typography>
                 <Typography variant="body2" color="primary" fontWeight={"bold"}>
                   {nextAvailableTimeSlot.locale("fr").format("dddd D MMMM")}
@@ -95,15 +97,18 @@ export const TakeAppointmentWeekSlotsMobile: FC = () => {
             </Button>
           ) : (
             <Typography variant="body2" sx={noSlotStyle}>
-              {t("appointments.take.appointment.modal.no.slot")}
+              {t("appointments.book.appointment.modal.no.slot")}
             </Typography>
           ))}
       </Box>
-      {isVisioOptionVisible && (
+      {isVideoCallOptionVisible && (
         <Box sx={flexStartBoxStyle}>
-          <Checkbox />
-          <Typography sx={visioOptionStyle}>
-            {t("appointments.take.appointment.modal.visio.option")}
+          <Checkbox
+            onChange={handleVideoCallCheckboxChange}
+            checked={isVideoCallOptionChecked}
+          />
+          <Typography sx={videoCallOptionStyle}>
+            {t("appointments.book.appointment.modal.video.call.option")}
           </Typography>
         </Box>
       )}

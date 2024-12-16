@@ -14,6 +14,7 @@ export const communicationApi = emptySplitApi.injectEndpoints({
         url: "/communication/to/users",
         params: body,
       }),
+      providesTags: ["Availability"],
     }),
   }),
 });

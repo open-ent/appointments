@@ -14,7 +14,7 @@ import static fr.openent.appointments.core.constants.Fields.*;
 
 public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalGridInfos> {
     private Duration duration;
-    private String visioLink;
+    private String videoCallLink;
     private String place;
     private String documentId;
     private String publicComment;
@@ -24,7 +24,7 @@ public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalG
     public MinimalGridInfos(JsonObject grid) {
         super(grid);
         this.duration = DateHelper.parseDuration(grid.getString(DURATION,null));
-        this.visioLink = grid.getString(CAMEL_DOCUMENT_ID, null);
+        this.videoCallLink = grid.getString(CAMEL_DOCUMENT_ID, null);
         this.place = grid.getString(PLACE, null);
         this.documentId = grid.getString(CAMEL_DOCUMENT_ID, null);
         this.publicComment = grid.getString(CAMEL_PUBLIC_COMMENT, null);
@@ -33,7 +33,7 @@ public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalG
     public MinimalGridInfos(Grid grid) {
         super(grid);
         this.setDuration(grid.getDuration());
-        this.setVisioLink(grid.getVisioLink());
+        this.setVideoCallLink(grid.getVideoCallLink());
         this.setPlace(grid.getPlace());
         this.setDocumentId(grid.getDocumentId());
         this.setPublicComment(grid.getPublicComment());
@@ -45,8 +45,8 @@ public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalG
         return duration;
     }
 
-    public String getVisioLink() {
-        return visioLink;
+    public String getVideoCallLink() {
+        return videoCallLink;
     }
 
     public String getPlace() {
@@ -68,8 +68,8 @@ public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalG
         return this;
     }
 
-    public MinimalGridInfos setVisioLink(String visioLink) {
-        this.visioLink = visioLink;
+    public MinimalGridInfos setVideoCallLink(String videoCallLink) {
+        this.videoCallLink = videoCallLink;
         return this;
     }
 

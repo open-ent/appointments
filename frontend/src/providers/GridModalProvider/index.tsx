@@ -84,7 +84,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
 
   const updateFirstPageErrors = () => {
     blurGridModalInputs.handleNameBlur();
-    blurGridModalInputs.handleVisioLinkBlur();
+    blurGridModalInputs.handleVideoCallLinkBlur();
   };
 
   const resetInputs = () => {

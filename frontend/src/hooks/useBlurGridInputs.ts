@@ -32,8 +32,8 @@ export const useBlurGridInputs = (
       : ""
     : FIELD_REQUIRED_ERROR;
 
-  const newVisioLinkError =
-    inputs.isVisio && !inputs.visioLink ? FIELD_REQUIRED_ERROR : "";
+  const newVideoCallLinkError =
+    inputs.isVideoCall && !inputs.videoCallLink ? FIELD_REQUIRED_ERROR : "";
 
   const newValidityPeriodError =
     inputs.validityPeriod.start && inputs.validityPeriod.end
@@ -61,17 +61,17 @@ export const useBlurGridInputs = (
     updateErrorInputs("name", newNameError);
   };
 
-  const handleVisioLinkBlur = () => {
-    updateErrorInputs("visioLink", newVisioLinkError);
+  const handleVideoCallLinkBlur = () => {
+    updateErrorInputs("videoCallLink", newVideoCallLinkError);
   };
 
   return {
     newNameError,
-    newVisioLinkError,
+    newVideoCallLinkError,
     newValidityPeriodError,
     newWeekSlotsError,
     newSlotsError,
     handleNameBlur,
-    handleVisioLinkBlur,
+    handleVideoCallLinkBlur,
   };
 };

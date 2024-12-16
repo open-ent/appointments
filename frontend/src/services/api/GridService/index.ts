@@ -39,9 +39,11 @@ export const gridApi = emptySplitApi.injectEndpoints({
     }),
     getAvailableUserMinimalGrids: builder.query<NameWithId[], string>({
       query: (userId) => `/users/${userId}/grids/minimal`,
+      providesTags: ["Availability"],
     }),
     getMinimalGridInfosById: builder.query<GridInfos, number>({
       query: (gridId) => `/grids/${gridId}/minimal/infos`,
+      providesTags: ["Availability"],
     }),
     getTimeSlotsByGridIdAndDate: builder.query<TimeSlots, GetTimeSlotsPayload>({
       query: ({ gridId, beginDate, endDate }) => ({
@@ -51,6 +53,7 @@ export const gridApi = emptySplitApi.injectEndpoints({
           endDate: endDate,
         },
       }),
+      providesTags: ["Availability"],
     }),
   }),
 });

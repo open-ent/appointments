@@ -17,13 +17,10 @@ import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.http.filter.ResourceFilter;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
-import org.joda.time.DateTime;
-
-import java.time.DateTimeException;
 import java.util.Optional;
 
-import static fr.openent.appointments.core.constants.Constants.CAMEL_TIME_SLOT_ID;
-import static fr.openent.appointments.core.constants.Constants.CAMEL_USER_INFO;
+import static fr.openent.appointments.core.constants.Constants.*;
+import static fr.openent.appointments.core.constants.Fields.ERROR;
 
 public class AppointmentController extends ControllerHelper {
     private final AppointmentService appointmentService;
@@ -52,18 +49,41 @@ public class AppointmentController extends ControllerHelper {
             return;
         }
 
+        boolean isVideoCall = Optional.ofNullable(request.getParam(CAMEL_IS_VIDEO_CALL))
+                .map(Boolean::parseBoolean)
+                .orElse(false);
+
         final JsonObject composeInfo = new JsonObject();
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> {
                 composeInfo.put(CAMEL_USER_INFO, user);
-                return appointmentService.create(timeSlotId, user.getUserId(), user.getGroupsIds());
+                return appointmentService.checkIfUserCanAccessTimeSlot(timeSlotId, user.getUserId(), user.getGroupsIds());
+            })
+            .compose(canAccess -> {
+                if (!canAccess) {
+                    String errorMessage = "User cannot access this time slot";
+                    LogHelper.logError(this, "createAppointment", errorMessage);
+                    forbidden(request, errorMessage);
+                    return Future.failedFuture(errorMessage);
+                }
+                return appointmentService.checkIfTimeSlotIsAvailable(timeSlotId);
+            })
+            .compose(isAvailable -> {
+                if (!isAvailable) {
+                    String errorMessage = "Time slot is not available";
+                    LogHelper.logError(this, "createAppointment", errorMessage);
+                    conflict(request, errorMessage);
+                    return Future.failedFuture(errorMessage);
+                }
+                UserInfos user = (UserInfos) composeInfo.getValue(CAMEL_USER_INFO);
+                return appointmentService.create(timeSlotId, user.getUserId(), isVideoCall);
             })
             .recover(err -> {
                 String errorMessage = "Failed to create appointment";
                 LogHelper.logError(this, "createAppointment", errorMessage, err.getMessage());
-                conflict(request);
-                return Future.failedFuture(err);
+                renderError(request);
+                return Future.failedFuture(errorMessage);
             })
             .compose(appointment -> {
                 renderJson(request, appointment.toJson());
@@ -82,7 +102,7 @@ public class AppointmentController extends ControllerHelper {
             .onFailure(err -> {
                 String errorMessage = "Failed to create appointment";
                 LogHelper.logError(this, "createAppointment", errorMessage, err.getMessage());
-                renderError(request, new JsonObject().put("error", errorMessage));
+                if(!request.isEnded()) renderError(request, new JsonObject().put(ERROR, errorMessage));
             });
     }
 }

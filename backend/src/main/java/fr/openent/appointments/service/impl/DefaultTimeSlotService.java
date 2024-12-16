@@ -118,6 +118,30 @@ public class DefaultTimeSlotService implements TimeSlotService {
     }
 
     @Override
+    public Future<Boolean> checkIfTimeSlotIsVideoCall(Long timeSlotId) {
+        Promise<Boolean> promise = Promise.promise();
+
+        timeSlotRepository.get(timeSlotId)
+            .compose(timeSlot -> {
+                if(!timeSlot.isPresent()) {
+                    String errorMessage = "TimeSlot with id " + timeSlotId + " not found";
+                    return Future.failedFuture(errorMessage);
+                }
+                return gridRepository.get(timeSlot.get().getGridId());
+            })
+            .onSuccess(grid -> {
+                promise.complete(grid.isPresent() && !grid.get().getVideoCallLink().isEmpty());
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to check if timeSlot with id " + timeSlotId + " is video call";
+                LogHelper.logError(this, "checkIfTimeSlotIsVideoCall", errorMessage, err.getMessage());
+                promise.complete(false);
+            });
+
+        return promise.future();
+    }
+
+    @Override
     public Future<TimeSlotsAvailableResponse> getAvailableTimeSlotsByDates(UserInfos user, Long gridId, LocalDate beginDate, LocalDate endDate) {
         Promise<TimeSlotsAvailableResponse> promise = Promise.promise();
 

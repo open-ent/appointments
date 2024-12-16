@@ -39,7 +39,7 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
     publicOptions,
     blurGridModalInputs: {
       newNameError,
-      newVisioLinkError,
+      newVideoCallLinkError,
       newValidityPeriodError,
       newWeekSlotsError,
       newSlotsError,
@@ -68,7 +68,7 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
   const handleNext = () => {
     const newErrors = {
       name: newNameError,
-      visioLink: newVisioLinkError,
+      videoCallLink: newVideoCallLinkError,
       validityPeriod: "",
       weekSlots: "",
       slots: {
@@ -77,14 +77,14 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
       },
     };
     setErrorInputs(newErrors);
-    if (newErrors.name || newErrors.visioLink) return;
+    if (newErrors.name || newErrors.videoCallLink) return;
     setPage(PAGE_TYPE.SECOND);
   };
 
   const handleSubmit = async () => {
     const newErrors = {
       name: newNameError,
-      visioLink: newVisioLinkError,
+      videoCallLink: newVideoCallLinkError,
       validityPeriod: newValidityPeriodError,
       weekSlots: newWeekSlotsError,
       slots: newSlotsError,
@@ -92,7 +92,7 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
     setErrorInputs(newErrors);
     if (
       newErrors.name ||
-      newErrors.visioLink ||
+      newErrors.videoCallLink ||
       newErrors.validityPeriod ||
       newErrors.weekSlots ||
       newErrors.slots.ids.length

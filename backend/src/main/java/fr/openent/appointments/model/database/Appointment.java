@@ -13,14 +13,16 @@ public class Appointment implements IModel<Appointment> {
     private Long timeSlotId;
     private String requesterId;
     private AppointmentState state;
+    private Boolean isVideoCall;
 
     // Constructor
 
     public Appointment(JsonObject appointment) {
         this.id = appointment.getLong(ID, null);
         this.timeSlotId = appointment.getLong(TIME_SLOT_ID, null);
-        this.requesterId = appointment.getString(GRID_ID, null);
+        this.requesterId = appointment.getString(REQUESTER_ID, null);
         this.state = AppointmentState.getAppointmentState(appointment.getString(STATE, null));
+        this.isVideoCall = appointment.getBoolean(IS_VIDEO_CALL, false);
     }
 
     // Getter
@@ -39,6 +41,10 @@ public class Appointment implements IModel<Appointment> {
 
     public AppointmentState getState() {
         return state;
+    }
+
+    public Boolean getIsVideoCall() {
+        return isVideoCall;
     }
 
     // Setter
@@ -60,6 +66,11 @@ public class Appointment implements IModel<Appointment> {
 
     public Appointment setState(AppointmentState state) {
         this.state = state;
+        return this;
+    }
+
+    public Appointment setIsVideoCall(Boolean isVideoCall) {
+        this.isVideoCall = isVideoCall;
         return this;
     }
 

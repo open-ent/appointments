@@ -68,6 +68,12 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
     setHasMoreUsers(true);
   };
 
+  const refreshSearch = () => {
+    setPage(1);
+    setUsers([]);
+    setHasMoreUsers(true);
+  };
+
   const value = useMemo<FindAppointmentsProviderContextProps>(
     () => ({
       users,
@@ -75,6 +81,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       search,
       loadMoreUsers,
       handleSearch,
+      refreshSearch,
     }),
     [users, hasMoreUsers],
   );

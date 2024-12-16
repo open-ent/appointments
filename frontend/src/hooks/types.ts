@@ -24,8 +24,8 @@ export interface useUpdateGridInputsReturnType {
   handleStructureChange: (event: SelectChangeEvent<unknown>) => void;
   handleLocationChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handlePublicChange: (_: SyntheticEvent, value: Public[]) => void;
-  handleIsVisioChange: () => void;
-  handleVisioLinkChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleIsVideoCallChange: () => void;
+  handleVideoCallLinkChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handlePublicCommentChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleStartDateChange: (date: Dayjs | null) => void;
   handleEndDateChange: (date: Dayjs | null) => void;
@@ -57,12 +57,12 @@ export type useUpdateGridInputsType = (
 
 export interface useBlurGridInputsReturnType {
   newNameError: string;
-  newVisioLinkError: string;
+  newVideoCallLinkError: string;
   newValidityPeriodError: string;
   newWeekSlotsError: string;
   newSlotsError: { ids: number[]; error: string };
   handleNameBlur: () => void;
-  handleVisioLinkBlur: () => void;
+  handleVideoCallLinkBlur: () => void;
 }
 
 export type useBlurGridInputsType = (

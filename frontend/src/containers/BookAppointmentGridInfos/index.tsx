@@ -27,21 +27,21 @@ import {
   topUserInfoStyle,
   wrapperUserInfoStyle,
 } from "./style";
-import { TakeAppointmentGridInfosProps } from "./types";
+import { BookAppointmentGridInfosProps } from "./types";
 import { NoAvatar } from "~/components/SVG/NoAvatar";
-import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { GREY } from "~/styles/color.constants";
 
-// this container is the first part of TakeAppointmentModal
-export const TakeAppointmentGridInfos: FC<TakeAppointmentGridInfosProps> = ({
+// this container is the first part of BookAppointmentModal
+export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   userInfos,
 }) => {
   const { picture, displayName, functions, isAvailable } = userInfos;
   const { t } = useTranslation("appointments");
   const { grids, gridInfos, selectedGrid, handleGridChange } =
-    useTakeAppointmentModal();
+    useBookAppointmentModal();
 
-  const { duration, visioLink, place, publicComment } = gridInfos || {};
+  const { duration, videoCallLink, place, publicComment } = gridInfos || {};
 
   return (
     <Box sx={wrapperUserInfoStyle}>
@@ -65,7 +65,7 @@ export const TakeAppointmentGridInfos: FC<TakeAppointmentGridInfosProps> = ({
         <Box sx={bottomUserInfoStyle}>
           <FormControl variant="standard">
             <InputLabel>
-              {t("appointments.take.appointment.modal.time.grid")}
+              {t("appointments.book.appointment.modal.time.grid")}
             </InputLabel>
             <Select
               variant="standard"
@@ -80,11 +80,11 @@ export const TakeAppointmentGridInfos: FC<TakeAppointmentGridInfosProps> = ({
             </Select>
           </FormControl>
           <Box sx={itemStyle}>
-            {visioLink ? <VideoCameraFrontIcon /> : <VideocamOffIcon />}
+            {videoCallLink ? <VideoCameraFrontIcon /> : <VideocamOffIcon />}
             <Typography>
               {t(
-                `appointments.take.appointment.modal.visio.${
-                  visioLink ? "possible" : "impossible"
+                `appointments.book.appointment.modal.video.call.${
+                  videoCallLink ? "possible" : "impossible"
                 }`,
               )}
             </Typography>

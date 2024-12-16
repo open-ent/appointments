@@ -43,7 +43,7 @@ CREATE TABLE appointments.grid (
     duration interval NOT NULL,
     periodicity integer NOT NULL,
     target_public_list_id varchar(2000) NOT NULL,
-    visio_link varchar(255) NOT NULL,
+    video_call_link varchar(255) NOT NULL,
     place varchar(255) NOT NULL,
     document_id varchar(255) NOT NULL,
     public_comment varchar(255) NOT NULL,
@@ -80,6 +80,7 @@ CREATE TABLE appointments.appointment (
     requester_id varchar(255) NOT NULL,
     time_slot_id bigint NOT NULL,
     state appointments.A_STATE NOT NULL,
+    is_video_call boolean NOT NULL,
     CONSTRAINT fk_time_slot_id FOREIGN KEY (time_slot_id) REFERENCES appointments.time_slot (id) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 

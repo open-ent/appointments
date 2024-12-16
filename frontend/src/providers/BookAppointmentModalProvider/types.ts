@@ -2,12 +2,12 @@ import { Dispatch, ReactNode, SetStateAction } from "react";
 
 import { Dayjs } from "dayjs";
 
-import { DAY } from "~/core/enums";
+import { ALERT, DAY } from "~/core/enums";
 import { Slot } from "~/core/types";
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
 import { GridInfos } from "~/services/api/GridService/types";
 
-export interface TakeAppointmentModalProviderContextProps {
+export interface BookAppointmentModalProviderContextProps {
   selectedUser: UserCardInfos | null;
   isModalOpen: boolean;
   grids: GridNameWithId[] | undefined;
@@ -20,6 +20,8 @@ export interface TakeAppointmentModalProviderContextProps {
   hasNoSlots: boolean;
   nextAvailableTimeSlot: Dayjs | null;
   isGridTimeSlotsFetching: boolean;
+  isVideoCallOptionChecked: boolean;
+  alert: Alert;
   handleGridChange: (gridName: string) => void;
   handleOnClickSlot: (slotId: number) => void;
   handleNextWeek: () => void;
@@ -27,9 +29,12 @@ export interface TakeAppointmentModalProviderContextProps {
   handleNextTimeSlot: () => void;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   handleOnClickCard: (user: UserCardInfos | null) => void;
+  handleSubmitAppointment: () => void;
+  handleVideoCallCheckboxChange: () => void;
+  handleCloseAlert: () => void;
 }
 
-export interface TakeAppointmentModalProviderProps {
+export interface BookAppointmentModalProviderProps {
   children: ReactNode;
 }
 
@@ -42,4 +47,9 @@ export interface DaySlots {
 export interface GridNameWithId {
   id: number;
   name: string;
+}
+
+export interface Alert {
+  isOpen: boolean;
+  alert: ALERT;
 }

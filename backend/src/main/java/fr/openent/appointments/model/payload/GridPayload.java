@@ -31,7 +31,7 @@ public class GridPayload implements IModel<GridPayload> {
     private List<String> targetPublicIds;
     private List<DailySlotPayload> dailySlots;
     private List<TimeSlotPayload> timeSlots;
-    private String visioLink;
+    private String videoCallLink;
     private String place;
     private String documentId;
     private String publicComment;
@@ -50,7 +50,7 @@ public class GridPayload implements IModel<GridPayload> {
             .map(Object::toString)
             .collect(Collectors.toList());
         this.dailySlots = IModelHelper.toList(grid.getJsonArray(CAMEL_DAILY_SLOTS, new JsonArray()), DailySlotPayload.class);
-        this.visioLink = grid.getString(CAMEL_VISIO_LINK, null);
+        this.videoCallLink = grid.getString(CAMEL_VIDEO_CALL_LINK, null);
         this.place = grid.getString(PLACE, null);
         this.documentId = grid.getString(CAMEL_DOCUMENT_ID, null);
         this.publicComment = grid.getString(CAMEL_PUBLIC_COMMENT, null);
@@ -98,8 +98,8 @@ public class GridPayload implements IModel<GridPayload> {
         return timeSlots;
     }
 
-    public String getVisioLink() {
-        return visioLink;
+    public String getVideoCallLink() {
+        return videoCallLink;
     }
 
     public String getPlace() {
@@ -166,8 +166,8 @@ public class GridPayload implements IModel<GridPayload> {
         return this;
     }
 
-    public GridPayload setVisioLink(String visioLink) {
-        this.visioLink = visioLink;
+    public GridPayload setVideoCallLink(String videoCallLink) {
+        this.videoCallLink = videoCallLink;
         return this;
     }
 
@@ -256,7 +256,7 @@ public class GridPayload implements IModel<GridPayload> {
             .put(CAMEL_TARGET_PUBLIC_LIST_ID, new JsonArray(this.targetPublicIds))
             .put(CAMEL_DAILY_SLOTS, new JsonArray(this.dailySlots.stream().map(DailySlotPayload::toString).collect(Collectors.toList())))
             .put(CAMEL_TIME_SLOTS, new JsonArray(this.timeSlots.stream().map(TimeSlotPayload::toString).collect(Collectors.toList())))
-            .put(CAMEL_VISIO_LINK, this.visioLink)
+            .put(CAMEL_VIDEO_CALL_LINK, this.videoCallLink)
             .put(PLACE, this.place)
             .put(CAMEL_DOCUMENT_ID, this.documentId)
             .put(CAMEL_PUBLIC_COMMENT, this.publicComment)

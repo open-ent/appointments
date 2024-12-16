@@ -63,10 +63,10 @@ export const ColumnHeader = styled(Box)<ColumnHeaderProps>(
 );
 
 export const ColumnSlotsWrapper = styled(Box)<ColumnSlotsWrapperProps>(
-  ({ isEmpty, isVisioOptionVisible }) => ({
+  ({ isEmpty, isVideoCallOptionVisible }) => ({
     opacity: isEmpty ? "0.5" : "1",
     minWidth: "7.5rem",
-    height: isVisioOptionVisible
+    height: isVideoCallOptionVisible
       ? "calc(100vh - 45rem)"
       : "calc(100vh - 40.1rem)",
     minHeight: "18rem",
@@ -97,7 +97,7 @@ export const dayStyle: SxProps = {
   fontSize: "1.3rem",
 };
 
-export const visioOptionStyle: SxProps = {
+export const videoCallOptionStyle: SxProps = {
   color: BLACK,
   fontSize: "1.4rem",
 };
@@ -111,12 +111,12 @@ export const containerStyle: SxProps = {
 };
 
 export const GoToNextTimeSlot = styled(Box)<NoSlotsProps>(
-  ({ isVisioOptionVisible }) => ({
+  ({ isVideoCallOptionVisible }) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     minHeight: "14rem",
-    height: isVisioOptionVisible
+    height: isVideoCallOptionVisible
       ? "calc(100vh - 49.4rem)"
       : "calc(100vh - 44.5rem)",
     width: "100%",
@@ -129,12 +129,12 @@ export const nextTimeSlotButtonStyle = {
 };
 
 export const NoSlots = styled(Box)<NoSlotsProps>(
-  ({ isVisioOptionVisible }) => ({
+  ({ isVideoCallOptionVisible }) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     minHeight: "18rem",
-    height: isVisioOptionVisible
+    height: isVideoCallOptionVisible
       ? "calc(100vh - 45rem)"
       : "calc(100vh - 40.1rem)",
     width: "100%",

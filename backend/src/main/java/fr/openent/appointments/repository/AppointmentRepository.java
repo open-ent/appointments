@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AppointmentRepository {
-    Future<Optional<Appointment>> create(Long timeSlotId, String userId);
+    Future<Optional<Appointment>> create(Long timeSlotId, String userId, Boolean isVideoCall);
 
     Future<List<Appointment>> getAvailableAppointments(Long timeSlotId);
 }

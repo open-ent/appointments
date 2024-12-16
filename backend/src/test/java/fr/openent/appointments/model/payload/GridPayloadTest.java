@@ -36,7 +36,7 @@ public class GridPayloadTest {
                 .put(DAY, "MONDAY")
                 .put(CAMEL_BEGIN_TIME, "09:00")
                 .put(CAMEL_END_TIME, "17:00"))))
-            .put(CAMEL_VISIO_LINK, "http://example.com")
+            .put(CAMEL_VIDEO_CALL_LINK, "http://example.com")
             .put(PLACE, "Office")
             .put(CAMEL_DOCUMENT_ID, "doc-123")
             .put(CAMEL_PUBLIC_COMMENT, "Test comment");
@@ -52,7 +52,7 @@ public class GridPayloadTest {
         ctx.assertEquals(Periodicity.WEEKLY, gridPayload.getPeriodicity());
         ctx.assertEquals(Arrays.asList("public-1", "public-2"), gridPayload.getTargetPublicIds());
         ctx.assertFalse(gridPayload.getDailySlots().isEmpty());
-        ctx.assertEquals("http://example.com", gridPayload.getVisioLink());
+        ctx.assertEquals("http://example.com", gridPayload.getVideoCallLink());
         ctx.assertEquals("Office", gridPayload.getPlace());
         ctx.assertEquals("doc-123", gridPayload.getDocumentId());
         ctx.assertEquals("Test comment", gridPayload.getPublicComment());
@@ -76,7 +76,7 @@ public class GridPayloadTest {
                     .put(CAMEL_BEGIN_TIME, "09:00")
                     .put(CAMEL_END_TIME, "17:00")
             )))
-            .put(CAMEL_VISIO_LINK, "http://example.com")
+            .put(CAMEL_VIDEO_CALL_LINK, "http://example.com")
             .put(PLACE, "Office")
             .put(CAMEL_DOCUMENT_ID, "doc-123")
             .put(CAMEL_PUBLIC_COMMENT, "Test comment");
@@ -123,7 +123,7 @@ public class GridPayloadTest {
                     .put(CAMEL_BEGIN_TIME, "09:00")
                     .put(CAMEL_END_TIME, "17:00")
             )))
-            .put(CAMEL_VISIO_LINK, "http://example.com")
+            .put(CAMEL_VIDEO_CALL_LINK, "http://example.com")
             .put(PLACE, "Office")
             .put(CAMEL_DOCUMENT_ID, "doc-123")
             .put(CAMEL_PUBLIC_COMMENT, "Test comment");

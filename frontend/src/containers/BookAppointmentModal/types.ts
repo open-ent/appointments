@@ -1,6 +1,6 @@
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
 
-export interface TakeAppointmentModalProps {
+export interface BookAppointmentModalProps {
   userInfos: UserCardInfos;
 }
 

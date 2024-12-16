@@ -11,11 +11,11 @@ import {
 } from "./style";
 import { DaySlotsProps } from "./types";
 import { sortSlots } from "./utils";
-import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 
 export const DaySlots: FC<DaySlotsProps> = ({ slots, isMobile }) => {
   const { handleOnClickSlot, selectedSlotId, isGridTimeSlotsFetching } =
-    useTakeAppointmentModal();
+    useBookAppointmentModal();
 
   const sortedSlots = slots ? sortSlots(slots) : [];
 

@@ -38,8 +38,8 @@ export interface GridModalInputs {
   structure: Structure;
   location: string;
   public: Public[];
-  isVisio: boolean;
-  visioLink: string;
+  isVideoCall: boolean;
+  videoCallLink: string;
   publicComment: string;
   validityPeriod: {
     start: Dayjs | undefined;
@@ -52,7 +52,7 @@ export interface GridModalInputs {
 
 export interface InputsErrors {
   name: string;
-  visioLink: string;
+  videoCallLink: string;
   validityPeriod: string;
   weekSlots: string;
   slots: {

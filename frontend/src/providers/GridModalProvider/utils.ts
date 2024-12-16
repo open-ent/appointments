@@ -25,8 +25,8 @@ export const initialGridModalInputs = (
   structure: structures.length ? structures[0] : { id: "", name: "" },
   location: "",
   public: initialPublic,
-  isVisio: false,
-  visioLink: "",
+  isVideoCall: false,
+  videoCallLink: "",
   publicComment: "",
   validityPeriod: {
     start: undefined,
@@ -39,7 +39,7 @@ export const initialGridModalInputs = (
 
 export const initialErrorInputs: InputsErrors = {
   name: "",
-  visioLink: "",
+  videoCallLink: "",
   validityPeriod: "",
   weekSlots: "",
   slots: {
@@ -84,7 +84,7 @@ export const gridInputsToGridPayload = (
       },
       [] as { day: DAY; beginTime: string; endTime: string }[],
     ),
-    visioLink: inputs.isVisio ? inputs.visioLink : "",
+    videoCallLink: inputs.isVideoCall ? inputs.videoCallLink : "",
     place: inputs.location,
     documentId: "",
     publicComment: inputs.publicComment,

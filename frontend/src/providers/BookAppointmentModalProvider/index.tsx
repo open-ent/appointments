@@ -10,16 +10,20 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 
 import {
+  Alert,
+  BookAppointmentModalProviderContextProps,
+  BookAppointmentModalProviderProps,
   DaySlots,
   GridNameWithId,
-  TakeAppointmentModalProviderContextProps,
-  TakeAppointmentModalProviderProps,
 } from "./types";
 import {
   loadingDaySlots,
   transformStringToDayjs,
   transformTimeSlotsToDaySlots,
 } from "./utils";
+import { useFindAppointments } from "../FindAppointmentsProvider";
+import { ALERT } from "~/core/enums";
+import { useBookAppointmentMutation } from "~/services/api/AppointmentService";
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
 import {
   useGetAvailableUserMinimalGridsQuery,
@@ -27,21 +31,21 @@ import {
   useGetTimeSlotsByGridIdAndDateQuery,
 } from "~/services/api/GridService";
 
-const TakeAppointmentModalProviderContext =
-  createContext<TakeAppointmentModalProviderContextProps | null>(null);
+const BookAppointmentModalProviderContext =
+  createContext<BookAppointmentModalProviderContextProps | null>(null);
 
-export const useTakeAppointmentModal = () => {
-  const context = useContext(TakeAppointmentModalProviderContext);
+export const useBookAppointmentModal = () => {
+  const context = useContext(BookAppointmentModalProviderContext);
   if (!context) {
     throw new Error(
-      "useTakeAppointmentModal must be used within a TakeAppointmentModalProvider",
+      "useBookAppointmentModal must be used within a BookAppointmentModalProvider",
     );
   }
   return context;
 };
 
-export const TakeAppointmentModalProvider: FC<
-  TakeAppointmentModalProviderProps
+export const BookAppointmentModalProvider: FC<
+  BookAppointmentModalProviderProps
 > = ({ children }) => {
   const [selectedUser, setSelectedUser] = useState<UserCardInfos | null>(null);
   const [selectedGrid, setSelectedGrid] = useState<GridNameWithId | null>(null);
@@ -56,6 +60,13 @@ export const TakeAppointmentModalProvider: FC<
   const [canGoNext, setCanGoNext] = useState(true);
   const [canGoPrev, setCanGoPrev] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVideoCallOptionChecked, setIsVideoCallOptionChecked] =
+    useState(false);
+
+  const [alert, setAlert] = useState<Alert>({
+    isOpen: false,
+    alert: ALERT.BOOK_APPOINTMENT_SUCCESS,
+  });
 
   const { data: grids } = useGetAvailableUserMinimalGridsQuery(
     selectedUser?.userId ?? "",
@@ -74,6 +85,9 @@ export const TakeAppointmentModalProvider: FC<
       },
       { skip: !selectedGrid },
     );
+
+  const [bookAppointment] = useBookAppointmentMutation();
+  const { refreshSearch } = useFindAppointments();
 
   const handleOnClickCard = (user: UserCardInfos | null) => {
     setSelectedUser(user);
@@ -107,6 +121,46 @@ export const TakeAppointmentModalProvider: FC<
     setSelectedGrid(newGrid);
     setSelectedSlotId(null);
     setCurrentDay(dayjs().locale("fr"));
+  };
+
+  const handleVideoCallCheckboxChange = () => {
+    setIsVideoCallOptionChecked((prev) => !prev);
+  };
+
+  const handleSubmitAppointment = async () => {
+    if (!selectedSlotId) return;
+    try {
+      const bookAppointmentPayload = gridInfos?.videoCallLink.length
+        ? { timeSlotId: selectedSlotId, isVideoCall: isVideoCallOptionChecked }
+        : { timeSlotId: selectedSlotId };
+
+      await bookAppointment(bookAppointmentPayload).unwrap();
+      setAlert({
+        isOpen: true,
+        alert: ALERT.BOOK_APPOINTMENT_SUCCESS,
+      });
+    } catch (error: any) {
+      if (error && error.status) {
+        if (error.status === 409) {
+          setAlert({
+            isOpen: true,
+            alert: ALERT.BOOK_APPOINTMENT_UNAVAILABLE_ERROR,
+          });
+        }
+        if (error.status === 500) {
+          setAlert({
+            isOpen: true,
+            alert: ALERT.BOOK_APPOINTMENT_INTERNAL_ERROR,
+          });
+        }
+      }
+    }
+    setIsModalOpen(false);
+    refreshSearch();
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, isOpen: false });
   };
 
   useEffect(() => {
@@ -147,7 +201,7 @@ export const TakeAppointmentModalProvider: FC<
     }
   }, [currentDay]);
 
-  const value = useMemo<TakeAppointmentModalProviderContextProps>(
+  const value = useMemo<BookAppointmentModalProviderContextProps>(
     () => ({
       selectedUser,
       isModalOpen,
@@ -161,6 +215,8 @@ export const TakeAppointmentModalProvider: FC<
       hasNoSlots,
       nextAvailableTimeSlot,
       isGridTimeSlotsFetching,
+      isVideoCallOptionChecked,
+      alert,
       handleGridChange,
       handleOnClickSlot,
       handleNextWeek,
@@ -168,6 +224,9 @@ export const TakeAppointmentModalProvider: FC<
       handleNextTimeSlot,
       setIsModalOpen,
       handleOnClickCard,
+      handleSubmitAppointment,
+      handleVideoCallCheckboxChange,
+      handleCloseAlert,
     }),
     [
       isModalOpen,
@@ -183,11 +242,13 @@ export const TakeAppointmentModalProvider: FC<
       hasNoSlots,
       nextAvailableTimeSlot,
       isGridTimeSlotsFetching,
+      isVideoCallOptionChecked,
+      alert,
     ],
   );
   return (
-    <TakeAppointmentModalProviderContext.Provider value={value}>
+    <BookAppointmentModalProviderContext.Provider value={value}>
       {children}
-    </TakeAppointmentModalProviderContext.Provider>
+    </BookAppointmentModalProviderContext.Provider>
   );
 };

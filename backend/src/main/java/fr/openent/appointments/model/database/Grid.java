@@ -29,7 +29,7 @@ public class Grid implements IModel<Grid> {
     private Duration duration;
     private Periodicity periodicity;
     private List<String> targetPublicListId;
-    private String visioLink;
+    private String videoCallLink;
     private String place;
     private String documentId;
     private String publicComment;
@@ -49,7 +49,7 @@ public class Grid implements IModel<Grid> {
         this.color = grid.getString(COLOR, null);
         this.duration = DateHelper.parseDuration(grid.getString(DURATION,null));
         this.periodicity = Periodicity.getPeriodicity(grid.getInteger(PERIODICITY,0));
-        this.visioLink = grid.getString(VISIO_LINK, null);
+        this.videoCallLink = grid.getString(VIDEO_CALL_LINK, null);
         this.place = grid.getString(PLACE, null);
         this.documentId = grid.getString(DOCUMENT_ID, null);
         this.publicComment = grid.getString(PUBLIC_COMMENT, null);
@@ -110,8 +110,8 @@ public class Grid implements IModel<Grid> {
         return targetPublicListId;
     }
 
-    public String getVisioLink() {
-        return visioLink;
+    public String getVideoCallLink() {
+        return videoCallLink;
     }
 
     public String getPlace() {
@@ -192,8 +192,8 @@ public class Grid implements IModel<Grid> {
         return this;
     }
 
-    public Grid setVisioLink(String visioLink) {
-        this.visioLink = visioLink;
+    public Grid setVideoCallLink(String videoCallLink) {
+        this.videoCallLink = videoCallLink;
         return this;
     }
 

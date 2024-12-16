@@ -88,13 +88,13 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
     updateInputField("public", value);
   };
 
-  const handleIsVisioChange = () => {
-    updateInputField("isVisio", !inputs.isVisio);
+  const handleIsVideoCallChange = () => {
+    updateInputField("isVideoCall", !inputs.isVideoCall);
   };
 
-  const handleVisioLinkChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateInputField("visioLink", formatString(e.target.value));
-    updateErrorInputs("visioLink", "");
+  const handleVideoCallLinkChange = (e: ChangeEvent<HTMLInputElement>) => {
+    updateInputField("videoCallLink", formatString(e.target.value));
+    updateErrorInputs("videoCallLink", "");
   };
 
   const handlePublicCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -216,8 +216,8 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
     handleStructureChange,
     handleLocationChange,
     handlePublicChange,
-    handleIsVisioChange,
-    handleVisioLinkChange,
+    handleIsVideoCallChange,
+    handleVideoCallLinkChange,
     handlePublicCommentChange,
     handleStartDateChange,
     handleEndDateChange,

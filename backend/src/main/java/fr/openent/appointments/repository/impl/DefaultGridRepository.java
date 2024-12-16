@@ -1,5 +1,6 @@
 package fr.openent.appointments.repository.impl;
 
+import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.*;
 import fr.openent.appointments.model.database.Grid;
 import fr.openent.appointments.model.payload.GridPayload;
@@ -15,13 +16,18 @@ import io.vertx.core.json.JsonObject;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.sql.SqlResult;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static fr.openent.appointments.enums.AppointmentState.ACCEPTED;
+import static fr.openent.appointments.core.constants.Constants.FRENCH_NOW;
+import static fr.openent.appointments.core.constants.Constants.FRENCH_TIME_ZONE;
+import static fr.openent.appointments.core.constants.DateFormat.DATE_TIME_FORMAT_2;
 import static fr.openent.appointments.enums.GridState.CLOSED;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.SqlTables.*;
@@ -134,16 +140,20 @@ public class DefaultGridRepository implements GridRepository {
             return promise.future();
         }
 
+        List<String> availableAppointmentStates = AppointmentState.getAvailableStates();
+
         String query = "SELECT DISTINCT g.* FROM " + DB_GRID_TABLE + " g " +
                 "JOIN " + DB_TIME_SLOT_TABLE + " ts ON ts.grid_id = g.id " +
                 "LEFT JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
                 "WHERE g.id IN " + Sql.listPrepared(gridsIds) +
-                "AND ts.begin_date > NOW() " +
-                "AND (a.id IS NULL OR a.state != ?);";
+                "AND ts.begin_date > " + FRENCH_NOW + " " +
+                "AND (a.id IS NULL OR a.state NOT IN " +
+                Sql.listPrepared(availableAppointmentStates) +
+                ");";
 
         JsonArray params = new JsonArray()
                 .addAll(new JsonArray(gridsIds))
-                .add(ACCEPTED);
+                .addAll(new JsonArray(availableAppointmentStates));
 
         String errorMessage = String.format("[Appointments@DefaultGridRepository::getGridsWithAvailableTimeSlots] Failed to get grids with available timeslots from grid ids %s : ", gridsIds);
         sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
@@ -218,8 +228,8 @@ public class DefaultGridRepository implements GridRepository {
     public Future<JsonObject> closeAllPassedGrids() {
         Promise<JsonObject> promise = Promise.promise();
         
-        String query = "UPDATE " + DB_GRID_TABLE + " SET " + STATE + " = ? WHERE " + END_DATE + " < ?;";
-        JsonArray params = new JsonArray().add(CLOSED).add("NOW()");
+        String query = "UPDATE " + DB_GRID_TABLE + " SET " + STATE + " = ? WHERE " + END_DATE + " < " + FRENCH_NOW;
+        JsonArray params = new JsonArray().add(CLOSED);
 
         String errorMessage = "[Appointments@DefaultGridRepository::closeAllPassedGrids] Fail to close passed grids : ";
         sql.prepared(query, params, SqlResult.validUniqueResultHandler(FutureHelper.handlerEither(promise, errorMessage)));
@@ -232,8 +242,26 @@ public class DefaultGridRepository implements GridRepository {
     private Future<Optional<Grid>> insert(GridPayload grid, String userId) {
         Promise<Optional<Grid>> promise = Promise.promise();
 
-        List<String> sqlColumns = Arrays.asList(NAME, OWNER_ID, STRUCTURE_ID, BEGIN_DATE, END_DATE,  CREATION_DATE, UPDATING_DATE,
-                COLOR, DURATION, PERIODICITY, TARGET_PUBLIC_LIST_ID, VISIO_LINK, PLACE, DOCUMENT_ID, PUBLIC_COMMENT, STATE);
+        String frenchNow = ZonedDateTime.now(ZoneId.of(FRENCH_TIME_ZONE))
+                .format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_2));
+
+        List<String> sqlColumns = Arrays.asList(
+                NAME,
+                OWNER_ID,
+                STRUCTURE_ID,
+                BEGIN_DATE,
+                END_DATE,
+                CREATION_DATE,
+                UPDATING_DATE,
+                COLOR,
+                DURATION,
+                PERIODICITY,
+                TARGET_PUBLIC_LIST_ID,
+                VIDEO_CALL_LINK,
+                PLACE,
+                DOCUMENT_ID,
+                PUBLIC_COMMENT,
+                STATE);
 
         String query = "INSERT INTO "+ DB_GRID_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
                 "VALUES " + Sql.listPrepared(sqlColumns) + " RETURNING *";
@@ -244,13 +272,13 @@ public class DefaultGridRepository implements GridRepository {
                 .add(grid.getStructureId())
                 .add(DateHelper.formatDate(grid.getBeginDate()))
                 .add(DateHelper.formatDate(grid.getEndDate()))
-                .add("NOW()")
-                .add("NOW()")
+                .add(frenchNow)
+                .add(frenchNow)
                 .add(grid.getColor())
                 .add(DateHelper.formatDuration(grid.getDuration()))
                 .add(grid.getPeriodicity().getValue())
                 .add(grid.getTargetPublicIds().toString())
-                .add(grid.getVisioLink())
+                .add(grid.getVideoCallLink())
                 .add(grid.getPlace())
                 .add(grid.getDocumentId())
                 .add(grid.getPublicComment())

@@ -1,6 +1,8 @@
 package fr.openent.appointments.enums;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public enum AppointmentState {
     CREATED("CREATED"),
@@ -12,6 +14,10 @@ public enum AppointmentState {
 
     AppointmentState(String value) {
         this.value = value;
+    }
+
+    public static List<String> getAvailableStates() {
+        return Arrays.asList(CREATED.getValue(), ACCEPTED.getValue());
     }
 
     public String getValue() {

@@ -12,17 +12,17 @@ import {
   listCardStyle,
   searchInputStyle,
 } from "./style";
-import { TakeAppointmentModal } from "../TakeAppointmentModal";
+import { BookAppointmentModal } from "../BookAppointmentModal";
 import { FindAppointmentsEmptyState } from "~/components/SVG/FindAppointmentsEmptyState";
 import { UserCard } from "~/components/UserCard";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { NUMBER_MORE_USERS } from "~/providers/FindAppointmentsProvider/utils";
-import { useTakeAppointmentModal } from "~/providers/TakeAppointmentModalProvider";
 
 export const FindAppointments: FC = () => {
   const { users, hasMoreUsers, search, loadMoreUsers, handleSearch } =
     useFindAppointments();
-  const { selectedUser } = useTakeAppointmentModal();
+  const { selectedUser } = useBookAppointmentModal();
   const { t } = useTranslation("appointments");
   const observerRef = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
@@ -60,7 +60,7 @@ export const FindAppointments: FC = () => {
 
   return (
     <>
-      {selectedUser && <TakeAppointmentModal userInfos={selectedUser} />}
+      {selectedUser && <BookAppointmentModal userInfos={selectedUser} />}
       <Box sx={containerStyle}>
         <SearchInput
           sx={searchInputStyle}

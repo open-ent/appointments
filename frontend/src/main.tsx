@@ -16,10 +16,10 @@ import { RouterProvider } from "react-router-dom";
 import "~/i18n";
 
 import { AvailabilityProvider } from "./providers/AvailabilityProvider";
+import { BookAppointmentModalProvider } from "./providers/BookAppointmentModalProvider";
 import { FindAppointmentsProvider } from "./providers/FindAppointmentsProvider";
 import { GlobalProvider } from "./providers/GlobalProvider";
 import { GridModalProvider } from "./providers/GridModalProvider";
-import { TakeAppointmentModalProvider } from "./providers/TakeAppointmentModalProvider";
 import { router } from "./routes";
 import { setupStore } from "./store";
 import { options } from "./styles/theme";
@@ -63,13 +63,13 @@ root.render(
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
               <GlobalProvider>
                 <FindAppointmentsProvider>
-                  <TakeAppointmentModalProvider>
+                  <BookAppointmentModalProvider>
                     <AvailabilityProvider>
                       <GridModalProvider>
                         <RouterProvider router={router} />
                       </GridModalProvider>
                     </AvailabilityProvider>
-                  </TakeAppointmentModalProvider>
+                  </BookAppointmentModalProvider>
                 </FindAppointmentsProvider>
               </GlobalProvider>
             </LocalizationProvider>

@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static fr.openent.appointments.core.constants.Constants.*;
+import static fr.openent.appointments.core.constants.Fields.ERROR;
 
 public class TimeSlotController extends ControllerHelper {
     private final TimeSlotService timeslotService;
@@ -63,7 +64,7 @@ public class TimeSlotController extends ControllerHelper {
             .onFailure(err -> {
                 String errorMessage = String.format("Failed to get available timeslots of grid %s between %s and %s ", gridId, beginDate, endDate);
                 LogHelper.logError(this, "getTimeSlotsByDates", errorMessage, err.getMessage());
-                renderError(request, new JsonObject().put("error", errorMessage));
+                renderError(request, new JsonObject().put(ERROR, errorMessage));
             });
     }
 }

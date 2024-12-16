@@ -31,11 +31,11 @@ export const FirstPageGridModal: FC = () => {
       handleNameChange,
       handleStructureChange,
       handleLocationChange,
-      handleIsVisioChange,
-      handleVisioLinkChange,
+      handleIsVideoCallChange,
+      handleVideoCallLinkChange,
       handlePublicCommentChange,
     },
-    blurGridModalInputs: { handleNameBlur, handleVisioLinkBlur },
+    blurGridModalInputs: { handleNameBlur, handleVideoCallLinkBlur },
   } = useGridModal();
 
   return (
@@ -91,18 +91,21 @@ export const FirstPageGridModal: FC = () => {
       <CustomMultiAutocomplete />
       <Box sx={flexStartBoxStyle}>
         <Typography>{t("appointments.grid.videoconference")}</Typography>
-        <Switch checked={inputs.isVisio} onChange={handleIsVisioChange} />
+        <Switch
+          checked={inputs.isVideoCall}
+          onChange={handleIsVideoCallChange}
+        />
       </Box>
-      {inputs.isVisio && (
+      {inputs.isVideoCall && (
         <TextField
-          id="grid-visio-link"
+          id="grid-video-call-link"
           label={t("appointments.grid.videoconference.link") + " *"}
           variant="outlined"
-          value={inputs.visioLink}
-          onChange={handleVisioLinkChange}
-          onBlur={handleVisioLinkBlur}
-          error={!!errorInputs.visioLink.length}
-          helperText={t(errorInputs.visioLink)}
+          value={inputs.videoCallLink}
+          onChange={handleVideoCallLinkChange}
+          onBlur={handleVideoCallLinkBlur}
+          error={!!errorInputs.videoCallLink.length}
+          helperText={t(errorInputs.videoCallLink)}
         />
       )}
       <TextField
