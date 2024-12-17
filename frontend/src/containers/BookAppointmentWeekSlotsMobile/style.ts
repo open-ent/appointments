@@ -33,7 +33,7 @@ export const daySlotsHeaderStyle: SxProps = {
   flexDirection: "column",
   alignItems: "center",
   lineHeight: "0",
-  minWidth: "8rem",
+  minWidth: "5.5rem",
   marginTop: ".4rem",
 };
 

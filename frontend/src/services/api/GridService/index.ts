@@ -18,7 +18,7 @@ export const gridApi = emptySplitApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["MyGrids"],
+      invalidatesTags: ["MyGrids", "Availability"],
     }),
     getMyGrids: builder.query<MyGrids, GetMyGridsPayload>({
       query: (body) => {

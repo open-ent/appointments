@@ -68,6 +68,11 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
     setHasMoreUsers(true);
   };
 
+  const resetSearch = () => {
+    setSearch("");
+    refreshSearch();
+  };
+
   const refreshSearch = () => {
     setPage(1);
     setUsers([]);
@@ -82,6 +87,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       loadMoreUsers,
       handleSearch,
       refreshSearch,
+      resetSearch,
     }),
     [users, hasMoreUsers],
   );

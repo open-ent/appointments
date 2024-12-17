@@ -70,7 +70,7 @@ export const BookAppointmentWeekSlotsDesktop: FC = () => {
                 {t(DAY_VALUES[daySlot.weekDay].i18nKey)}
               </Typography>
               <Typography sx={dayStyle}>
-                {daySlot.day.locale("fr").format("D MMMM")}
+                {daySlot.day.locale("fr").format("D MMM")}
               </Typography>
             </ColumnHeader>
           ))}

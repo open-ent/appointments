@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { ReactNode } from "react";
 
 import { Dayjs } from "dayjs";
 
@@ -27,7 +27,7 @@ export interface BookAppointmentModalProviderContextProps {
   handleNextWeek: () => void;
   handlePreviousWeek: () => void;
   handleNextTimeSlot: () => void;
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  handleCloseModal: () => void;
   handleOnClickCard: (user: UserCardInfos | null) => void;
   handleSubmitAppointment: () => void;
   handleVideoCallCheckboxChange: () => void;

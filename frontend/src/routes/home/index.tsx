@@ -15,6 +15,7 @@ import { AppointmentsIcon } from "~/components/SVG/AppointmentsIcon";
 import { FindAppointments } from "~/containers/FindAppointments";
 import { MyAppointments } from "~/containers/MyAppointments";
 import { MyAvailability } from "~/containers/MyAvailability";
+import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { PURPLE } from "~/styles/color.constants";
 
@@ -32,14 +33,17 @@ export interface AppProps {
 
 export const Home: FC = () => {
   const { hasManageRight } = useGlobal();
+  const { resetSearch } = useFindAppointments();
 
+  const initialTabValue = parseInt(sessionStorage.getItem("tabValue") || "0");
   const [tabValue, setTabValue] = useState(
-    parseInt(sessionStorage.getItem("tabValue")!) | 0,
+    hasManageRight && initialTabValue === 2 ? 0 : initialTabValue,
   );
   const { t } = useTranslation("appointments");
 
   const handleChange = (_: SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+    tabValue === 0 && resetSearch();
     sessionStorage.setItem("tabValue", newValue.toString());
   };
 

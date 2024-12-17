@@ -37,11 +37,11 @@ export const BookAppointmentModal: FC<BookAppointmentModalProps> = ({
 }) => {
   const {
     isModalOpen,
-    setIsModalOpen,
     selectedSlotId,
     handleSubmitAppointment,
     alert,
     handleCloseAlert,
+    handleCloseModal,
   } = useBookAppointmentModal();
   const { t } = useTranslation("appointments");
   const isMobile = useMediaQuery(
@@ -64,23 +64,14 @@ export const BookAppointmentModal: FC<BookAppointmentModalProps> = ({
           {t(ALERT_VALUES[alert.alert].i18nKey)}
         </Alert>
       </Snackbar>
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        disableAutoFocus
-      >
+      <Modal open={isModalOpen} onClose={handleCloseModal} disableAutoFocus>
         <ModalContainer isMobile={isMobile}>
           <Box sx={contentBoxStyle}>
             <Box sx={spaceBetweenBoxStyle}>
               <Typography variant="h3">
                 {t("appointments.book.appointment.modal.title")}
               </Typography>
-              <IconButton
-                sx={closeIconStyle}
-                onClick={() => {
-                  setIsModalOpen(false);
-                }}
-              >
+              <IconButton sx={closeIconStyle} onClick={handleCloseModal}>
                 <CloseIcon />
               </IconButton>
             </Box>
