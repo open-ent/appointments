@@ -31,7 +31,6 @@ import { isToday } from "./utils";
 import { DaySlots } from "~/components/DaySlots";
 import { DAY_VALUES } from "~/core/constants";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
-import { flexStartBoxStyle } from "~/styles/boxStyles";
 
 export const BookAppointmentWeekSlotsDesktop: FC = () => {
   const { t } = useTranslation("appointments");
@@ -140,12 +139,12 @@ export const BookAppointmentWeekSlotsDesktop: FC = () => {
           </Box>
         )}
         {isVideoCallOptionVisible && (
-          <Box sx={flexStartBoxStyle}>
+          <Box sx={videoCallOptionStyle}>
             <Checkbox
               onChange={handleVideoCallCheckboxChange}
               checked={isVideoCallOptionChecked}
             />
-            <Typography sx={videoCallOptionStyle}>
+            <Typography>
               {t("appointments.book.appointment.modal.video.call.option")}
             </Typography>
           </Box>

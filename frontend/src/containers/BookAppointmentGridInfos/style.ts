@@ -52,6 +52,7 @@ export const skeletonStyle: SxProps = {
 
 export const itemStyle: SxProps = {
   ...flexStartBoxStyle,
+  alignItems: "flex-start",
   gap: "1rem",
 };
 

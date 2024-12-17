@@ -30,8 +30,8 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
       lastAppointmentDate,
       isAvailable,
     } = infos;
-    const [isElipsisDisplayName, setIsElipsisDisplayName] = useState(false);
-    const [isElipsisfunctions, setIsElipsisfunctions] = useState(false);
+    const [isEllipsisDisplayName, setIsEllipsisDisplayName] = useState(false);
+    const [isEllipsisfunctions, setIsEllipsisfunctions] = useState(false);
 
     const { t } = useTranslation("appointments");
     const { handleOnClickCard } = useBookAppointmentModal();
@@ -42,14 +42,14 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
     useEffect(() => {
       if (displayNameRef.current) {
         const { scrollWidth, clientWidth } = displayNameRef.current;
-        setIsElipsisDisplayName(scrollWidth > clientWidth);
+        setIsEllipsisDisplayName(scrollWidth > clientWidth);
       }
     }, [displayName]);
 
     useEffect(() => {
       if (functionsRef.current) {
         const { scrollWidth, clientWidth } = functionsRef.current;
-        setIsElipsisfunctions(scrollWidth > clientWidth);
+        setIsEllipsisfunctions(scrollWidth > clientWidth);
       }
     }, [functions]);
 
@@ -74,7 +74,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
         <Box sx={textWrapperStyle}>
           <Box sx={topTextWrapperStyle}>
             <Tooltip
-              title={isElipsisDisplayName ? displayName : ""}
+              title={isEllipsisDisplayName ? displayName : ""}
               placement="top"
             >
               <Typography
@@ -86,7 +86,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               </Typography>
             </Tooltip>
             <Tooltip
-              title={isElipsisfunctions ? functions : ""}
+              title={isEllipsisfunctions ? functions : ""}
               placement="bottom"
             >
               <Typography sx={functionsStyle} ref={functionsRef}>

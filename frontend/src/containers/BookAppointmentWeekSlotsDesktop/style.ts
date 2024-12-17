@@ -12,7 +12,7 @@ import {
   flexStartBoxStyle,
   spaceBetweenBoxStyle,
 } from "~/styles/boxStyles";
-import { BLACK, LIGHTER_GREY, PURPLE } from "~/styles/color.constants";
+import { LIGHTER_GREY, PURPLE } from "~/styles/color.constants";
 import { BOLD_FONT, ITALIC_FONT } from "~/styles/fontStyle.constants";
 
 export const globalContainerStyle: SxProps = {
@@ -97,11 +97,6 @@ export const dayStyle: SxProps = {
   fontSize: "1.3rem",
 };
 
-export const videoCallOptionStyle: SxProps = {
-  color: BLACK,
-  fontSize: "1.4rem",
-};
-
 export const containerStyle: SxProps = {
   display: "flex",
   flexDirection: "column",
@@ -168,4 +163,9 @@ export const noSlotsStyle: SxProps = {
   "& > .MuiSvgIcon-root": {
     fontSize: "1.8rem",
   },
+};
+
+export const videoCallOptionStyle: SxProps = {
+  ...flexStartBoxStyle,
+  filter: "blur(0)",
 };

@@ -30,8 +30,11 @@ import {
 } from "./style";
 import { BookAppointmentGridInfosProps } from "./types";
 import { NoAvatar } from "~/components/SVG/NoAvatar";
+import { DURATION_VALUES } from "~/core/constants";
+import { DURATION } from "~/core/enums";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { GREY } from "~/styles/color.constants";
+import { ellipsisWithWrapStyle } from "~/styles/textStyles";
 
 // this container is the first part of BookAppointmentModal
 export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
@@ -94,18 +97,25 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
           </Box>
           <Box sx={itemStyle}>
             <TimerIcon />
-            <Typography>{duration}</Typography>
+            <Typography>
+              {
+                DURATION_VALUES[duration ?? DURATION.FIFTEEN_MINUTES]
+                  .displayValue
+              }
+            </Typography>
           </Box>
           {!!place && (
             <Box sx={itemStyle}>
               <PlaceIcon />
-              <Typography>{place}</Typography>
+              <Typography sx={ellipsisWithWrapStyle}>{place}</Typography>
             </Box>
           )}
           {!!publicComment && (
             <Box sx={itemStyle}>
               <ChatIcon />
-              <Typography>{publicComment}</Typography>
+              <Typography sx={ellipsisWithWrapStyle} fontStyle={"italic"}>
+                {publicComment}
+              </Typography>
             </Box>
           )}
         </Box>
