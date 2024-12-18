@@ -37,8 +37,8 @@ export interface MyGridsResponse {
     id: number;
     name: string;
     color: HexaColor;
-    begin_date: string;
-    end_date: string;
+    beginDate: string;
+    endDate: string;
     structureId: string;
     state: GRID_STATE;
   }>;

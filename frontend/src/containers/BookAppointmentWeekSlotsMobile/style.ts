@@ -1,12 +1,12 @@
 import { Box, styled, SxProps } from "@mui/material";
 
-import { RowSlotsWrapperProps } from "./types";
+import { DaySlotsHeaderProps, RowSlotsWrapperProps } from "./types";
 import {
   centerBoxStyle,
   columnBoxStyle,
   flexStartBoxStyle,
 } from "~/styles/boxStyles";
-import { BLACK, LIGHTER_GREY } from "~/styles/color.constants";
+import { BLACK, LIGHTER_GREY, PURPLE } from "~/styles/color.constants";
 import { BOLD_FONT, ITALIC_FONT } from "~/styles/fontStyle.constants";
 
 export const weekSlotsWrapperStyle: SxProps = {
@@ -28,26 +28,27 @@ export const RowSlotsWrapper = styled(Box)<RowSlotsWrapperProps>(
   }),
 );
 
-export const daySlotsHeaderStyle: SxProps = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  lineHeight: "0",
-  minWidth: "5.5rem",
-  marginTop: ".4rem",
-};
+export const DaySlotsHeader = styled(Box)<DaySlotsHeaderProps>(
+  ({ isToday }) => ({
+    color: isToday ? PURPLE : "inherit",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    lineHeight: "0",
+    minWidth: "5.5rem",
+    marginTop: ".4rem",
+  }),
+);
 
 export const weekDayStyle: SxProps = {
   ...BOLD_FONT,
   fontSize: "1.3rem",
   lineHeight: "1.2rem",
-  color: BLACK,
 };
 
 export const dayStyle: SxProps = {
   ...ITALIC_FONT,
   fontSize: "1.3rem",
-  color: BLACK,
 };
 
 export const videoCallOptionStyle: SxProps = {

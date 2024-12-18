@@ -8,9 +8,9 @@ import { useTranslation } from "react-i18next";
 import { v4 as uuid4v } from "uuid";
 
 import {
+  DaySlotsHeader,
   RowSlotsWrapper,
   containerStyle,
-  daySlotsHeaderStyle,
   dayStyle,
   nextTimeSlotStyle,
   nextTimeSlotTextStyle,
@@ -20,6 +20,7 @@ import {
   weekSlotsWrapperStyle,
 } from "./style";
 import { ArrowButton } from "../BookAppointmentWeekSlotsDesktop/style";
+import { isToday } from "../BookAppointmentWeekSlotsDesktop/utils";
 import { DaySlots } from "~/components/DaySlots";
 import { DAY_VALUES } from "~/core/constants";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
@@ -64,14 +65,14 @@ export const BookAppointmentWeekSlotsMobile: FC = () => {
               isEmpty={!!daySlot.slots && !daySlot.slots.length}
               key={uuid4v()}
             >
-              <Box sx={daySlotsHeaderStyle}>
+              <DaySlotsHeader isToday={isToday(daySlot)}>
                 <Typography sx={weekDayStyle}>
                   {t(DAY_VALUES[daySlot.weekDay].i18nKey)}
                 </Typography>
                 <Typography sx={dayStyle}>
                   {daySlot.day.locale("fr").format("D MMM")}
                 </Typography>
-              </Box>
+              </DaySlotsHeader>
               {canGoNext && (
                 <DaySlots key={index} slots={daySlot.slots} isMobile={true} />
               )}

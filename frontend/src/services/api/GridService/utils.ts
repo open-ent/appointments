@@ -9,8 +9,8 @@ export const transformResponseToMyGridsResponse = (
     total: response.total,
     grids: response.minimalCreatorGrids.map((grid) => ({
       ...grid,
-      beginDate: dayjs(grid.begin_date),
-      endDate: dayjs(grid.end_date),
+      beginDate: dayjs(grid.beginDate),
+      endDate: dayjs(grid.endDate),
     })),
   };
   return myGrids;

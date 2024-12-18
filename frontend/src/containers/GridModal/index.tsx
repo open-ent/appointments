@@ -120,6 +120,7 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
   const handleConfirmDialog = () => {
     setIsDialogOpen(false);
     resetInputs();
+    setPage(PAGE_TYPE.FIRST);
     handleDisplayModal(MODAL_TYPE.GRID);
   };
 

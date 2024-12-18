@@ -108,17 +108,6 @@ export const options: ThemeOptions = {
         },
       },
     },
-    MuiAlert: {
-      styleOverrides: {
-        root: {
-          borderRadius: "0.8rem",
-          fontSize: "1.4rem",
-          padding: "1rem 1.6rem",
-          whiteSpace: "nowrap",
-          marginRight: "auto",
-        },
-      },
-    },
     MuiFormHelperText: {
       styleOverrides: {
         root: {

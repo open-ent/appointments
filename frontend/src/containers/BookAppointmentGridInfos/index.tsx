@@ -55,7 +55,12 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
             {!(picture && picture.startsWith("/userbook/avatar/")) ? (
               <NoAvatar fill={GREY} />
             ) : (
-              <Box alt="user picture" component="img" src={picture} />
+              <Box
+                alt="user picture"
+                component="img"
+                src={picture}
+                sx={{ objectFit: "cover" }}
+              />
             )}
           </Box>
           <StatusCircle isAvailable={isAvailable} />
@@ -98,10 +103,10 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
           <Box sx={itemStyle}>
             <TimerIcon />
             <Typography>
-              {
+              {t("appointments.slots") +
+                " : " +
                 DURATION_VALUES[duration ?? DURATION.FIFTEEN_MINUTES]
-                  .displayValue
-              }
+                  .displayValue}
             </Typography>
           </Box>
           {!!place && (

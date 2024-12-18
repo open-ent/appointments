@@ -61,7 +61,7 @@ export const gridInputsToGridPayload = (
   publicOptions: Public[],
 ): CreateGridPayload => {
   return {
-    name: inputs.name,
+    name: inputs.name.trimEnd(),
     color: inputs.color,
     beginDate: inputs.validityPeriod.start?.format("YYYY-MM-DD") || "",
     endDate: inputs.validityPeriod.end?.format("YYYY-MM-DD") || "",

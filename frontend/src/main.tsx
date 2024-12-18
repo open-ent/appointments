@@ -13,8 +13,13 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
 import "~/i18n";
 
+import "react-toastify/dist/ReactToastify.css";
+
+import { TOAST_CONFIG } from "./core/constants";
 import { AvailabilityProvider } from "./providers/AvailabilityProvider";
 import { BookAppointmentModalProvider } from "./providers/BookAppointmentModalProvider";
 import { FindAppointmentsProvider } from "./providers/FindAppointmentsProvider";
@@ -66,6 +71,7 @@ root.render(
                   <BookAppointmentModalProvider>
                     <AvailabilityProvider>
                       <GridModalProvider>
+                        <ToastContainer {...TOAST_CONFIG} />
                         <RouterProvider router={router} />
                       </GridModalProvider>
                     </AvailabilityProvider>

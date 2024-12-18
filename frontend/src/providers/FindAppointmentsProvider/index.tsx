@@ -46,18 +46,18 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
 
   // first load
   useEffect(() => {
-    if (!users.length && newUsers && search) {
+    if (page === 1 && newUsers) {
       setUsers(newUsers);
       setPage((prev) => prev + 1);
     }
   }, [newUsers]);
 
   const loadMoreUsers = () => {
-    setPage((prev) => prev + 1);
     if (!newUsers) {
       setHasMoreUsers(false);
       return;
     }
+    setPage((prev) => prev + 1);
     setUsers((prev) => [...prev, ...newUsers]);
   };
 
@@ -89,7 +89,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       refreshSearch,
       resetSearch,
     }),
-    [users, hasMoreUsers],
+    [users, hasMoreUsers, search, newUsers, page],
   );
   return (
     <FindAppointmentsProviderContext.Provider value={value}>

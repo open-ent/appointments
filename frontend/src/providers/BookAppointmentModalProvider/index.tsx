@@ -8,9 +8,10 @@ import {
 } from "react";
 
 import dayjs, { Dayjs } from "dayjs";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 import {
-  Alert,
   BookAppointmentModalProviderContextProps,
   BookAppointmentModalProviderProps,
   DaySlots,
@@ -22,7 +23,6 @@ import {
   transformTimeSlotsToDaySlots,
 } from "./utils";
 import { useFindAppointments } from "../FindAppointmentsProvider";
-import { ALERT } from "~/core/enums";
 import { useBookAppointmentMutation } from "~/services/api/AppointmentService";
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
 import {
@@ -63,10 +63,7 @@ export const BookAppointmentModalProvider: FC<
   const [isVideoCallOptionChecked, setIsVideoCallOptionChecked] =
     useState(false);
 
-  const [alert, setAlert] = useState<Alert>({
-    isOpen: false,
-    alert: ALERT.BOOK_APPOINTMENT_SUCCESS,
-  });
+  const { t } = useTranslation("appointments");
 
   const { data: grids } = useGetAvailableUserMinimalGridsQuery(
     selectedUser?.userId ?? "",
@@ -135,23 +132,14 @@ export const BookAppointmentModalProvider: FC<
         : { timeSlotId: selectedSlotId };
 
       await bookAppointment(bookAppointmentPayload).unwrap();
-      setAlert({
-        isOpen: true,
-        alert: ALERT.BOOK_APPOINTMENT_SUCCESS,
-      });
+      toast.success(t("appointments.book.appointment.success"));
     } catch (error: any) {
       if (error && error.status) {
         if (error.status === 409) {
-          setAlert({
-            isOpen: true,
-            alert: ALERT.BOOK_APPOINTMENT_UNAVAILABLE_ERROR,
-          });
+          toast.error(t("appointments.book.appointment.error.not.available"));
         }
         if (error.status === 500) {
-          setAlert({
-            isOpen: true,
-            alert: ALERT.BOOK_APPOINTMENT_INTERNAL_ERROR,
-          });
+          toast.error(t("appointments.book.appointment.internal.error"));
         }
       }
     }
@@ -167,10 +155,6 @@ export const BookAppointmentModalProvider: FC<
     setIsVideoCallOptionChecked(false);
     setIsModalOpen(false);
     setCurrentSlots(loadingDaySlots(dayjs().locale("fr")));
-  };
-
-  const handleCloseAlert = () => {
-    setAlert({ ...alert, isOpen: false });
   };
 
   useEffect(() => {
@@ -226,7 +210,6 @@ export const BookAppointmentModalProvider: FC<
       nextAvailableTimeSlot,
       isGridTimeSlotsFetching,
       isVideoCallOptionChecked,
-      alert,
       handleGridChange,
       handleOnClickSlot,
       handleNextWeek,
@@ -236,7 +219,6 @@ export const BookAppointmentModalProvider: FC<
       handleOnClickCard,
       handleSubmitAppointment,
       handleVideoCallCheckboxChange,
-      handleCloseAlert,
     }),
     [
       isModalOpen,
@@ -253,7 +235,6 @@ export const BookAppointmentModalProvider: FC<
       nextAvailableTimeSlot,
       isGridTimeSlotsFetching,
       isVideoCallOptionChecked,
-      alert,
     ],
   );
   return (

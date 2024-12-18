@@ -68,7 +68,12 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
           {!(picture && picture.startsWith("/userbook/avatar/")) ? (
             <NoAvatar fill={GREY} />
           ) : (
-            <Box alt="user picture" component="img" src={picture} />
+            <Box
+              alt="user picture"
+              component="img"
+              src={picture}
+              sx={{ objectFit: "cover" }}
+            />
           )}
         </Box>
         <Box sx={textWrapperStyle}>

@@ -59,7 +59,7 @@ export const itemStyle: SxProps = {
 export const pictureStyle: SxProps = {
   overflow: "hidden",
   borderRadius: "50%",
-  objectFit: "cover",
+  display: "flex",
 };
 
 export const pictureBoxStyle: SxProps = {

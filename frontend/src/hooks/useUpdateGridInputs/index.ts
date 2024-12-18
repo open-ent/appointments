@@ -61,7 +61,7 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newName = formatString(e.target.value);
     updateInputField("name", newName);
-    if (existingGridsNames.includes(newName)) {
+    if (existingGridsNames.includes(newName.trimEnd())) {
       updateErrorInputs("name", SAME_GRID_ALREADY_EXISTS_ERROR);
       return;
     }

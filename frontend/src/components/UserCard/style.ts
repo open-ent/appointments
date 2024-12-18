@@ -58,6 +58,7 @@ export const pictureStyle: SxProps = {
   maxHeight: "6rem",
   borderRadius: "50%",
   overflow: "hidden",
+  display: "flex",
 };
 
 export const textWrapperStyle: SxProps = {

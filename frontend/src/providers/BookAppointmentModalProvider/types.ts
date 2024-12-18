@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 import { Dayjs } from "dayjs";
 
-import { ALERT, DAY } from "~/core/enums";
+import { DAY } from "~/core/enums";
 import { Slot } from "~/core/types";
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
 import { GridInfos } from "~/services/api/GridService/types";
@@ -21,7 +21,6 @@ export interface BookAppointmentModalProviderContextProps {
   nextAvailableTimeSlot: Dayjs | null;
   isGridTimeSlotsFetching: boolean;
   isVideoCallOptionChecked: boolean;
-  alert: Alert;
   handleGridChange: (gridName: string) => void;
   handleOnClickSlot: (slotId: number) => void;
   handleNextWeek: () => void;
@@ -31,7 +30,6 @@ export interface BookAppointmentModalProviderContextProps {
   handleOnClickCard: (user: UserCardInfos | null) => void;
   handleSubmitAppointment: () => void;
   handleVideoCallCheckboxChange: () => void;
-  handleCloseAlert: () => void;
 }
 
 export interface BookAppointmentModalProviderProps {
@@ -47,9 +45,4 @@ export interface DaySlots {
 export interface GridNameWithId {
   id: number;
   name: string;
-}
-
-export interface Alert {
-  isOpen: boolean;
-  alert: ALERT;
 }
