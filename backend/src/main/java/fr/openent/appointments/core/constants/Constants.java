@@ -44,6 +44,7 @@ public class Constants {
     public static final String MODE = "mode";
     public static final String PAGE = "page";
     public static final String PICTURE = "picture";
+    public static final String PROFILES = "profiles";
     public static final String SEARCH = "search";
     public static final String STATEMENT = "statement";
     public static final String STRUCTURES = "structures";

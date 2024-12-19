@@ -154,7 +154,6 @@ export const BookAppointmentModalProvider: FC<
     setCurrentDay(dayjs().locale("fr"));
     setIsVideoCallOptionChecked(false);
     setIsModalOpen(false);
-    setCurrentSlots(loadingDaySlots(dayjs().locale("fr")));
   };
 
   useEffect(() => {

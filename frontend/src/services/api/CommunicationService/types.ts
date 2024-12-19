@@ -14,7 +14,7 @@ export interface UserCardInfos {
   userId: string;
   picture: string | null;
   displayName: string;
-  functions: string;
+  functions: string[];
   lastAppointmentDate: Dayjs | null;
   isAvailable: boolean;
 }

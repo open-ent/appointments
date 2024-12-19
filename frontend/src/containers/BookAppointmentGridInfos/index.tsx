@@ -20,6 +20,7 @@ import {
   bottomUserInfoStyle,
   displayNameStyle,
   functionsStyle,
+  imageStyle,
   itemStyle,
   pictureBoxStyle,
   pictureStyle,
@@ -59,7 +60,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
                 alt="user picture"
                 component="img"
                 src={picture}
-                sx={{ objectFit: "cover" }}
+                sx={imageStyle}
               />
             )}
           </Box>

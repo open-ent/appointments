@@ -68,6 +68,13 @@ export const pictureBoxStyle: SxProps = {
   minHeight: "6rem",
   maxHeight: "6rem",
   position: "relative",
+  display: "flex",
+};
+
+export const imageStyle: SxProps = {
+  objectFit: "cover",
+  width: "100%",
+  height: "100%",
 };
 
 export const StatusCircle = styled(Box)<StatusCircleProps>(
@@ -78,7 +85,7 @@ export const StatusCircle = styled(Box)<StatusCircleProps>(
     maxHeight: "1.7rem",
     borderRadius: "50%",
     position: "absolute",
-    transform: "translate(250%, -80%)",
+    transform: "translate(250%, 250%)",
     zIndex: 1000,
     backgroundColor: isAvailable
       ? USER_STATUS_AVAILABLE_COLOR

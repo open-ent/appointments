@@ -95,7 +95,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               placement="bottom"
             >
               <Typography sx={functionsStyle} ref={functionsRef}>
-                {functions}
+                {functions.join(", ")}
               </Typography>
             </Tooltip>
             <Typography sx={lastAppointmentDateStyle}>

@@ -25,7 +25,7 @@ public class NeoUser implements IModel<NeoUser> {
     public NeoUser(JsonObject neoUser) {
         this.setId(neoUser.getString(ID, null));
         this.setDisplayName(neoUser.getString(CAMEL_DISPLAY_NAME, null));
-        this.setFunctions(neoUser.getJsonArray(FUNCTIONS, new JsonArray()));
+        this.setFunctions(neoUser.getJsonArray(FUNCTIONS, new JsonArray()), neoUser.getJsonArray(PROFILES, new JsonArray()));
         this.setPicture(neoUser.getString(PICTURE, null));
     }
 
@@ -59,12 +59,16 @@ public class NeoUser implements IModel<NeoUser> {
         return this;
     }
 
-    public NeoUser setFunctions(JsonArray functions) {
+    public NeoUser setFunctions(JsonArray functions, JsonArray profiles) {
         List<String> stringFunctions = functions.stream()
                 .filter(String.class::isInstance)
                 .map(String.class::cast)
                 .collect(Collectors.toList());
-        this.functions = UserFunctionHelper.format(stringFunctions);
+        List<String> stringProfiles = profiles.stream()
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .collect(Collectors.toList());
+        this.functions = UserFunctionHelper.format(stringFunctions, stringProfiles);
         return this;
     }
 

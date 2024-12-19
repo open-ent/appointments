@@ -68,7 +68,7 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
                 "WHERE g.id IN {groupsIds} " +
                 "OPTIONAL MATCH (u)-[:USERBOOK]->(ub:UserBook) " +
                 "WITH u, ub, [func IN u.functions WHERE split(func, \"$\")[0] IN structuresExternalIds] AS filteredFunctions " +
-                "RETURN u.id AS id, u.displayName AS displayName, filteredFunctions AS functions, ub.picture AS picture;";
+                "RETURN u.id AS id, u.displayName AS displayName, filteredFunctions AS functions, ub.picture AS picture, u.profiles as profiles;";
         JsonObject params = new JsonObject().put(CAMEL_GROUPS_IDS, groupsIds).put(CAMEL_STRUCTURES_IDS, structuresIds);
 
         String errorMessage = "[Appointments@DefaultCommunicationRepository::getUsersFromGroupsIds] Fail to retrieve users infos from groups ids : ";

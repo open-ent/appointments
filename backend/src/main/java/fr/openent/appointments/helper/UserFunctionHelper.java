@@ -13,11 +13,24 @@ public class UserFunctionHelper {
     public static final String DASH = "-";
     public static final String DE = "de ";
     public static final String DOLLAR = "$";
+    public static final String RELATIVE = "Relative";
+    public static final String STUDENT = "Student";
+    public static final String PERSONNEL = "Personnel";
+    public static final String TEACHER = "Teacher";
     public static final List<String> CAPITAL_EXCEPTIONS = Arrays.asList("ce", "cpe");
 
-    public static List<String> format(List<String> neoFunctions) {
-        if (areFullOfDashFunction(neoFunctions)) {
-            return Collections.singletonList(UserFunction.NO_OBJECT.getValue());
+    public static List<String> format(List<String> neoFunctions, List<String> neoProfiles) {
+        if (neoProfiles.contains(RELATIVE)) {
+            return Collections.singletonList(capitalizeFirstLetter(UserFunction.RELATIVE.getValue()));
+        }
+        if (neoProfiles.contains(STUDENT)) {
+            return Collections.singletonList(capitalizeFirstLetter(UserFunction.ELEVE.getValue()));
+        }
+        if (neoProfiles.contains(PERSONNEL) && areFullOfDashFunction(neoFunctions)) {
+            return Collections.singletonList(capitalizeFirstLetter(UserFunction.PERSONNEL.getValue()));
+        }
+        if (neoProfiles.contains(TEACHER) && areFullOfDashFunction(neoFunctions)) {
+            return Collections.singletonList(capitalizeFirstLetter(UserFunction.TEACHER.getValue()));
         }
 
         return neoFunctions.stream()
