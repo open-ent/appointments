@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useRef } from "react";
 
-import { SearchInput } from "@cgi-learning-hub/ui";
+import { Loader, SearchInput } from "@cgi-learning-hub/ui";
 import { Box, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
@@ -17,11 +17,16 @@ import { FindAppointmentsEmptyState } from "~/components/SVG/FindAppointmentsEmp
 import { UserCard } from "~/components/UserCard";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
-import { NUMBER_MORE_USERS } from "~/providers/FindAppointmentsProvider/utils";
 
 export const FindAppointments: FC = () => {
-  const { users, hasMoreUsers, search, loadMoreUsers, handleSearch } =
-    useFindAppointments();
+  const {
+    users,
+    hasMoreUsers,
+    search,
+    isFetching,
+    loadMoreUsers,
+    handleSearch,
+  } = useFindAppointments();
   const { selectedUser } = useBookAppointmentModal();
   const { t } = useTranslation("appointments");
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -66,7 +71,7 @@ export const FindAppointments: FC = () => {
           sx={searchInputStyle}
           onChange={(event) => handleSearch(event.target.value)}
         />
-        {(!search || !users.length) && (
+        {!users.length && !isFetching && (
           <Box sx={emptyStateBoxStyle}>
             <Typography variant="body1" sx={emptyStateTextStyle}>
               {!search
@@ -79,16 +84,12 @@ export const FindAppointments: FC = () => {
           </Box>
         )}
         <Box sx={listCardStyle}>
-          {users.map((user, index) => (
-            <UserCard
-              key={user.userId}
-              infos={user}
-              ref={
-                index === users.length - NUMBER_MORE_USERS ? targetRef : null
-              }
-            />
+          {users.map((user) => (
+            <UserCard key={user.userId} infos={user} />
           ))}
         </Box>
+        <Box ref={targetRef}></Box>
+        {isFetching && <Loader />}
       </Box>
     </>
   );

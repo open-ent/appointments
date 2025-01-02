@@ -17,6 +17,7 @@ public class UserFunctionHelper {
     public static final String STUDENT = "Student";
     public static final String PERSONNEL = "Personnel";
     public static final String TEACHER = "Teacher";
+    public static final String GUEST = "Guest";
     public static final List<String> CAPITAL_EXCEPTIONS = Arrays.asList("ce", "cpe");
 
     public static List<String> format(List<String> neoFunctions, List<String> neoProfiles) {
@@ -31,6 +32,9 @@ public class UserFunctionHelper {
         }
         if (neoProfiles.contains(TEACHER) && areFullOfDashFunction(neoFunctions)) {
             return Collections.singletonList(capitalizeFirstLetter(UserFunction.TEACHER.getValue()));
+        }
+        if (neoProfiles.contains(GUEST)) {
+            return Collections.singletonList(capitalizeFirstLetter(UserFunction.GUEST.getValue()));
         }
 
         return neoFunctions.stream()

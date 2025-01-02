@@ -91,7 +91,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               </Typography>
             </Tooltip>
             <Tooltip
-              title={isEllipsisfunctions ? functions : ""}
+              title={isEllipsisfunctions ? functions.join(", ") : ""}
               placement="bottom"
             >
               <Typography sx={functionsStyle} ref={functionsRef}>

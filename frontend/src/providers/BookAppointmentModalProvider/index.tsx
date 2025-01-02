@@ -84,7 +84,7 @@ export const BookAppointmentModalProvider: FC<
     );
 
   const [bookAppointment] = useBookAppointmentMutation();
-  const { refreshSearch } = useFindAppointments();
+  const { refetchSearch } = useFindAppointments();
 
   const handleOnClickCard = (user: UserCardInfos | null) => {
     setSelectedUser(user);
@@ -125,26 +125,31 @@ export const BookAppointmentModalProvider: FC<
   };
 
   const handleSubmitAppointment = async () => {
-    if (!selectedSlotId) return;
+    if (!selectedSlotId) {
+      return;
+    }
     try {
-      const bookAppointmentPayload = gridInfos?.videoCallLink.length
+      const bookAppointmentPayload = gridInfos?.videoCallLink?.length
         ? { timeSlotId: selectedSlotId, isVideoCall: isVideoCallOptionChecked }
         : { timeSlotId: selectedSlotId };
 
       await bookAppointment(bookAppointmentPayload).unwrap();
       toast.success(t("appointments.book.appointment.success"));
     } catch (error: any) {
-      if (error && error.status) {
-        if (error.status === 409) {
-          toast.error(t("appointments.book.appointment.error.not.available"));
-        }
-        if (error.status === 500) {
-          toast.error(t("appointments.book.appointment.internal.error"));
+      if (error?.status) {
+        switch (error.status) {
+          case 409:
+            toast.error(t("appointments.book.appointment.error.not.available"));
+            break;
+          case 500:
+          default:
+            toast.error(t("appointments.book.appointment.internal.error"));
+            break;
         }
       }
     }
     handleCloseModal();
-    refreshSearch();
+    refetchSearch();
   };
 
   const handleCloseModal = () => {

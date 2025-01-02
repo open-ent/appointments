@@ -35,7 +35,11 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
-  const { data: newUsers } = useGetCommunicationUsersQuery(
+  const {
+    data: newUsers,
+    isFetching,
+    refetch,
+  } = useGetCommunicationUsersQuery(
     {
       search,
       page,
@@ -44,33 +48,30 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
     { skip: !search },
   );
 
-  // first load
   useEffect(() => {
-    if (page === 1 && newUsers) {
-      setUsers(newUsers);
-      setPage((prev) => prev + 1);
-    }
+    setUsersFromNewUsers(newUsers);
   }, [newUsers]);
 
-  const loadMoreUsers = () => {
-    if (!newUsers) {
+  const setUsersFromNewUsers = (newUsers: UserCardInfos[] | undefined) => {
+    if (newUsers) setUsers((prev) => [...prev, ...newUsers]);
+    if (newUsers && newUsers.length < NUMBER_MORE_USERS) {
       setHasMoreUsers(false);
-      return;
+    } else {
+      setHasMoreUsers(true);
     }
-    setPage((prev) => prev + 1);
-    setUsers((prev) => [...prev, ...newUsers]);
+  };
+
+  const loadMoreUsers = () => {
+    !isFetching && setPage((prev) => prev + 1);
   };
 
   const handleSearch = (newSearch: string) => {
+    refreshSearch();
     setSearch(newSearch);
-    setPage(1);
-    setUsers([]);
-    setHasMoreUsers(true);
   };
 
   const resetSearch = () => {
-    setSearch("");
-    refreshSearch();
+    handleSearch("");
   };
 
   const refreshSearch = () => {
@@ -79,17 +80,26 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
     setHasMoreUsers(true);
   };
 
+  const refetchSearch = async () => {
+    refreshSearch();
+    const oldNewUsers = newUsers;
+    const { data } = await refetch();
+    if (oldNewUsers === data) setUsersFromNewUsers(data);
+  };
+
   const value = useMemo<FindAppointmentsProviderContextProps>(
     () => ({
       users,
       hasMoreUsers,
       search,
+      isFetching,
       loadMoreUsers,
       handleSearch,
       refreshSearch,
       resetSearch,
+      refetchSearch,
     }),
-    [users, hasMoreUsers, search, newUsers, page],
+    [users, hasMoreUsers, search, newUsers, page, isFetching],
   );
   return (
     <FindAppointmentsProviderContext.Provider value={value}>

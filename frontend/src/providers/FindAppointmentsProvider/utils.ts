@@ -1,1 +1,1 @@
-export const NUMBER_MORE_USERS = 20;
+export const NUMBER_MORE_USERS = 30;
