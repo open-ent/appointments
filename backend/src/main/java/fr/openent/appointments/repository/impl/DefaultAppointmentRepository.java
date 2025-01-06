@@ -3,6 +3,7 @@ package fr.openent.appointments.repository.impl;
 import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.model.database.Appointment;
+import fr.openent.appointments.model.database.AppointmentWithInfos;
 import fr.openent.appointments.repository.AppointmentRepository;
 import fr.openent.appointments.repository.RepositoryFactory;
 import io.vertx.core.Future;
@@ -18,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static fr.openent.appointments.core.constants.Constants.FRENCH_NOW;
 
 public class DefaultAppointmentRepository implements AppointmentRepository {
 
@@ -70,6 +74,41 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
 
         String errorMessage = "[Appointemnts@DefaultAppointmentRepository::getAvailableAppointments] Failed to get available appointments : ";
         sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Appointment.class, errorMessage)));
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<List<AppointmentWithInfos>> getAppointments(String userId, List<AppointmentState> states, Boolean ignorePast) {
+        Promise<List<AppointmentWithInfos>> promise = Promise.promise();
+
+        if (userId == null) {
+            promise.complete(new ArrayList<>());
+            return promise.future();
+        }
+
+        String query = "SELECT a.*, ts.begin_date, ts.end_date, g.owner_id " +
+                "FROM " + DB_APPOINTMENT_TABLE + " a " +
+                "JOIN " + DB_TIME_SLOT_TABLE + " ts ON a.time_slot_id = ts.id " +
+                "LEFT JOIN " + DB_GRID_TABLE + " g ON ts.grid_id = g.id " +
+                "WHERE (a.requester_id = ? OR g.owner_id = ?) ";
+        JsonArray params = new JsonArray().add(userId).add(userId);
+
+        // Filter by states
+        if (states != null && !states.isEmpty()) {
+            query += " AND a.state IN " + Sql.listPrepared(states);
+            params.addAll(new JsonArray(states.stream().map(AppointmentState::getValue).collect(Collectors.toList())));
+        }
+
+        if (ignorePast) {
+            query += " AND ts.end_date > " + FRENCH_NOW;
+        }
+
+        // Order by start date
+        query += " ORDER BY ts.begin_date";
+
+        String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::getAppointments] Failed to get appointments for user %s : ", userId);
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, AppointmentWithInfos.class, errorMessage)));
 
         return promise.future();
     }

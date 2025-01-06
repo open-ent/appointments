@@ -1,7 +1,10 @@
 package fr.openent.appointments.service;
 
+import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.model.database.Appointment;
+import fr.openent.appointments.model.response.ListAppointmentsResponse;
 import io.vertx.core.Future;
+import org.entcore.common.user.UserInfos;
 
 import java.util.List;
 
@@ -33,4 +36,15 @@ public interface AppointmentService {
      *  @return The created appointment
      */
     Future<Appointment> create(Long timeSlotId, String userId, Boolean isVideoCall);
+
+    /**
+     * Get appointments of a user
+     * @param userInfos The user infos
+     * @param states The states of the appointments
+     * @param page The page number
+     * @param limit The limit of the number of appointments
+     * @return The list of appointments
+     */
+    Future<ListAppointmentsResponse> getMyAppointments(UserInfos userInfos, List<AppointmentState> states, Long page, Long limit);
+
 }

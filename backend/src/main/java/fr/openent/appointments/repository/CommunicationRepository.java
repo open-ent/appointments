@@ -6,6 +6,7 @@ import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CommunicationRepository {
     /**
@@ -33,4 +34,13 @@ public interface CommunicationRepository {
      * @return A Future containing a {@link List} of {@link NeoUser}.
      */
     Future<List<NeoUser>> getUsersFromGroupsIds(List<String> groupsIds, List<String> structureExternalIds);
+
+    /**
+     * Retrieves NeoUser from its ID.
+     *
+     * @param userId The ID of the user we want to retrieve.
+     * @param structuresIds The {@link List} of ID of structure externalID the user belongs to.
+     * @return A Future containing a {@link NeoUser}.
+     */
+    Future<Optional<NeoUser>> getUserFromId(String userId, List<String> structuresIds);
 }

@@ -14,6 +14,7 @@ import org.entcore.common.neo4j.Neo4j;
 import org.entcore.common.neo4j.Neo4jResult;
 
 import java.util.List;
+import java.util.Optional;
 
 import static fr.openent.appointments.core.constants.Constants.*;
 
@@ -73,6 +74,27 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
 
         String errorMessage = "[Appointments@DefaultCommunicationRepository::getUsersFromGroupsIds] Fail to retrieve users infos from groups ids : ";
         neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, NeoUser.class, errorMessage)));
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<Optional<NeoUser>> getUserFromId(String userId, List<String> structuresIds) {
+        Promise<Optional<NeoUser>> promise = Promise.promise();
+
+        String query =
+                "MATCH (s:Structure) " +
+                "WHERE s.id IN {structuresIds} " +
+                "WITH collect(s.externalId) AS structuresExternalIds " +
+
+                "MATCH (u:User {id: {userId}}) " +
+                "OPTIONAL MATCH (u)-[:USERBOOK]->(ub:UserBook) " +
+                "WITH u, ub, [func IN u.functions WHERE split(func, \"$\")[0] IN structuresExternalIds] AS filteredFunctions " +
+                "RETURN u.id AS id, u.displayName AS displayName, filteredFunctions AS functions, ub.picture AS picture, u.profiles as profiles;";
+        JsonObject params = new JsonObject().put(CAMEL_USER_ID, userId).put(CAMEL_STRUCTURES_IDS, structuresIds);
+
+        String errorMessage = String.format("[Appointments@DefaultCommunicationRepository::getUserFromId] Fail to retrieve user with id %s : ", userId);
+        neo4j.execute(query, params, Neo4jResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, NeoUser.class, errorMessage)));
 
         return promise.future();
     }
