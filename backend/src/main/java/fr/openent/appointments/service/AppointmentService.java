@@ -76,8 +76,8 @@ public interface AppointmentService {
     /**
      * Cancel an appointment
      * @param appointmentId The appointment id
-     * @param userInfos The user infos
+     * @param userId The user id
      * @return The updated appointment
      */
-    Future<Appointment> cancelAppointment(Long appointmentId, UserInfos userInfos);
+    Future<Appointment> cancelAppointment(Long appointmentId, String userId);
 }

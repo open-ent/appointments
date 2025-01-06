@@ -176,16 +176,6 @@ public class DefaultAppointmentService implements AppointmentService {
         return promise.future();                
     }
 
-    @Override
-    public Future<Appointment> acceptAppointment(Long appointmentId, String userId) {
-        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.ACCEPTED, "acceptAppointment");
-    }
-
-    @Override
-    public Future<Appointment> rejectAppointment(Long appointmentId, String userId) {
-        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.REFUSED, "rejectAppointment");
-    }
-
     private Future<Appointment> handleAppointmentStateChange(Long appointmentId, String userId, AppointmentState targetState, String functionName) {
         Promise<Appointment> promise = Promise.promise();
 
@@ -225,9 +215,18 @@ public class DefaultAppointmentService implements AppointmentService {
     }
 
     @Override
-    public Future<Appointment> cancelAppointment(Long appointmentId, UserInfos userInfos){
-        // TODO
-        return null;
+    public Future<Appointment> acceptAppointment(Long appointmentId, String userId) {
+        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.ACCEPTED, "acceptAppointment");
+    }
+
+    @Override
+    public Future<Appointment> rejectAppointment(Long appointmentId, String userId) {
+        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.REFUSED, "rejectAppointment");
+    }
+
+    @Override
+    public Future<Appointment> cancelAppointment(Long appointmentId, String userId) {
+        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.CANCELED, "cancelAppointment");
     }
 
 }

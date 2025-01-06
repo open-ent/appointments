@@ -2,6 +2,7 @@ package fr.openent.appointments.controller;
 
 import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.security.ManageRight;
 import fr.openent.appointments.security.ViewRight;
 import fr.openent.appointments.service.AppointmentService;
@@ -176,31 +177,41 @@ public class AppointmentController extends ControllerHelper {
                 });
     }
 
-    // TODO: Notif
-    @Put("appointments/:appointmentId/accept")
-    @ApiDoc("Accept an appointment")
-    @ResourceFilter(ManageRight.class)
-    @SecuredAction(value="", type= ActionType.RESOURCE)
-    public void acceptAppointment(final HttpServerRequest request) {
+    private void handleAppointmentAction(final HttpServerRequest request,
+                                         String action,
+                                         AppointmentActionHandler actionHandler) {
         Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
                 .map(Long::parseLong)
                 .orElse(null);
 
         if (appointmentId == null) {
             String errorMessage = "Missing appointment id";
-            LogHelper.logError(this, "acceptAppointment", errorMessage);
+            LogHelper.logError(this, action+"Appointment", errorMessage);
             badRequest(request);
             return;
         }
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
-            .compose(user -> appointmentService.acceptAppointment(appointmentId, user.getUserId()))
-            .onSuccess(appointment -> renderJson(request, appointment.toJson()))
-            .onFailure(err -> {
-                String errorMessage = "Failed to accept appointment";
-                LogHelper.logError(this, "acceptAppointment", errorMessage, err.getMessage());
-                renderError(request);
-            });
+                .compose(user -> actionHandler.handle(appointmentId, user.getUserId()))
+                .onSuccess(appointment -> renderJson(request, appointment.toJson()))
+                .onFailure(err -> {
+                    String errorMessage = "Failed to " + action + " appointment";
+                    LogHelper.logError(this, action+"Appointment", errorMessage, err.getMessage());
+                    renderError(request);
+                });
+    }
+
+    interface AppointmentActionHandler {
+        Future<Appointment> handle(Long appointmentId, String userId);
+    }
+
+    // TODO: Notif
+    @Put("appointments/:appointmentId/accept")
+    @ApiDoc("Accept an appointment")
+    @ResourceFilter(ManageRight.class)
+    @SecuredAction(value="", type= ActionType.RESOURCE)
+    public void acceptAppointment(final HttpServerRequest request) {
+        handleAppointmentAction(request, "accept", appointmentService::acceptAppointment);
     }
 
     // TODO: Notif
@@ -209,25 +220,17 @@ public class AppointmentController extends ControllerHelper {
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value="", type= ActionType.RESOURCE)
     public void rejectAppointment(final HttpServerRequest request) {
-        Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
-                .map(Long::parseLong)
-                .orElse(null);
-
-        if (appointmentId == null) {
-            String errorMessage = "Missing appointment id";
-            LogHelper.logError(this, "rejectAppointment", errorMessage);
-            badRequest(request);
-            return;
-        }
-
-        UserUtils.getAuthenticatedUserInfos(eb, request)
-            .compose(user -> appointmentService.rejectAppointment(appointmentId, user.getUserId()))
-            .onSuccess(appointment -> renderJson(request, appointment.toJson()))
-            .onFailure(err -> {
-                String errorMessage = "Failed to reject appointment";
-                LogHelper.logError(this, "rejectAppointment", errorMessage, err.getMessage());
-                renderError(request);
-            });
+        handleAppointmentAction(request, "reject", appointmentService::rejectAppointment);
     }
+
+    // TODO: Notif
+    @Put("appointments/:appointmentId/cancel")
+    @ApiDoc("Cancel an appointment")
+    @ResourceFilter(ViewRight.class)
+    @SecuredAction(value="", type= ActionType.RESOURCE)
+    public void cancelAppointment(final HttpServerRequest request) {
+        handleAppointmentAction(request, "cancel", appointmentService::cancelAppointment);
+    }
+
 
 }
