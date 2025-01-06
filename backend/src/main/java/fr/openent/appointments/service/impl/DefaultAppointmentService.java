@@ -144,6 +144,10 @@ public class DefaultAppointmentService implements AppointmentService {
         return appointment.getRequesterId().equals(userId) || appointment.getOwnerId().equals(userId);
     }
 
+    private Boolean isOwnerOfAppointment(AppointmentWithInfos appointment, String userId) {
+        return appointment.getOwnerId().equals(userId);
+    }
+
     @Override
     public Future<AppointmentWithInfos> getAppointmentById(Long appointmentId, String userId){
         Promise<AppointmentWithInfos> promise = Promise.promise();
@@ -171,4 +175,59 @@ public class DefaultAppointmentService implements AppointmentService {
 
         return promise.future();                
     }
+
+    @Override
+    public Future<Appointment> acceptAppointment(Long appointmentId, String userId) {
+        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.ACCEPTED, "acceptAppointment");
+    }
+
+    @Override
+    public Future<Appointment> rejectAppointment(Long appointmentId, String userId) {
+        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.REFUSED, "rejectAppointment");
+    }
+
+    private Future<Appointment> handleAppointmentStateChange(Long appointmentId, String userId, AppointmentState targetState, String functionName) {
+        Promise<Appointment> promise = Promise.promise();
+
+        appointmentRepository.get(appointmentId)
+                .compose(appointment -> {
+                    if (!appointment.isPresent()) {
+                        LogHelper.logError(this, functionName, "Appointment not found", "");
+                        return Future.failedFuture("Appointment not found");
+                    }
+
+                    if (!isOwnerOfAppointment(appointment.get(), userId)) {
+                        LogHelper.logError(this, functionName, "User is not the owner of the appointment", "");
+                        return Future.failedFuture("User is not the owner of the appointment");
+                    }
+
+                    if (appointment.get().getState() != AppointmentState.CREATED) {
+                        LogHelper.logError(this, functionName, "Appointment is not pending", "");
+                        return Future.failedFuture("Appointment is not pending");
+                    }
+
+                    return appointmentRepository.updateState(appointmentId, targetState);
+                })
+                .onSuccess(updatedAppointment -> {
+                    if (updatedAppointment.isPresent()) {
+                        promise.complete(updatedAppointment.get());
+                    } else {
+                        LogHelper.logError(this, functionName, "Failed to update appointment", "");
+                        promise.fail("Failed to update appointment");
+                    }
+                })
+                .onFailure(err -> {
+                    LogHelper.logError(this, functionName, "Failed to update appointment", err.getMessage());
+                    promise.fail(err);
+                });
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<Appointment> cancelAppointment(Long appointmentId, UserInfos userInfos){
+        // TODO
+        return null;
+    }
+
 }

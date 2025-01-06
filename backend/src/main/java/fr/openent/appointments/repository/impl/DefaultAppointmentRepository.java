@@ -136,4 +136,23 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
 
         return promise.future();
     }
+
+    @Override
+    public Future<Optional<Appointment>> updateState(Long appointmentId, AppointmentState state){
+        Promise<Optional<Appointment>> promise = Promise.promise();
+
+        if (appointmentId == null || state == null) {
+            promise.complete(Optional.empty());
+            return promise.future();
+        }
+
+        String query = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ? WHERE id = ? RETURNING *";
+
+        JsonArray params = new JsonArray().add(state.getValue()).add(appointmentId);
+
+        String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::updateState] Failed to update state of appointment %d : ", appointmentId);
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Appointment.class, errorMessage)));
+
+        return promise.future();
+    }
 }

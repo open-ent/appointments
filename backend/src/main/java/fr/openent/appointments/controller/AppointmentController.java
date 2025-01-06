@@ -2,6 +2,7 @@ package fr.openent.appointments.controller;
 
 import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.security.ManageRight;
 import fr.openent.appointments.security.ViewRight;
 import fr.openent.appointments.service.AppointmentService;
 import fr.openent.appointments.service.GridService;
@@ -10,6 +11,7 @@ import fr.openent.appointments.service.ServiceFactory;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Get;
 import fr.wseduc.rs.Post;
+import fr.wseduc.rs.Put;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
 import io.vertx.core.Future;
@@ -173,4 +175,59 @@ public class AppointmentController extends ControllerHelper {
                     renderError(request);
                 });
     }
+
+    // TODO: Notif
+    @Put("appointments/:appointmentId/accept")
+    @ApiDoc("Accept an appointment")
+    @ResourceFilter(ManageRight.class)
+    @SecuredAction(value="", type= ActionType.RESOURCE)
+    public void acceptAppointment(final HttpServerRequest request) {
+        Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        if (appointmentId == null) {
+            String errorMessage = "Missing appointment id";
+            LogHelper.logError(this, "acceptAppointment", errorMessage);
+            badRequest(request);
+            return;
+        }
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user -> appointmentService.acceptAppointment(appointmentId, user.getUserId()))
+            .onSuccess(appointment -> renderJson(request, appointment.toJson()))
+            .onFailure(err -> {
+                String errorMessage = "Failed to accept appointment";
+                LogHelper.logError(this, "acceptAppointment", errorMessage, err.getMessage());
+                renderError(request);
+            });
+    }
+
+    // TODO: Notif
+    @Put("appointments/:appointmentId/reject")
+    @ApiDoc("Reject an appointment")
+    @ResourceFilter(ManageRight.class)
+    @SecuredAction(value="", type= ActionType.RESOURCE)
+    public void rejectAppointment(final HttpServerRequest request) {
+        Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        if (appointmentId == null) {
+            String errorMessage = "Missing appointment id";
+            LogHelper.logError(this, "rejectAppointment", errorMessage);
+            badRequest(request);
+            return;
+        }
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user -> appointmentService.rejectAppointment(appointmentId, user.getUserId()))
+            .onSuccess(appointment -> renderJson(request, appointment.toJson()))
+            .onFailure(err -> {
+                String errorMessage = "Failed to reject appointment";
+                LogHelper.logError(this, "rejectAppointment", errorMessage, err.getMessage());
+                renderError(request);
+            });
+    }
+
 }
