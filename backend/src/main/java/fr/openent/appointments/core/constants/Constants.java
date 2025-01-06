@@ -13,6 +13,7 @@ public class Constants {
     public static final String CAMEL_END_TIME = "endTime";
     public static final String CAMEL_GRID_ID = "gridId";
     public static final String CAMEL_GROUPS_IDS = "groupsIds";
+    public static final String CAMEL_HTTP_STATUS = "httpStatus";
     public static final String CAMEL_IS_VIDEO_CALL = "isVideoCall";
     public static final String CAMEL_PUBLIC_COMMENT = "publicComment";
     public static final String CAMEL_PUSH_NOTIF = "pushNotif";
@@ -36,11 +37,13 @@ public class Constants {
     public static final String APPOINTMENTS = "Appointments";
     public static final String APPOINTMENTS_ADDRESS = "fr.openent.appointments";
     public static final String BODY = "body";
+    public static final String CODE = "code";
     public static final String FUNCTIONS = "functions";
     public static final String FRENCH_NOW = "NOW() AT TIME ZONE 'Europe/Paris'";
     public static final String FRENCH_TIME_ZONE = "Europe/Paris";
     public static final String HOST = "host";
     public static final String LIMIT = "limit";
+    public static final String MESSAGE = "message";
     public static final String MODE = "mode";
     public static final String PAGE = "page";
     public static final String PICTURE = "picture";
