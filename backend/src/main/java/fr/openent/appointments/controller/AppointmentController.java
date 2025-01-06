@@ -147,4 +147,30 @@ public class AppointmentController extends ControllerHelper {
                 renderError(request);
             });
     }
+
+    @Get("appointments/:appointmentId")
+    @ApiDoc("Get an appointment by its id")
+    @ResourceFilter(ViewRight.class)
+    @SecuredAction(value="", type= ActionType.RESOURCE)
+    public void getAppointmentById(final HttpServerRequest request) {
+        Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        if (appointmentId == null) {
+            String errorMessage = "Missing appointment id";
+            LogHelper.logError(this, "getAppointmentById", errorMessage);
+            badRequest(request);
+            return;
+        }
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+                .compose(user -> appointmentService.getAppointmentById(appointmentId, user.getUserId()))
+                .onSuccess(appointment -> renderJson(request, appointment.toJson()))
+                .onFailure(err -> {
+                    String errorMessage = "Failed to get appointment by id";
+                    LogHelper.logError(this, "getAppointmentById", errorMessage, err.getMessage());
+                    renderError(request);
+                });
+    }
 }

@@ -16,14 +16,10 @@ import fr.openent.appointments.service.TimeSlotService;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.core.eventbus.EventBus;
 import org.entcore.common.user.UserInfos;
-import org.entcore.common.user.UserUtils;
-import fr.openent.appointments.helper.FutureHelper;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 public class DefaultAppointmentService implements AppointmentService {
@@ -142,5 +138,37 @@ public class DefaultAppointmentService implements AppointmentService {
             });
 
         return promise.future();
+    }
+    
+    private Boolean isUserInAppointment(AppointmentWithInfos appointment, String userId) {
+        return appointment.getRequesterId().equals(userId) || appointment.getOwnerId().equals(userId);
+    }
+
+    @Override
+    public Future<AppointmentWithInfos> getAppointmentById(Long appointmentId, String userId){
+        Promise<AppointmentWithInfos> promise = Promise.promise();
+        appointmentRepository.get(appointmentId)
+            .onSuccess(appointmentWithInfos -> {
+                if (appointmentWithInfos.isPresent())
+                    if (isUserInAppointment(appointmentWithInfos.get(), userId))
+                        promise.complete(appointmentWithInfos.get());
+                    else {
+                        String errorMessage = "User is not in appointment";
+                        LogHelper.logError(this, "getAppointmentById", errorMessage, "");
+                        promise.fail(errorMessage);
+                    }
+                else {
+                    String errorMessage = "Appointment not found";
+                    LogHelper.logError(this, "getAppointmentById", errorMessage, "");
+                    promise.fail(errorMessage);
+                }
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to get appointment by id";
+                LogHelper.logError(this, "getAppointmentById", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();                
     }
 }

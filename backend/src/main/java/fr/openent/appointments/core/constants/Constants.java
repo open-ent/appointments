@@ -2,6 +2,7 @@ package fr.openent.appointments.core.constants;
 
 public class Constants {
     // camelCase constants
+    public static final String CAMEL_APPOINTMENT_ID = "appointmentId";
     public static final String CAMEL_APPOINTMENT_URI = "appointmentUri";
     public static final String CAMEL_AVAILABLE_GRIDS_IDS = "availableGridsIds";
     public static final String CAMEL_BEGIN_DATE = "beginDate";

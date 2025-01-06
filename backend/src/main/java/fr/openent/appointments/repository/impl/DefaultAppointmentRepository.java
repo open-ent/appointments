@@ -113,4 +113,27 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
         return promise.future();
     }
 
+    @Override
+    public Future<Optional<AppointmentWithInfos>> get(Long appointmentId){
+        Promise<Optional<AppointmentWithInfos>> promise = Promise.promise();
+
+        if (appointmentId == null) {
+            promise.complete(Optional.empty());
+            return promise.future();
+        }
+
+        String query = "SELECT a.*, ts.begin_date, ts.end_date, g.owner_id, g.video_call_link, " +
+                "g.place, g.document_id, g.public_comment " +
+                "FROM " + DB_APPOINTMENT_TABLE + " a " +
+                "JOIN " + DB_TIME_SLOT_TABLE + " ts ON a.time_slot_id = ts.id " +
+                "LEFT JOIN " + DB_GRID_TABLE + " g ON ts.grid_id = g.id " +
+                "WHERE a.id = ?";
+
+        JsonArray params = new JsonArray().add(appointmentId);
+
+        String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::get] Failed to get appointment %d : ", appointmentId);
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, AppointmentWithInfos.class, errorMessage)));
+
+        return promise.future();
+    }
 }

@@ -14,4 +14,6 @@ public interface AppointmentRepository {
     Future<List<Appointment>> getAvailableAppointments(Long timeSlotId);
 
     Future<List<AppointmentWithInfos>> getAppointments(String userId, List<AppointmentState> states, Boolean ignorePast);
+
+    Future<Optional<AppointmentWithInfos>> get(Long appointmentId);
 }
