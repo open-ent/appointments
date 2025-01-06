@@ -71,7 +71,10 @@
   "appointments.book.appointment.error.not.available": "Ce créneau n'est plus disponible. Veuillez en choisir un autre.",
   "appointments.book.appointment.internal.error": "Une erreur est survenue lors de la réservation. Veuillez réessayer.",
 
+  "appointments.cancel.request": "Annuler la demande",
+
   "appointments.cancel": "Annuler",
+  "appointments.canceled": "Annulé",
   "appointments.save": "Enregistrer",
   "appointments.back": "Retour",
   "appointments.next": "Suivant",
@@ -84,6 +87,13 @@
   "appointments.available": "Disponible",
   "appointments.unavailable": "Indisponible",
   "appointments.slots": "Créneaux",
+  "appointments.pending": "En attente",
+  "appointments.accept": "Accepter",
+  "appointments.accepted": "Accepté",
+  "appointments.refused": "Refusé",
+  "appointments.refuse": "Refuser",
+  "appointments.cancelled": "Annulé",
+  "appointments.videoconference": "Visioconférence",
 
   "appointments.monday": "Lundi",
   "appointments.tuesday": "Mardi",

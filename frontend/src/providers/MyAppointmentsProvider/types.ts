@@ -2,16 +2,16 @@ import { ReactNode } from "react";
 
 import { MY_APPOINTMENTS_LIST_STATE } from "./enum";
 import {
-  MyAppointment,
-  MyAppointmentsResponse,
+  Appointment,
+  MyAppointments,
 } from "~/services/api/AppointmentService/types";
 
 export interface MyAppointmentsProviderContextProps {
-  myPendingAppointments: MyAppointmentsResponse | undefined;
-  myAcceptedAppointments: MyAppointmentsResponse | undefined;
-  myRejectedOrCanceledAppointments: MyAppointmentsResponse | undefined;
+  myPendingAppointments: MyAppointments | undefined;
+  myAcceptedAppointments: MyAppointments | undefined;
+  myRejectedOrCanceledAppointments: MyAppointments | undefined;
   isAppointmentModalOpen: boolean;
-  selectedAppointment: MyAppointment | undefined;
+  selectedAppointment: Appointment | undefined;
   handleChangePage: (state: MY_APPOINTMENTS_LIST_STATE, page: number) => void;
   handleChangeLimit: (state: MY_APPOINTMENTS_LIST_STATE, limit: number) => void;
   handleAcceptAppointment: (id: number) => void;

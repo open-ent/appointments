@@ -1,9 +1,13 @@
 import {
+  Appointment,
   BookAppointmentPayload,
   GetMyAppointmentsPayload,
-  MyAppointment,
-  MyAppointmentsResponse,
+  MyAppointments,
 } from "./types";
+import {
+  transformResponseToAppointment,
+  transformResponseToMyAppointments,
+} from "./utils";
 import { emptySplitApi } from "../EmptySplitService";
 
 export const appointmentApi = emptySplitApi.injectEndpoints({
@@ -17,10 +21,7 @@ export const appointmentApi = emptySplitApi.injectEndpoints({
       }),
       invalidatesTags: ["Availability"],
     }),
-    getMyAppointments: builder.query<
-      MyAppointmentsResponse,
-      GetMyAppointmentsPayload
-    >({
+    getMyAppointments: builder.query<MyAppointments, GetMyAppointmentsPayload>({
       query: (body) => {
         const statesString = JSON.stringify(body.states);
         return {
@@ -31,9 +32,11 @@ export const appointmentApi = emptySplitApi.injectEndpoints({
           },
         };
       },
+      transformResponse: transformResponseToMyAppointments,
     }),
-    getAppointment: builder.query<MyAppointment, number>({
+    getAppointment: builder.query<Appointment, number>({
       query: (appointmentId) => `/appointments/${appointmentId}`,
+      transformResponse: transformResponseToAppointment,
     }),
     acceptAppointment: builder.mutation<void, number>({
       query: (appointmentId) => ({
