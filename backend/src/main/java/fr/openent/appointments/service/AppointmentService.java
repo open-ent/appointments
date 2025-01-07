@@ -4,10 +4,10 @@ import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.database.AppointmentWithInfos;
 import fr.openent.appointments.model.response.ListAppointmentsResponse;
-import fr.openent.appointments.model.response.MinimalAppointment;
 import io.vertx.core.Future;
 import org.entcore.common.user.UserInfos;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AppointmentService {
@@ -48,6 +48,13 @@ public interface AppointmentService {
      * @return The list of appointments
      */
     Future<ListAppointmentsResponse> getMyAppointments(UserInfos userInfos, List<AppointmentState> states, Long page, Long limit);
+
+    /**
+     * Get dates of appointments with a specific state of a user
+     * @param userId The user id
+     * @param states The states of the appointments
+     */
+    Future<List<LocalDate>> getAppointmentsDates(String userId, List<AppointmentState> states);
 
     /**
      * Get appointment by its id

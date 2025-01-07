@@ -18,6 +18,8 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import org.entcore.common.user.UserInfos;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -174,6 +176,29 @@ public class DefaultAppointmentService implements AppointmentService {
             });
 
         return promise.future();                
+    }
+
+    private List<LocalDate> buildAppointmentsDates(List<AppointmentWithInfos> appointments) {
+        return appointments.stream()
+            .map(AppointmentWithInfos::getBeginDate)
+            .map(LocalDateTime::toLocalDate)
+            .distinct()
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public Future<List<LocalDate>> getAppointmentsDates(String userId, List<AppointmentState> states) {
+        Promise<List<LocalDate>> promise = Promise.promise();
+
+        appointmentRepository.getAppointments(userId, states, true)
+            .onSuccess(appointments -> promise.complete(buildAppointmentsDates(appointments)))
+            .onFailure(err -> {
+                String errorMessage = "Failed to get appointments dates";
+                LogHelper.logError(this, "getAppointmentsDates", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();
     }
 
     private Future<Appointment> handleAppointmentStateChange(Long appointmentId, String userId, AppointmentState targetState, String functionName) {
