@@ -6,13 +6,10 @@ import fr.openent.appointments.model.IModel;
 import fr.openent.appointments.model.database.AppointmentWithInfos;
 import io.vertx.core.json.JsonObject;
 
-import static fr.openent.appointments.core.constants.Fields.*;
-import static fr.openent.appointments.core.constants.Constants.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class MinimalAppointment implements IModel<MinimalAppointment> {
+public class AppointmentResponse implements IModel<AppointmentResponse> {
     private Long id;
     private String displayName;
     private List<String> functions;
@@ -23,18 +20,24 @@ public class MinimalAppointment implements IModel<MinimalAppointment> {
     private String videoCallLink;
     private AppointmentState state;
     private Boolean isRequester;
+    private String place;
+    private String documentId;
+    private String publicComment;
 
-    public MinimalAppointment(AppointmentWithInfos appointmentWithInfos, Boolean isRequester, String displayName, List<String> functions, String picture) {
-        this.id = appointmentWithInfos.getId();
+    public AppointmentResponse(AppointmentWithInfos appointment, Boolean isRequester, String displayName, List<String> functions, String picture) {
+        this.id = appointment.getId();
         this.displayName = displayName;
         this.functions = functions;
         this.picture = picture;
-        this.beginDate = appointmentWithInfos.getBeginDate();
-        this.endDate = appointmentWithInfos.getEndDate();
-        this.isVideoCall = appointmentWithInfos.getIsVideoCall();
-        this.videoCallLink = appointmentWithInfos.getVideoCallLink();
-        this.state = appointmentWithInfos.getState();
+        this.beginDate = appointment.getBeginDate();
+        this.endDate = appointment.getEndDate();
+        this.isVideoCall = appointment.getIsVideoCall();
+        this.videoCallLink = appointment.getVideoCallLink();
+        this.state = appointment.getState();
         this.isRequester = isRequester;
+        this.place = appointment.getPlace();
+        this.documentId = appointment.getDocumentId();
+        this.publicComment = appointment.getPublicComment();
     }
 
     // Getters
@@ -79,60 +82,86 @@ public class MinimalAppointment implements IModel<MinimalAppointment> {
         return isRequester;
     }
 
+    public String getPlace() {
+        return place;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public String getPublicComment() {
+        return publicComment;
+    }
+
     // Setters
 
-    public MinimalAppointment setId(Long id) {
+    public AppointmentResponse setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public MinimalAppointment setDisplayName(String displayName) {
+    public AppointmentResponse setDisplayName(String displayName) {
         this.displayName = displayName;
         return this;
     }
 
-    public MinimalAppointment setFunctions(List<String> functions) {
+    public AppointmentResponse setFunctions(List<String> functions) {
         this.functions = functions;
         return this;
     }
 
-    public MinimalAppointment setPicture(String picture) {
+    public AppointmentResponse setPicture(String picture) {
         this.picture = picture;
         return this;
     }
 
-    public MinimalAppointment setBeginDate(LocalDateTime beginDate) {
+    public AppointmentResponse setBeginDate(LocalDateTime beginDate) {
         this.beginDate = beginDate;
         return this;
     }
 
-    public MinimalAppointment setEndDate(LocalDateTime endDate) {
+    public AppointmentResponse setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public MinimalAppointment setIsVideoCall(Boolean isVideoCall) {
+    public AppointmentResponse setIsVideoCall(Boolean isVideoCall) {
         this.isVideoCall = isVideoCall;
         return this;
     }
 
-    public MinimalAppointment setVideoCallLink(String videoCallLink) {
+    public AppointmentResponse setVideoCallLink(String videoCallLink) {
         this.videoCallLink = videoCallLink;
         return this;
     }
 
-    public MinimalAppointment setState(AppointmentState state) {
+    public AppointmentResponse setState(AppointmentState state) {
         this.state = state;
         return this;
     }
 
-    public MinimalAppointment setIsRequester(Boolean isRequester) {
+    public AppointmentResponse setIsRequester(Boolean isRequester) {
         this.isRequester = isRequester;
         return this;
     }
 
-    // Functions
+    public AppointmentResponse setPlace(String place) {
+        this.place = place;
+        return this;
+    }
 
+    public AppointmentResponse setDocumentId(String documentId) {
+        this.documentId = documentId;
+        return this;
+    }
+
+    public AppointmentResponse setPublicComment(String publicComment) {
+        this.publicComment = publicComment;
+        return this;
+    }
+
+    // Functions
     public JsonObject toJson() {
         return IModelHelper.toJson(this, false, false);
     }

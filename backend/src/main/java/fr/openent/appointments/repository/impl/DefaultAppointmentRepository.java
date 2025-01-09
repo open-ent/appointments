@@ -87,7 +87,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
             return promise.future();
         }
 
-        String query = "SELECT a.*, ts.begin_date, ts.end_date, g.owner_id " +
+        String query = "SELECT a.*, ts.begin_date, ts.end_date, g.owner_id, g.video_call_link " +
                 "FROM " + DB_APPOINTMENT_TABLE + " a " +
                 "JOIN " + DB_TIME_SLOT_TABLE + " ts ON a.time_slot_id = ts.id " +
                 "LEFT JOIN " + DB_GRID_TABLE + " g ON ts.grid_id = g.id " +

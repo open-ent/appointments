@@ -5,6 +5,7 @@ import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.database.AppointmentWithInfos;
 import fr.openent.appointments.model.database.NeoUser;
+import fr.openent.appointments.model.response.AppointmentResponse;
 import fr.openent.appointments.model.response.ListAppointmentsResponse;
 import fr.openent.appointments.model.response.MinimalAppointment;
 import fr.openent.appointments.repository.AppointmentRepository;
@@ -150,25 +151,54 @@ public class DefaultAppointmentService implements AppointmentService {
         return appointment.getOwnerId().equals(userId);
     }
 
+    private Future<AppointmentResponse> buildAppointmentResponse(AppointmentWithInfos appointment, UserInfos userInfos) {
+        Promise<AppointmentResponse> promise = Promise.promise();
+
+        Boolean isRequester = appointment.getRequesterId().equals(userInfos.getUserId());
+        String otherUserId = isRequester ? appointment.getOwnerId() : appointment.getRequesterId();
+        communicationRepository.getUserFromId(otherUserId, userInfos.getStructures())
+                .onSuccess(user -> {
+                    if (user.isPresent()) {
+                        NeoUser otherUser = user.get();
+                        promise.complete(new AppointmentResponse(appointment, isRequester, otherUser.getDisplayName(), otherUser.getFunctions(), otherUser.getPicture()));
+                    }
+                    else {
+                        String errorMessage = "User not found";
+                        LogHelper.logError(this, "buildAppointmentResponse", errorMessage, "");
+                        promise.fail(errorMessage);
+                    }
+                })
+                .onFailure(err -> {
+                    String errorMessage = "Failed to build appointment response";
+                    LogHelper.logError(this, "buildAppointmentResponse", errorMessage, err.getMessage());
+                    promise.complete(null);
+                });
+
+        return promise.future();
+    }
+
     @Override
-    public Future<AppointmentWithInfos> getAppointmentById(Long appointmentId, String userId){
-        Promise<AppointmentWithInfos> promise = Promise.promise();
+    public Future<AppointmentResponse> getAppointmentById(Long appointmentId, UserInfos userInfos) {
+        Promise<AppointmentResponse> promise = Promise.promise();
         appointmentRepository.get(appointmentId)
-            .onSuccess(appointmentWithInfos -> {
+            .compose(appointmentWithInfos -> {
                 if (appointmentWithInfos.isPresent())
-                    if (isUserInAppointment(appointmentWithInfos.get(), userId))
-                        promise.complete(appointmentWithInfos.get());
+                    if (isUserInAppointment(appointmentWithInfos.get(), userInfos.getUserId())) {
+                        AppointmentWithInfos appointment = appointmentWithInfos.get();
+                        return buildAppointmentResponse(appointment, userInfos);
+                    }
                     else {
                         String errorMessage = "User is not in appointment";
                         LogHelper.logError(this, "getAppointmentById", errorMessage, "");
-                        promise.fail(errorMessage);
+                        return Future.failedFuture(errorMessage);
                     }
                 else {
                     String errorMessage = "Appointment not found";
                     LogHelper.logError(this, "getAppointmentById", errorMessage, "");
-                    promise.fail(errorMessage);
+                    return Future.failedFuture(errorMessage);
                 }
             })
+            .onSuccess(promise::complete)
             .onFailure(err -> {
                 String errorMessage = "Failed to get appointment by id";
                 LogHelper.logError(this, "getAppointmentById", errorMessage, err.getMessage());

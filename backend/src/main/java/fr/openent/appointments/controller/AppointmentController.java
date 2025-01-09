@@ -167,7 +167,7 @@ public class AppointmentController extends ControllerHelper {
         }
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
-                .compose(user -> appointmentService.getAppointmentById(appointmentId, user.getUserId()))
+                .compose(user -> appointmentService.getAppointmentById(appointmentId, user))
                 .onSuccess(appointment -> renderJson(request, appointment.toJson()))
                 .onFailure(err -> {
                     String errorMessage = "Failed to get appointment by id";
