@@ -27,9 +27,9 @@ import {
   weekDayStyle,
   weekSlotsWrapperStyle,
 } from "./style";
-import { isToday } from "./utils";
 import { DaySlots } from "~/components/DaySlots";
 import { DAY_VALUES } from "~/core/constants";
+import { isToday } from "~/core/utils";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 
 export const BookAppointmentWeekSlotsDesktop: FC = () => {
@@ -64,7 +64,7 @@ export const BookAppointmentWeekSlotsDesktop: FC = () => {
             <ColumnHeader
               isEmpty={!!daySlot.slots && !daySlot.slots.length}
               key={uuidv4()}
-              isToday={isToday(daySlot)}
+              isToday={isToday(daySlot.day)}
             >
               <Typography sx={weekDayStyle}>
                 {t(DAY_VALUES[daySlot.weekDay].i18nKey)}

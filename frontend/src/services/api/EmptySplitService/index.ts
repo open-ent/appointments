@@ -8,6 +8,6 @@ const delayBaseQuery = async (args: any, api: any, extraOptions: any) => {
 
 export const emptySplitApi = createApi({
   baseQuery: delayBaseQuery,
-  tagTypes: ["MyGrids", "Availability"],
+  tagTypes: ["MyGrids", "Availability", "MyAppointments"],
   endpoints: () => ({}),
 });

@@ -2,10 +2,15 @@ import { SvgIconProps } from "@mui/material";
 import { Theme, ToastPosition } from "react-toastify";
 
 import { APPOINTMENT_STATE, DAY, DURATION, PERIODICITY } from "./enums";
+import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/enum";
 
 export const GRID_PER_PAGE = 5;
 
 export const MAX_STRING_LENGTH = 250;
+
+export const APPOINTMENT_CARDS_GAP = 40;
+
+export const APPOINTMENT_CARD_WIDTH = 270; // 230 width + 40 gap
 
 export const DURATION_VALUES = {
   [DURATION.FIFTEEN_MINUTES]: {
@@ -81,12 +86,27 @@ export const APPOINTMENT_STATE_VALUES = {
     i18nKey: "appointments.accepted",
     color: "success" as SvgIconProps["color"],
   },
-  [APPOINTMENT_STATE.REJECTED]: {
+  [APPOINTMENT_STATE.REFUSED]: {
     i18nKey: "appointments.refused",
     color: "error" as SvgIconProps["color"],
   },
   [APPOINTMENT_STATE.CANCELED]: {
     i18nKey: "appointments.canceled",
     color: "error" as SvgIconProps["color"],
+  },
+};
+
+export const MY_APPOINTMENTS_LIST_STATE_VALUES = {
+  [MY_APPOINTMENTS_LIST_STATE.PENDING]: {
+    i18nTitleKey: "appointments.my.appointments.pending",
+    i18nEmptyStateKey: "appointments.my.appointments.pending.empty.state",
+  },
+  [MY_APPOINTMENTS_LIST_STATE.ACCEPTED]: {
+    i18nTitleKey: "appointments.my.appointments.accepted",
+    i18nEmptyStateKey: "appointments.my.appointments.accepted.empty.state",
+  },
+  [MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED]: {
+    i18nTitleKey: "appointments.my.appointments.rejected.or.canceled",
+    i18nEmptyStateKey: "",
   },
 };

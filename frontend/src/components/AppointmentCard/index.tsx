@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Button } from "@cgi-learning-hub/ui";
+import { Button, EllipsisWithTooltip } from "@cgi-learning-hub/ui";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import { Box, Divider, Typography } from "@mui/material";
@@ -22,9 +22,16 @@ import { AppointmentCardProps } from "./types";
 import { AppointmentStateIcon } from "./utils";
 import { APPOINTMENT_STATE_VALUES } from "~/core/constants";
 import { APPOINTMENT_STATE } from "~/core/enums";
+import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
   const { t } = useTranslation("appointments");
+
+  const {
+    handleAcceptAppointment,
+    handleCancelAppointment,
+    handleRejectAppointment,
+  } = useMyAppointments();
 
   return (
     <Box sx={cardWrapperStyle}>
@@ -34,12 +41,14 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
         alt={appointment.displayName}
         sx={pictureStyle}
       />
-      <Typography variant="h5" fontWeight={"bold"}>
+      <EllipsisWithTooltip
+        typographyProps={{ variant: "h5", fontWeight: "bold" }}
+      >
         {appointment.displayName}
-      </Typography>
-      <Typography variant="body1">
+      </EllipsisWithTooltip>
+      <EllipsisWithTooltip typographyProps={{ variant: "body1" }}>
         {appointment.functions.join(", ")}
-      </Typography>
+      </EllipsisWithTooltip>
       <Box sx={bottomWrapperBoxStyle}>
         <Box sx={dateBoxStyle}>
           <Typography fontSize={"3.6rem"} lineHeight={"1.2"}>
@@ -84,15 +93,30 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
       </Box>
       {appointment.state === APPOINTMENT_STATE.CREATED &&
         (appointment.isRequester ? (
-          <Button variant="outlined" color="error" fullWidth>
+          <Button
+            variant="outlined"
+            color="error"
+            fullWidth
+            onClick={() => handleCancelAppointment(appointment.id)}
+          >
             {t("appointments.cancel.request")}
           </Button>
         ) : (
           <Box sx={twoButtonsBoxStyle}>
-            <Button variant="outlined" sx={twoButtonsStyle} color="success">
+            <Button
+              variant="outlined"
+              sx={twoButtonsStyle}
+              color="success"
+              onClick={() => handleAcceptAppointment(appointment.id)}
+            >
               {t("appointments.accept")}
             </Button>
-            <Button variant="outlined" sx={twoButtonsStyle} color="error">
+            <Button
+              variant="outlined"
+              sx={twoButtonsStyle}
+              color="error"
+              onClick={() => handleRejectAppointment(appointment.id)}
+            >
               {t("appointments.refuse")}
             </Button>
           </Box>

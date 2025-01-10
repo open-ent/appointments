@@ -8,6 +8,7 @@ import {
   appointmentsIconStyle,
   contentStyle,
   homeStyle,
+  tabItemStyle,
   tabsStyle,
   titleStyle,
 } from "./style";
@@ -17,6 +18,7 @@ import { MyAppointments } from "~/containers/MyAppointments";
 import { MyAvailability } from "~/containers/MyAvailability";
 import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { useGlobal } from "~/providers/GlobalProvider";
+import { MyAppointmentsProvider } from "~/providers/MyAppointmentsProvider";
 import { PURPLE } from "~/styles/color.constants";
 
 export interface AppProps {
@@ -67,9 +69,15 @@ export const Home: FC = () => {
           <Tab label={t("appointments.my.appointments")} />
           {hasManageRight && <Tab label={t("appointments.my.availability")} />}
         </Tabs>
-        {tabValue === 0 && <FindAppointments />}
-        {tabValue === 1 && <MyAppointments />}
-        {tabValue === 2 && hasManageRight && <MyAvailability />}
+        <Box sx={tabItemStyle}>
+          {tabValue === 0 && <FindAppointments />}
+          {tabValue === 1 && (
+            <MyAppointmentsProvider>
+              <MyAppointments />
+            </MyAppointmentsProvider>
+          )}
+          {tabValue === 2 && hasManageRight && <MyAvailability />}
+        </Box>
       </Box>
     </Box>
   );

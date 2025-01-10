@@ -7,8 +7,14 @@ export const cardWrapperStyle: SxProps = {
   padding: "2.4rem",
   borderRadius: "1rem",
   boxShadow: "0px 2px 8px 0px rgba(176, 176, 176, 0.25)",
-  width: "23rem",
+  minWidth: "23rem",
+  maxWidth: "23rem",
   gap: ".4rem",
+  transition: "all 0.2s",
+  cursor: "pointer",
+  "&:hover": {
+    boxShadow: "0px 2px 8px 0px rgba(176, 176, 176, 0.75)",
+  },
 };
 
 export const pictureStyle: SxProps = {
@@ -35,7 +41,7 @@ export const dateBoxStyle: SxProps = {
 
 export const bottomRightBoxStyle: SxProps = {
   ...columnBoxStyle,
-  justifyContent: "space-between",
+  justifyContent: "space-around",
   height: "7rem",
 };
 

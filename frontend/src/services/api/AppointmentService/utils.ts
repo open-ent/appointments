@@ -31,3 +31,7 @@ export const transformResponseToMyAppointments = (
   };
   return myAppointments;
 };
+
+export const transformResponseToDayjsArray = (response: string[]) => {
+  return response.map((date) => dayjs(date));
+};

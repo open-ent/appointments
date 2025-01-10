@@ -12,7 +12,6 @@ export const availabilityContainerStyle = {
   display: "flex",
   flexDirection: "column",
   columnBoxStyle,
-  padding: "5rem 3rem",
   gap: "2rem",
 };
 

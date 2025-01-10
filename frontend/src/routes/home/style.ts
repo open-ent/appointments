@@ -36,3 +36,7 @@ export const tabsStyle = {
   borderColor: "divider",
   width: "100%",
 };
+
+export const tabItemStyle = {
+  padding: "3rem",
+};

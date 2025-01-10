@@ -1,16 +1,32 @@
-import { createContext, FC, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { MY_APPOINTMENTS_LIST_STATE } from "./enum";
 import {
   AppointmentListInfoType,
+  AppointmentsType,
   MyAppointmentsProviderContextProps,
   MyAppointmentsProviderProps,
 } from "./types";
-import { initialLimits, initialPages, states } from "./utils";
+import {
+  initialAppointments,
+  initialLimits,
+  initialPages,
+  states,
+} from "./utils";
+import { APPOINTMENT_STATE } from "~/core/enums";
 import {
   useAcceptAppointmentMutation,
   useCancelAppointmentMutation,
   useGetAppointmentQuery,
+  useGetAppointmentsDatesQuery,
   useGetMyAppointmentsQuery,
   useRejectAppointmentMutation,
 } from "~/services/api/AppointmentService";
@@ -33,6 +49,8 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
 }) => {
   const [pages, setPages] = useState<AppointmentListInfoType>(initialPages);
   const [limits, setLimits] = useState<AppointmentListInfoType>(initialLimits);
+  const [myAppointments, setMyAppointments] =
+    useState<AppointmentsType>(initialAppointments);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<
     number | null
   >(null);
@@ -61,65 +79,96 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     { skip: !selectedAppointmentId },
   );
 
+  const { data: myAppointmentsDates } = useGetAppointmentsDatesQuery({
+    states: [APPOINTMENT_STATE.ACCEPTED],
+  });
+
   const [acceptAppointment] = useAcceptAppointmentMutation();
   const [rejectAppointment] = useRejectAppointmentMutation();
   const [cancelAppointment] = useCancelAppointmentMutation();
 
-  const handleChangePage = (
-    state: MY_APPOINTMENTS_LIST_STATE,
-    page: number,
-  ) => {
-    setPages((prev) => ({ ...prev, [state]: page }));
-  };
+  const handleChangePage = useCallback(
+    (state: MY_APPOINTMENTS_LIST_STATE, page: number) => {
+      setPages((prev) => ({ ...prev, [state]: page }));
+    },
+    [],
+  );
 
-  const handleChangeLimit = (
-    state: MY_APPOINTMENTS_LIST_STATE,
-    limit: number,
-  ) => {
-    setLimits((prev) => ({ ...prev, [state]: limit }));
-  };
+  const handleChangeLimit = useCallback(
+    (state: MY_APPOINTMENTS_LIST_STATE, limit: number) => {
+      setLimits((prev) => ({ ...prev, [state]: limit }));
+    },
+    [],
+  );
 
-  const handleAcceptAppointment = async (id: number) => {
-    try {
-      await acceptAppointment(id).unwrap();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleAcceptAppointment = useCallback(
+    async (id: number) => {
+      try {
+        await acceptAppointment(id).unwrap();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [acceptAppointment],
+  );
 
-  const handleRejectAppointment = async (id: number) => {
-    try {
-      await rejectAppointment(id).unwrap();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleRejectAppointment = useCallback(
+    async (id: number) => {
+      try {
+        await rejectAppointment(id).unwrap();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [rejectAppointment],
+  );
 
-  const handleCancelAppointment = async (id: number) => {
-    try {
-      await cancelAppointment(id).unwrap();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleCancelAppointment = useCallback(
+    async (id: number) => {
+      try {
+        await cancelAppointment(id).unwrap();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [cancelAppointment],
+  );
 
-  const handleClickAppointment = (id: number) => {
+  const handleClickAppointment = useCallback((id: number) => {
     setSelectedAppointmentId(id);
     setIsAppointmentModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseAppointmentModal = () => {
+  const handleCloseAppointmentModal = useCallback(() => {
     setSelectedAppointmentId(null);
     setIsAppointmentModalOpen(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    setMyAppointments((prev) => ({
+      ...prev,
+      [MY_APPOINTMENTS_LIST_STATE.PENDING]:
+        myPendingAppointments || prev[MY_APPOINTMENTS_LIST_STATE.PENDING],
+      [MY_APPOINTMENTS_LIST_STATE.ACCEPTED]:
+        myAcceptedAppointments || prev[MY_APPOINTMENTS_LIST_STATE.ACCEPTED],
+      [MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED]:
+        myRejectedOrCanceledAppointments ||
+        prev[MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED],
+    }));
+  }, [
+    myPendingAppointments,
+    myAcceptedAppointments,
+    myRejectedOrCanceledAppointments,
+  ]);
 
   const value = useMemo<MyAppointmentsProviderContextProps>(
     () => ({
-      myPendingAppointments,
-      myAcceptedAppointments,
-      myRejectedOrCanceledAppointments,
+      myAppointments,
+      limits,
+      pages,
       isAppointmentModalOpen,
       selectedAppointment,
+      myAppointmentsDates,
       handleChangePage,
       handleChangeLimit,
       handleAcceptAppointment,
@@ -129,9 +178,11 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
       handleCloseAppointmentModal,
     }),
     [
+      myAppointments,
       myPendingAppointments,
       myAcceptedAppointments,
       myRejectedOrCanceledAppointments,
+      myAppointmentsDates,
       isAppointmentModalOpen,
       selectedAppointment,
       pages,

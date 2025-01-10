@@ -35,7 +35,7 @@ export const AppointmentStateIcon: FC<AppointmentStateIconProps> = ({
           color={APPOINTMENT_STATE_VALUES[state].color}
         />
       );
-    case APPOINTMENT_STATE.REJECTED:
+    case APPOINTMENT_STATE.REFUSED:
       return (
         <RemoveCircleIcon
           sx={iconsStyle}

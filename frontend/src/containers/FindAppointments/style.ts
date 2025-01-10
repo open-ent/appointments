@@ -5,7 +5,6 @@ import { ITALIC_FONT } from "~/styles/fontStyle.constants";
 
 export const containerStyle = {
   ...columnBoxStyle,
-  padding: "3rem 3rem",
   gap: "2rem",
 };
 
