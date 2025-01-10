@@ -70,6 +70,8 @@ export const PERIODICITY_VALUES = {
 };
 
 export const DISPLAY_DATE_FORMAT = "DD/MM/YYYY";
+export const TEXT_DATE_FORMAT = "DD MMMM YYYY";
+export const TIME_FORMAT = "HH:mm";
 
 export const TOAST_CONFIG = {
   position: "top-center" as ToastPosition,

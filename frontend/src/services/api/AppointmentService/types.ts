@@ -17,31 +17,13 @@ export interface GetAppointmentsDatesPayload {
   states: APPOINTMENT_STATE[];
 }
 
-export interface AppointmentResponse {
-  id: number;
-  displayName: string;
-  functions: string[];
-  picture: string;
-  beginDate: string;
-  endDate: string;
-  videoCallLink: string;
-  state: APPOINTMENT_STATE;
-  isVideoCall: boolean;
+export interface AppointmentResponse extends MyMinimalAppointmentResponse {
   place: string;
   documentId: string;
   publicComment: string;
 }
 
-export interface Appointment {
-  id: number;
-  displayName: string;
-  functions: string[];
-  picture: string;
-  beginDate: Dayjs;
-  endDate: Dayjs;
-  videoCallLink: string;
-  state: APPOINTMENT_STATE;
-  isVideoCall: boolean;
+export interface Appointment extends MyMinimalAppointment {
   place: string;
   documentId: string;
   publicComment: string;
@@ -54,6 +36,7 @@ export interface MyMinimalAppointmentResponse {
   picture: string;
   beginDate: string;
   endDate: string;
+  isVideoCall: boolean;
   videoCallLink: string;
   state: APPOINTMENT_STATE;
   isRequester: boolean;
@@ -66,6 +49,7 @@ export interface MyMinimalAppointment {
   picture: string;
   beginDate: Dayjs;
   endDate: Dayjs;
+  isVideoCall: boolean;
   videoCallLink: string;
   state: APPOINTMENT_STATE;
   isRequester: boolean;

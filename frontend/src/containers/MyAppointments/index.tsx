@@ -13,6 +13,7 @@ import {
   mainContainerStyle,
 } from "./style";
 import { AppointmentCardList } from "../AppointmentCardList";
+import { AppointmentInfosModal } from "../AppointmentInfosModal";
 import { CustomDateCalendar } from "~/components/CustomDateCalendar";
 import { AppointmentsEmptyState } from "~/components/SVG/AppointmentsEmptyState";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
@@ -20,7 +21,8 @@ import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/e
 import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
 
 export const MyAppointments: FC = () => {
-  const { myAppointments, myAppointmentsDates } = useMyAppointments();
+  const { myAppointments, myAppointmentsDates, selectedAppointment } =
+    useMyAppointments();
   const isMobile = useMediaQuery("(max-width:620px)");
   const { t } = useTranslation("appointments");
   const theme = useTheme();
@@ -85,30 +87,35 @@ export const MyAppointments: FC = () => {
   }
 
   return (
-    <Box sx={mainContainerStyle}>
-      <Box sx={fisrtContainerStyle}>
+    <>
+      {selectedAppointment && (
+        <AppointmentInfosModal appointment={selectedAppointment} />
+      )}
+      <Box sx={mainContainerStyle}>
+        <Box sx={fisrtContainerStyle}>
+          <AppointmentCardList
+            appointmentsType={MY_APPOINTMENTS_LIST_STATE.PENDING}
+            myAppointments={myPendingAppointments}
+          />
+          {!isMobile && (
+            <Box sx={customCalendarBoxStyle}>
+              <CustomDateCalendar
+                acceptedAppointmentsDates={myAppointmentsDates}
+              />
+            </Box>
+          )}
+        </Box>
         <AppointmentCardList
-          appointmentsType={MY_APPOINTMENTS_LIST_STATE.PENDING}
-          myAppointments={myPendingAppointments}
+          appointmentsType={MY_APPOINTMENTS_LIST_STATE.ACCEPTED}
+          myAppointments={myAcceptedAppointments}
         />
-        {!isMobile && (
-          <Box sx={customCalendarBoxStyle}>
-            <CustomDateCalendar
-              acceptedAppointmentsDates={myAppointmentsDates}
-            />
-          </Box>
+        {myRejectedOrCanceledAppointments.total > 0 && (
+          <AppointmentCardList
+            appointmentsType={MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED}
+            myAppointments={myRejectedOrCanceledAppointments}
+          />
         )}
       </Box>
-      <AppointmentCardList
-        appointmentsType={MY_APPOINTMENTS_LIST_STATE.ACCEPTED}
-        myAppointments={myAcceptedAppointments}
-      />
-      {myRejectedOrCanceledAppointments.total > 0 && (
-        <AppointmentCardList
-          appointmentsType={MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED}
-          myAppointments={myRejectedOrCanceledAppointments}
-        />
-      )}
-    </Box>
+    </>
   );
 };

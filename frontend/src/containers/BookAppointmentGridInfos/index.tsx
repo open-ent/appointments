@@ -20,7 +20,6 @@ import {
   bottomUserInfoStyle,
   displayNameStyle,
   functionsStyle,
-  imageStyle,
   itemStyle,
   pictureBoxStyle,
   pictureStyle,
@@ -30,11 +29,10 @@ import {
   wrapperUserInfoStyle,
 } from "./style";
 import { BookAppointmentGridInfosProps } from "./types";
-import { NoAvatar } from "~/components/SVG/NoAvatar";
+import { UserPicture } from "~/components/UserPicture";
 import { DURATION_VALUES } from "~/core/constants";
 import { DURATION } from "~/core/enums";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
-import { GREY } from "~/styles/color.constants";
 import { ellipsisWithWrapStyle } from "~/styles/textStyles";
 
 // this container is the first part of BookAppointmentModal
@@ -53,16 +51,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
       <Box sx={topUserInfoStyle}>
         <Box sx={pictureBoxStyle}>
           <Box sx={pictureStyle}>
-            {!(picture && picture.startsWith("/userbook/avatar/")) ? (
-              <NoAvatar fill={GREY} />
-            ) : (
-              <Box
-                alt="user picture"
-                component="img"
-                src={picture}
-                sx={imageStyle}
-              />
-            )}
+            <UserPicture picture={picture} />
           </Box>
           <StatusCircle isAvailable={isAvailable} />
         </Box>

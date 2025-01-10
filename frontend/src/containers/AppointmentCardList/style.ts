@@ -4,7 +4,6 @@ export const containerStyle: SxProps = {
   display: "flex",
   flexGrow: 1,
   flexDirection: "column",
-  overflow: "hidden",
   width: "100%",
   gap: "1.6rem",
 };

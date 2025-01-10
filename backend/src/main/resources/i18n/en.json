@@ -76,6 +76,9 @@
   "appointments.my.appointments.accepted": "Mes rendez-vous",
   "appointments.my.appointments.accepted.empty.state": "Vous n’avez aucun rendez-vous planifié. Utilisez l’onglet Trouver un rendez-vous pour en programmer un.",
   "appointments.my.appointments.rejected.or.canceled": "Rendez-vous annulés/refusés",
+  "appointments.my.appointment.infos.modal.title": "Rendez-vous avec...",
+  "appointments.my.appointment.infos.modal.video.call": "Rendez-vous en visioconférence :",
+  "appointments.my.appointment.infos.modal.date": "Le {{date}}, de {{beginTime}} à {{endTime}}",
 
   "appointments.cancel.request": "Annuler la demande",
 

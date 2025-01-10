@@ -60,6 +60,8 @@ export const pictureStyle: SxProps = {
   overflow: "hidden",
   borderRadius: "50%",
   display: "flex",
+  width: "100%",
+  height: "100%",
 };
 
 export const pictureBoxStyle: SxProps = {

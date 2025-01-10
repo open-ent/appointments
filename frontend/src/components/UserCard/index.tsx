@@ -17,9 +17,8 @@ import {
   WrapperUserCard,
 } from "./style";
 import { UserCardProps } from "./types";
-import { NoAvatar } from "../SVG/NoAvatar";
+import { UserPicture } from "../UserPicture";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
-import { GREY } from "~/styles/color.constants";
 
 export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
   ({ infos }, ref) => {
@@ -65,16 +64,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
         onClick={() => handleOnClickCard(isAvailable ? infos : null)}
       >
         <Box sx={pictureStyle}>
-          {!(picture && picture.startsWith("/userbook/avatar/")) ? (
-            <NoAvatar fill={GREY} />
-          ) : (
-            <Box
-              alt="user picture"
-              component="img"
-              src={picture}
-              sx={{ objectFit: "cover" }}
-            />
-          )}
+          <UserPicture picture={picture} />
         </Box>
         <Box sx={textWrapperStyle}>
           <Box sx={topTextWrapperStyle}>
