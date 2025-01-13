@@ -38,7 +38,7 @@ import {
   TEXT_DATE_FORMAT,
   TIME_FORMAT,
 } from "~/core/constants";
-import { APPOINTMENT_STATE } from "~/core/enums";
+import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 
 export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
@@ -48,8 +48,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
     isAppointmentModalOpen,
     handleCloseAppointmentModal,
     handleAcceptAppointment,
-    handleCancelAppointment,
-    handleRejectAppointment,
+    handleOpenDialogModal,
   } = useMyAppointments();
   const { t } = useTranslation("appointments");
 
@@ -85,17 +84,19 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 {t(APPOINTMENT_STATE_VALUES[appointment.state].i18nKey)}
               </Typography>
             </Box>
-            <Box sx={rowInfoStyle}>
-              <VideoCameraFrontIcon color="primary" />
-              <Box>
-                <Typography variant="h5">
-                  {t("appointments.my.appointment.infos.modal.video.call")}
-                </Typography>
-                <Link href={appointment.videoCallLink} color={"primary"}>
-                  {appointment.videoCallLink}
-                </Link>
+            {appointment.isVideoCall && (
+              <Box sx={rowInfoStyle}>
+                <VideoCameraFrontIcon color="primary" />
+                <Box>
+                  <Typography variant="h5">
+                    {t("appointments.my.appointment.infos.modal.video.call")}
+                  </Typography>
+                  <Link href={appointment.videoCallLink} color={"primary"}>
+                    {appointment.videoCallLink}
+                  </Link>
+                </Box>
               </Box>
-            </Box>
+            )}
             <Box sx={rowInfoStyle}>
               <EventIcon sx={greyIconStyle} />
               <Typography variant="h5">
@@ -108,14 +109,20 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 })}
               </Typography>
             </Box>
-            <Box sx={rowInfoStyle}>
-              <PlaceIcon sx={greyIconStyle} />
-              <Typography variant="h5">{appointment.place}</Typography>
-            </Box>
-            <Box sx={rowInfoStyle}>
-              <CommentIcon sx={greyIconStyle} />
-              <Typography variant="h5">{appointment.publicComment}</Typography>
-            </Box>
+            {appointment.place && (
+              <Box sx={rowInfoStyle}>
+                <PlaceIcon sx={greyIconStyle} />
+                <Typography variant="h5">{appointment.place}</Typography>
+              </Box>
+            )}
+            {appointment.publicComment && (
+              <Box sx={rowInfoStyle}>
+                <CommentIcon sx={greyIconStyle} />
+                <Typography variant="h5">
+                  {appointment.publicComment}
+                </Typography>
+              </Box>
+            )}
           </Box>
           {appointment.state === APPOINTMENT_STATE.CREATED &&
             (appointment.isRequester ? (
@@ -124,7 +131,12 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                   variant="outlined"
                   color="error"
                   sx={oneButtonStyle}
-                  onClick={() => handleCancelAppointment(appointment.id)}
+                  onClick={() =>
+                    handleOpenDialogModal(
+                      CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
+                      appointment.id,
+                    )
+                  }
                 >
                   {t("appointments.cancel.request")}
                 </Button>
@@ -135,7 +147,10 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                   variant="outlined"
                   sx={twoButtonsStyle}
                   color="success"
-                  onClick={() => handleAcceptAppointment(appointment.id)}
+                  onClick={() => {
+                    handleAcceptAppointment(appointment.id);
+                    handleCloseAppointmentModal();
+                  }}
                 >
                   {t("appointments.accept")}
                 </Button>
@@ -143,7 +158,12 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                   variant="outlined"
                   sx={twoButtonsStyle}
                   color="error"
-                  onClick={() => handleRejectAppointment(appointment.id)}
+                  onClick={() =>
+                    handleOpenDialogModal(
+                      CONFIRM_MODAL_TYPE.REJECT_REQUEST,
+                      appointment.id,
+                    )
+                  }
                 >
                   {t("appointments.refuse")}
                 </Button>
@@ -155,9 +175,14 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 variant="outlined"
                 color="error"
                 sx={oneButtonStyle}
-                onClick={() => handleCancelAppointment(appointment.id)}
+                onClick={() =>
+                  handleOpenDialogModal(
+                    CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT,
+                    appointment.id,
+                  )
+                }
               >
-                {t("appointments.cancel.request")}
+                {t("appointments.cancel.appointment")}
               </Button>
             </Box>
           )}

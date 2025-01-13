@@ -1,7 +1,13 @@
 import { SvgIconProps } from "@mui/material";
 import { Theme, ToastPosition } from "react-toastify";
 
-import { APPOINTMENT_STATE, DAY, DURATION, PERIODICITY } from "./enums";
+import {
+  APPOINTMENT_STATE,
+  CONFIRM_MODAL_TYPE,
+  DAY,
+  DURATION,
+  PERIODICITY,
+} from "./enums";
 import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/enum";
 
 export const GRID_PER_PAGE = 5;
@@ -110,5 +116,20 @@ export const MY_APPOINTMENTS_LIST_STATE_VALUES = {
   [MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED]: {
     i18nTitleKey: "appointments.my.appointments.rejected.or.canceled",
     i18nEmptyStateKey: "",
+  },
+};
+
+export const CONFIRM_MODAL_VALUES = {
+  [CONFIRM_MODAL_TYPE.REJECT_REQUEST]: {
+    titleKey: "appointments.confirm.modal.reject.request.title",
+    descriptionKey: "appointments.confirm.modal.reject.request.description",
+  },
+  [CONFIRM_MODAL_TYPE.CANCEL_REQUEST]: {
+    titleKey: "appointments.confirm.modal.cancel.request.title",
+    descriptionKey: "appointments.confirm.modal.cancel.request.description",
+  },
+  [CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT]: {
+    titleKey: "appointments.confirm.modal.cancel.appointment.title",
+    descriptionKey: "appointments.confirm.modal.cancel.appointment.description",
   },
 };

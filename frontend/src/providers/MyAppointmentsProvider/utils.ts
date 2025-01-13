@@ -27,3 +27,11 @@ export const states = {
     APPOINTMENT_STATE.CANCELED,
   ],
 };
+
+export const initialDialogModalProps = {
+  open: false,
+  title: "",
+  description: "",
+  handleCancel: () => {},
+  handleConfirm: () => {},
+};

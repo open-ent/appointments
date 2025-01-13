@@ -80,7 +80,15 @@
   "appointments.my.appointment.infos.modal.video.call": "Rendez-vous en visioconférence :",
   "appointments.my.appointment.infos.modal.date": "Le {{date}}, de {{beginTime}} à {{endTime}}",
 
+  "appointments.confirm.modal.reject.request.title": "Refuser la demande",
+  "appointments.confirm.modal.reject.request.description": "Si vous confirmez, la demande de rendez-vous sera refusée et vous redeviendrez disponible sur le créneau concerné.",
+  "appointments.confirm.modal.cancel.request.title": "Annuler la demande",
+  "appointments.confirm.modal.cancel.request.description": "Si vous confirmez, la demande de rendez-vous sera annulée et le créneau redeviendra disponible.",
+  "appointments.confirm.modal.cancel.appointment.title": "Annuler le rendez-vous",
+  "appointments.confirm.modal.cancel.appointment.description": "Si vous confirmez, le rendez-vous sera annulé et vous redeviendrez disponible sur le créneau concerné.",
+
   "appointments.cancel.request": "Annuler la demande",
+  "appointments.cancel.appointment": "Annuler le rendez-vous",
 
   "appointments.appointments": "Rendez-vous",
   "appointments.cancel": "Annuler",

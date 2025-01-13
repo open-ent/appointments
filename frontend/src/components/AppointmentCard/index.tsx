@@ -22,7 +22,7 @@ import { AppointmentCardProps } from "./types";
 import { AppointmentStateIcon } from "./utils";
 import { UserPicture } from "../UserPicture";
 import { APPOINTMENT_STATE_VALUES, TIME_FORMAT } from "~/core/constants";
-import { APPOINTMENT_STATE } from "~/core/enums";
+import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
@@ -30,9 +30,8 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
 
   const {
     handleAcceptAppointment,
-    handleCancelAppointment,
-    handleRejectAppointment,
     handleClickAppointment,
+    handleOpenDialogModal,
   } = useMyAppointments();
 
   return (
@@ -99,7 +98,13 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
             variant="outlined"
             color="error"
             fullWidth
-            onClick={() => handleCancelAppointment(appointment.id)}
+            onClick={(event) => {
+              event?.stopPropagation();
+              handleOpenDialogModal(
+                CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
+                appointment.id,
+              );
+            }}
           >
             {t("appointments.cancel.request")}
           </Button>
@@ -109,7 +114,10 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
               variant="outlined"
               sx={twoButtonsStyle}
               color="success"
-              onClick={() => handleAcceptAppointment(appointment.id)}
+              onClick={(event) => {
+                event?.stopPropagation();
+                handleAcceptAppointment(appointment.id);
+              }}
             >
               {t("appointments.accept")}
             </Button>
@@ -117,7 +125,13 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
               variant="outlined"
               sx={twoButtonsStyle}
               color="error"
-              onClick={() => handleRejectAppointment(appointment.id)}
+              onClick={(event) => {
+                event?.stopPropagation();
+                handleOpenDialogModal(
+                  CONFIRM_MODAL_TYPE.REJECT_REQUEST,
+                  appointment.id,
+                );
+              }}
             >
               {t("appointments.refuse")}
             </Button>

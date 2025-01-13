@@ -8,6 +8,8 @@ import {
   useState,
 } from "react";
 
+import { useTranslation } from "react-i18next";
+
 import { MY_APPOINTMENTS_LIST_STATE } from "./enum";
 import {
   AppointmentListInfoType,
@@ -17,11 +19,14 @@ import {
 } from "./types";
 import {
   initialAppointments,
+  initialDialogModalProps,
   initialLimits,
   initialPages,
   states,
 } from "./utils";
-import { APPOINTMENT_STATE } from "~/core/enums";
+import { DialogModalProps } from "~/components/DialogModal/types";
+import { CONFIRM_MODAL_VALUES } from "~/core/constants";
+import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
 import {
   useAcceptAppointmentMutation,
   useCancelAppointmentMutation,
@@ -47,6 +52,7 @@ export const useMyAppointments = () => {
 export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   children,
 }) => {
+  const { t } = useTranslation("appointments");
   const [pages, setPages] = useState<AppointmentListInfoType>(initialPages);
   const [limits, setLimits] = useState<AppointmentListInfoType>(initialLimits);
   const [myAppointments, setMyAppointments] =
@@ -55,6 +61,9 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     number | null
   >(null);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [dialogModalProps, setDialogModalProps] = useState<DialogModalProps>(
+    initialDialogModalProps,
+  );
 
   const { data: myPendingAppointments } = useGetMyAppointmentsQuery({
     states: states[MY_APPOINTMENTS_LIST_STATE.PENDING],
@@ -144,6 +153,44 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     setIsAppointmentModalOpen(false);
   }, []);
 
+  const handleCloseDialogModal = useCallback(() => {
+    setDialogModalProps(initialDialogModalProps);
+  }, []);
+
+  const handleOpenDialogModal = useCallback(
+    (confirmType: CONFIRM_MODAL_TYPE, id: number) => {
+      const dialogModalProps: DialogModalProps = {
+        open: true,
+        title: t(CONFIRM_MODAL_VALUES[confirmType].titleKey),
+        description: t(CONFIRM_MODAL_VALUES[confirmType].descriptionKey),
+        handleCancel: handleCloseDialogModal,
+        handleConfirm: () => {
+          switch (confirmType) {
+            case CONFIRM_MODAL_TYPE.REJECT_REQUEST:
+              handleRejectAppointment(id);
+              break;
+            case CONFIRM_MODAL_TYPE.CANCEL_REQUEST:
+              handleCancelAppointment(id);
+              break;
+            case CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT:
+              handleCancelAppointment(id);
+              break;
+          }
+          handleCloseDialogModal();
+          handleCloseAppointmentModal();
+        },
+      };
+
+      setDialogModalProps(dialogModalProps);
+    },
+    [
+      t,
+      handleRejectAppointment,
+      handleCancelAppointment,
+      handleCloseDialogModal,
+    ],
+  );
+
   useEffect(() => {
     setMyAppointments((prev) => ({
       ...prev,
@@ -169,13 +216,14 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
       isAppointmentModalOpen,
       selectedAppointment,
       myAppointmentsDates,
+      dialogModalProps,
       handleChangePage,
       handleChangeLimit,
       handleAcceptAppointment,
-      handleRejectAppointment,
-      handleCancelAppointment,
       handleClickAppointment,
       handleCloseAppointmentModal,
+      handleOpenDialogModal,
+      handleCloseDialogModal,
     }),
     [
       myAppointments,
@@ -187,6 +235,7 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
       selectedAppointment,
       pages,
       limits,
+      dialogModalProps,
     ],
   );
 

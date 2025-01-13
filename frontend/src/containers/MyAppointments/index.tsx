@@ -15,14 +15,19 @@ import {
 import { AppointmentCardList } from "../AppointmentCardList";
 import { AppointmentInfosModal } from "../AppointmentInfosModal";
 import { CustomDateCalendar } from "~/components/CustomDateCalendar";
+import { DialogModal } from "~/components/DialogModal";
 import { AppointmentsEmptyState } from "~/components/SVG/AppointmentsEmptyState";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/enum";
 import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
 
 export const MyAppointments: FC = () => {
-  const { myAppointments, myAppointmentsDates, selectedAppointment } =
-    useMyAppointments();
+  const {
+    myAppointments,
+    myAppointmentsDates,
+    selectedAppointment,
+    dialogModalProps,
+  } = useMyAppointments();
   const isMobile = useMediaQuery("(max-width:620px)");
   const { t } = useTranslation("appointments");
   const theme = useTheme();
@@ -91,6 +96,7 @@ export const MyAppointments: FC = () => {
       {selectedAppointment && (
         <AppointmentInfosModal appointment={selectedAppointment} />
       )}
+      <DialogModal {...dialogModalProps} />
       <Box sx={mainContainerStyle}>
         <Box sx={fisrtContainerStyle}>
           <AppointmentCardList
