@@ -6,6 +6,7 @@ import fr.openent.appointments.model.database.AppointmentWithInfos;
 import fr.openent.appointments.model.response.AppointmentResponse;
 import fr.openent.appointments.model.response.ListAppointmentsResponse;
 import io.vertx.core.Future;
+import io.vertx.core.http.HttpServerRequest;
 import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
@@ -67,25 +68,28 @@ public interface AppointmentService {
 
     /**
      * Accept an appointment
+     * @param request The http request
      * @param appointmentId The appointment id
-     * @param userId The user id
+     * @param userInfos The user infos
      * @return The updated appointment
      */
-    Future<Appointment> acceptAppointment(Long appointmentId, String userId);
+    Future<Appointment> acceptAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
 
     /**
      * reject an appointment
+     * @param request The http request
      * @param appointmentId The appointment id
-     * @param userId The user id
+     * @param userInfos The user infos
      * @return The updated appointment
      */
-    Future<Appointment> rejectAppointment(Long appointmentId, String userId);
+    Future<Appointment> rejectAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
 
     /**
      * Cancel an appointment
+     * @param request The http request
      * @param appointmentId The appointment id
-     * @param userId The user id
+     * @param userInfos The user infos
      * @return The updated appointment
      */
-    Future<Appointment> cancelAppointment(Long appointmentId, String userId);
+    Future<Appointment> cancelAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
 }

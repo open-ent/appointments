@@ -1,22 +1,21 @@
 <span>
-  {{#i18n}}timeline.appointments.received.new.appointment.request{{/i18n}}
   {{#userUri}}
     <a href="{{#host}}{{userUri}}{{/host}}">
-      {{#userName}}{{userName}}{{/userName}}.
+      {{#userName}}{{userName}}{{/userName}}
     </a>
   {{/userUri}}
   {{^userUri}}
     {{#userName}}{{userName}}{{/userName}}.
   {{/userUri}}
+  {{#i18n}}timeline.appointments.rejected.appointment.request{{/i18n}}
   <br />
-  {{#i18n}}timeline.appointments.consult.app{{/i18n}}
+  {{#i18n}}timeline.appointments.rejected.appointment.request.consult.app{{/i18n}}
   {{#appointmentUri}}
     <a href="{{#host}}{{appointmentUri}}{{/host}}">
-      {{#i18n}}appointments{{/i18n}}
+      {{#i18n}}appointments{{/i18n}}.
     </a>
   {{/appointmentUri}}
   {{^appointmentUri}}
-    {{#i18n}}appointments{{/i18n}}
+    {{#i18n}}appointments{{/i18n}}.
   {{/appointmentUri}}
-  {{#i18n}}timeline.appointments.to.respond{{/i18n}}
 </span>

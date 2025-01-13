@@ -95,6 +95,7 @@ public class AppointmentController extends ControllerHelper {
                 return Future.failedFuture(errorMessage);
             })
             .compose(appointment -> {
+                composeInfo.put(CAMEL_APPOINTMENT_ID, appointment.getId());
                 renderJson(request, appointment.toJson());
                 return gridService.getGridByTimeSlotId(timeSlotId);
             })
@@ -106,7 +107,8 @@ public class AppointmentController extends ControllerHelper {
             .onSuccess(grid -> {
                 UserInfos user = (UserInfos) composeInfo.getValue(CAMEL_USER_INFO);
                 String targetUserId = grid.getOwnerId();
-                notifyService.notifyNewAppointment(request, user, targetUserId);
+                Long appointmentId = composeInfo.getLong(CAMEL_APPOINTMENT_ID, null);
+                notifyService.notifyNewAppointment(request, user, targetUserId, appointmentId);
             })
             .onFailure(err -> {
                 String errorMessage = "Failed to create appointment";
@@ -191,20 +193,19 @@ public class AppointmentController extends ControllerHelper {
         }
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
-                .compose(user -> actionHandler.handle(appointmentId, user.getUserId()))
-                .onSuccess(appointment -> renderJson(request, appointment.toJson()))
-                .onFailure(err -> {
-                    String errorMessage = "Failed to " + action + " appointment";
-                    LogHelper.logError(this, action+"Appointment", errorMessage, err.getMessage());
-                    renderError(request);
-                });
+            .compose(user -> actionHandler.handle(request, appointmentId, user))
+            .onSuccess(appointment -> renderJson(request, appointment.toJson()))
+            .onFailure(err -> {
+                String errorMessage = "Failed to " + action + " appointment";
+                LogHelper.logError(this, action+"Appointment", errorMessage, err.getMessage());
+                renderError(request);
+            });
     }
 
     interface AppointmentActionHandler {
-        Future<Appointment> handle(Long appointmentId, String userId);
+        Future<Appointment> handle(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
     }
 
-    // TODO: Notif
     @Put("appointments/:appointmentId/accept")
     @ApiDoc("Accept an appointment")
     @ResourceFilter(ManageRight.class)
@@ -213,7 +214,6 @@ public class AppointmentController extends ControllerHelper {
         handleAppointmentAction(request, "accept", appointmentService::acceptAppointment);
     }
 
-    // TODO: Notif
     @Put("appointments/:appointmentId/reject")
     @ApiDoc("Reject an appointment")
     @ResourceFilter(ManageRight.class)
@@ -222,7 +222,6 @@ public class AppointmentController extends ControllerHelper {
         handleAppointmentAction(request, "reject", appointmentService::rejectAppointment);
     }
 
-    // TODO: Notif
     @Put("appointments/:appointmentId/cancel")
     @ApiDoc("Cancel an appointment")
     @ResourceFilter(ViewRight.class)

@@ -12,11 +12,14 @@ import fr.openent.appointments.repository.AppointmentRepository;
 import fr.openent.appointments.repository.CommunicationRepository;
 import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.service.AppointmentService;
+import fr.openent.appointments.service.NotifyService;
 import fr.openent.appointments.service.ServiceFactory;
 import fr.openent.appointments.service.TimeSlotService;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonObject;
 import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
@@ -25,15 +28,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static fr.openent.appointments.core.constants.Fields.STATE;
+
 public class DefaultAppointmentService implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final CommunicationRepository communicationRepository;
     private final TimeSlotService timeSlotService;
+    private final NotifyService notifyService;
 
     public DefaultAppointmentService(ServiceFactory serviceFactory, RepositoryFactory repositoryFactory) {
         this.appointmentRepository = repositoryFactory.appointmentRepository();
         this.communicationRepository = repositoryFactory.communicationRepository();
         this.timeSlotService = serviceFactory.timeSlotService();
+        this.notifyService = serviceFactory.notifyService();
     }
 
     @Override
@@ -231,57 +238,78 @@ public class DefaultAppointmentService implements AppointmentService {
         return promise.future();
     }
 
-    private Future<Appointment> handleAppointmentStateChange(Long appointmentId, String userId, AppointmentState targetState, String functionName) {
+    private Boolean isValidAction(AppointmentState currentState, AppointmentState targetState) {
+        switch (currentState) {
+            case CREATED:
+                return  targetState == AppointmentState.ACCEPTED ||
+                        targetState == AppointmentState.REFUSED ||
+                        targetState == AppointmentState.CANCELED;
+            case ACCEPTED:
+                return targetState == AppointmentState.CANCELED;
+            default:
+                return false;
+        }
+    }
+
+    private Future<Appointment> handleAppointmentStateChange(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, AppointmentState targetState, String functionName) {
         Promise<Appointment> promise = Promise.promise();
 
+        JsonObject composeInfos = new JsonObject();
+
         appointmentRepository.get(appointmentId)
-                .compose(appointment -> {
-                    if (!appointment.isPresent()) {
-                        LogHelper.logError(this, functionName, "Appointment not found", "");
-                        return Future.failedFuture("Appointment not found");
-                    }
-
-                    if (!isOwnerOfAppointment(appointment.get(), userId)) {
-                        LogHelper.logError(this, functionName, "User is not the owner of the appointment", "");
-                        return Future.failedFuture("User is not the owner of the appointment");
-                    }
-
-                    if (appointment.get().getState() != AppointmentState.CREATED) {
-                        LogHelper.logError(this, functionName, "Appointment is not pending", "");
-                        return Future.failedFuture("Appointment is not pending");
-                    }
-
-                    return appointmentRepository.updateState(appointmentId, targetState);
-                })
-                .onSuccess(updatedAppointment -> {
-                    if (updatedAppointment.isPresent()) {
-                        promise.complete(updatedAppointment.get());
-                    } else {
-                        LogHelper.logError(this, functionName, "Failed to update appointment", "");
-                        promise.fail("Failed to update appointment");
-                    }
-                })
-                .onFailure(err -> {
-                    LogHelper.logError(this, functionName, "Failed to update appointment", err.getMessage());
-                    promise.fail(err);
-                });
+            .compose(appointment -> {
+                if (!appointment.isPresent()) {
+                    LogHelper.logError(this, functionName, "Appointment not found", "");
+                    return Future.failedFuture("Appointment not found");
+                }
+                AppointmentWithInfos appointmentWithInfos = appointment.get();
+                if(!isUserInAppointment(appointmentWithInfos, userInfos.getUserId())) {
+                    LogHelper.logError(this, functionName, "User is not in appointment", "");
+                    return Future.failedFuture("User is not in appointment");
+                }
+                composeInfos.put(STATE, appointmentWithInfos.getState().getValue());
+                if ( (targetState == AppointmentState.ACCEPTED || targetState == AppointmentState.REFUSED) && !isOwnerOfAppointment(appointmentWithInfos, userInfos.getUserId())) {
+                    String errorMessage = "User is not the owner of the appointment";
+                    LogHelper.logError(this, functionName, errorMessage, "");
+                    return Future.failedFuture(errorMessage);
+                }
+                if (!isValidAction(AppointmentState.getAppointmentState((String) composeInfos.getValue(STATE)), targetState)) {
+                    String errorMessage = "Invalid action";
+                    LogHelper.logError(this, functionName, errorMessage, "");
+                    return Future.failedFuture(errorMessage);
+                }
+                return appointmentRepository.updateState(appointmentId, targetState);
+            })
+            .onSuccess(updatedAppointment -> {
+                if (updatedAppointment.isPresent()) {
+                    promise.complete(updatedAppointment.get());
+                    notifyService.notifyAppointmentUpdate(request, userInfos, AppointmentState.getAppointmentState((String) composeInfos.getValue(STATE)), appointmentId);
+                } else {
+                    LogHelper.logError(this, functionName, "Failed to update appointment", "");
+                    promise.fail("Failed to update appointment");
+                }
+            })
+            .onFailure(err -> {
+                LogHelper.logError(this, functionName, "Failed to update appointment", err.getMessage());
+                promise.fail(err);
+            });
 
         return promise.future();
     }
 
     @Override
-    public Future<Appointment> acceptAppointment(Long appointmentId, String userId) {
-        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.ACCEPTED, "acceptAppointment");
+    public Future<Appointment> acceptAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos) {
+        return handleAppointmentStateChange(request, appointmentId, userInfos, AppointmentState.ACCEPTED, "acceptAppointment");
     }
 
     @Override
-    public Future<Appointment> rejectAppointment(Long appointmentId, String userId) {
-        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.REFUSED, "rejectAppointment");
+    public Future<Appointment> rejectAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos) {
+        return handleAppointmentStateChange(request, appointmentId, userInfos, AppointmentState.REFUSED, "rejectAppointment");
     }
 
     @Override
-    public Future<Appointment> cancelAppointment(Long appointmentId, String userId) {
-        return handleAppointmentStateChange(appointmentId, userId, AppointmentState.CANCELED, "cancelAppointment");
+    public Future<Appointment> cancelAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos) {
+        return handleAppointmentStateChange(request, appointmentId, userInfos, AppointmentState.CANCELED, "cancelAppointment");
     }
 
 }

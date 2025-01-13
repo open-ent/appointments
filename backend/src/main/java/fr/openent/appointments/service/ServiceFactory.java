@@ -24,11 +24,12 @@ public class ServiceFactory {
         this.vertx = vertx;
         this.appConfig = appConfig;
         this.timelineHelper = timelineHelper;
+        this.notifyService = new DefaultNotifyService(this, repositoryFactory);
         this.timeSlotService = new DefaultTimeSlotService(this, repositoryFactory);
         this.gridService = new DefaultGridService(this, repositoryFactory);
         this.communicationService = new DefaultCommunicationService(this, repositoryFactory);
         this.appointmentService = new DefaultAppointmentService(this, repositoryFactory);
-        this.notifyService = new DefaultNotifyService(this);
+
     }
 
     public Vertx vertx() {
