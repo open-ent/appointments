@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   EllipsisWithTooltip,
@@ -92,7 +93,9 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                     {t("appointments.my.appointment.infos.modal.video.call")}
                   </Typography>
                   <Link href={appointment.videoCallLink} color={"primary"}>
-                    {appointment.videoCallLink}
+                    <Typography variant="h5">
+                      {appointment.videoCallLink}
+                    </Typography>
                   </Link>
                 </Box>
               </Box>
@@ -124,6 +127,8 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               </Box>
             )}
           </Box>
+        </DialogContent>
+        <DialogActions>
           {appointment.state === APPOINTMENT_STATE.CREATED &&
             (appointment.isRequester ? (
               <Box sx={oneButtonBoxStyle}>
@@ -186,7 +191,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               </Button>
             </Box>
           )}
-        </DialogContent>
+        </DialogActions>
       </Box>
     </Dialog>
   );
