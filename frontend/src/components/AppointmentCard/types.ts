@@ -9,3 +9,7 @@ export interface AppointmentStateIconProps {
   state: APPOINTMENT_STATE;
   isRequester: boolean;
 }
+
+export interface StyledCardProps {
+  isAnimated: boolean;
+}

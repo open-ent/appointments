@@ -1,8 +1,9 @@
-import { FC, SyntheticEvent, useState } from "react";
+import { FC, SyntheticEvent, useEffect, useState } from "react";
 
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { ID } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 
 import {
   appointmentsIconStyle,
@@ -34,12 +35,12 @@ export interface AppProps {
 }
 
 export const Home: FC = () => {
-  const { hasManageRight } = useGlobal();
+  const { hasManageRight, setAppointmentIdFromNotify } = useGlobal();
   const { resetSearch } = useFindAppointments();
 
   const initialTabValue = parseInt(sessionStorage.getItem("tabValue") || "0");
   const [tabValue, setTabValue] = useState(
-    hasManageRight && initialTabValue === 2 ? 0 : initialTabValue,
+    !hasManageRight && initialTabValue === 2 ? 0 : initialTabValue,
   );
   const { t } = useTranslation("appointments");
 
@@ -48,6 +49,18 @@ export const Home: FC = () => {
     tabValue === 0 && resetSearch();
     sessionStorage.setItem("tabValue", newValue.toString());
   };
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const appointmentId = searchParams.get("appointmentId");
+    if (appointmentId) {
+      setAppointmentIdFromNotify(parseInt(appointmentId));
+      handleChange({} as SyntheticEvent, 1);
+      searchParams.delete("appointmentId");
+      setSearchParams(searchParams);
+    }
+  }, [searchParams, setAppointmentIdFromNotify]);
 
   return (
     <Box sx={homeStyle}>

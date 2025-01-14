@@ -1,21 +1,40 @@
-import { SxProps } from "@mui/material";
+import { Box, styled, SxProps } from "@mui/material";
 
+import { StyledCardProps } from "./types";
 import { columnBoxStyle, flexStartBoxStyle } from "~/styles/boxStyles";
 
-export const cardWrapperStyle: SxProps = {
-  ...columnBoxStyle,
-  padding: "2.4rem",
-  borderRadius: "1rem",
-  boxShadow: "0px 2px 8px 0px rgba(176, 176, 176, 0.25)",
-  minWidth: "23rem",
-  maxWidth: "23rem",
-  gap: ".4rem",
-  transition: "all 0.2s",
-  cursor: "pointer",
-  "&:hover": {
-    boxShadow: "0px 2px 8px 0px rgba(176, 176, 176, 0.75)",
-  },
-};
+export const StyledCard = styled(Box)<StyledCardProps>(({
+  isAnimated,
+  theme,
+}) => {
+  return {
+    ...columnBoxStyle,
+    padding: "2.4rem",
+    borderRadius: "1rem",
+    boxShadow: isAnimated
+      ? `0px 2px 8px 4px ${theme.palette.primary.light}`
+      : "0px 2px 8px 0px rgba(176, 176, 176, 0.25)",
+    minWidth: "23rem",
+    maxWidth: "23rem",
+    gap: ".4rem",
+    cursor: "pointer",
+    "&:hover": {
+      boxShadow: "0px 2px 16px 4px rgba(176, 176, 176, 0.25)",
+    },
+    "@keyframes flash": {
+      "0%": {
+        boxShadow: `0px 2px 8px 4px ${theme.palette.primary.light}`,
+      },
+      "50%": {
+        boxShadow: `0px 2px 16px 8px ${theme.palette.primary.light}`,
+      },
+      "100%": {
+        boxShadow: `0px 2px 8px 4px ${theme.palette.primary.light}`,
+      },
+    },
+    animation: isAnimated ? "flash 1s ease-in-out" : "none",
+  };
+});
 
 export const pictureStyle: SxProps = {
   minWidth: "6rem",

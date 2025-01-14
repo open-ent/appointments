@@ -64,3 +64,7 @@ export interface MyAppointments {
   total: number;
   appointments: MyMinimalAppointment[];
 }
+
+export interface SpecialAppointmentInfos {
+  index: number;
+}

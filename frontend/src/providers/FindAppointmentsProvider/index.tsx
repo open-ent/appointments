@@ -99,7 +99,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       resetSearch,
       refetchSearch,
     }),
-    [users, hasMoreUsers, search, newUsers, page, isFetching],
+    [users, hasMoreUsers, search, isFetching],
   );
   return (
     <FindAppointmentsProviderContext.Provider value={value}>

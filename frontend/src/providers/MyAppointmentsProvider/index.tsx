@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import {
   createContext,
   FC,
@@ -24,12 +25,14 @@ import {
   initialPages,
   states,
 } from "./utils";
+import { useGlobal } from "../GlobalProvider";
 import { DialogModalProps } from "~/components/DialogModal/types";
 import { CONFIRM_MODAL_VALUES } from "~/core/constants";
 import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
 import {
   useAcceptAppointmentMutation,
   useCancelAppointmentMutation,
+  useGetAppointmentIndexQuery,
   useGetAppointmentQuery,
   useGetAppointmentsDatesQuery,
   useGetMyAppointmentsQuery,
@@ -53,6 +56,7 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   children,
 }) => {
   const { t } = useTranslation("appointments");
+  const { appointmentIdFromNotify } = useGlobal();
   const [pages, setPages] = useState<AppointmentListInfoType>(initialPages);
   const [limits, setLimits] = useState<AppointmentListInfoType>(initialLimits);
   const [myAppointments, setMyAppointments] =
@@ -86,6 +90,20 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   const { data: selectedAppointment } = useGetAppointmentQuery(
     selectedAppointmentId as number,
     { skip: !selectedAppointmentId },
+  );
+
+  const { data: appointmentIndexFromNotif } = useGetAppointmentIndexQuery(
+    appointmentIdFromNotify as number,
+    {
+      skip: !appointmentIdFromNotify,
+    },
+  );
+
+  const { data: appointmentFromNotif } = useGetAppointmentQuery(
+    appointmentIdFromNotify as number,
+    {
+      skip: !appointmentIdFromNotify,
+    },
   );
 
   const { data: myAppointmentsDates } = useGetAppointmentsDatesQuery({
@@ -190,6 +208,49 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
       handleCloseDialogModal,
     ],
   );
+
+  useEffect(() => {
+    if (appointmentIndexFromNotif && appointmentFromNotif) {
+      const { state } = appointmentFromNotif;
+      switch (state) {
+        case APPOINTMENT_STATE.CREATED:
+          const createdLimit = limits[MY_APPOINTMENTS_LIST_STATE.PENDING];
+          const newCreatedPage = Math.floor(
+            appointmentIndexFromNotif / createdLimit,
+          );
+          setPages((prev) => ({
+            ...prev,
+            [MY_APPOINTMENTS_LIST_STATE.PENDING]: newCreatedPage + 1,
+          }));
+          break;
+        case APPOINTMENT_STATE.ACCEPTED:
+          const acceptedLimit = limits[MY_APPOINTMENTS_LIST_STATE.ACCEPTED];
+          const newAcceptedPage = Math.floor(
+            appointmentIndexFromNotif / acceptedLimit,
+          );
+          setPages((prev) => ({
+            ...prev,
+            [MY_APPOINTMENTS_LIST_STATE.ACCEPTED]: newAcceptedPage + 1,
+          }));
+          break;
+        case APPOINTMENT_STATE.REFUSED:
+        case APPOINTMENT_STATE.CANCELED:
+          const rejectedOrCanceledLimit =
+            limits[MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED];
+          const newRejectedOrCanceledPage = Math.floor(
+            appointmentIndexFromNotif / rejectedOrCanceledLimit,
+          );
+          setPages((prev) => ({
+            ...prev,
+            [MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED]:
+              newRejectedOrCanceledPage + 1,
+          }));
+          break;
+        default:
+          break;
+      }
+    }
+  }, [appointmentIndexFromNotif, appointmentFromNotif, limits]);
 
   useEffect(() => {
     setMyAppointments((prev) => ({

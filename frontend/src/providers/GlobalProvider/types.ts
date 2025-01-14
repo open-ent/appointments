@@ -8,6 +8,8 @@ export interface GlobalProviderContextProps {
   structures: Structure[];
   hasAccessRight: boolean;
   hasManageRight: boolean;
+  appointmentIdFromNotify: number | null;
+  setAppointmentIdFromNotify: Dispatch<SetStateAction<number | null>>;
   getStructureNameById: (id: string) => string;
   displayModals: DisplayModalsState;
   setDisplayModals: Dispatch<SetStateAction<DisplayModalsState>>;

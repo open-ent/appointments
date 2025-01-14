@@ -35,3 +35,7 @@ export const transformResponseToMyAppointments = (
 export const transformResponseToDayjsArray = (response: string[]) => {
   return response.map((date) => dayjs(date));
 };
+
+export const transformResponseToNumber = (response: { index: number }) => {
+  return response.index;
+};

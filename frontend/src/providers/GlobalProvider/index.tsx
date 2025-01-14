@@ -29,6 +29,9 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
   const { data: actions } = useActions();
   const hasAccessRight = isActionAvailable("access", actions) ?? false;
   const hasManageRight = isActionAvailable("manage", actions) ?? false;
+  const [appointmentIdFromNotify, setAppointmentIdFromNotify] = useState<
+    number | null
+  >(null);
 
   const [displayModals, setDisplayModals] = useState<DisplayModalsState>(
     initialDisplayModalsState,
@@ -47,12 +50,21 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
       structures,
       hasAccessRight,
       hasManageRight,
+      appointmentIdFromNotify,
+      setAppointmentIdFromNotify,
       getStructureNameById,
       displayModals,
       setDisplayModals,
       handleDisplayModal,
     }),
-    [displayModals, structures, isMultiStructure],
+    [
+      displayModals,
+      structures,
+      isMultiStructure,
+      hasAccessRight,
+      hasManageRight,
+      appointmentIdFromNotify,
+    ],
   );
 
   return (

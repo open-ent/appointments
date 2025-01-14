@@ -89,18 +89,22 @@ export const APPOINTMENT_STATE_VALUES = {
   [APPOINTMENT_STATE.CREATED]: {
     i18nKey: "appointments.pending",
     color: "warning" as SvgIconProps["color"],
+    listState: MY_APPOINTMENTS_LIST_STATE.PENDING,
   },
   [APPOINTMENT_STATE.ACCEPTED]: {
     i18nKey: "appointments.accepted",
     color: "success" as SvgIconProps["color"],
+    listState: MY_APPOINTMENTS_LIST_STATE.ACCEPTED,
   },
   [APPOINTMENT_STATE.REFUSED]: {
     i18nKey: "appointments.refused",
     color: "error" as SvgIconProps["color"],
+    listState: MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED,
   },
   [APPOINTMENT_STATE.CANCELED]: {
     i18nKey: "appointments.canceled",
     color: "error" as SvgIconProps["color"],
+    listState: MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED,
   },
 };
 
@@ -108,14 +112,17 @@ export const MY_APPOINTMENTS_LIST_STATE_VALUES = {
   [MY_APPOINTMENTS_LIST_STATE.PENDING]: {
     i18nTitleKey: "appointments.my.appointments.pending",
     i18nEmptyStateKey: "appointments.my.appointments.pending.empty.state",
+    scrollTo: 100,
   },
   [MY_APPOINTMENTS_LIST_STATE.ACCEPTED]: {
     i18nTitleKey: "appointments.my.appointments.accepted",
     i18nEmptyStateKey: "appointments.my.appointments.accepted.empty.state",
+    scrollTo: 250,
   },
   [MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED]: {
     i18nTitleKey: "appointments.my.appointments.rejected.or.canceled",
     i18nEmptyStateKey: "",
+    scrollTo: 500,
   },
 };
 
