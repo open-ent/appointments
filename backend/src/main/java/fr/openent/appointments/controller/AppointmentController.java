@@ -4,6 +4,7 @@ import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.database.Appointment;
+import fr.openent.appointments.model.response.MinimalAppointment;
 import fr.openent.appointments.security.ManageRight;
 import fr.openent.appointments.security.ViewRight;
 import fr.openent.appointments.service.AppointmentService;
@@ -27,9 +28,10 @@ import org.entcore.common.user.UserUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static fr.openent.appointments.core.constants.Constants.*;
-import static fr.openent.appointments.core.constants.Fields.ERROR;
+import static fr.openent.appointments.core.constants.Fields.*;
 
 public class AppointmentController extends ControllerHelper {
     private final AppointmentService appointmentService;
@@ -253,6 +255,58 @@ public class AppointmentController extends ControllerHelper {
             .onFailure(err -> {
                 String errorMessage = "Failed to get appointments dates";
                 LogHelper.logError(this, "getAppointmentsDates", errorMessage, err.getMessage());
+                renderError(request);
+            });
+    }
+
+    @Get("appointments/:appointmentId/index")
+    @ApiDoc("Get appointment index in front list in order to make front animation when user click on url present in notification")
+    @ResourceFilter(ViewRight.class)
+    @SecuredAction(value="", type= ActionType.RESOURCE)
+    public void getAppointmentIndexInFrontList(final HttpServerRequest request) {
+        Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        if (appointmentId == null) {
+            String errorMessage = "Missing appointment id";
+            LogHelper.logError(this, "getAppointmentById", errorMessage);
+            badRequest(request);
+            return;
+        }
+
+        JsonObject composeInfo = new JsonObject();
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user -> {
+                composeInfo.put(CAMEL_USER_INFO, user);
+                return appointmentService.getAppointmentById(appointmentId, user);
+            })
+            .compose(appointmentResponse -> {
+                UserInfos user = (UserInfos) composeInfo.getValue(CAMEL_USER_INFO);
+                AppointmentState appointmentState = appointmentResponse.getState();
+                List<AppointmentState> states = appointmentState == AppointmentState.CANCELED || appointmentState == AppointmentState.REFUSED
+                    ? Arrays.asList(AppointmentState.CANCELED, AppointmentState.REFUSED)
+                    : Collections.singletonList(appointmentState);
+                return appointmentService.getMyAppointments(user, states, null, null);
+            })
+            .onSuccess(listAppointments -> {
+                List<MinimalAppointment> appointments = listAppointments.getAppointments();
+                int index = IntStream.range(0, appointments.size())
+                    .filter(i -> appointments.get(i).getId().equals(appointmentId))
+                    .findFirst()
+                    .orElse(-1);
+
+                if (index == -1) {
+                    String errorMessage = "Appointment not found in list";
+                    LogHelper.logError(this, "getSpecialAppointmentInfosById", errorMessage);
+                    renderError(request);
+                }
+                else renderJson(request, new JsonObject().put(INDEX, index));
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to get special appointment infos";
+                LogHelper.logError(this, "getSpecialAppointmentInfosById", errorMessage, err.getMessage());
                 renderError(request);
             });
     }
