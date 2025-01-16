@@ -14,6 +14,8 @@ L'application **appointments** devrait permettre aux utilisateurs de prendre des
 
 Pour build le module, il suffit de lancer le build.sh présent à la racine
 <pre>
-./build.sh
+./build.sh install
 </pre>
+
+Le fat-jar se trouve dans backend/target/
 
