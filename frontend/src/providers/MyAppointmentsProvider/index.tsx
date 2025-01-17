@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 import { MY_APPOINTMENTS_LIST_STATE } from "./enum";
 import {
@@ -27,8 +28,12 @@ import {
 } from "./utils";
 import { useGlobal } from "../GlobalProvider";
 import { DialogModalProps } from "~/components/DialogModal/types";
-import { CONFIRM_MODAL_VALUES } from "~/core/constants";
-import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
+import { CONFIRM_MODAL_VALUES, TOAST_VALUES } from "~/core/constants";
+import {
+  APPOINTMENT_STATE,
+  CONFIRM_MODAL_TYPE,
+  TOAST_TYPE,
+} from "~/core/enums";
 import {
   useAcceptAppointmentMutation,
   useCancelAppointmentMutation,
@@ -38,6 +43,7 @@ import {
   useGetMyAppointmentsQuery,
   useRejectAppointmentMutation,
 } from "~/services/api/AppointmentService";
+import { Appointment } from "~/services/api/AppointmentService/types";
 
 const MyAppointmentsProviderContext =
   createContext<MyAppointmentsProviderContextProps | null>(null);
@@ -58,13 +64,16 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   const { t } = useTranslation("appointments");
   const { appointmentIdFromNotify } = useGlobal();
   const [pages, setPages] = useState<AppointmentListInfoType>(initialPages);
+  const [maxPages, setMaxPages] =
+    useState<AppointmentListInfoType>(initialPages);
   const [limits, setLimits] = useState<AppointmentListInfoType>(initialLimits);
   const [myAppointments, setMyAppointments] =
     useState<AppointmentsType>(initialAppointments);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<
     number | null
   >(null);
-  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<Appointment | null>(null);
   const [dialogModalProps, setDialogModalProps] = useState<DialogModalProps>(
     initialDialogModalProps,
   );
@@ -87,7 +96,7 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     limit: limits[MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED],
   });
 
-  const { data: selectedAppointment } = useGetAppointmentQuery(
+  const { data: selectedAppointmentData, isFetching } = useGetAppointmentQuery(
     selectedAppointmentId as number,
     { skip: !selectedAppointmentId },
   );
@@ -132,8 +141,10 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     async (id: number) => {
       try {
         await acceptAppointment(id).unwrap();
+        toast.success(t(TOAST_VALUES.ACCEPT_APPOINTMENT.i18nKeySuccess));
       } catch (error) {
         console.error(error);
+        toast.error(t(TOAST_VALUES.ACCEPT_APPOINTMENT.i18nKeyError));
       }
     },
     [acceptAppointment],
@@ -143,19 +154,23 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     async (id: number) => {
       try {
         await rejectAppointment(id).unwrap();
+        toast.success(t(TOAST_VALUES.REJECT_APPOINTMENT.i18nKeySuccess));
       } catch (error) {
         console.error(error);
+        toast.error(t(TOAST_VALUES.REJECT_APPOINTMENT.i18nKeyError));
       }
     },
     [rejectAppointment],
   );
 
   const handleCancelAppointment = useCallback(
-    async (id: number) => {
+    async (id: number, toastType: TOAST_TYPE) => {
       try {
         await cancelAppointment(id).unwrap();
+        toast.success(t(TOAST_VALUES[toastType].i18nKeySuccess));
       } catch (error) {
         console.error(error);
+        toast.error(t(TOAST_VALUES[toastType].i18nKeyError));
       }
     },
     [cancelAppointment],
@@ -163,12 +178,11 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
 
   const handleClickAppointment = useCallback((id: number) => {
     setSelectedAppointmentId(id);
-    setIsAppointmentModalOpen(true);
   }, []);
 
   const handleCloseAppointmentModal = useCallback(() => {
     setSelectedAppointmentId(null);
-    setIsAppointmentModalOpen(false);
+    setSelectedAppointment(null);
   }, []);
 
   const handleCloseDialogModal = useCallback(() => {
@@ -188,10 +202,10 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
               handleRejectAppointment(id);
               break;
             case CONFIRM_MODAL_TYPE.CANCEL_REQUEST:
-              handleCancelAppointment(id);
+              handleCancelAppointment(id, TOAST_TYPE.CANCEL_REQUEST);
               break;
             case CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT:
-              handleCancelAppointment(id);
+              handleCancelAppointment(id, TOAST_TYPE.CANCEL_APPOINTMENT);
               break;
           }
           handleCloseDialogModal();
@@ -208,6 +222,12 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
       handleCloseDialogModal,
     ],
   );
+
+  useEffect(() => {
+    if (selectedAppointmentData && selectedAppointmentId && !isFetching) {
+      setSelectedAppointment(selectedAppointmentData);
+    }
+  }, [selectedAppointmentData, selectedAppointmentId, isFetching]);
 
   useEffect(() => {
     if (appointmentIndexFromNotif && appointmentFromNotif) {
@@ -269,13 +289,78 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     myRejectedOrCanceledAppointments,
   ]);
 
+  useEffect(() => {
+    if (
+      myPendingAppointments &&
+      myAcceptedAppointments &&
+      myRejectedOrCanceledAppointments
+    )
+      setMaxPages((prev) => ({
+        ...prev,
+        [MY_APPOINTMENTS_LIST_STATE.PENDING]:
+          Math.ceil(
+            myPendingAppointments?.total /
+              limits[MY_APPOINTMENTS_LIST_STATE.PENDING],
+          ) || 1,
+        [MY_APPOINTMENTS_LIST_STATE.ACCEPTED]:
+          Math.ceil(
+            myAcceptedAppointments?.total /
+              limits[MY_APPOINTMENTS_LIST_STATE.ACCEPTED],
+          ) || 1,
+        [MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED]:
+          Math.ceil(
+            myRejectedOrCanceledAppointments?.total /
+              limits[MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED],
+          ) || 1,
+      }));
+  }, [
+    myPendingAppointments,
+    myAcceptedAppointments,
+    myRejectedOrCanceledAppointments,
+    limits,
+  ]);
+
+  useEffect(() => {
+    if (
+      pages[MY_APPOINTMENTS_LIST_STATE.PENDING] >
+      maxPages[MY_APPOINTMENTS_LIST_STATE.PENDING]
+    ) {
+      setPages((prev) => ({
+        ...prev,
+        [MY_APPOINTMENTS_LIST_STATE.PENDING]:
+          maxPages[MY_APPOINTMENTS_LIST_STATE.PENDING],
+      }));
+    }
+    if (
+      pages[MY_APPOINTMENTS_LIST_STATE.ACCEPTED] >
+      maxPages[MY_APPOINTMENTS_LIST_STATE.ACCEPTED]
+    ) {
+      setPages((prev) => ({
+        ...prev,
+        [MY_APPOINTMENTS_LIST_STATE.ACCEPTED]:
+          maxPages[MY_APPOINTMENTS_LIST_STATE.ACCEPTED],
+      }));
+    }
+    if (
+      pages[MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED] >
+      maxPages[MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED]
+    ) {
+      setPages((prev) => ({
+        ...prev,
+        [MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED]:
+          maxPages[MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED],
+      }));
+    }
+  }, [maxPages]);
+
   const value = useMemo<MyAppointmentsProviderContextProps>(
     () => ({
       myAppointments,
       limits,
       pages,
-      isAppointmentModalOpen,
+      maxPages,
       selectedAppointment,
+      selectedAppointmentId,
       myAppointmentsDates,
       dialogModalProps,
       handleChangePage,
@@ -292,9 +377,10 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
       myAcceptedAppointments,
       myRejectedOrCanceledAppointments,
       myAppointmentsDates,
-      isAppointmentModalOpen,
       selectedAppointment,
+      selectedAppointmentId,
       pages,
+      maxPages,
       limits,
       dialogModalProps,
     ],

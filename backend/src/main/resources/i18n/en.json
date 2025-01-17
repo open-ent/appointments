@@ -88,6 +88,7 @@
   "appointments.confirm.modal.cancel.appointment.description": "Si vous confirmez, le rendez-vous sera annulé et vous redeviendrez disponible sur le créneau concerné.",
 
   "appointments.cancel.request": "Annuler la demande",
+  "appointments.cannot.cancel.request.tooltip": "Impossible d'annuler un rendez-vous moins de 24h avant",
   "appointments.cancel.appointment": "Annuler le rendez-vous",
 
   "appointments.appointments": "Rendez-vous",
@@ -130,5 +131,16 @@
   "appointments.error.same.grid.already.exists": "Ce nom est déjà utilisé.",
   "appointments.error.field.required": "Ce champ est obligatoire.",
   "appointments.error.one.slot.required": "Veuillez ajouter au moins une plage horaire.",
-  "appointments.error.invalid.slot": "Veuillez renseigner les horaires."
+  "appointments.error.invalid.slot": "Veuillez renseigner les horaires.",
+
+  "appointments.toast.create.grid.success": "Votre grille de disponibilités a bien été créée.",
+  "appointments.toast.create.grid.error": "Une erreur est survenue lors de la création de la grille. Veuillez réessayer.",
+  "appointments.toast.accept.appointment.success": "La demande a bien été acceptée.",
+  "appointments.toast.accept.appointment.error": "Une erreur est survenue lors de l’acceptation de la demande. Veuillez réessayer.",
+  "appointments.toast.reject.appointment.success": "La demande a bien été refusée.",
+  "appointments.toast.reject.appointment.error": "Une erreur est survenue lors du refus de la demande. Veuillez réessayer.",
+  "appointments.toast.cancel.appointment.success": "Le rendez-vous a bien été annulé.",
+  "appointments.toast.cancel.appointment.error": "Une erreur est survenue lors de l’annulation du rendez-vous. Veuillez réessayer.",
+  "appointments.toast.cancel.appointment.request.success": "La demande de rendez-vous a bien été annulée.",
+  "appointments.toast.cancel.appointment.request.error": "Une erreur est survenue lors de l’annulation de la demande de rendez-vous. Veuillez réessayer."
 }

@@ -23,7 +23,7 @@ export const AppointmentCardList: FC<AppointmentCardListProps> = ({
   myAppointments,
 }) => {
   const { t } = useTranslation("appointments");
-  const { handleChangeLimit, handleChangePage, limits, pages } =
+  const { handleChangeLimit, handleChangePage, limits, pages, maxPages } =
     useMyAppointments();
 
   const [containerWidth, setContainerWidth] = useState<number | undefined>();
@@ -56,7 +56,7 @@ export const AppointmentCardList: FC<AppointmentCardListProps> = ({
   const appointmentsLength = myAppointments.appointments.length;
 
   const paginationWidth =
-    appointmentsLength * APPOINTMENT_CARD_WIDTH - APPOINTMENT_CARDS_GAP;
+    limits[appointmentsType] * APPOINTMENT_CARD_WIDTH - APPOINTMENT_CARDS_GAP;
 
   return (
     <Box ref={containerRef} sx={containerStyle}>
@@ -85,7 +85,7 @@ export const AppointmentCardList: FC<AppointmentCardListProps> = ({
       >
         {myAppointments.total > limits[appointmentsType] && (
           <Pagination
-            count={Math.ceil(myAppointments.total / limits[appointmentsType])}
+            count={maxPages[appointmentsType]}
             page={pages[appointmentsType]}
             onChange={(_, newPage) =>
               handleChangePage(appointmentsType, newPage)

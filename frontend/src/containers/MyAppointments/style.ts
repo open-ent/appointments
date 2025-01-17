@@ -11,7 +11,8 @@ export const mainContainerStyle: SxProps = {
 
 export const fisrtContainerStyle: SxProps = {
   display: "flex",
-  gap: "1rem",
+  width: "100%",
+  minWidth: "0",
 };
 
 export const customCalendarBoxStyle: SxProps = {

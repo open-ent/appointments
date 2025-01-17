@@ -43,6 +43,7 @@ export const appointmentApi = emptySplitApi.injectEndpoints({
     getAppointment: builder.query<Appointment, number>({
       query: (appointmentId) => `/appointments/${appointmentId}`,
       transformResponse: transformResponseToAppointment,
+      providesTags: ["MyAppointments"],
     }),
     getAppointmentIndex: builder.query<number, number>({
       query: (appointmentId) => `/appointments/${appointmentId}/index`,

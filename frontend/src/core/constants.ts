@@ -7,6 +7,7 @@ import {
   DAY,
   DURATION,
   PERIODICITY,
+  TOAST_TYPE,
 } from "./enums";
 import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/enum";
 
@@ -80,7 +81,7 @@ export const TEXT_DATE_FORMAT = "DD MMMM YYYY";
 export const TIME_FORMAT = "HH:mm";
 
 export const TOAST_CONFIG = {
-  position: "top-center" as ToastPosition,
+  position: "top-right" as ToastPosition,
   autoClose: 5000,
   theme: "light" as Theme,
 };
@@ -138,5 +139,28 @@ export const CONFIRM_MODAL_VALUES = {
   [CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT]: {
     titleKey: "appointments.confirm.modal.cancel.appointment.title",
     descriptionKey: "appointments.confirm.modal.cancel.appointment.description",
+  },
+};
+
+export const TOAST_VALUES = {
+  [TOAST_TYPE.CREATE_GRID]: {
+    i18nKeySuccess: "appointments.toast.create.grid.success",
+    i18nKeyError: "appointments.toast.create.grid.error",
+  },
+  [TOAST_TYPE.ACCEPT_APPOINTMENT]: {
+    i18nKeySuccess: "appointments.toast.accept.appointment.success",
+    i18nKeyError: "appointments.toast.accept.appointment.error",
+  },
+  [TOAST_TYPE.REJECT_APPOINTMENT]: {
+    i18nKeySuccess: "appointments.toast.reject.appointment.success",
+    i18nKeyError: "appointments.toast.reject.appointment.error",
+  },
+  [TOAST_TYPE.CANCEL_APPOINTMENT]: {
+    i18nKeySuccess: "appointments.toast.cancel.appointment.success",
+    i18nKeyError: "appointments.toast.cancel.appointment.error",
+  },
+  [TOAST_TYPE.CANCEL_REQUEST]: {
+    i18nKeySuccess: "appointments.toast.cancel.appointment.request.success",
+    i18nKeyError: "appointments.toast.cancel.appointment.request.error",
   },
 };

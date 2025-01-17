@@ -25,8 +25,8 @@ export const MyAppointments: FC = () => {
   const {
     myAppointments,
     myAppointmentsDates,
-    selectedAppointment,
     dialogModalProps,
+    selectedAppointment,
   } = useMyAppointments();
   const isMobile = useMediaQuery("(max-width:620px)");
   const { t } = useTranslation("appointments");

@@ -4,6 +4,7 @@ import { centerBoxStyle } from "~/styles/boxStyles";
 
 export const modalStyle: SxProps = {
   minWidth: "44rem",
+  maxWidth: "44rem",
   maxHeight: "80vh",
   height: "fit-content",
 

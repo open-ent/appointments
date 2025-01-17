@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import {
   Box,
@@ -9,12 +9,14 @@ import {
   DialogTitle,
   EllipsisWithTooltip,
   Link,
+  Tooltip,
   Typography,
 } from "@cgi-learning-hub/ui";
 import CommentIcon from "@mui/icons-material/Comment";
 import EventIcon from "@mui/icons-material/Event";
 import PlaceIcon from "@mui/icons-material/Place";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
+import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -46,15 +48,19 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   appointment,
 }) => {
   const {
-    isAppointmentModalOpen,
     handleCloseAppointmentModal,
     handleAcceptAppointment,
     handleOpenDialogModal,
   } = useMyAppointments();
   const { t } = useTranslation("appointments");
 
+  const canCancelRequest = useMemo(
+    () => dayjs().add(24, "hour").isBefore(appointment.beginDate),
+    [appointment],
+  );
+
   return (
-    <Dialog open={isAppointmentModalOpen} onClose={handleCloseAppointmentModal}>
+    <Dialog open onClose={handleCloseAppointmentModal}>
       <Box sx={modalStyle}>
         <DialogTitle>
           {t("appointments.my.appointment.infos.modal.title")}
@@ -121,7 +127,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             {appointment.publicComment && (
               <Box sx={rowInfoStyle}>
                 <CommentIcon sx={greyIconStyle} />
-                <Typography variant="h5">
+                <Typography variant="h5" whiteSpace={"pre-line"}>
                   {appointment.publicComment}
                 </Typography>
               </Box>
@@ -131,21 +137,39 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
         <DialogActions>
           {appointment.state === APPOINTMENT_STATE.CREATED &&
             (appointment.isRequester ? (
-              <Box sx={oneButtonBoxStyle}>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  sx={oneButtonStyle}
-                  onClick={() =>
-                    handleOpenDialogModal(
-                      CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
-                      appointment.id,
-                    )
-                  }
-                >
-                  {t("appointments.cancel.request")}
-                </Button>
-              </Box>
+              <Tooltip
+                title={
+                  canCancelRequest
+                    ? ""
+                    : t("appointments.cannot.cancel.request.tooltip")
+                }
+                placement="top"
+                arrow
+                componentsProps={{
+                  tooltip: {
+                    style: {
+                      width: "210px",
+                    },
+                  },
+                }}
+              >
+                <Box sx={oneButtonBoxStyle}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    sx={oneButtonStyle}
+                    disabled={!canCancelRequest}
+                    onClick={() =>
+                      handleOpenDialogModal(
+                        CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
+                        appointment.id,
+                      )
+                    }
+                  >
+                    {t("appointments.cancel.request")}
+                  </Button>
+                </Box>
+              </Tooltip>
             ) : (
               <Box sx={twoButtonsBoxStyle}>
                 <Button

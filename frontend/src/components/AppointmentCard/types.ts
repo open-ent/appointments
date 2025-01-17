@@ -13,3 +13,7 @@ export interface AppointmentStateIconProps {
 export interface StyledCardProps {
   isAnimated: boolean;
 }
+
+export interface CancelButtonBoxProps {
+  canCancelRequest: boolean;
+}

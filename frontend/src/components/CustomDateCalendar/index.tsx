@@ -1,7 +1,9 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import { DateCalendar } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -17,10 +19,25 @@ import { CustomDateCalendarProps } from "./types";
 import { isWithAcceptedAppointment } from "./utils";
 import { isToday } from "~/core/utils";
 
+dayjs.extend(isoWeek);
+
 export const CustomDateCalendar: FC<CustomDateCalendarProps> = ({
   acceptedAppointmentsDates,
 }) => {
   const { t } = useTranslation("appointments");
+  const [currentMonth, setCurrentMonth] = useState(dayjs());
+  const [nbWeeksOfCurrentMonth, setNbWeeksOfCurrentMonth] = useState(0);
+
+  useEffect(() => {
+    const firstDayOfCurrentMonth = currentMonth.startOf("month");
+    const lastDayOfCurrentMonth = currentMonth.endOf("month");
+
+    const firstWeek = firstDayOfCurrentMonth.isoWeek();
+    const lastWeek = lastDayOfCurrentMonth.isoWeek();
+
+    setNbWeeksOfCurrentMonth(lastWeek - firstWeek + 1);
+  }, [currentMonth]);
+
   return (
     <Box sx={containerStyle}>
       <DateCalendar
@@ -33,12 +50,15 @@ export const CustomDateCalendar: FC<CustomDateCalendarProps> = ({
                   acceptedAppointmentsDates,
                 )}
                 isToday={isToday(day)}
+                isMonthDay={currentMonth.isSame(day, "month")}
+                nbWeeksOfCurrentMonth={nbWeeksOfCurrentMonth}
               >
                 {day.date()}
               </StyledDay>
             );
           },
         }}
+        onMonthChange={(month) => setCurrentMonth(month)}
         sx={calandarStyle}
       />
       <Box sx={legendStyle}>

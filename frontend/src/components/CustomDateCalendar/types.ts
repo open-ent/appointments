@@ -7,4 +7,6 @@ export interface CustomDateCalendarProps {
 export interface StyledDayProps {
   isWithAcceptedAppointment: boolean;
   isToday: boolean;
+  isMonthDay: boolean;
+  nbWeeksOfCurrentMonth: number;
 }

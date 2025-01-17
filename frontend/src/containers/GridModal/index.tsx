@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, IconButton, Modal, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 import { GRID_MODAL_TYPE, PAGE_TYPE } from "./enum";
 import {
@@ -16,6 +17,7 @@ import { FirstPageGridModal } from "../FirstPageGridModal";
 import { SecondPageGridModal } from "../SecondPageGridModal";
 import { CustomStepper } from "~/components/CustomStepper";
 import { DialogModal } from "~/components/DialogModal";
+import { TOAST_VALUES } from "~/core/constants";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { MODAL_TYPE } from "~/providers/GlobalProvider/enum";
 import { useGridModal } from "~/providers/GridModalProvider";
@@ -104,13 +106,15 @@ export const GridModal: FC<GridModalProps> = ({ gridModalType }) => {
       publicOptions,
     );
     try {
-      await createGrid(payload);
+      await createGrid(payload).unwrap();
+      toast.success(t(TOAST_VALUES.CREATE_GRID.i18nKeySuccess));
+      resetInputs();
+      setPage(PAGE_TYPE.FIRST);
+      handleDisplayModal(MODAL_TYPE.GRID);
     } catch (error) {
       console.error(error);
+      toast.error(t(TOAST_VALUES.CREATE_GRID.i18nKeyError));
     }
-    resetInputs();
-    setPage(PAGE_TYPE.FIRST);
-    handleDisplayModal(MODAL_TYPE.GRID);
   };
 
   const handleCancelDialog = () => {

@@ -57,7 +57,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
         </Box>
         <Box>
           <Typography sx={displayNameStyle}>{displayName}</Typography>
-          <Typography sx={functionsStyle}>{functions}</Typography>
+          <Typography sx={functionsStyle}>{functions.join(", ")}</Typography>
         </Box>
       </Box>
       {!gridInfos ? (

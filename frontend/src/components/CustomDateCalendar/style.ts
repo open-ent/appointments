@@ -32,13 +32,22 @@ export const calandarStyle = (theme: Theme) => ({
   "& .MuiPickersYear-yearButton": {
     fontSize: "1.4rem",
   },
+  "& .MuiPickersYear-root": {
+    maxWidth: "8rem",
+  },
   "& .MuiPickersMonth-monthButton": {
     fontSize: "1.4rem",
   },
 });
 
 export const StyledDay = styled(Box)<StyledDayProps>(
-  ({ theme, isWithAcceptedAppointment, isToday }) => ({
+  ({
+    theme,
+    isWithAcceptedAppointment,
+    isToday,
+    isMonthDay,
+    nbWeeksOfCurrentMonth,
+  }) => ({
     backgroundColor: isWithAcceptedAppointment
       ? theme.palette.success.light
       : "transparent",
@@ -50,9 +59,10 @@ export const StyledDay = styled(Box)<StyledDayProps>(
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
-    margin: "0.4rem",
+    margin: nbWeeksOfCurrentMonth === 6 ? "0.2rem .4rem" : ".4rem",
     fontSize: "1.4rem",
     lineHeight: "0",
+    opacity: isMonthDay ? 1 : 0,
 
     ...(isWithAcceptedAppointment && {
       "::after": {

@@ -14,8 +14,9 @@ export interface MyAppointmentsProviderContextProps {
   myAppointments: AppointmentsType;
   limits: AppointmentListInfoType;
   pages: AppointmentListInfoType;
-  isAppointmentModalOpen: boolean;
-  selectedAppointment: Appointment | undefined;
+  maxPages: AppointmentListInfoType;
+  selectedAppointment: Appointment | null;
+  selectedAppointmentId: number | null;
   myAppointmentsDates: Dayjs[] | undefined;
   dialogModalProps: DialogModalProps;
   handleChangePage: (state: MY_APPOINTMENTS_LIST_STATE, page: number) => void;
