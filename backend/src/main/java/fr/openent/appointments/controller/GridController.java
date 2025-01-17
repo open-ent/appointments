@@ -133,7 +133,7 @@ public class GridController extends ControllerHelper {
         }
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
-            .compose(gridService::getAvailableUserMinimalGrids)
+            .compose(user -> gridService.getAvailableUserMinimalGrids(user, userId))
             .onSuccess(minimalGrids -> renderJson(request, IModelHelper.toJsonArray(minimalGrids)))
             .onFailure(err -> {
                 String errorMessage = "Failed to get available grids for user with id " + userId;

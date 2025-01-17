@@ -129,7 +129,7 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
 
         List<String> availableAppointmentStates = AppointmentState.getAvailableStates();
 
-        String query = "SELECT ts.* FROM " + DB_TIME_SLOT_TABLE + " ts " +
+        String query = "SELECT DISTINCT ts.* FROM " + DB_TIME_SLOT_TABLE + " ts " +
                 "JOIN " + DB_GRID_TABLE + " g ON ts.grid_id = g.id " +
                 "LEFT JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
                 "WHERE (a.id IS NULL OR a.state NOT IN " +

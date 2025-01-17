@@ -35,12 +35,14 @@ public class DefaultAppointmentService implements AppointmentService {
     private final CommunicationRepository communicationRepository;
     private final TimeSlotService timeSlotService;
     private final NotifyService notifyService;
+    private final Long limitHoursBeforeCancelAppointment;
 
     public DefaultAppointmentService(ServiceFactory serviceFactory, RepositoryFactory repositoryFactory) {
         this.appointmentRepository = repositoryFactory.appointmentRepository();
         this.communicationRepository = repositoryFactory.communicationRepository();
         this.timeSlotService = serviceFactory.timeSlotService();
         this.notifyService = serviceFactory.notifyService();
+        this.limitHoursBeforeCancelAppointment = serviceFactory.appConfig().minHoursBeforeCancellation();
     }
 
     @Override
@@ -251,6 +253,10 @@ public class DefaultAppointmentService implements AppointmentService {
         }
     }
 
+    private Boolean isBeforeLimitHoursAppointment(LocalDateTime beginDate) {
+        return LocalDateTime.now().plusHours(limitHoursBeforeCancelAppointment).isBefore(beginDate);
+    }
+
     private Future<Appointment> handleAppointmentStateChange(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, AppointmentState targetState, String functionName) {
         Promise<Appointment> promise = Promise.promise();
 
@@ -270,6 +276,11 @@ public class DefaultAppointmentService implements AppointmentService {
                 composeInfos.put(STATE, appointmentWithInfos.getState().getValue());
                 if ( (targetState == AppointmentState.ACCEPTED || targetState == AppointmentState.REFUSED) && !isOwnerOfAppointment(appointmentWithInfos, userInfos.getUserId())) {
                     String errorMessage = "User is not the owner of the appointment";
+                    LogHelper.logError(this, functionName, errorMessage, "");
+                    return Future.failedFuture(errorMessage);
+                }
+                if (targetState == AppointmentState.CANCELED && !isBeforeLimitHoursAppointment(appointmentWithInfos.getBeginDate())) {
+                    String errorMessage = "Appointment cannot be canceled less than " + limitHoursBeforeCancelAppointment + " hours before";
                     LogHelper.logError(this, functionName, errorMessage, "");
                     return Future.failedFuture(errorMessage);
                 }

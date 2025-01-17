@@ -60,9 +60,10 @@ public interface GridService {
      * Retrieves all grids associated with a specific user.
      *
      * @param user The {@link UserInfos} of the user connected user.
+     * @param userId The ID of the user for which we want to retrieve grids.
      * @return A Future containing a JsonArray of grids associated with the user.
      */
-    Future<List<MinimalGrid>> getAvailableUserMinimalGrids(UserInfos user);
+    Future<List<MinimalGrid>> getAvailableUserMinimalGrids(UserInfos user, String userId);
 
     /**
      * Retrieves the minimal grid infos of the grid with the specified ID.

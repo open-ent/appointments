@@ -33,6 +33,7 @@ public class Constants {
 
     // kebab-case constants
     public static final String KEBAB_CLOSING_CRON = "closing-cron";
+    public static final String KEBAB_MIN_HOURS_BEFORE_CANCELLATION = "min-hours-before-cancellation";
 
     // Other constants
     public static final String ACTION = "action";

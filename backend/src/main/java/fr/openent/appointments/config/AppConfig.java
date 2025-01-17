@@ -9,11 +9,13 @@ public class AppConfig {
     private final String host;
     private final String mode;
     private final String closingCron;
+    private final Long minHoursBeforeCancellation;
 
     public AppConfig(JsonObject config) {
         this.host = config.getString(HOST);
         this.mode = config.getString(MODE);
         this.closingCron = config.getString(KEBAB_CLOSING_CRON, "0 0 0 */1 * ? *");
+        this.minHoursBeforeCancellation = config.getLong(KEBAB_MIN_HOURS_BEFORE_CANCELLATION, 24L);
     }
 
     public String host() {
@@ -26,5 +28,9 @@ public class AppConfig {
 
     public String closingCron() {
         return this.closingCron;
+    }
+
+    public Long minHoursBeforeCancellation() {
+        return this.minHoursBeforeCancellation;
     }
 }

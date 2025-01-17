@@ -99,11 +99,14 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
-    public Future<List<MinimalGrid>> getAvailableUserMinimalGrids(UserInfos user) {
+    public Future<List<MinimalGrid>> getAvailableUserMinimalGrids(UserInfos user, String userId) {
         Promise<List<MinimalGrid>> promise = Promise.promise();
 
         gridRepository.getGridsGroupsCanAccess(user.getGroupsIds())
-            .compose(userGrids -> gridRepository.getGridsWithAvailableTimeSlots(userGrids.stream().map(Grid::getId).collect(Collectors.toList())))
+            .compose(userGrids -> {
+                userGrids = userGrids.stream().filter(grid -> grid.getOwnerId().equals(userId)).collect(Collectors.toList());
+                return gridRepository.getGridsWithAvailableTimeSlots(userGrids.stream().map(Grid::getId).collect(Collectors.toList()));
+            })
             .onSuccess(grids -> promise.complete(grids.stream().map(MinimalGrid::new).collect(Collectors.toList())))
             .onFailure(err -> {
                 String errorMessage = "Failed to get available grids for user with id " + user.getUserId();
