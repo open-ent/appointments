@@ -353,6 +353,11 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     }
   }, [maxPages]);
 
+  useEffect(() => {
+    if (!selectedAppointment && !dialogModalProps.open)
+      document.body.style.overflow = "";
+  }, [selectedAppointment, dialogModalProps]);
+
   const value = useMemo<MyAppointmentsProviderContextProps>(
     () => ({
       myAppointments,

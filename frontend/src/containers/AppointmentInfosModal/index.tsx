@@ -199,21 +199,39 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               </Box>
             ))}
           {appointment.state === APPOINTMENT_STATE.ACCEPTED && (
-            <Box sx={oneButtonBoxStyle}>
-              <Button
-                variant="outlined"
-                color="error"
-                sx={oneButtonStyle}
-                onClick={() =>
-                  handleOpenDialogModal(
-                    CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT,
-                    appointment.id,
-                  )
-                }
-              >
-                {t("appointments.cancel.appointment")}
-              </Button>
-            </Box>
+            <Tooltip
+              title={
+                canCancelRequest
+                  ? ""
+                  : t("appointments.cannot.cancel.request.tooltip")
+              }
+              placement="top"
+              arrow
+              componentsProps={{
+                tooltip: {
+                  style: {
+                    width: "210px",
+                  },
+                },
+              }}
+            >
+              <Box sx={oneButtonBoxStyle}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  disabled={!canCancelRequest}
+                  sx={oneButtonStyle}
+                  onClick={() =>
+                    handleOpenDialogModal(
+                      CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT,
+                      appointment.id,
+                    )
+                  }
+                >
+                  {t("appointments.cancel.appointment")}
+                </Button>
+              </Box>
+            </Tooltip>
           )}
         </DialogActions>
       </Box>

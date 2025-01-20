@@ -101,7 +101,7 @@ export const containerStyle: SxProps = {
   display: "flex",
   flexDirection: "column",
   width: "100%",
-  justifyContent: "space-between",
+  justifyContent: "flex-start",
   gap: "1rem",
 };
 

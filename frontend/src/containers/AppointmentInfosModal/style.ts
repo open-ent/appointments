@@ -28,6 +28,7 @@ export const topContainerStyle: SxProps<Theme> = (theme: Theme) => ({
   borderRadius: "1rem",
   padding: "1.6rem",
   gap: "2.2rem",
+  maxWidth: "100%",
 });
 
 export const dialogContentStyle: SxProps = {
@@ -79,6 +80,7 @@ export const userInfosBoxStyle: SxProps = {
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-around",
+  maxWidth: "78%",
 };
 
 export const greyIconStyle: SxProps<Theme> = (theme: Theme) => ({

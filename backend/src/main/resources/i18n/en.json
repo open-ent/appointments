@@ -87,6 +87,8 @@
   "appointments.confirm.modal.cancel.appointment.title": "Annuler le rendez-vous",
   "appointments.confirm.modal.cancel.appointment.description": "Si vous confirmez, le rendez-vous sera annulé et vous redeviendrez disponible sur le créneau concerné.",
 
+  "appointments.last.appointment": "Dernier rdv : {{date}}",
+
   "appointments.cancel.request": "Annuler la demande",
   "appointments.cannot.cancel.request.tooltip": "Impossible d'annuler un rendez-vous moins de 24h avant",
   "appointments.cancel.appointment": "Annuler le rendez-vous",

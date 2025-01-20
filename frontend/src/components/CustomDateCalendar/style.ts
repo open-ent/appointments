@@ -59,7 +59,7 @@ export const StyledDay = styled(Box)<StyledDayProps>(
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
-    margin: nbWeeksOfCurrentMonth === 6 ? "0.2rem .4rem" : ".4rem",
+    margin: nbWeeksOfCurrentMonth === 5 ? ".4rem" : ".2rem .4rem",
     fontSize: "1.4rem",
     lineHeight: "0",
     opacity: isMonthDay ? 1 : 0,

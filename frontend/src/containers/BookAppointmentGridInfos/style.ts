@@ -56,6 +56,20 @@ export const itemStyle: SxProps = {
   gap: "1rem",
 };
 
+export const itemComStyle: SxProps = {
+  ...itemStyle,
+  maxHeight: "118px",
+  overflowY: "auto",
+  "&::-webkit-scrollbar": {
+    width: "0.6rem",
+    height: "0.8rem",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "divider",
+    borderRadius: "0.3rem",
+  },
+};
+
 export const pictureStyle: SxProps = {
   overflow: "hidden",
   borderRadius: "50%",

@@ -59,6 +59,7 @@ export const CustomDateCalendar: FC<CustomDateCalendarProps> = ({
           },
         }}
         onMonthChange={(month) => setCurrentMonth(month)}
+        onYearChange={(year) => setCurrentMonth(year)}
         sx={calandarStyle}
       />
       <Box sx={legendStyle}>

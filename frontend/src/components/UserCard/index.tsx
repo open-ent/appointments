@@ -89,7 +89,9 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               </Typography>
             </Tooltip>
             <Typography sx={lastAppointmentDateStyle}>
-              {lastAppointmentDateDisplayFormat}
+              {t("appointments.last.appointment", {
+                date: lastAppointmentDateDisplayFormat,
+              })}
             </Typography>
           </Box>
           <Box sx={statusBoxStyle}>

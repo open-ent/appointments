@@ -20,6 +20,7 @@ import {
   bottomUserInfoStyle,
   displayNameStyle,
   functionsStyle,
+  itemComStyle,
   itemStyle,
   pictureBoxStyle,
   pictureStyle,
@@ -106,7 +107,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
             </Box>
           )}
           {!!publicComment && (
-            <Box sx={itemStyle}>
+            <Box sx={itemComStyle}>
               <ChatIcon />
               <Typography sx={ellipsisWithWrapStyle} fontStyle={"italic"}>
                 {publicComment}
