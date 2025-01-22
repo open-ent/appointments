@@ -112,3 +112,6 @@ dependency-reduced-pom.xml
 
 # Turborepo
 /frontend/.turbo
+
+# Nx
+/frontend/.nx

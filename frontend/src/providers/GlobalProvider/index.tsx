@@ -1,6 +1,6 @@
 import { createContext, FC, useContext, useMemo, useState } from "react";
 
-import { isActionAvailable } from "@edifice-ui/react";
+import { isActionAvailable } from "@edifice.io/client";
 
 import { MODAL_TYPE } from "./enum";
 import {

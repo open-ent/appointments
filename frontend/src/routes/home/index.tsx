@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useEffect, useState } from "react";
 
+import { ID } from "@edifice.io/client";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
-import { ID } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
