@@ -14,6 +14,11 @@ import {
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
+import { APPOINTMENT_STATE_VALUES, TIME_FORMAT } from "~/core/constants";
+import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
+import { useGlobal } from "~/providers/GlobalProvider";
+import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
+import { UserPicture } from "../UserPicture";
 import {
   bottomRightBoxStyle,
   bottomWrapperBoxStyle,
@@ -29,11 +34,6 @@ import {
 } from "./style";
 import { AppointmentCardProps } from "./types";
 import { AppointmentStateIcon } from "./utils";
-import { UserPicture } from "../UserPicture";
-import { APPOINTMENT_STATE_VALUES, TIME_FORMAT } from "~/core/constants";
-import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
-import { useGlobal } from "~/providers/GlobalProvider";
-import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
   const { t } = useTranslation("appointments");
@@ -81,10 +81,11 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
 
     return () => {
       if (appointmentCardRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observer.unobserve(appointmentCardRef.current);
       }
     };
-  }, [isAppointmentFromNotif]);
+  }, [isAppointmentFromNotif, setAppointmentIdFromNotify]);
 
   useEffect(() => {
     if (isAppointmentFromNotif && appointmentCardRef.current) {

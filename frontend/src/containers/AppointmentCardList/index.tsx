@@ -3,13 +3,6 @@ import { FC, useEffect, useRef, useState } from "react";
 import { Box, Pagination, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import {
-  containerStyle,
-  paginationBoxStyle,
-  paginationStyle,
-  wrapperListBox,
-} from "./style";
-import { AppointmentCardListProps } from "./types";
 import { AppointmentCard } from "~/components/AppointmentCard";
 import {
   APPOINTMENT_CARD_WIDTH,
@@ -17,6 +10,13 @@ import {
   MY_APPOINTMENTS_LIST_STATE_VALUES,
 } from "~/core/constants";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
+import {
+  containerStyle,
+  paginationBoxStyle,
+  paginationStyle,
+  wrapperListBox,
+} from "./style";
+import { AppointmentCardListProps } from "./types";
 
 export const AppointmentCardList: FC<AppointmentCardListProps> = ({
   appointmentsType,
@@ -51,7 +51,7 @@ export const AppointmentCardList: FC<AppointmentCardListProps> = ({
           (containerWidth + APPOINTMENT_CARDS_GAP) / APPOINTMENT_CARD_WIDTH,
         ),
       );
-  }, [containerWidth]);
+  }, [appointmentsType, containerWidth, handleChangeLimit]);
 
   const appointmentsLength = myAppointments.appointments.length;
 

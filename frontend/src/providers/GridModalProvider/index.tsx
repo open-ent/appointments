@@ -1,12 +1,22 @@
 import {
   createContext,
   FC,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
 
+import {
+  useBlurGridInputsReturnType,
+  useUpdateGridInputsReturnType,
+} from "~/hooks/types";
+import { useBlurGridInputs } from "~/hooks/useBlurGridInputs";
+import { useUpdateGridInputs } from "~/hooks/useUpdateGridInputs";
+import { useGetCommunicationGroupsQuery } from "~/services/api/CommunicationService";
+import { useGetMyGridsNameQuery } from "~/services/api/GridService";
+import { useGlobal } from "../GlobalProvider";
 import {
   GridModalInputs,
   GridModalProviderContextProps,
@@ -19,15 +29,6 @@ import {
   initialGridModalInputs,
   periodicityOptions,
 } from "./utils";
-import { useGlobal } from "../GlobalProvider";
-import {
-  useBlurGridInputsReturnType,
-  useUpdateGridInputsReturnType,
-} from "~/hooks/types";
-import { useBlurGridInputs } from "~/hooks/useBlurGridInputs";
-import { useUpdateGridInputs } from "~/hooks/useUpdateGridInputs";
-import { useGetCommunicationGroupsQuery } from "~/services/api/CommunicationService";
-import { useGetMyGridsNameQuery } from "~/services/api/GridService";
 
 const GridModalProviderContext =
   createContext<GridModalProviderContextProps | null>(null);
@@ -82,19 +83,19 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
     existingGridsNames ?? [],
   );
 
-  const updateFirstPageErrors = () => {
+  const updateFirstPageErrors = useCallback(() => {
     blurGridModalInputs.handleNameBlur();
     blurGridModalInputs.handleVideoCallLinkBlur();
-  };
+  }, [blurGridModalInputs]);
 
-  const resetInputs = () => {
+  const resetInputs = useCallback(() => {
     setInputs(initialGridModalInputs(structures));
     setErrorInputs(initialErrorInputs);
-  };
+  }, [structures]);
 
   useEffect(() => {
     if (inputs.structure.id && hasManageRight) refetchGroups();
-  }, [inputs.structure]);
+  }, [hasManageRight, inputs.structure, refetchGroups]);
 
   const value = useMemo<GridModalProviderContextProps>(
     () => ({
@@ -112,7 +113,17 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       updateFirstPageErrors,
       resetInputs,
     }),
-    [inputs, errorInputs, structures, groups, existingGridsNames],
+    [
+      inputs,
+      errorInputs,
+      existingGridsNames,
+      structures,
+      groups,
+      updateGridModalInputs,
+      blurGridModalInputs,
+      updateFirstPageErrors,
+      resetInputs,
+    ],
   );
 
   return (

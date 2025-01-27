@@ -10,6 +10,11 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { DAY_VALUES } from "~/core/constants";
+import { DAY } from "~/core/enums";
+import { Slot } from "~/core/types";
+import { useGridModal } from "~/providers/GridModalProvider";
+import { DailySlot } from "../DailySlot";
 import {
   dayBoxStyle,
   dayLabelStyle,
@@ -18,11 +23,6 @@ import {
   slotsBoxStyle,
   weekBoxStyle,
 } from "./style";
-import { DailySlot } from "../DailySlot";
-import { DAY_VALUES } from "~/core/constants";
-import { DAY } from "~/core/enums";
-import { Slot } from "~/core/types";
-import { useGridModal } from "~/providers/GridModalProvider";
 
 export const WeekSlots: FC = () => {
   const { t } = useTranslation("appointments");
@@ -43,7 +43,7 @@ export const WeekSlots: FC = () => {
       );
     });
     return errors;
-  }, [inputs.weekSlots, slots]);
+  }, [entries, slots.ids]);
 
   return (
     <Box sx={weekBoxStyle}>

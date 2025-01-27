@@ -2,6 +2,8 @@ import { createContext, FC, useContext, useMemo, useState } from "react";
 
 import { isActionAvailable } from "@edifice.io/client";
 
+import { useStructure } from "~/hooks/useStructure";
+import { useActions } from "~/services/queries";
 import { MODAL_TYPE } from "./enum";
 import {
   DisplayModalsState,
@@ -9,8 +11,6 @@ import {
   GlobalProviderProps,
 } from "./types";
 import { initialDisplayModalsState } from "./utils";
-import { useStructure } from "~/hooks/useStructure";
-import { useActions } from "~/services/queries";
 
 const GlobalProviderContext = createContext<GlobalProviderContextProps | null>(
   null,
@@ -58,12 +58,13 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
       handleDisplayModal,
     }),
     [
-      displayModals,
-      structures,
       isMultiStructure,
+      structures,
       hasAccessRight,
       hasManageRight,
       appointmentIdFromNotify,
+      getStructureNameById,
+      displayModals,
     ],
   );
 

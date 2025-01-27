@@ -1,19 +1,20 @@
 import {
   createContext,
   FC,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
 
+import { useGetCommunicationUsersQuery } from "~/services/api/CommunicationService";
+import { UserCardInfos } from "~/services/api/CommunicationService/types";
 import {
   FindAppointmentsProviderContextProps,
   FindAppointmentsProviderProps,
 } from "./types";
 import { NUMBER_MORE_USERS } from "./utils";
-import { useGetCommunicationUsersQuery } from "~/services/api/CommunicationService";
-import { UserCardInfos } from "~/services/api/CommunicationService/types";
 
 const FindAppointmentsProviderContext =
   createContext<FindAppointmentsProviderContextProps | null>(null);
@@ -61,31 +62,34 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
     }
   };
 
-  const loadMoreUsers = () => {
-    !isFetching && setPage((prev) => prev + 1);
-  };
+  const loadMoreUsers = useCallback(() => {
+    if (!isFetching) setPage((prev) => prev + 1);
+  }, [isFetching]);
 
-  const handleSearch = (newSearch: string) => {
-    refreshSearch();
-    setSearch(newSearch);
-  };
-
-  const resetSearch = () => {
-    handleSearch("");
-  };
-
-  const refreshSearch = () => {
+  const refreshSearch = useCallback(() => {
     setPage(1);
     setUsers([]);
     setHasMoreUsers(true);
-  };
+  }, []);
 
-  const refetchSearch = async () => {
+  const handleSearch = useCallback(
+    (newSearch: string) => {
+      refreshSearch();
+      setSearch(newSearch);
+    },
+    [refreshSearch],
+  );
+
+  const resetSearch = useCallback(() => {
+    handleSearch("");
+  }, [handleSearch]);
+
+  const refetchSearch = useCallback(async () => {
     refreshSearch();
     const oldNewUsers = newUsers;
     const { data } = await refetch();
     if (oldNewUsers === data) setUsersFromNewUsers(data);
-  };
+  }, [refreshSearch, newUsers, refetch]);
 
   const value = useMemo<FindAppointmentsProviderContextProps>(
     () => ({
@@ -99,7 +103,17 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       resetSearch,
       refetchSearch,
     }),
-    [users, hasMoreUsers, search, isFetching],
+    [
+      users,
+      hasMoreUsers,
+      search,
+      isFetching,
+      loadMoreUsers,
+      handleSearch,
+      refreshSearch,
+      resetSearch,
+      refetchSearch,
+    ],
   );
   return (
     <FindAppointmentsProviderContext.Provider value={value}>

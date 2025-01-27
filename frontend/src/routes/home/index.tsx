@@ -1,18 +1,10 @@
-import { FC, SyntheticEvent, useEffect, useState } from "react";
+import { FC, SyntheticEvent, useCallback, useEffect, useState } from "react";
 
 import { ID } from "@edifice.io/client";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
-import {
-  appointmentsIconStyle,
-  contentStyle,
-  homeStyle,
-  tabItemStyle,
-  tabsStyle,
-  titleStyle,
-} from "./style";
 import { AppointmentsIcon } from "~/components/SVG/AppointmentsIcon";
 import { FindAppointments } from "~/containers/FindAppointments";
 import { MyAppointments } from "~/containers/MyAppointments";
@@ -21,6 +13,14 @@ import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { MyAppointmentsProvider } from "~/providers/MyAppointmentsProvider";
 import { PURPLE } from "~/styles/color.constants";
+import {
+  appointmentsIconStyle,
+  contentStyle,
+  homeStyle,
+  tabItemStyle,
+  tabsStyle,
+  titleStyle,
+} from "./style";
 
 export interface AppProps {
   _id: string;
@@ -44,11 +44,14 @@ export const Home: FC = () => {
   );
   const { t } = useTranslation("appointments");
 
-  const handleChange = (_: SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
-    tabValue === 0 && resetSearch();
-    sessionStorage.setItem("tabValue", newValue.toString());
-  };
+  const handleChange = useCallback(
+    (_: SyntheticEvent, newValue: number) => {
+      setTabValue(newValue);
+      if (tabValue === 0) resetSearch();
+      sessionStorage.setItem("tabValue", newValue.toString());
+    },
+    [resetSearch, tabValue],
+  );
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -60,7 +63,7 @@ export const Home: FC = () => {
       searchParams.delete("appointmentId");
       setSearchParams(searchParams);
     }
-  }, [searchParams, setAppointmentIdFromNotify]);
+  }, [searchParams, setAppointmentIdFromNotify, handleChange, setSearchParams]);
 
   return (
     <Box sx={homeStyle}>

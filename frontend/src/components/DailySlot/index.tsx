@@ -52,7 +52,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
               }
               sx={selectStyle}
               value={slot.begin.parseToString()}
-              renderValue={(value: String) => (
+              renderValue={(value: string) => (
                 <Box sx={boxValueStyle}>
                   <AccessTimeIcon sx={iconStyle} />
                   <Typography sx={timeInputStyle}>{value}</Typography>

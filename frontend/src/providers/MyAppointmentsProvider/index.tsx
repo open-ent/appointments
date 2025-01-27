@@ -12,21 +12,6 @@ import {
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
-import { MY_APPOINTMENTS_LIST_STATE } from "./enum";
-import {
-  AppointmentListInfoType,
-  AppointmentsType,
-  MyAppointmentsProviderContextProps,
-  MyAppointmentsProviderProps,
-} from "./types";
-import {
-  initialAppointments,
-  initialDialogModalProps,
-  initialLimits,
-  initialPages,
-  states,
-} from "./utils";
-import { useGlobal } from "../GlobalProvider";
 import { DialogModalProps } from "~/components/DialogModal/types";
 import { CONFIRM_MODAL_VALUES, TOAST_VALUES } from "~/core/constants";
 import {
@@ -44,6 +29,21 @@ import {
   useRejectAppointmentMutation,
 } from "~/services/api/AppointmentService";
 import { Appointment } from "~/services/api/AppointmentService/types";
+import { useGlobal } from "../GlobalProvider";
+import { MY_APPOINTMENTS_LIST_STATE } from "./enum";
+import {
+  AppointmentListInfoType,
+  AppointmentsType,
+  MyAppointmentsProviderContextProps,
+  MyAppointmentsProviderProps,
+} from "./types";
+import {
+  initialAppointments,
+  initialDialogModalProps,
+  initialLimits,
+  initialPages,
+  states,
+} from "./utils";
 
 const MyAppointmentsProviderContext =
   createContext<MyAppointmentsProviderContextProps | null>(null);
@@ -147,7 +147,7 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
         toast.error(t(TOAST_VALUES.ACCEPT_APPOINTMENT.i18nKeyError));
       }
     },
-    [acceptAppointment],
+    [acceptAppointment, t],
   );
 
   const handleRejectAppointment = useCallback(
@@ -160,7 +160,7 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
         toast.error(t(TOAST_VALUES.REJECT_APPOINTMENT.i18nKeyError));
       }
     },
-    [rejectAppointment],
+    [rejectAppointment, t],
   );
 
   const handleCancelAppointment = useCallback(
@@ -173,7 +173,7 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
         toast.error(t(TOAST_VALUES[toastType].i18nKeyError));
       }
     },
-    [cancelAppointment],
+    [cancelAppointment, t],
   );
 
   const handleClickAppointment = useCallback((id: number) => {
@@ -217,9 +217,10 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     },
     [
       t,
+      handleCloseDialogModal,
+      handleCloseAppointmentModal,
       handleRejectAppointment,
       handleCancelAppointment,
-      handleCloseDialogModal,
     ],
   );
 
@@ -351,7 +352,7 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
           maxPages[MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED],
       }));
     }
-  }, [maxPages]);
+  }, [maxPages, pages]);
 
   useEffect(() => {
     if (!selectedAppointment && !dialogModalProps.open)
@@ -378,16 +379,20 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
     }),
     [
       myAppointments,
-      myPendingAppointments,
-      myAcceptedAppointments,
-      myRejectedOrCanceledAppointments,
-      myAppointmentsDates,
-      selectedAppointment,
-      selectedAppointmentId,
+      limits,
       pages,
       maxPages,
-      limits,
+      selectedAppointment,
+      selectedAppointmentId,
+      myAppointmentsDates,
       dialogModalProps,
+      handleChangePage,
+      handleChangeLimit,
+      handleAcceptAppointment,
+      handleClickAppointment,
+      handleCloseAppointmentModal,
+      handleOpenDialogModal,
+      handleCloseDialogModal,
     ],
   );
 

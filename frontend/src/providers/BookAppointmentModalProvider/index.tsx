@@ -1,6 +1,7 @@
 import {
   createContext,
   FC,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -11,6 +12,14 @@ import dayjs, { Dayjs } from "dayjs";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
+import { useBookAppointmentMutation } from "~/services/api/AppointmentService";
+import { UserCardInfos } from "~/services/api/CommunicationService/types";
+import {
+  useGetAvailableUserMinimalGridsQuery,
+  useGetMinimalGridInfosByIdQuery,
+  useGetTimeSlotsByGridIdAndDateQuery,
+} from "~/services/api/GridService";
+import { useFindAppointments } from "../FindAppointmentsProvider";
 import {
   BookAppointmentModalProviderContextProps,
   BookAppointmentModalProviderProps,
@@ -22,14 +31,6 @@ import {
   transformStringToDayjs,
   transformTimeSlotsToDaySlots,
 } from "./utils";
-import { useFindAppointments } from "../FindAppointmentsProvider";
-import { useBookAppointmentMutation } from "~/services/api/AppointmentService";
-import { UserCardInfos } from "~/services/api/CommunicationService/types";
-import {
-  useGetAvailableUserMinimalGridsQuery,
-  useGetMinimalGridInfosByIdQuery,
-  useGetTimeSlotsByGridIdAndDateQuery,
-} from "~/services/api/GridService";
 
 const BookAppointmentModalProviderContext =
   createContext<BookAppointmentModalProviderContextProps | null>(null);
@@ -103,28 +104,40 @@ export const BookAppointmentModalProvider: FC<
     setCurrentDay((prev) => prev.subtract(1, "week"));
   };
 
-  const handleNextTimeSlot = () => {
+  const handleNextTimeSlot = useCallback(() => {
     if (nextAvailableTimeSlot) {
       setCurrentDay(nextAvailableTimeSlot);
     }
-  };
+  }, [nextAvailableTimeSlot]);
 
-  const handleGridChange = (gridName: string) => {
-    if (!grids) return;
-    const newGrid = grids.find((grid) => grid.name === gridName);
-    if (!newGrid) return;
-    setCanGoNext(true);
-    setCanGoPrev(false);
-    setSelectedGrid(newGrid);
-    setSelectedSlotId(null);
-    setCurrentDay(dayjs().locale("fr"));
-  };
+  const handleGridChange = useCallback(
+    (gridName: string) => {
+      if (!grids) return;
+      const newGrid = grids.find((grid) => grid.name === gridName);
+      if (!newGrid) return;
+      setCanGoNext(true);
+      setCanGoPrev(false);
+      setSelectedGrid(newGrid);
+      setSelectedSlotId(null);
+      setCurrentDay(dayjs().locale("fr"));
+    },
+    [grids],
+  );
 
   const handleVideoCallCheckboxChange = () => {
     setIsVideoCallOptionChecked((prev) => !prev);
   };
 
-  const handleSubmitAppointment = async () => {
+  const handleCloseModal = useCallback(() => {
+    setSelectedUser(null);
+    setSelectedGrid(null);
+    setSelectedSlotId(null);
+    setCurrentDay(dayjs().locale("fr"));
+    setIsVideoCallOptionChecked(false);
+    setIsModalOpen(false);
+  }, []);
+
+  const handleSubmitAppointment = useCallback(async () => {
     if (!selectedSlotId) {
       return;
     }
@@ -150,16 +163,15 @@ export const BookAppointmentModalProvider: FC<
     }
     handleCloseModal();
     refetchSearch();
-  };
-
-  const handleCloseModal = () => {
-    setSelectedUser(null);
-    setSelectedGrid(null);
-    setSelectedSlotId(null);
-    setCurrentDay(dayjs().locale("fr"));
-    setIsVideoCallOptionChecked(false);
-    setIsModalOpen(false);
-  };
+  }, [
+    selectedSlotId,
+    gridInfos?.videoCallLink?.length,
+    isVideoCallOptionChecked,
+    bookAppointment,
+    t,
+    handleCloseModal,
+    refetchSearch,
+  ]);
 
   useEffect(() => {
     if (gridTimeSlots) {
@@ -177,13 +189,13 @@ export const BookAppointmentModalProvider: FC<
         !!gridTimeSlots.nextAvailableTimeSlot || !!gridTimeSlots.timeslots,
       );
     }
-  }, [gridTimeSlots]);
+  }, [currentDay, gridTimeSlots]);
 
   useEffect(() => {
     if (isGridTimeSlotsFetching) {
       setCurrentSlots(loadingDaySlots(currentDay));
     }
-  }, [isGridTimeSlotsFetching]);
+  }, [currentDay, isGridTimeSlotsFetching]);
 
   useEffect(() => {
     if (grids && !selectedGrid) {
@@ -225,13 +237,12 @@ export const BookAppointmentModalProvider: FC<
       handleVideoCallCheckboxChange,
     }),
     [
-      isModalOpen,
       selectedUser,
+      isModalOpen,
       grids,
-      selectedGrid,
       gridInfos,
       currentSlots,
-      currentDay,
+      selectedGrid,
       selectedSlotId,
       canGoNext,
       canGoPrev,
@@ -239,6 +250,10 @@ export const BookAppointmentModalProvider: FC<
       nextAvailableTimeSlot,
       isGridTimeSlotsFetching,
       isVideoCallOptionChecked,
+      handleGridChange,
+      handleNextTimeSlot,
+      handleCloseModal,
+      handleSubmitAppointment,
     ],
   );
   return (
