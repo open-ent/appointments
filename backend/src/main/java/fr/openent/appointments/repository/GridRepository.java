@@ -118,4 +118,16 @@ public interface GridRepository {
      *        if the operation fails.
      */
     Future<Optional<Grid>> updateFields(Long gridId, GridPayload grid);
+
+    /**
+     * Update grid state with possibility to delete appointments associated
+     *
+     * @param gridId the unique identifier of the grid to be updated.
+     * @param state the new state of the grid.
+     * @param deleteAppointments boolean to delete appointments associated with the grid.
+     *
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *          return a List of userIds of cancelled appointments if deleteAppointments is true
+     */
+    Future<List<String>> updateState(Long gridId, GridState state, boolean deleteAppointments);
 }

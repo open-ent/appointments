@@ -8,6 +8,7 @@ public class Constants {
     public static final String CAMEL_BEGIN_DATE = "beginDate";
     public static final String CAMEL_BEGIN_TIME = "beginTime";
     public static final String CAMEL_DAILY_SLOTS = "dailySlots";
+    public static final String CAMEL_DELETE_APPOINTMENTS = "deleteAppointments";
     public static final String CAMEL_DISPLAY_NAME = "displayName";
     public static final String CAMEL_DOCUMENT_ID = "documentId";
     public static final String CAMEL_END_DATE = "endDate";

@@ -2,6 +2,7 @@ package fr.openent.appointments.repository.impl;
 
 import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.*;
+import fr.openent.appointments.model.TransactionElement;
 import fr.openent.appointments.model.database.Grid;
 import fr.openent.appointments.model.payload.GridPayload;
 import fr.openent.appointments.repository.DailySlotRepository;
@@ -11,18 +12,17 @@ import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.repository.TimeSlotRepository;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.sql.SqlResult;
+import org.entcore.common.sql.SqlStatementsBuilder;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Constants.FRENCH_NOW;
@@ -278,6 +278,45 @@ public class DefaultGridRepository implements GridRepository {
 
         String errorMessage = "[Appointments@DefaultGridRepository::updateFields] Fail to update grid fields : ";
         sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Grid.class, errorMessage)));
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<List<String>> updateState(Long gridId, GridState state, boolean deleteAppointments){
+        Promise<List<String>> promise = Promise.promise();
+
+        List<String> availableAppointmentStates = AppointmentState.getAvailableStates();
+
+        String updateGridQuery = "UPDATE " + DB_GRID_TABLE + " SET " + STATE + " = ? WHERE id = ?";
+        JsonArray gridParams = new JsonArray().add(state.name()).add(gridId);
+
+        String updateAppointmentsQuery = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ? " +
+                "WHERE time_slot_id IN (SELECT id FROM " + DB_TIME_SLOT_TABLE + " WHERE grid_id = ?) AND " + STATE +
+                " IN " + Sql.listPrepared(availableAppointmentStates) + " RETURNING requester_id";
+        JsonArray appointmentParams = new JsonArray().add(AppointmentState.CANCELED).add(gridId).addAll(new JsonArray(availableAppointmentStates));
+
+        String errorMessage = "[Appointments@DefaultGridRepository::updateState] Fail to update grid state or associated appointments: ";
+
+        List<TransactionElement> transactionElements = new ArrayList<>();
+        transactionElements.add(new TransactionElement(updateGridQuery, gridParams));
+        if (deleteAppointments) {
+            transactionElements.add(new TransactionElement(updateAppointmentsQuery, appointmentParams));
+        }
+
+        TransactionHelper.executeTransaction(transactionElements, errorMessage)
+            .onSuccess(result -> {
+                List<String> uniqueRequesterIds = transactionElements.stream()
+                        .flatMap(element -> element.getResult().stream())
+                        .map(requesterId -> ((JsonObject) requesterId).getString(REQUESTER_ID))
+                        .distinct()
+                        .collect(Collectors.toList());
+                promise.complete(uniqueRequesterIds);
+            })
+            .onFailure(err -> {
+                LogHelper.logError(this, "updateState", errorMessage, err.getMessage());
+                promise.fail(err.getMessage());
+            });
 
         return promise.future();
     }

@@ -249,9 +249,8 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
-    public Future<Void> deleteGrid(Integer gridId) {
-        // TODO: Implement the logic to delete a specific grid.
-        return Future.succeededFuture();
+    public Future<List<String>> deleteGrid(Long gridId, boolean deleteAppointments) {
+        return gridRepository.updateState(gridId, GridState.DELETED, deleteAppointments);
     }
 
     @Override

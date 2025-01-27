@@ -219,12 +219,55 @@ public class GridController extends ControllerHelper {
         });
     }
 
-    @Delete("/grids/:id")
-    @ApiDoc("Delete grid")
+    @Put("/grids/:gridId/delete")
+    @ApiDoc("Delete grid with the possibility to delete all appointments associated")
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void deleteGrid(final HttpServerRequest request) {
-        
+        Long gridId = Optional.ofNullable(request.getParam(CAMEL_GRID_ID))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        if (gridId == null) {
+            String errorMessage = "Grid id should be valid";
+            LogHelper.logError(this, "updateGrid", errorMessage);
+            badRequest(request);
+            return;
+        }
+
+        boolean deleteAppointments = Optional.ofNullable(request.getParam(CAMEL_DELETE_APPOINTMENTS))
+                .map(Boolean::parseBoolean)
+                .orElse(false);
+
+        JsonObject composeInfos = new JsonObject();
+        gridService.getGridById(gridId)
+            .compose(grid -> {
+                composeInfos.put(OWNER_ID, grid.getOwnerId());
+                return UserUtils.getAuthenticatedUserInfos(eb, request);
+            })
+            .recover(error -> {
+                String errorMessage = "Failed to get grid with id " + gridId;
+                LogHelper.logError(this, "deleteGrid", errorMessage, error.getMessage());
+                conflict(request, errorMessage);
+                return Future.failedFuture(errorMessage);
+            })
+            .compose(user -> {
+                if (!composeInfos.getString(OWNER_ID).equals(user.getUserId())) {
+                    String errorMessage = "You are not the owner of this grid";
+                    LogHelper.logError(this, "deleteGrid", errorMessage);
+                    unauthorized(request, errorMessage);
+                    return Future.failedFuture(errorMessage);
+                }
+                return gridService.deleteGrid(gridId, deleteAppointments);
+            })
+            .onSuccess(requesterIds -> renderJson(request, new JsonObject()))
+            .onFailure(error -> {
+                String errorMessage = "Failed to delete grid with id " + gridId;
+                LogHelper.logError(this, "deleteGrid", errorMessage, error.getMessage());
+                if (!request.response().ended()) renderError(request);
+            });
+
+
         renderJson(request, new JsonObject());
     }
 }

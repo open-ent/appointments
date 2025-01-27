@@ -122,7 +122,7 @@ public interface GridService {
      * @param gridId The ID of the grid to delete.
      * @return A Future that will complete when the grid has been deleted.
      */
-    Future<Void> deleteGrid(Integer gridId);
+    Future<List<String>> deleteGrid(Long gridId, boolean deleteAppointments);
 
     /**
      * Close all the grid with an ending date in the past
