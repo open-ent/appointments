@@ -50,6 +50,11 @@ CREATE TABLE appointments.grid (
     state appointments.G_STATE NOT NULL
 );
 
+CREATE UNIQUE INDEX unique_name_owner_active_grid
+ON appointments.grid (name, owner_id)
+WHERE state NOT IN ('CLOSED', 'DELETED');
+
+
 CREATE TABLE appointments.grid_state (
     id bigserial PRIMARY KEY,
     state appointments.G_STATE NOT NULL,

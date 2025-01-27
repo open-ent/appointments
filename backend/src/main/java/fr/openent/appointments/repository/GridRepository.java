@@ -105,4 +105,17 @@ public interface GridRepository {
      *         if the operation fails.
      */
     Future<JsonObject> closeAllPassedGrids();
+
+    /**
+     * Update some grid fields
+     *
+     * @param gridId the unique identifier of the grid to be updated.
+     * @param grid the {@link GridPayload} object containing the fields to be updated.
+     *
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *        return a {@link Grid} containing the result of the update operation.
+     *        This object may include the updated grid's details or an error message
+     *        if the operation fails.
+     */
+    Future<Optional<Grid>> updateFields(Long gridId, GridPayload grid);
 }

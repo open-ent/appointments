@@ -71,9 +71,21 @@ public class DefaultGridService implements GridService {
 
 
     @Override
-    public Future<JsonArray> getGridById(Integer gridId) {
-        // TODO: Implement the logic to retrieve a specific grid by its ID.
-        return Future.succeededFuture(new JsonArray());
+    public Future<Grid> getGridById(Long gridId) {
+        Promise<Grid> promise = Promise.promise();
+
+        gridRepository.get(gridId)
+            .onSuccess(grid -> {
+                if (grid.isPresent()) promise.complete(grid.get());
+                else promise.fail("Grid not found");
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to get grid by id";
+                LogHelper.logError(this, "getGridById", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();
     }
 
     @Override
@@ -203,9 +215,25 @@ public class DefaultGridService implements GridService {
 
 
     @Override
-    public Future<Void> updateGrid(Integer gridId, JsonArray grid) {
-        // TODO: Implement the logic to update an existing grid.
-        return Future.succeededFuture();
+    public Future<Grid> updateGrid(Long gridId, GridPayload grid) {
+        Promise<Grid> promise = Promise.promise();
+
+        gridRepository.updateFields(gridId, grid)
+            .onSuccess(updatedGrid -> {
+                if (updatedGrid.isPresent()) promise.complete(updatedGrid.get());
+                else{
+                    String errorMessage = "Failed to update grid";
+                    LogHelper.logError(this, "updateGrid", errorMessage, "Grid not found");
+                    promise.fail(errorMessage);
+                }
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to update grid";
+                LogHelper.logError(this, "updateGrid", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();
     }
 
     @Override

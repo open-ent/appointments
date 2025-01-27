@@ -51,7 +51,7 @@ public class CommunicationController extends BaseController {
             })
             .onSuccess(groups -> renderJson(request, groups))
             .onFailure(err -> {
-                if (!request.isEnded()) {
+                if (!request.response().ended()) {
                     String errorMessage = "Failed to retrieve groups allow to communicate with connected user";
                     LogHelper.logError(this, "getGroupsCanCommunicateWithMe", errorMessage, err.getMessage());
                     renderError(request);

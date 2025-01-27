@@ -12,6 +12,7 @@ import fr.wseduc.webutils.request.RequestUtils;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
 
+import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -31,6 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Constants.*;
+import static fr.openent.appointments.core.constants.Fields.OWNER_ID;
 
 public class GridController extends ControllerHelper {
     private final GridService gridService;
@@ -167,13 +169,54 @@ public class GridController extends ControllerHelper {
         });
     }
 
-    @Put("/grids/:id")
+    @Put("/grids/:gridId")
     @ApiDoc("Update grid")
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void updateGrid(final HttpServerRequest request) {
-        
-        renderJson(request, new JsonObject());
+        Long gridId = Optional.ofNullable(request.getParam(CAMEL_GRID_ID))
+                .map(Long::parseLong)
+                .orElse(null);
+
+        if (gridId == null) {
+            String errorMessage = "Grid id should be valid";
+            LogHelper.logError(this, "updateGrid", errorMessage);
+            badRequest(request);
+            return;
+        }
+
+        JsonObject composeInfos = new JsonObject();
+        RequestUtils.bodyToJson(request, body -> {
+            GridPayload gridPayload = new GridPayload(body);
+            gridService.getGridById(gridId)
+                .compose(grid -> {
+                    composeInfos.put(OWNER_ID, grid.getOwnerId());
+                    return UserUtils.getAuthenticatedUserInfos(eb, request);
+                })
+                .recover(error -> {
+                    String errorMessage = "Failed to get grid with id " + gridId;
+                    LogHelper.logError(this, "updateGrid", errorMessage, error.getMessage());
+                    conflict(request, errorMessage);
+                    return Future.failedFuture(errorMessage);
+                })
+                .compose(user -> {
+                    if (!composeInfos.getString(OWNER_ID).equals(user.getUserId())) {
+                        String errorMessage = "You are not the owner of this grid";
+                        LogHelper.logError(this, "updateGrid", errorMessage);
+                        unauthorized(request, errorMessage);
+                        return Future.failedFuture(errorMessage);
+                    }
+                    return gridService.updateGrid(gridId, gridPayload);
+                })
+                .onSuccess(
+                    grid -> renderJson(request, grid.toJson())
+                )
+                .onFailure(error -> {
+                    String errorMessage = "Failed to update grid with id " + gridId;
+                    LogHelper.logError(this, "updateGrid", errorMessage, error.getMessage());
+                    if (!request.response().ended()) renderError(request);
+                });
+        });
     }
 
     @Delete("/grids/:id")

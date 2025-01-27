@@ -237,6 +237,51 @@ public class DefaultGridRepository implements GridRepository {
         return promise.future();
     }
 
+    @Override
+    public Future<Optional<Grid>> updateFields(Long gridId, GridPayload grid){
+        Promise<Optional<Grid>> promise = Promise.promise();
+
+        String name = grid.getGridName();
+        String color = grid.getColor();
+        String videoCallLink = grid.getVideoCallLink();
+        String place = grid.getPlace();
+        String documentId = grid.getDocumentId();
+        String publicComment = grid.getPublicComment();
+
+        boolean isNameUpdatable = name != null && !name.isEmpty();
+        boolean isColorUpdatable = color != null;
+        boolean isVideoCallLinkUpdatable = videoCallLink != null;
+        boolean isPlaceUpdatable = place != null;
+        boolean isDocumentIdUpdatable = documentId != null;
+        boolean isPublicCommentUpdatable = publicComment != null;
+
+        String query = "UPDATE " + DB_GRID_TABLE + " SET " + UPDATING_DATE + " = ?, ";
+        if (isNameUpdatable) query += NAME + " = ?, ";
+        if (isColorUpdatable) query += COLOR + " = ?, ";
+        if (isVideoCallLinkUpdatable) query += VIDEO_CALL_LINK + " = ?, ";
+        if (isPlaceUpdatable) query += PLACE + " = ?, ";
+        if (isDocumentIdUpdatable) query += DOCUMENT_ID + " = ?, ";
+        if (isPublicCommentUpdatable) query += PUBLIC_COMMENT + " = ?, ";
+        query = query.substring(0, query.length() - 2) + " WHERE " + ID + " = ? RETURNING *";
+
+        String frenchNow = ZonedDateTime.now(ZoneId.of(FRENCH_TIME_ZONE))
+                .format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_2));
+
+        JsonArray params = new JsonArray().add(frenchNow);
+        if (isNameUpdatable) params.add(name);
+        if (isColorUpdatable) params.add(color);
+        if (isVideoCallLinkUpdatable) params.add(videoCallLink);
+        if (isPlaceUpdatable) params.add(place);
+        if (isDocumentIdUpdatable) params.add(documentId);
+        if (isPublicCommentUpdatable) params.add(publicComment);
+        params.add(gridId);
+
+        String errorMessage = "[Appointments@DefaultGridRepository::updateFields] Fail to update grid fields : ";
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Grid.class, errorMessage)));
+
+        return promise.future();
+    }
+
     // Private functions
 
     private Future<Optional<Grid>> insert(GridPayload grid, String userId) {

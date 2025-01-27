@@ -46,7 +46,7 @@ public interface GridService {
      * @param gridId The ID of the grid to retrieve.
      * @return A Future containing a JsonArray with the grid data.
      */
-    Future<JsonArray> getGridById(Integer gridId);
+    Future<Grid> getGridById(Long gridId);
 
     /**
      * Retrieves a specific grid by timeSlotId.
@@ -95,10 +95,10 @@ public interface GridService {
      * Updates an existing grid.
      *
      * @param gridId The ID of the grid to update.
-     * @param grid A JsonArray containing the updated data for the grid.
+     * @param grid A GridPayload containing the data to update the grid with.
      * @return A Future that will complete when the grid has been updated.
      */
-    Future<Void> updateGrid(Integer gridId, JsonArray grid);
+    Future<Grid> updateGrid(Long gridId, GridPayload grid);
 
     /**
      * Suspends a specific grid by its ID.
