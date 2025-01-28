@@ -237,15 +237,13 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
-    public Future<Void> suspendGrid(Integer gridId) {
-        // TODO: Implement the logic to suspend a specific grid.
-        return Future.succeededFuture();
+    public Future<List<String>> suspendGrid(Long gridId, boolean deleteAppointments) {
+        return gridRepository.updateState(gridId, GridState.SUSPENDED, deleteAppointments);
     }
 
     @Override
-    public Future<Void> restoreGrid(Integer gridId) {
-        // TODO: Implement the logic to restore a suspended grid.
-        return Future.succeededFuture();
+    public Future<List<String>> restoreGrid(Long gridId) {
+        return gridRepository.updateState(gridId, GridState.OPEN, false);
     }
 
     @Override

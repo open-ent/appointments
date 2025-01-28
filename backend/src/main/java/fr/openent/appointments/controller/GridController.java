@@ -194,46 +194,77 @@ public class GridController extends ControllerHelper {
         });
     }
 
+    @FunctionalInterface
+    private interface UpdateGridStateFunction {
+        Future<List<String>> apply(Long gridId, boolean deleteAppointments);
+    }
+
+    private void handleGridOperation(final HttpServerRequest request,
+                                     UpdateGridStateFunction function,
+                                     String actionName) {
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, actionName);
+        if (request.response().ended()) return;
+
+        boolean deleteAppointments = Boolean.TRUE.equals(
+                ParamHelper.getParam(CAMEL_DELETE_APPOINTMENTS, request, Boolean.class, false, actionName)
+        );
+        if (request.response().ended()) return;
+
+        JsonObject composeInfos = new JsonObject();
+
+        gridService.getGridById(gridId)
+                .compose(grid -> {
+                    composeInfos.put(OWNER_ID, grid.getOwnerId());
+                    return UserUtils.getAuthenticatedUserInfos(eb, request);
+                })
+                .recover(error -> {
+                    String errorMessage = "Failed to get grid with id " + gridId;
+                    LogHelper.logError(this, actionName, errorMessage, error.getMessage());
+                    conflict(request, errorMessage);
+                    return Future.failedFuture(errorMessage);
+                })
+                .compose(user -> {
+                    if (!composeInfos.getString(OWNER_ID).equals(user.getUserId())) {
+                        String errorMessage = "You are not the owner of this grid";
+                        LogHelper.logError(this, actionName, errorMessage);
+                        unauthorized(request, errorMessage);
+                        return Future.failedFuture(errorMessage);
+                    }
+                    return function.apply(gridId, deleteAppointments);
+                })
+                .onSuccess(requesterIds -> {
+                    // Render a JSON response with the result (e.g., list of requester IDs).
+                    renderJson(request, new JsonObject().put("requesterIds", requesterIds));
+                })
+                .onFailure(error -> {
+                    String errorMessage = "Failed to " + actionName + " grid with id " + gridId;
+                    LogHelper.logError(this, actionName, errorMessage, error.getMessage());
+                    if (!request.response().ended()) renderError(request);
+                });
+    }
+
     @Put("/grids/:gridId/delete")
     @ApiDoc("Delete grid with the possibility to delete all appointments associated")
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void deleteGrid(final HttpServerRequest request) {
-        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "deleteGrid");
-        if (request.response().ended()) return;
+        handleGridOperation(request, gridService::deleteGrid, "deleteGrid");
+    }
 
-        boolean deleteAppointments = Boolean.TRUE.equals(ParamHelper.getParam(CAMEL_DELETE_APPOINTMENTS, request, Boolean.class, false, "deleteGrid"));
-        if (request.response().ended()) return;
+    @Put("/grids/:gridId/suspend")
+    @ApiDoc("Suspend grid with the possibility to delete all appointments associated")
+    @ResourceFilter(ManageRight.class)
+    @SecuredAction(value = "", type = ActionType.RESOURCE)
+    public void suspendGrid(final HttpServerRequest request) {
+        handleGridOperation(request, gridService::suspendGrid, "suspendGrid");
+    }
 
-        JsonObject composeInfos = new JsonObject();
-        gridService.getGridById(gridId)
-            .compose(grid -> {
-                composeInfos.put(OWNER_ID, grid.getOwnerId());
-                return UserUtils.getAuthenticatedUserInfos(eb, request);
-            })
-            .recover(error -> {
-                String errorMessage = "Failed to get grid with id " + gridId;
-                LogHelper.logError(this, "deleteGrid", errorMessage, error.getMessage());
-                conflict(request, errorMessage);
-                return Future.failedFuture(errorMessage);
-            })
-            .compose(user -> {
-                if (!composeInfos.getString(OWNER_ID).equals(user.getUserId())) {
-                    String errorMessage = "You are not the owner of this grid";
-                    LogHelper.logError(this, "deleteGrid", errorMessage);
-                    unauthorized(request, errorMessage);
-                    return Future.failedFuture(errorMessage);
-                }
-                return gridService.deleteGrid(gridId, deleteAppointments);
-            })
-            .onSuccess(requesterIds -> renderJson(request, new JsonObject()))
-            .onFailure(error -> {
-                String errorMessage = "Failed to delete grid with id " + gridId;
-                LogHelper.logError(this, "deleteGrid", errorMessage, error.getMessage());
-                if (!request.response().ended()) renderError(request);
-            });
-
-
-        renderJson(request, new JsonObject());
+    @Put("/grids/:gridId/restore")
+    @ApiDoc("Restore grid")
+    @ResourceFilter(ManageRight.class)
+    @SecuredAction(value = "", type = ActionType.RESOURCE)
+    public void restoreGrid(final HttpServerRequest request) {
+        // For restoreGrid, deleteAppointments is irrelevant, so we use a lambda that ignores it.
+        handleGridOperation(request, (gridId, deleteAppointments) -> gridService.restoreGrid(gridId), "restoreGrid");
     }
 }
