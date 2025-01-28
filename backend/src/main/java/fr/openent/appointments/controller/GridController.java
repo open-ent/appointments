@@ -87,8 +87,30 @@ public class GridController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getGridById(final HttpServerRequest request) {
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "getGridById");
+        if (request.response().ended()) return;
 
-        renderJson(request, new JsonObject());
+        JsonObject composeInfos = new JsonObject();
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user -> {
+                composeInfos.put(CAMEL_USER_ID, user.getUserId());
+                return gridService.getGridById(gridId);
+            })
+            .onSuccess(grid -> {
+                if (!grid.getOwnerId().equals(composeInfos.getString(CAMEL_USER_ID))) {
+                    String errorMessage = "You are not the owner of this grid";
+                    LogHelper.logError(this, "getGridById", errorMessage);
+                    unauthorized(request, errorMessage);
+                    return;
+                }
+                renderJson(request, grid.toJson());
+            })
+            .onFailure(error -> {
+                String errorMessage = "Failed to get grid with id " + gridId;
+                LogHelper.logError(this, "getGridById", errorMessage, error.getMessage());
+                badRequest(request);
+            });
     }
 
     @Get("/grids/:gridId/minimal/infos")
