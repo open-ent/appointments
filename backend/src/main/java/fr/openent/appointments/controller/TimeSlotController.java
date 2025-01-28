@@ -2,6 +2,7 @@ package fr.openent.appointments.controller;
 
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.helper.ParamHelper;
 import fr.openent.appointments.security.ViewRight;
 import fr.openent.appointments.service.*;
 import fr.wseduc.rs.ApiDoc;
@@ -32,16 +33,8 @@ public class TimeSlotController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value="", type= ActionType.RESOURCE)
     public void getTimeSlotsByDates(final HttpServerRequest request) {
-        Long gridId = Optional.ofNullable(request.getParam(CAMEL_GRID_ID))
-                .map(Long::parseLong)
-                .orElse(null);
-
-        if (gridId == null) {
-            String errorMessage = "Missing grid id";
-            LogHelper.logError(this, "getTimeSlotsByDates", errorMessage);
-            badRequest(request);
-            return;
-        }
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "getTimeslotsByDates");
+        if (request.response().ended()) return;
 
         LocalDate beginDate = Optional.ofNullable(request.params().get(CAMEL_BEGIN_DATE))
                 .map(DateHelper::parseDate)

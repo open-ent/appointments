@@ -3,11 +3,11 @@ package fr.openent.appointments.controller;
 import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.helper.ParamHelper;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Get;
 import fr.wseduc.rs.Post;
 import fr.wseduc.rs.Put;
-import fr.wseduc.rs.Delete;
 import fr.wseduc.webutils.request.RequestUtils;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
@@ -28,7 +28,6 @@ import fr.openent.appointments.security.ViewRight;
 import org.entcore.common.user.UserUtils;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Constants.*;
@@ -46,13 +45,11 @@ public class GridController extends ControllerHelper {
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     @ResourceFilter(ManageRight.class)
     public void getMyGrids(final HttpServerRequest request) {
-        Long page = Optional.ofNullable(request.params().get(PAGE))
-                .map(Long::parseLong)
-                .orElse(null);
+        Long page = ParamHelper.getParam(PAGE, request, Long.class, false, "getMyGrids");
+        if (request.response().ended()) return;
 
-        Long limit = Optional.ofNullable(request.params().get(LIMIT))
-                .map(Long::parseLong)
-                .orElse(null);
+        Long limit = ParamHelper.getParam(LIMIT, request, Long.class, false, "getMyGrids");
+        if (request.response().ended()) return;
 
         List<GridState> states = new JsonArray(request.params().get(STATES)).stream()
                 .filter(String.class::isInstance)
@@ -99,16 +96,8 @@ public class GridController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getMinimalGridInfosById(final HttpServerRequest request) {
-        Long gridId = Optional.ofNullable(request.getParam(CAMEL_GRID_ID))
-                .map(Long::parseLong)
-                .orElse(null);
-
-        if (gridId == null) {
-            String errorMessage = "Grid id should be valid";
-            LogHelper.logError(this, "getMinimalGridInfosById", errorMessage);
-            badRequest(request);
-            return;
-        }
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "getMinimalGridInfosById");
+        if (request.response().ended()) return;
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> gridService.getMinimalGridInfosById(user, gridId))
@@ -125,14 +114,8 @@ public class GridController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getAvailableUserMinimalGrids(final HttpServerRequest request) {
-        String userId = request.getParam(CAMEL_USER_ID, "");
-
-        if (userId.isEmpty()) {
-            String errorMessage = "User id should be valid";
-            LogHelper.logError(this, "getUserGrids", errorMessage);
-            badRequest(request);
-            return;
-        }
+        String userId = ParamHelper.getParam(CAMEL_USER_ID, request, String.class, true, "getAvailableUserMinimalGrids");
+        if (request.response().ended()) return;
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> gridService.getAvailableUserMinimalGrids(user, userId))
@@ -174,16 +157,8 @@ public class GridController extends ControllerHelper {
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void updateGrid(final HttpServerRequest request) {
-        Long gridId = Optional.ofNullable(request.getParam(CAMEL_GRID_ID))
-                .map(Long::parseLong)
-                .orElse(null);
-
-        if (gridId == null) {
-            String errorMessage = "Grid id should be valid";
-            LogHelper.logError(this, "updateGrid", errorMessage);
-            badRequest(request);
-            return;
-        }
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "updateGrid");
+        if (request.response().ended()) return;
 
         JsonObject composeInfos = new JsonObject();
         RequestUtils.bodyToJson(request, body -> {
@@ -224,20 +199,11 @@ public class GridController extends ControllerHelper {
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void deleteGrid(final HttpServerRequest request) {
-        Long gridId = Optional.ofNullable(request.getParam(CAMEL_GRID_ID))
-                .map(Long::parseLong)
-                .orElse(null);
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "deleteGrid");
+        if (request.response().ended()) return;
 
-        if (gridId == null) {
-            String errorMessage = "Grid id should be valid";
-            LogHelper.logError(this, "updateGrid", errorMessage);
-            badRequest(request);
-            return;
-        }
-
-        boolean deleteAppointments = Optional.ofNullable(request.getParam(CAMEL_DELETE_APPOINTMENTS))
-                .map(Boolean::parseBoolean)
-                .orElse(false);
+        boolean deleteAppointments = Boolean.TRUE.equals(ParamHelper.getParam(CAMEL_DELETE_APPOINTMENTS, request, Boolean.class, false, "deleteGrid"));
+        if (request.response().ended()) return;
 
         JsonObject composeInfos = new JsonObject();
         gridService.getGridById(gridId)

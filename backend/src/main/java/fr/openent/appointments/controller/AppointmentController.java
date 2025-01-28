@@ -3,6 +3,7 @@ package fr.openent.appointments.controller;
 import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.helper.ParamHelper;
 import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.response.MinimalAppointment;
 import fr.openent.appointments.security.ManageRight;
@@ -49,20 +50,11 @@ public class AppointmentController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value="", type= ActionType.RESOURCE)
     public void createAppointment(final HttpServerRequest request) {
-        Long timeSlotId = Optional.ofNullable(request.getParam(CAMEL_TIME_SLOT_ID))
-                .map(Long::parseLong)
-                .orElse(null);
+        Long timeSlotId = ParamHelper.getParam(CAMEL_TIME_SLOT_ID, request, Long.class, true, "createAppointment");
+        if(request.response().ended()) return;
 
-        if (timeSlotId == null) {
-            String errorMessage = "Missing time slot id";
-            LogHelper.logError(this, "createAppointment", errorMessage);
-            badRequest(request);
-            return;
-        }
-
-        boolean isVideoCall = Optional.ofNullable(request.getParam(CAMEL_IS_VIDEO_CALL))
-                .map(Boolean::parseBoolean)
-                .orElse(false);
+        boolean isVideoCall = Boolean.TRUE.equals(ParamHelper.getParam(CAMEL_IS_VIDEO_CALL, request, Boolean.class, false, "createAppointment"));
+        if(request.response().ended()) return;
 
         final JsonObject composeInfo = new JsonObject();
 
@@ -124,13 +116,11 @@ public class AppointmentController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value="", type= ActionType.RESOURCE)
     public void getMyAppointments(final HttpServerRequest request) {
-        Long page = Optional.ofNullable(request.params().get(PAGE))
-            .map(Long::parseLong)
-            .orElse(null);
+        Long page = ParamHelper.getParam(PAGE, request, Long.class, false, "getMyAppointments");
+        if(request.response().ended()) return;
 
-        Long limit = Optional.ofNullable(request.params().get(LIMIT))
-            .map(Long::parseLong)
-            .orElse(null);
+        Long limit = ParamHelper.getParam(LIMIT, request, Long.class, false, "getMyAppointments");
+        if(request.response().ended()) return;
 
         List<AppointmentState> states;
         String statesParam = request.params().get(STATES);
@@ -159,16 +149,8 @@ public class AppointmentController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value="", type= ActionType.RESOURCE)
     public void getAppointmentById(final HttpServerRequest request) {
-        Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
-                .map(Long::parseLong)
-                .orElse(null);
-
-        if (appointmentId == null) {
-            String errorMessage = "Missing appointment id";
-            LogHelper.logError(this, "getAppointmentById", errorMessage);
-            badRequest(request);
-            return;
-        }
+        Long appointmentId = ParamHelper.getParam(CAMEL_APPOINTMENT_ID, request, Long.class, true, "getAppointmentById");
+        if(request.response().ended()) return;
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
                 .compose(user -> appointmentService.getAppointmentById(appointmentId, user))
@@ -183,16 +165,8 @@ public class AppointmentController extends ControllerHelper {
     private void handleAppointmentAction(final HttpServerRequest request,
                                          String action,
                                          AppointmentActionHandler actionHandler) {
-        Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
-                .map(Long::parseLong)
-                .orElse(null);
-
-        if (appointmentId == null) {
-            String errorMessage = "Missing appointment id";
-            LogHelper.logError(this, action+"Appointment", errorMessage);
-            badRequest(request);
-            return;
-        }
+        Long appointmentId = ParamHelper.getParam(CAMEL_APPOINTMENT_ID, request, Long.class, true, action + "Appointment");
+        if(request.response().ended()) return;
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> actionHandler.handle(request, appointmentId, user))
@@ -264,16 +238,8 @@ public class AppointmentController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value="", type= ActionType.RESOURCE)
     public void getAppointmentIndexInFrontList(final HttpServerRequest request) {
-        Long appointmentId = Optional.ofNullable(request.getParam(CAMEL_APPOINTMENT_ID))
-                .map(Long::parseLong)
-                .orElse(null);
-
-        if (appointmentId == null) {
-            String errorMessage = "Missing appointment id";
-            LogHelper.logError(this, "getAppointmentById", errorMessage);
-            badRequest(request);
-            return;
-        }
+        Long appointmentId = ParamHelper.getParam(CAMEL_APPOINTMENT_ID, request, Long.class, true, "getAppointmentIndexInFrontList");
+        if(request.response().ended()) return;
 
         JsonObject composeInfo = new JsonObject();
 

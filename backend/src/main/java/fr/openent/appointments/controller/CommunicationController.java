@@ -2,6 +2,7 @@ package fr.openent.appointments.controller;
 
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.helper.ParamHelper;
 import fr.openent.appointments.security.ViewRight;
 import fr.openent.appointments.service.CommunicationService;
 import fr.openent.appointments.service.ServiceFactory;
@@ -16,7 +17,8 @@ import io.vertx.core.http.HttpServerRequest;
 import fr.openent.appointments.security.ManageRight;
 import org.entcore.common.user.UserUtils;
 
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import static fr.openent.appointments.core.constants.Constants.*;
 
@@ -33,11 +35,8 @@ public class CommunicationController extends BaseController {
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getGroupsCanCommunicateWithMe(final HttpServerRequest request) {
-        String structureId = request.getParam(CAMEL_STRUCTURE_ID);
-        if (structureId == null || structureId.isEmpty()) {
-            badRequest(request);
-            return;
-        }
+        String structureId = ParamHelper.getParam(CAMEL_STRUCTURE_ID, request, String.class, true, "getGroupsCanCommunicateWithMe");
+        if (request.response().ended()) return;
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> {
@@ -64,13 +63,17 @@ public class CommunicationController extends BaseController {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void getUsersICanCommunicateWith(final HttpServerRequest request) {
-        String search = request.getParam(SEARCH);
-        Long page = Optional.ofNullable(request.params().get(PAGE))
-                .map(Long::parseLong)
-                .orElse(null);
-        Long limit = Optional.ofNullable(request.params().get(LIMIT))
-                .map(Long::parseLong)
-                .orElse(null);
+        Map<String, Class<?>> requestParams = new HashMap<>();
+        requestParams.put(SEARCH, String.class);
+        requestParams.put(PAGE, Long.class);
+        requestParams.put(LIMIT, Long.class);
+
+        Map<String, Object> paramValues = ParamHelper.getParams(requestParams, request, new String[0], "getUsersICanCommunicateWith");
+        if (request.response().ended()) return;
+
+        String search = (String) paramValues.get(SEARCH);
+        Long page = (Long) paramValues.get(PAGE);
+        Long limit = (Long) paramValues.get(LIMIT);
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> communicationService.getUsersICanCommunicateWith(user, search, page, limit))
