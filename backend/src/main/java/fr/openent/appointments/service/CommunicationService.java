@@ -1,6 +1,7 @@
 package fr.openent.appointments.service;
 
 import fr.openent.appointments.model.UserAppointment;
+import fr.openent.appointments.model.database.NeoGroup;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 import org.entcore.common.user.UserInfos;
@@ -16,7 +17,7 @@ public interface CommunicationService {
      * @param structureId The ID of the structure the user selected.
      * @return A Future containing a JsonArray of groups.
      */
-    Future<JsonArray> getGroupsCanCommunicateWithMe(String userId, String structureId);
+    Future<List<NeoGroup>> getGroupsCanCommunicateWithMe(String userId, String structureId);
 
     /**
      * Retrieves all people that the current user can communicate with.

@@ -29,8 +29,8 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
         this.neo4j = repositoryFactory.neo4j();
     }
 
-    public Future<JsonArray> getGroupsCanCommunicateWithMe(String userId, String structureId) {
-        Promise<JsonArray> promise = Promise.promise();
+    public Future<List<NeoGroup>> getGroupsCanCommunicateWithMe(String userId, String structureId) {
+        Promise<List<NeoGroup>> promise = Promise.promise();
 
         String query = getCommunicationQuery(true, structureId);
         JsonObject params = new JsonObject()
@@ -38,7 +38,7 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
                 .put(CAMEL_STRUCTURE_ID, structureId);
 
         String errorMessage = "[Appointments@DefaultCommunicationRepository::getGroupsCanCommunicateWithMe] Fail to retrieve visible groups : ";
-        neo4j.execute(query, params, Neo4jResult.validResultHandler(FutureHelper.handlerEither(promise, errorMessage)));
+        neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, NeoGroup.class, errorMessage)));
 
         return promise.future();
     }

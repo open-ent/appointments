@@ -46,8 +46,8 @@ public class DefaultCommunicationService implements CommunicationService {
 
 
     @Override
-    public Future<JsonArray> getGroupsCanCommunicateWithMe(String userId, String structureId){
-        Promise<JsonArray> promise = Promise.promise();
+    public Future<List<NeoGroup>> getGroupsCanCommunicateWithMe(String userId, String structureId){
+        Promise<List<NeoGroup>> promise = Promise.promise();
 
         communicationRepository.getGroupsCanCommunicateWithMe(userId, structureId)
             .onSuccess(promise::complete)

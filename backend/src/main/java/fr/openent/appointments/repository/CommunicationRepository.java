@@ -16,7 +16,7 @@ public interface CommunicationRepository {
      * @param structureId The ID of the structure the user selected.
      * @return A Future containing a JsonArray of groups.
      */
-    Future<JsonArray> getGroupsCanCommunicateWithMe(String userId, String structureId);
+    Future<List<NeoGroup>> getGroupsCanCommunicateWithMe(String userId, String structureId);
 
     /**
      * Retrieves all groups the current user can communicate with.
