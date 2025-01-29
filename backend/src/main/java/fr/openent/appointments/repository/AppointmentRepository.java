@@ -18,4 +18,6 @@ public interface AppointmentRepository {
     Future<Optional<AppointmentWithInfos>> get(Long appointmentId);
 
     Future<Optional<Appointment>> updateState(Long appointmentId, AppointmentState state);
+
+    Future<List<Appointment>> getAcceptedAppointments(Long gridId);
 }

@@ -29,7 +29,6 @@ public class ServiceFactory {
         this.gridService = new DefaultGridService(this, repositoryFactory);
         this.communicationService = new DefaultCommunicationService(this, repositoryFactory);
         this.appointmentService = new DefaultAppointmentService(this, repositoryFactory);
-
     }
 
     public Vertx vertx() {

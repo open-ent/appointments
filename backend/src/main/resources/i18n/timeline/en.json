@@ -21,5 +21,11 @@
   "appointments.cancel_appointment_notification": "Rendez-vous annulé",
   "timeline.appointments.cancelled.appointment.first": "Le rendez-vous avec ",
   "timeline.appointments.cancelled.appointment.second": " a été annulé.",
-  "timeline.appointments.cancelled.appointment.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application "
+  "timeline.appointments.cancelled.appointment.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+
+  "appointments.update_grid_notification": "Des informations sur votre rendez-vous ont été mises à jour",
+  "timeline.appointments.update.grid.first": "Des informations concernant votre rendez-vous avec ",
+  "timeline.appointments.update.grid.second": " ont été modifiées.",
+  "timeline.appointments.update.grid.consult.app": "Consultez l'application ",
+  "timeline.appointments.update.grid.to.know.more": " pour en savoir plus."
 }

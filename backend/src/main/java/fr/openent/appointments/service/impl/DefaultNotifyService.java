@@ -2,6 +2,7 @@ package fr.openent.appointments.service.impl;
 
 import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.database.AppointmentWithInfos;
 import fr.openent.appointments.repository.AppointmentRepository;
 import fr.openent.appointments.repository.RepositoryFactory;
@@ -93,5 +94,25 @@ public class DefaultNotifyService implements NotifyService {
                 String errorMessage = "Error while getting appointment with id " + appointmentId;
                 LogHelper.logError(this, "notifyAppointmentUpdate", errorMessage, err.getMessage());
             });
+    }
+
+    @Override
+    public void notifyGridUpdate(HttpServerRequest request, UserInfos actionUserInfos, List<Appointment> appointments, boolean isStateUpdated){
+        String notifName = isStateUpdated ? NOTIF_NAME_CANCEL_APPOINTMENT : NOTIF_NAME_UPDATE_GRID;
+        appointments.forEach(appointment -> {
+            String targetUserId = appointment.getRequesterId();
+
+            JsonObject params = new JsonObject()
+                .put(CAMEL_USER_NAME, actionUserInfos.getUsername())
+                .put(CAMEL_USER_URI, USERBOOK_ANNUAIRE_URI + actionUserInfos.getUserId())
+                .put(CAMEL_APPOINTMENT_URI, APPOINTMENTS_URI + "#/?appointmentId="+appointment.getId())
+                .put(CAMEL_PUSH_NOTIF, new JsonObject().put(TITLE, notifName).put(BODY, ""));
+
+            List<String> targetUsers = Collections.singletonList(targetUserId);
+
+            timelineHelper.notifyTimeline(request, notifName, actionUserInfos, targetUsers, null, null, params, true);
+
+            LogHelper.logInfo(this, "notifyGridUpdate", "Notif sent : " + notifName + " to " + targetUserId + " for appointment " + appointment.getId());
+        });
     }
 }

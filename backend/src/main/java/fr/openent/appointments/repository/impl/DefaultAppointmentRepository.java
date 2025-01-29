@@ -155,4 +155,25 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
 
         return promise.future();
     }
+
+    @Override
+    public Future<List<Appointment>> getAcceptedAppointments(Long gridId){
+        Promise<List<Appointment>> promise = Promise.promise();
+
+        if (gridId == null) {
+            promise.complete(new ArrayList<>());
+            return promise.future();
+        }
+
+        String query = "SELECT a.* FROM " + DB_APPOINTMENT_TABLE + " a " +
+                "JOIN " + DB_TIME_SLOT_TABLE + " ts ON a.time_slot_id = ts.id " +
+                "WHERE ts.grid_id = ? AND a.state = ?";
+
+        JsonArray params = new JsonArray().add(gridId).add(AppointmentState.ACCEPTED.getValue());
+
+        String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::getAcceptedAppointments] Failed to get accepted appointments for grid %d : ", gridId);
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Appointment.class, errorMessage)));
+
+        return promise.future();
+    }
 }

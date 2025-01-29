@@ -309,6 +309,11 @@ public class DefaultAppointmentService implements AppointmentService {
     }
 
     @Override
+    public Future<List<Appointment>> getAcceptedAppointment(Long gridId) {
+        return appointmentRepository.getAcceptedAppointments(gridId);
+    }
+
+    @Override
     public Future<Appointment> acceptAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos) {
         return handleAppointmentStateChange(request, appointmentId, userInfos, AppointmentState.ACCEPTED, "acceptAppointment");
     }

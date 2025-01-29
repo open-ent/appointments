@@ -3,6 +3,7 @@ package fr.openent.appointments.repository.impl;
 import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.*;
 import fr.openent.appointments.model.TransactionElement;
+import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.database.Grid;
 import fr.openent.appointments.model.payload.GridPayload;
 import fr.openent.appointments.repository.DailySlotRepository;
@@ -12,12 +13,10 @@ import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.repository.TimeSlotRepository;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.sql.SqlResult;
-import org.entcore.common.sql.SqlStatementsBuilder;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -283,8 +282,8 @@ public class DefaultGridRepository implements GridRepository {
     }
 
     @Override
-    public Future<List<String>> updateState(Long gridId, GridState state, boolean deleteAppointments){
-        Promise<List<String>> promise = Promise.promise();
+    public Future<List<Appointment>> updateState(Long gridId, GridState state, boolean deleteAppointments){
+        Promise<List<Appointment>> promise = Promise.promise();
 
         List<String> availableAppointmentStates = AppointmentState.getAvailableStates();
 
@@ -293,7 +292,7 @@ public class DefaultGridRepository implements GridRepository {
 
         String updateAppointmentsQuery = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ? " +
                 "WHERE time_slot_id IN (SELECT id FROM " + DB_TIME_SLOT_TABLE + " WHERE grid_id = ?) AND " + STATE +
-                " IN " + Sql.listPrepared(availableAppointmentStates) + " RETURNING requester_id";
+                " IN " + Sql.listPrepared(availableAppointmentStates) + " RETURNING *";
         JsonArray appointmentParams = new JsonArray().add(AppointmentState.CANCELED).add(gridId).addAll(new JsonArray(availableAppointmentStates));
 
         String errorMessage = "[Appointments@DefaultGridRepository::updateState] Fail to update grid state or associated appointments: ";
@@ -306,12 +305,11 @@ public class DefaultGridRepository implements GridRepository {
 
         TransactionHelper.executeTransaction(transactionElements, errorMessage)
             .onSuccess(result -> {
-                List<String> uniqueRequesterIds = transactionElements.stream()
+                List<Appointment> appointments = transactionElements.stream()
                         .flatMap(element -> element.getResult().stream())
-                        .map(requesterId -> ((JsonObject) requesterId).getString(REQUESTER_ID))
-                        .distinct()
+                        .map(appointmentJson -> new Appointment((JsonObject) appointmentJson))
                         .collect(Collectors.toList());
-                promise.complete(uniqueRequesterIds);
+                promise.complete(appointments);
             })
             .onFailure(err -> {
                 LogHelper.logError(this, "updateState", errorMessage, err.getMessage());

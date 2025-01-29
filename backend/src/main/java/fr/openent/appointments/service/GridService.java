@@ -1,6 +1,7 @@
 package fr.openent.appointments.service;
 
 import fr.openent.appointments.enums.GridState;
+import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.response.MinimalGrid;
 import fr.openent.appointments.model.response.ListGridsResponse;
 import fr.openent.appointments.model.database.Grid;
@@ -107,7 +108,7 @@ public interface GridService {
      * @param deleteAppointments A boolean indicating whether the appointments associated with the grid should be deleted.
      * @return A Future that will complete when the grid has been suspended.
      */
-    Future<List<String>> suspendGrid(Long gridId, boolean deleteAppointments);
+    Future<List<Appointment>> suspendGrid(Long gridId, boolean deleteAppointments);
 
     /**
      * Restores a suspended grid by its ID.
@@ -115,7 +116,7 @@ public interface GridService {
      * @param gridId The ID of the grid to restore.
      * @return A Future that will complete when the grid has been restored.
      */
-    Future<List<String>> restoreGrid(Long gridId);
+    Future<List<Appointment>> restoreGrid(Long gridId);
 
     /**
      * Deletes a specific grid by its ID.
@@ -124,7 +125,7 @@ public interface GridService {
      * @param deleteAppointments A boolean indicating whether the appointments associated with the grid should be deleted.
      * @return A Future that will complete when the grid has been deleted.
      */
-    Future<List<String>> deleteGrid(Long gridId, boolean deleteAppointments);
+    Future<List<Appointment>> deleteGrid(Long gridId, boolean deleteAppointments);
 
     /**
      * Close all the grid with an ending date in the past

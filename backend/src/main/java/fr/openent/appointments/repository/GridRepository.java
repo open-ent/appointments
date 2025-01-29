@@ -1,5 +1,6 @@
 package fr.openent.appointments.repository;
 
+import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.database.Grid;
 import fr.openent.appointments.model.payload.GridPayload;
 import io.vertx.core.Future;
@@ -127,7 +128,7 @@ public interface GridRepository {
      * @param deleteAppointments boolean to delete appointments associated with the grid.
      *
      * @return a {@link Future} representing the asynchronous operation, which will
-     *          return a List of userIds of cancelled appointments if deleteAppointments is true
+     *          return a List of appointments associated with the grid if deleteAppointments is true
      */
-    Future<List<String>> updateState(Long gridId, GridState state, boolean deleteAppointments);
+    Future<List<Appointment>> updateState(Long gridId, GridState state, boolean deleteAppointments);
 }

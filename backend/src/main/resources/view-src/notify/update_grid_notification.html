@@ -1,0 +1,23 @@
+<span>
+  {{#i18n}}timeline.appointments.update.grid.first{{/i18n}}
+  {{#userUri}}
+    <a href="{{#host}}{{userUri}}{{/host}}">
+      {{#userName}}{{userName}}{{/userName}}
+    </a>
+  {{/userUri}}
+  {{^userUri}}
+    {{#userName}}{{userName}}{{/userName}}.
+  {{/userUri}}
+    {{#i18n}}timeline.appointments.update.grid.second{{/i18n}}
+  <br />
+  {{#i18n}}timeline.appointments.update.grid.consult.app{{/i18n}}
+  {{#appointmentUri}}
+    <a href="{{#host}}{{appointmentUri}}{{/host}}">
+      {{#i18n}}appointments{{/i18n}}.
+    </a>
+  {{/appointmentUri}}
+  {{^appointmentUri}}
+    {{#i18n}}appointments{{/i18n}}.
+  {{/appointmentUri}}
+  {{#i18n}}timeline.appointments.update.grid.to.know.more{{/i18n}}
+</span>

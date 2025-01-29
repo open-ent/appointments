@@ -4,6 +4,9 @@ import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.helper.ParamHelper;
+import fr.openent.appointments.model.database.Appointment;
+import fr.openent.appointments.service.AppointmentService;
+import fr.openent.appointments.service.NotifyService;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Get;
 import fr.wseduc.rs.Post;
@@ -25,6 +28,7 @@ import fr.openent.appointments.service.GridService;
 import fr.openent.appointments.service.ServiceFactory;
 import fr.openent.appointments.security.ManageRight;
 import fr.openent.appointments.security.ViewRight;
+import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 
 import java.util.List;
@@ -35,9 +39,13 @@ import static fr.openent.appointments.core.constants.Fields.OWNER_ID;
 
 public class GridController extends ControllerHelper {
     private final GridService gridService;
+    private final AppointmentService appointmentService;
+    private final NotifyService notifyService;
 
     public GridController(ServiceFactory serviceFactory) {
         this.gridService = serviceFactory.gridService();
+        this.appointmentService = serviceFactory.appointmentService();
+        this.notifyService = serviceFactory.notifyService();
     }
 
     @Get("/grids")
@@ -197,6 +205,7 @@ public class GridController extends ControllerHelper {
                     return Future.failedFuture(errorMessage);
                 })
                 .compose(user -> {
+                    composeInfos.put(CAMEL_USER_INFO, user);
                     if (!composeInfos.getString(OWNER_ID).equals(user.getUserId())) {
                         String errorMessage = "You are not the owner of this grid";
                         LogHelper.logError(this, "updateGrid", errorMessage);
@@ -205,9 +214,14 @@ public class GridController extends ControllerHelper {
                     }
                     return gridService.updateGrid(gridId, gridPayload);
                 })
-                .onSuccess(
-                    grid -> renderJson(request, grid.toJson())
-                )
+                .compose(grid -> {
+                    renderJson(request, grid.toJson());
+                    return appointmentService.getAcceptedAppointment(gridId);
+                })
+                .onSuccess(appointments -> {
+                    UserInfos user = (UserInfos) composeInfos.getValue(CAMEL_USER_INFO);
+                    notifyService.notifyGridUpdate(request, user, appointments, false);
+                })
                 .onFailure(error -> {
                     String errorMessage = "Failed to update grid with id " + gridId;
                     LogHelper.logError(this, "updateGrid", errorMessage, error.getMessage());
@@ -218,7 +232,7 @@ public class GridController extends ControllerHelper {
 
     @FunctionalInterface
     private interface UpdateGridStateFunction {
-        Future<List<String>> apply(Long gridId, boolean deleteAppointments);
+        Future<List<Appointment>> apply(Long gridId, boolean deleteAppointments);
     }
 
     private void handleGridOperation(final HttpServerRequest request,
@@ -235,34 +249,36 @@ public class GridController extends ControllerHelper {
         JsonObject composeInfos = new JsonObject();
 
         gridService.getGridById(gridId)
-                .compose(grid -> {
-                    composeInfos.put(OWNER_ID, grid.getOwnerId());
-                    return UserUtils.getAuthenticatedUserInfos(eb, request);
-                })
-                .recover(error -> {
-                    String errorMessage = "Failed to get grid with id " + gridId;
-                    LogHelper.logError(this, actionName, errorMessage, error.getMessage());
-                    conflict(request, errorMessage);
+            .compose(grid -> {
+                composeInfos.put(OWNER_ID, grid.getOwnerId());
+                return UserUtils.getAuthenticatedUserInfos(eb, request);
+            })
+            .recover(error -> {
+                String errorMessage = "Failed to get grid with id " + gridId;
+                LogHelper.logError(this, actionName, errorMessage, error.getMessage());
+                conflict(request, errorMessage);
+                return Future.failedFuture(errorMessage);
+            })
+            .compose(user -> {
+                composeInfos.put(CAMEL_USER_INFO, user);
+                if (!composeInfos.getString(OWNER_ID).equals(user.getUserId())) {
+                    String errorMessage = "You are not the owner of this grid";
+                    LogHelper.logError(this, actionName, errorMessage);
+                    unauthorized(request, errorMessage);
                     return Future.failedFuture(errorMessage);
-                })
-                .compose(user -> {
-                    if (!composeInfos.getString(OWNER_ID).equals(user.getUserId())) {
-                        String errorMessage = "You are not the owner of this grid";
-                        LogHelper.logError(this, actionName, errorMessage);
-                        unauthorized(request, errorMessage);
-                        return Future.failedFuture(errorMessage);
-                    }
-                    return function.apply(gridId, deleteAppointments);
-                })
-                .onSuccess(requesterIds -> {
-                    // Render a JSON response with the result (e.g., list of requester IDs).
-                    renderJson(request, new JsonObject().put("requesterIds", requesterIds));
-                })
-                .onFailure(error -> {
-                    String errorMessage = "Failed to " + actionName + " grid with id " + gridId;
-                    LogHelper.logError(this, actionName, errorMessage, error.getMessage());
-                    if (!request.response().ended()) renderError(request);
-                });
+                }
+                return function.apply(gridId, deleteAppointments);
+            })
+            .onSuccess(appointments -> {
+                renderJson(request, new JsonObject());
+                UserInfos user = (UserInfos) composeInfos.getValue(CAMEL_USER_INFO);
+                notifyService.notifyGridUpdate(request, user, appointments, true);
+            })
+            .onFailure(error -> {
+                String errorMessage = "Failed to " + actionName + " grid with id " + gridId;
+                LogHelper.logError(this, actionName, errorMessage, error.getMessage());
+                if (!request.response().ended()) renderError(request);
+            });
     }
 
     @Put("/grids/:gridId/delete")

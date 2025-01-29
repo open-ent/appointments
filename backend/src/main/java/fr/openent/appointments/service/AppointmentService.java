@@ -67,6 +67,13 @@ public interface AppointmentService {
     Future<AppointmentResponse> getAppointmentById(Long appointmentId, UserInfos userInfos);
 
     /**
+     * Get all accepted appointments linked to a grid
+     * @param gridId The grid id
+     * @return The list of appointments
+     */
+    Future<List<Appointment>> getAcceptedAppointment(Long gridId);
+
+    /**
      * Accept an appointment
      * @param request The http request
      * @param appointmentId The appointment id

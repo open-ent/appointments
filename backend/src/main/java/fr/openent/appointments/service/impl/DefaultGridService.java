@@ -1,6 +1,7 @@
 package fr.openent.appointments.service.impl;
 
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.response.MinimalGrid;
 import fr.openent.appointments.model.response.ListGridsResponse;
 import fr.openent.appointments.model.database.Grid;
@@ -237,17 +238,17 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
-    public Future<List<String>> suspendGrid(Long gridId, boolean deleteAppointments) {
+    public Future<List<Appointment>> suspendGrid(Long gridId, boolean deleteAppointments) {
         return gridRepository.updateState(gridId, GridState.SUSPENDED, deleteAppointments);
     }
 
     @Override
-    public Future<List<String>> restoreGrid(Long gridId) {
+    public Future<List<Appointment>> restoreGrid(Long gridId) {
         return gridRepository.updateState(gridId, GridState.OPEN, false);
     }
 
     @Override
-    public Future<List<String>> deleteGrid(Long gridId, boolean deleteAppointments) {
+    public Future<List<Appointment>> deleteGrid(Long gridId, boolean deleteAppointments) {
         return gridRepository.updateState(gridId, GridState.DELETED, deleteAppointments);
     }
 

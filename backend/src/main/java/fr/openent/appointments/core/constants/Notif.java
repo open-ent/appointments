@@ -9,4 +9,5 @@ public class Notif {
     public static final String NOTIF_NAME_REJECT_REQUEST = APP_NAME + ".reject_request_notification";
     public static final String NOTIF_NAME_CANCEL_REQUEST = APP_NAME + ".cancel_request_notification";
     public static final String NOTIF_NAME_CANCEL_APPOINTMENT = APP_NAME + ".cancel_appointment_notification";
+    public static final String NOTIF_NAME_UPDATE_GRID = APP_NAME + ".update_grid_notification";
 }
