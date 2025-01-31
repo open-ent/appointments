@@ -5,6 +5,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, Button, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { DialogModal } from "~/components/DialogModal";
 import { AvailabilityEmptyState } from "~/components/SVG/AvailabilityEmptyState";
 import { useAvailability } from "~/providers/AvailabilityProvider";
 import {
@@ -33,7 +34,7 @@ export const MyAvailability: FC = () => {
     GRID_CARD_SIZE.LARGE,
   );
 
-  const { gridTypeLengths, isLoading } = useAvailability();
+  const { gridTypeLengths, isLoading, dialogModalProps } = useAvailability();
 
   const isAllGridListEmpty = useMemo(
     () =>
@@ -70,6 +71,7 @@ export const MyAvailability: FC = () => {
 
   return (
     <>
+      <DialogModal {...dialogModalProps} />
       <GridModal gridModalType={gridModalType} />
       <Box ref={boxRef} sx={availabilityContainerStyle}>
         <Box sx={headerStyle}>

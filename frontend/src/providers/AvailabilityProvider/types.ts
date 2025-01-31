@@ -1,14 +1,18 @@
 import { ReactNode } from "react";
 
-import { GRID_TYPE } from "./enum";
+import { DialogModalProps } from "~/components/DialogModal/types";
+import { CONFIRM_MODAL_TYPE } from "~/core/enums";
 import { MinimalGrid } from "~/services/api/GridService/types";
+import { GRID_TYPE } from "./enum";
 
 export interface AvailabilityProviderContextProps {
   gridPages: GridPages;
   gridTypeLengths: GridTypeLength;
   currentGridList: GridList;
   isLoading: boolean;
+  dialogModalProps: DialogModalProps;
   handleChangePage: (gridType: GRID_TYPE, newPage: number) => void;
+  handleOpenDialogModal: (gridId: number, type: CONFIRM_MODAL_TYPE) => void;
 }
 
 export interface AvailabilityProviderProps {

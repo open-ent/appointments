@@ -1,5 +1,5 @@
+import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
 import { MY_APPOINTMENTS_LIST_STATE } from "./enum";
-import { APPOINTMENT_STATE } from "~/core/enums";
 
 export const initialAppointments = {
   [MY_APPOINTMENTS_LIST_STATE.PENDING]: undefined,
@@ -30,8 +30,7 @@ export const states = {
 
 export const initialDialogModalProps = {
   open: false,
-  title: "",
-  description: "",
+  type: CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT,
   handleCancel: () => {},
   handleConfirm: () => {},
 };

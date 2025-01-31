@@ -20,6 +20,10 @@ public enum AppointmentState {
         return Arrays.asList(CREATED.getValue(), ACCEPTED.getValue());
     }
 
+    public static List<AppointmentState> getAvailableStatesAsEnum() {
+        return new ArrayList<>(Arrays.asList(CREATED, ACCEPTED));
+    }
+
     public String getValue() {
         return value;
     }

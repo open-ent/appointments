@@ -1,3 +1,4 @@
+import { emptySplitApi } from "../EmptySplitService";
 import {
   CreateGridPayload,
   GetMyGridsPayload,
@@ -6,9 +7,9 @@ import {
   MyGrids,
   NameWithId,
   TimeSlots,
+  UpdateGridStatePayload,
 } from "./types";
 import { transformResponseToMyGridsResponse } from "./utils";
-import { emptySplitApi } from "../EmptySplitService";
 
 export const gridApi = emptySplitApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -55,6 +56,29 @@ export const gridApi = emptySplitApi.injectEndpoints({
       }),
       providesTags: ["Availability"],
     }),
+    deleteGrid: builder.mutation<void, UpdateGridStatePayload>({
+      query: ({ gridId, deleteAppointments }) => ({
+        url: `/grids/${gridId}/delete`,
+        method: "PUT",
+        params: { deleteAppointments },
+      }),
+      invalidatesTags: ["MyGrids", "Availability", "MyAppointments"],
+    }),
+    suspendGrid: builder.mutation<void, UpdateGridStatePayload>({
+      query: ({ gridId, deleteAppointments }) => ({
+        url: `/grids/${gridId}/suspend`,
+        method: "PUT",
+        params: { deleteAppointments },
+      }),
+      invalidatesTags: ["MyGrids", "Availability", "MyAppointments"],
+    }),
+    restoreGrid: builder.mutation({
+      query: ({ gridId }) => ({
+        url: `/grids/${gridId}/restore`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["MyGrids", "Availability"],
+    }),
   }),
 });
 
@@ -65,4 +89,7 @@ export const {
   useGetAvailableUserMinimalGridsQuery,
   useGetMinimalGridInfosByIdQuery,
   useGetTimeSlotsByGridIdAndDateQuery,
+  useDeleteGridMutation,
+  useSuspendGridMutation,
+  useRestoreGridMutation,
 } = gridApi;

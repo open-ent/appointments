@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { DialogModalProps } from "~/components/DialogModal/types";
-import { CONFIRM_MODAL_VALUES, TOAST_VALUES } from "~/core/constants";
+import { TOAST_VALUES } from "~/core/constants";
 import {
   APPOINTMENT_STATE,
   CONFIRM_MODAL_TYPE,
@@ -186,42 +186,45 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   }, []);
 
   const handleCloseDialogModal = useCallback(() => {
-    setDialogModalProps(initialDialogModalProps);
+    setDialogModalProps((prev) => ({ ...prev, open: false }));
   }, []);
 
-  const handleOpenDialogModal = useCallback(
+  const handleConfirm = useCallback(
     (confirmType: CONFIRM_MODAL_TYPE, id: number) => {
-      const dialogModalProps: DialogModalProps = {
-        open: true,
-        title: t(CONFIRM_MODAL_VALUES[confirmType].titleKey),
-        description: t(CONFIRM_MODAL_VALUES[confirmType].descriptionKey),
-        handleCancel: handleCloseDialogModal,
-        handleConfirm: () => {
-          switch (confirmType) {
-            case CONFIRM_MODAL_TYPE.REJECT_REQUEST:
-              handleRejectAppointment(id);
-              break;
-            case CONFIRM_MODAL_TYPE.CANCEL_REQUEST:
-              handleCancelAppointment(id, TOAST_TYPE.CANCEL_REQUEST);
-              break;
-            case CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT:
-              handleCancelAppointment(id, TOAST_TYPE.CANCEL_APPOINTMENT);
-              break;
-          }
-          handleCloseDialogModal();
-          handleCloseAppointmentModal();
-        },
-      };
-
-      setDialogModalProps(dialogModalProps);
+      switch (confirmType) {
+        case CONFIRM_MODAL_TYPE.REJECT_REQUEST:
+          handleRejectAppointment(id);
+          break;
+        case CONFIRM_MODAL_TYPE.CANCEL_REQUEST:
+          handleCancelAppointment(id, TOAST_TYPE.CANCEL_REQUEST);
+          break;
+        case CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT:
+          handleCancelAppointment(id, TOAST_TYPE.CANCEL_APPOINTMENT);
+          break;
+      }
+      handleCloseDialogModal();
+      handleCloseAppointmentModal();
     },
     [
-      t,
       handleCloseDialogModal,
       handleCloseAppointmentModal,
       handleRejectAppointment,
       handleCancelAppointment,
     ],
+  );
+
+  const handleOpenDialogModal = useCallback(
+    (confirmType: CONFIRM_MODAL_TYPE, id: number) => {
+      const dialogModalProps: DialogModalProps = {
+        open: true,
+        type: confirmType,
+        handleCancel: handleCloseDialogModal,
+        handleConfirm: () => handleConfirm(confirmType, id),
+      };
+
+      setDialogModalProps(dialogModalProps);
+    },
+    [handleCloseDialogModal, handleConfirm],
   );
 
   useEffect(() => {

@@ -157,7 +157,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
     }
 
     @Override
-    public Future<List<Appointment>> getAcceptedAppointments(Long gridId){
+    public Future<List<Appointment>> getAppointmentsByGridId(Long gridId, List<AppointmentState> states, Boolean ignorePast){
         Promise<List<Appointment>> promise = Promise.promise();
 
         if (gridId == null) {
@@ -167,11 +167,21 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
 
         String query = "SELECT a.* FROM " + DB_APPOINTMENT_TABLE + " a " +
                 "JOIN " + DB_TIME_SLOT_TABLE + " ts ON a.time_slot_id = ts.id " +
-                "WHERE ts.grid_id = ? AND a.state = ?";
+                "WHERE ts.grid_id = ?";
 
-        JsonArray params = new JsonArray().add(gridId).add(AppointmentState.ACCEPTED.getValue());
+        JsonArray params = new JsonArray().add(gridId);
 
-        String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::getAcceptedAppointments] Failed to get accepted appointments for grid %d : ", gridId);
+        // Filter by states
+        if (states != null && !states.isEmpty()) {
+            query += " AND a.state IN " + Sql.listPrepared(states);
+            params.addAll(new JsonArray(states.stream().map(AppointmentState::getValue).collect(Collectors.toList())));
+        }
+
+        if (ignorePast) {
+            query += " AND ts.end_date > " + FRENCH_NOW;
+        }
+
+        String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::getAppointmentsByGridId] Failed to get appointments for grid %d : ", gridId);
         sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Appointment.class, errorMessage)));
 
         return promise.future();

@@ -24,6 +24,7 @@ import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -310,7 +311,12 @@ public class DefaultAppointmentService implements AppointmentService {
 
     @Override
     public Future<List<Appointment>> getAcceptedAppointment(Long gridId) {
-        return appointmentRepository.getAcceptedAppointments(gridId);
+        return appointmentRepository.getAppointmentsByGridId(gridId, Collections.singletonList(AppointmentState.ACCEPTED), true);
+    }
+
+    @Override
+    public Future<List<Appointment>> getAcceptedOrCreatedAppointment(Long gridId) {
+        return appointmentRepository.getAppointmentsByGridId(gridId, AppointmentState.getAvailableStatesAsEnum(), true);
     }
 
     @Override

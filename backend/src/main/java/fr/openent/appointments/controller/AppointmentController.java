@@ -277,5 +277,34 @@ public class AppointmentController extends ControllerHelper {
             });
     }
 
+    @Get("appointments/available/grids/:gridId")
+    @ApiDoc("Get available appointments for a grid")
+    @ResourceFilter(ViewRight.class)
+    @SecuredAction(value="", type= ActionType.RESOURCE)
+    public void getAvailableAppointmentsForGrid(final HttpServerRequest request) {
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "getAvailableAppointmentsForGrid");
+        if(request.response().ended()) return;
 
+        JsonObject composeInfo = new JsonObject();
+        gridService.getGridById(gridId)
+            .compose(grid -> {
+                composeInfo.put(OWNER_ID, grid.getOwnerId());
+                return UserUtils.getAuthenticatedUserInfos(eb, request);
+            })
+            .compose(user -> {
+                if(!user.getUserId().equals(composeInfo.getString(OWNER_ID))) {
+                    String errorMessage = "User cannot access this grid";
+                    LogHelper.logError(this, "getAvailableAppointmentsForGrid", errorMessage);
+                    unauthorized(request, errorMessage);
+                    return Future.failedFuture(errorMessage);
+                }
+                return appointmentService.getAcceptedOrCreatedAppointment(gridId);
+            })
+            .onSuccess(appointments -> renderJson(request, new JsonArray(appointments)))
+            .onFailure(err -> {
+                String errorMessage = "Failed to get available appointments for grid";
+                LogHelper.logError(this, "getAvailableAppointmentsForGrid", errorMessage, err.getMessage());
+                renderError(request);
+            });
+    }
 }

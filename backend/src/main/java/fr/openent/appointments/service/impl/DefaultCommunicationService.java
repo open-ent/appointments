@@ -1,5 +1,6 @@
 package fr.openent.appointments.service.impl;
 
+import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.UserAppointment;
 import fr.openent.appointments.model.database.Grid;
@@ -19,10 +20,7 @@ import io.vertx.core.json.JsonObject;
 import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Constants.CAMEL_AVAILABLE_GRIDS_IDS;
@@ -73,7 +71,7 @@ public class DefaultCommunicationService implements CommunicationService {
             })
             .compose(users -> {
                 List<NeoUser> filteredUsers = filterNeoUsersBySearchAndPagination(users, search, page, limit);
-                return getGridsAndBuildListUserAppointementResponse(userInfos.getUserId(), filteredUsers);
+                return getGridsAndBuildListUserAppointementResponse(userInfos, filteredUsers);
             })
             .onSuccess(promise::complete)
             .onFailure(err -> {
@@ -132,15 +130,21 @@ public class DefaultCommunicationService implements CommunicationService {
         return uniqueAndFilteredUsers;
     }
 
-    private Future<List<UserAppointment>> getGridsAndBuildListUserAppointementResponse(String userId, List<NeoUser> users) {
+    private Future<List<UserAppointment>> getGridsAndBuildListUserAppointementResponse(UserInfos user, List<NeoUser> users) {
         Promise<List<UserAppointment>> promise = Promise.promise();
 
-        List<String> usersIds = users.stream().map(NeoUser::getId).collect(Collectors.toList());
-        gridRepository.getGridsByUserIds(usersIds)
-            .compose(grids -> getAdditionalInfosAndBuildListUserAppointementResponse(userId, grids, users))
+        List<String> otherUsersIds = users.stream().map(NeoUser::getId).collect(Collectors.toList());
+        gridRepository.getGridsByUserIds(otherUsersIds)
+            .compose(grids -> {
+                // Filter grids in order to keep only grids that the user can access
+                List<Grid> filteredGrids = grids.stream().filter(grid -> grid.getTargetPublicListId()
+                                                .stream().anyMatch(user.getGroupsIds()::contains))
+                                                .collect(Collectors.toList());
+                return getAdditionalInfosAndBuildListUserAppointementResponse(user.getUserId(), filteredGrids, users);
+            })
             .onSuccess(promise::complete)
             .onFailure(err -> {
-                String errorMessage = "Failed to retrieve grids associated with users ids " + usersIds;
+                String errorMessage = "Failed to retrieve grids associated with users ids " + otherUsersIds;
                 LogHelper.logError(this, "getGridsAndBuildListUserAppointementResponse", errorMessage, err.getMessage());
                 promise.fail(err);
             });

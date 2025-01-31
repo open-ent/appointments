@@ -1,10 +1,9 @@
+import { CONFIRM_MODAL_TYPE } from "~/core/enums";
+
 export interface DialogModalProps {
   open: boolean;
-  title: string;
-  description: string;
-  handleCancel?: () => void;
-  handleConfirm?: () => void;
-  question?: string;
-  options?: string[];
-  selectedOption?: string;
+  type: CONFIRM_MODAL_TYPE;
+  showOptions?: boolean;
+  handleCancel: () => void;
+  handleConfirm: (option?: string) => void;
 }

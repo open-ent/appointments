@@ -1,5 +1,6 @@
 import { Dayjs } from "dayjs";
 
+import { emptySplitApi } from "../EmptySplitService";
 import {
   Appointment,
   BookAppointmentPayload,
@@ -13,18 +14,20 @@ import {
   transformResponseToMyAppointments,
   transformResponseToNumber,
 } from "./utils";
-import { emptySplitApi } from "../EmptySplitService";
 
 export const appointmentApi = emptySplitApi.injectEndpoints({
   endpoints: (builder) => ({
     bookAppointment: builder.mutation<void, BookAppointmentPayload>({
       query: ({ timeSlotId, isVideoCall }) => ({
-        url: `/appointments/${timeSlotId}${
-          isVideoCall !== undefined ? `?isVideoCall=${isVideoCall}` : ""
-        }`,
+        url: `/appointments/${timeSlotId}`,
         method: "POST",
+        params: isVideoCall !== undefined ? { isVideoCall } : undefined,
       }),
-      invalidatesTags: ["Availability", "MyAppointments"],
+      invalidatesTags: [
+        "Availability",
+        "MyAppointments",
+        "AppointmentsLinkedToGrid",
+      ],
     }),
     getMyAppointments: builder.query<MyAppointments, GetMyAppointmentsPayload>({
       query: (body) => {
@@ -63,6 +66,10 @@ export const appointmentApi = emptySplitApi.injectEndpoints({
       transformResponse: transformResponseToDayjsArray,
       providesTags: ["MyAppointments"],
     }),
+    getAvailableAppointments: builder.query<Appointment[], number>({
+      query: (gridId) => `/appointments/available/grids/${gridId}`,
+      providesTags: ["AppointmentsLinkedToGrid"],
+    }),
     acceptAppointment: builder.mutation<void, number>({
       query: (appointmentId) => ({
         url: `/appointments/${appointmentId}/accept`,
@@ -75,14 +82,14 @@ export const appointmentApi = emptySplitApi.injectEndpoints({
         url: `/appointments/${appointmentId}/reject`,
         method: "PUT",
       }),
-      invalidatesTags: ["MyAppointments"],
+      invalidatesTags: ["MyAppointments", "AppointmentsLinkedToGrid"],
     }),
     cancelAppointment: builder.mutation<void, number>({
       query: (appointmentId) => ({
         url: `/appointments/${appointmentId}/cancel`,
         method: "PUT",
       }),
-      invalidatesTags: ["MyAppointments"],
+      invalidatesTags: ["MyAppointments", "AppointmentsLinkedToGrid"],
     }),
   }),
 });
@@ -93,6 +100,7 @@ export const {
   useGetAppointmentQuery,
   useGetAppointmentIndexQuery,
   useGetAppointmentsDatesQuery,
+  useGetAvailableAppointmentsQuery,
   useAcceptAppointmentMutation,
   useRejectAppointmentMutation,
   useCancelAppointmentMutation,

@@ -86,3 +86,8 @@ export interface GetTimeSlotsPayload {
   beginDate: string;
   endDate: string;
 }
+
+export interface UpdateGridStatePayload {
+  gridId: number;
+  deleteAppointments: boolean;
+}

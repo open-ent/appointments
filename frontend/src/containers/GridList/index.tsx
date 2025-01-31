@@ -5,6 +5,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Collapse, Pagination, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { GridCard } from "~/components/GridCard";
+import { GRID_PER_PAGE } from "~/core/constants";
+import { useAvailability } from "~/providers/AvailabilityProvider";
+import { GRID_TYPE } from "~/providers/AvailabilityProvider/enum";
 import {
   emptyStateStyle,
   GridListContentStyle,
@@ -13,10 +17,6 @@ import {
   paginationStyle,
 } from "./style";
 import { GridListProps } from "./types";
-import { GridCard } from "~/components/GridCard";
-import { GRID_PER_PAGE } from "~/core/constants";
-import { useAvailability } from "~/providers/AvailabilityProvider";
-import { GRID_TYPE } from "~/providers/AvailabilityProvider/enum";
 
 export const GridList: FC<GridListProps> = ({ gridType, cardSize }) => {
   const { t } = useTranslation("appointments");

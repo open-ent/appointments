@@ -17,11 +17,17 @@
 
   "appointments.suspend.grid.confirm.title": "Suspendre votre grille ?",
   "appointments.suspend.grid.confirm.description": "Si vous confirmez, votre grille sera suspendue et vous deviendrez indisponible sur les créneaux concernés.",
-  "appointments.suspend.grid.confirm.question": "Souhaitez-vous conserver les rendez-vous déjà pris sur cette période ?",
+  "appointments.suspend.grid.confirm.question": "Vous avez déjà des rendez-vous pris sur la période concernée. Souhaitez-vous les conserver ?",
+
+  "appointments.restore.grid.confirm.title": "Reprendre votre grille ?",
+  "appointments.restore.grid.confirm.description": "Si vous confirmez, votre grille sera remise en service et vous deviendrez de nouveau disponible sur les plages horaires concernées.",
 
   "appointments.delete.grid.confirm.title": "Supprimer votre grille ?",
   "appointments.delete.grid.confirm.description": "Si vous confirmez, votre grille sera supprimée et n’apparaîtra plus dans votre liste.",
   "appointments.delete.grid.confirm.question": "Vous avez déjà des rendez-vous pris sur la période concernée. Souhaitez-vous les conserver ?",
+
+  "appointments.confirm.modal.option.preserve.them": "Les conserver",
+  "appointments.confirm.modal.option.cancel.them": "Les annuler",
 
   "appointments.grid.required": "Les champs suivis d’un * sont obligatoires",
   "appointments.grid.name": "Nom de la grille horaire",
@@ -145,6 +151,12 @@
   "appointments.toast.cancel.appointment.error": "Une erreur est survenue lors de l’annulation du rendez-vous. Veuillez réessayer.",
   "appointments.toast.cancel.appointment.request.success": "La demande de rendez-vous a bien été annulée.",
   "appointments.toast.cancel.appointment.request.error": "Une erreur est survenue lors de l’annulation de la demande de rendez-vous. Veuillez réessayer.",
+  "appointments.toast.delete.grid.success": "Votre grille a bien été supprimée.",
+  "appointments.toast.delete.grid.error": "Une erreur est survenue lors de la suppression de la grille. Veuillez réessayer.",
+  "appointments.toast.suspend.grid.success": "Votre grille a bien été suspendue.",
+  "appointments.toast.suspend.grid.error": "Une erreur est survenue lors de la suspension de la grille. Veuillez réessayer.",
+  "appointments.toast.restore.grid.success": "Votre grille est à nouveau ouverte.",
+  "appointments.toast.restore.grid.error": "Une erreur est survenue lors de la remise en service de la grille. Veuillez réessayer.",
 
   "group.HeadTeacher": "Professeurs principaux de {0}",
   "group.Direction": "Directeurs de {0}",

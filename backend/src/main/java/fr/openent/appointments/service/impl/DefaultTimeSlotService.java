@@ -1,5 +1,6 @@
 package fr.openent.appointments.service.impl;
 
+import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.database.Grid;
@@ -81,19 +82,19 @@ public class DefaultTimeSlotService implements TimeSlotService {
                 }
                 return gridRepository.get(timeSlot.get().getGridId());
             })
-            .compose(grid -> {
+            .onSuccess(grid -> {
                 if(!grid.isPresent()) {
                     String errorMessage = "Grid with timeSlot id " + timeSlotId + " not found";
-                    return Future.failedFuture(errorMessage);
+                    promise.fail(errorMessage);
+                    return;
                 }
-                return Future.succeededFuture(grid.get().getTargetPublicListId());
-            })
-            .onSuccess(
-                targetPublicListId -> {
-                    boolean isUserInTargetPublicList = targetPublicListId.stream().anyMatch(userGroupsIds::contains);
+                if(grid.get().getState() != GridState.OPEN)
+                    promise.complete(false);
+                else {
+                    boolean isUserInTargetPublicList = grid.get().getTargetPublicListId().stream().anyMatch(userGroupsIds::contains);
                     promise.complete(isUserInTargetPublicList);
                 }
-            )
+            })
             .onFailure(err -> {
                 String errorMessage = "Failed to check if user can access timeSlot with id " + timeSlotId;
                 LogHelper.logError(this, "checkIfUserCanAccessTimeSlot", errorMessage, err.getMessage());
