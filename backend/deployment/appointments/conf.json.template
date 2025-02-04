@@ -2,7 +2,7 @@
   "name": "fr.openent~appointments~${appointmentsVersion}",
     "config": {
       "main":"fr.openent.appointments.Appointments",
-      "port": 8364,
+      "port": 8483,
       "app-name" : "Appointments",
       "app-address" : "/appointments",
       "app-icon" : "${host}/appointments/public/img/logo-appointments.svg",
