@@ -29,3 +29,11 @@ main {
     }
   }
 }
+
+[data-product='neo'][data-theme='theme-demo-cgi'] {
+  .header {
+    .navbar {
+      background: #200A58;
+    }
+  }
+}
