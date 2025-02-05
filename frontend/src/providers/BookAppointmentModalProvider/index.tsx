@@ -52,9 +52,9 @@ export const BookAppointmentModalProvider: FC<
   const [selectedUser, setSelectedUser] = useState<UserCardInfos | null>(null);
   const [selectedGrid, setSelectedGrid] = useState<GridNameWithId | null>(null);
   const [selectedSlotId, setSelectedSlotId] = useState<number | null>(null);
-  const [currentDay, setCurrentDay] = useState<Dayjs>(dayjs().locale("fr"));
+  const [currentDay, setCurrentDay] = useState<Dayjs>(dayjs());
   const [currentSlots, setCurrentSlots] = useState<DaySlots[]>(
-    loadingDaySlots(dayjs().locale("fr")),
+    loadingDaySlots(dayjs()),
   );
   const [nextAvailableTimeSlot, setNextAvailableTimeSlot] =
     useState<Dayjs | null>(null);
@@ -120,7 +120,7 @@ export const BookAppointmentModalProvider: FC<
       setCanGoPrev(false);
       setSelectedGrid(newGrid);
       setSelectedSlotId(null);
-      setCurrentDay(dayjs().locale("fr"));
+      setCurrentDay(dayjs());
     },
     [grids],
   );
@@ -133,7 +133,7 @@ export const BookAppointmentModalProvider: FC<
     setSelectedUser(null);
     setSelectedGrid(null);
     setSelectedSlotId(null);
-    setCurrentDay(dayjs().locale("fr"));
+    setCurrentDay(dayjs());
     setIsVideoCallOptionChecked(false);
     setIsModalOpen(false);
   }, []);
@@ -205,7 +205,7 @@ export const BookAppointmentModalProvider: FC<
   }, [grids, selectedGrid]);
 
   useEffect(() => {
-    if (currentDay.isSame(dayjs().locale("fr"), "week")) {
+    if (currentDay.isSame(dayjs(), "week")) {
       setCanGoPrev(false);
     } else {
       setCanGoPrev(true);

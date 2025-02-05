@@ -22,11 +22,10 @@ export class Time implements ITime {
 
   parseToDayjs(): Dayjs {
     if (!this.time) {
-      return dayjs().locale("fr");
+      return dayjs();
     }
 
     return dayjs()
-      .locale("fr")
       .set("hour", this.time.hour)
       .set("minute", this.time.minute)
       .startOf("minute");

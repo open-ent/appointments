@@ -116,9 +116,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               <EventIcon sx={greyIconStyle} />
               <Typography variant="h5">
                 {t("appointments.my.appointment.infos.modal.date", {
-                  date: appointment.beginDate
-                    .locale("fr")
-                    .format(TEXT_DATE_FORMAT),
+                  date: appointment.beginDate.format(TEXT_DATE_FORMAT),
                   beginTime: appointment.beginDate.format(TIME_FORMAT),
                   endTime: appointment.endDate.format(TIME_FORMAT),
                 })}

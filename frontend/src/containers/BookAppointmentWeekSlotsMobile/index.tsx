@@ -70,7 +70,7 @@ export const BookAppointmentWeekSlotsMobile: FC = () => {
                   {t(DAY_VALUES[daySlot.weekDay].i18nKey)}
                 </Typography>
                 <Typography sx={dayStyle}>
-                  {daySlot.day.locale("fr").format("D MMM")}
+                  {daySlot.day.format("D MMM")}
                 </Typography>
               </DaySlotsHeader>
               {canGoNext && (
@@ -91,7 +91,7 @@ export const BookAppointmentWeekSlotsMobile: FC = () => {
                   {t("appointments.book.appointment.modal.next.slot")}&nbsp;
                 </Typography>
                 <Typography variant="body2" color="primary" fontWeight={"bold"}>
-                  {nextAvailableTimeSlot.locale("fr").format("dddd D MMMM")}
+                  {nextAvailableTimeSlot.format("dddd D MMMM")}
                 </Typography>
               </Box>
               <KeyboardArrowRightIcon sx={{ color: common.black }} />

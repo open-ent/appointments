@@ -20,6 +20,8 @@ import "~/i18n";
 
 import "react-toastify/dist/ReactToastify.css";
 
+import dayjs from "dayjs";
+import "dayjs/locale/fr";
 import { APPOINTMENTS, TOAST_CONFIG } from "./core/constants";
 import { AvailabilityProvider } from "./providers/AvailabilityProvider";
 import { BookAppointmentModalProvider } from "./providers/BookAppointmentModalProvider";
@@ -54,6 +56,8 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+dayjs.locale("fr");
 
 root.render(
   <QueryClientProvider client={queryClient}>

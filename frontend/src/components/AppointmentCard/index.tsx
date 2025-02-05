@@ -138,7 +138,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
               {appointment.beginDate.format("D")}
             </Typography>
             <Typography variant="body1">
-              {appointment.beginDate.locale("fr").format("MMM")}
+              {appointment.beginDate.format("MMM")}
             </Typography>
           </Box>
           <Divider

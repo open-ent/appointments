@@ -70,7 +70,7 @@ export const BookAppointmentWeekSlotsDesktop: FC = () => {
                 {t(DAY_VALUES[daySlot.weekDay].i18nKey)}
               </Typography>
               <Typography sx={dayStyle}>
-                {daySlot.day.locale("fr").format("D MMM")}
+                {daySlot.day.format("D MMM")}
               </Typography>
             </ColumnHeader>
           ))}
@@ -101,7 +101,7 @@ export const BookAppointmentWeekSlotsDesktop: FC = () => {
                     color="primary"
                     fontWeight={"bold"}
                   >
-                    {nextAvailableTimeSlot.locale("fr").format("dddd D MMMM")}
+                    {nextAvailableTimeSlot.format("dddd D MMMM")}
                   </Typography>
                   <KeyboardArrowRightIcon sx={{ color: common.black }} />
                 </Button>
