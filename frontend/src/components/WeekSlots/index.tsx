@@ -64,17 +64,17 @@ export const WeekSlots: FC = () => {
                   {timeSlots.map((slot) => (
                     <DailySlot key={slot.id} day={day} slot={slot} />
                   ))}
-                  {modalType === GRID_MODAL_TYPE.CREATION && (
+                  {modalType === GRID_MODAL_TYPE.CREATION ? (
                     <IconButton onClick={() => handleAddSlot(day)}>
                       <AddCircleIcon sx={iconStyle} />
                     </IconButton>
-                  )}
-                  {modalType === GRID_MODAL_TYPE.EDIT &&
+                  ) : (
                     timeSlots.length === 0 && (
                       <Box sx={noSlotStyle}>
                         <CloseRoundedIcon />
                       </Box>
-                    )}
+                    )
+                  )}
                 </Box>
                 {dayErrors[day] && (
                   <FormHelperText sx={errorStyle} error>

@@ -40,9 +40,13 @@ export const GridModal: FC = () => {
     confirmModalType,
   } = useGridModal();
 
+  const handleClose = () => {
+    if (modalType === GRID_MODAL_TYPE.CONSULTATION) handleCancel();
+  };
+
   return (
     <>
-      <Modal open={isModalOpen}>
+      <Modal open={isModalOpen} onClose={handleClose}>
         <Box sx={modalBoxStyle}>
           <Box sx={contentBoxStyle}>
             <Box sx={spaceBetweenBoxStyle}>
@@ -53,9 +57,11 @@ export const GridModal: FC = () => {
                 <CloseIcon />
               </IconButton>
             </Box>
-            <Typography sx={instructionStyle}>
-              {t(GRID_MODAL_VALUES[modalType].instructionKey)}
-            </Typography>
+            {GRID_MODAL_VALUES[modalType].instructionKey && (
+              <Typography sx={instructionStyle}>
+                {t(GRID_MODAL_VALUES[modalType].instructionKey)}
+              </Typography>
+            )}
             {isDisplayFirstPage && <FirstPageGridModal />}
             {isDisplaySecondPage && <SecondPageGridModal />}
             {modalType === GRID_MODAL_TYPE.CREATION && (

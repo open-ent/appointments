@@ -1,11 +1,12 @@
-import { FC, KeyboardEvent, useState } from "react";
+import { FC, KeyboardEvent, useMemo, useState } from "react";
 
 import { Box, ClickAwayListener } from "@mui/material";
 import { CirclePicker, ColorResult } from "react-color";
 
 import { ColorPickerIcon } from "~/components/SVG/ColorPickerIcon";
 import { useGridModal } from "~/providers/GridModalProvider";
-import { circlePickerStyle, colorPickerIconStyle } from "./style";
+import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
+import { circlePickerStyle, PickerBox } from "./style";
 import { HexaColor } from "./types";
 
 export const ColorPicker: FC = () => {
@@ -14,10 +15,17 @@ export const ColorPicker: FC = () => {
   const {
     inputs,
     updateGridModalInputs: { handleColorChange },
+    modalType,
   } = useGridModal();
 
+  const disabled = useMemo(
+    () => modalType === GRID_MODAL_TYPE.CONSULTATION,
+    [modalType],
+  );
+
   const handlePickerToggle = () => {
-    setIsCirclePickerVisible((prev) => !prev);
+    if (disabled) return;
+    return setIsCirclePickerVisible((prev) => !prev);
   };
 
   const handleClose = () => {
@@ -32,7 +40,7 @@ export const ColorPicker: FC = () => {
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
-      <Box sx={colorPickerIconStyle} tabIndex={0} onKeyDown={handleKeyDown}>
+      <PickerBox disabled={disabled} tabIndex={0} onKeyDown={handleKeyDown}>
         <ColorPickerIcon onClick={handlePickerToggle} fill={inputs.color} />
         {isCirclePickerVisible && (
           <Box sx={circlePickerStyle}>
@@ -48,7 +56,7 @@ export const ColorPicker: FC = () => {
             />
           </Box>
         )}
-      </Box>
+      </PickerBox>
     </ClickAwayListener>
   );
 };

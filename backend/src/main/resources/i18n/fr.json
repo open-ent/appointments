@@ -9,6 +9,8 @@
   "appointments.create.grid.abandon.title": "Abandonner la création de la grille ?",
   "appointments.create.grid.abandon.message": "Si vous confirmez, les informations saisies seront perdues.",
 
+  "appointments.consultation.grid.title": "Consulter votre grille passée",
+
   "appointments.modify.grid.title": "Modifier votre grille horaire",
   "appointments.modify.grid.confirm.title": "Modifier votre grille ?",
   "appointments.modify.grid.confirm.message": "Si vous confirmez, les informations saisies seront enregistrées et les modifications seront prises en compte pour tous les rendez-vous concernés.",

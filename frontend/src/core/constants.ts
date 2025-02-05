@@ -241,6 +241,6 @@ export const GRID_MODAL_VALUES = {
   },
   [GRID_MODAL_TYPE.CONSULTATION]: {
     titleKey: "appointments.consultation.grid.title",
-    instructionKey: "appointments.grid.required",
+    instructionKey: "",
   },
 };

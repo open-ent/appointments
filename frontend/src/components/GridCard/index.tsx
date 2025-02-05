@@ -65,6 +65,11 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
     handleCloseMenu();
   };
 
+  const handleOpenConsultModal = () => {
+    handleOpenGridModal(GRID_MODAL_TYPE.CONSULTATION, grid.id);
+    handleCloseMenu();
+  };
+
   useEffect(() => {
     if (size === GRID_CARD_SIZE.LARGE) handleCloseMenu();
   }, [size]);
@@ -146,7 +151,11 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
             </Button>
           </Box>
         ) : (
-          <Button variant="outlined" startIcon={<VisibilityRoundedIcon />}>
+          <Button
+            variant="outlined"
+            startIcon={<VisibilityRoundedIcon />}
+            onClick={handleOpenConsultModal}
+          >
             {t("appointments.consult")}
           </Button>
         )
@@ -163,7 +172,7 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
             transformOrigin={{ vertical: "top", horizontal: "right" }}
           >
             {grid.state === GRID_STATE.CLOSED ? (
-              <MenuItem>
+              <MenuItem onClick={handleOpenConsultModal}>
                 <VisibilityRoundedIcon />
                 {t("appointments.consult")}
               </MenuItem>

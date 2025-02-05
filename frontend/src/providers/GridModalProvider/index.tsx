@@ -194,10 +194,14 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
         setConfirmModalType(CONFIRM_MODAL_TYPE.CANCEL_GRID_EDIT);
         setIsDialogOpen(true);
         break;
+      case GRID_MODAL_TYPE.CONSULTATION:
+        resetInputs();
+        setIsModalOpen(false);
+        break;
       default:
         break;
     }
-  }, [modalType]);
+  }, [modalType, resetInputs]);
 
   const handleCancelDialog = () => {
     setIsDialogOpen(false);

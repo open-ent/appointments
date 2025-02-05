@@ -71,6 +71,9 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
   const [dialogModalProps, setDialogModalProps] = useState<DialogModalProps>(
     initialDialogModalProps,
   );
+  const [currentModalType, setCurrentModalType] = useState<GRID_MODAL_TYPE>(
+    GRID_MODAL_TYPE.EDIT,
+  );
 
   const { data: myInProgressData, isLoading: isLoadingInProgress } =
     useGetMyGridsQuery(
@@ -113,7 +116,8 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
     (type: GRID_MODAL_TYPE, gridId?: number) => {
       if (type === GRID_MODAL_TYPE.CREATION)
         return handleDisplayGridModal(type);
-      return setSelectedGridIdUpdateFields(gridId ?? null);
+      setSelectedGridIdUpdateFields(gridId ?? null);
+      setCurrentModalType(type);
     },
     [handleDisplayGridModal],
   );
@@ -214,7 +218,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
     if (!gridIsLoading && selectedGridIdUpdateFields && grid) {
       setInputs(grid);
       handleDisplayGridModal(
-        GRID_MODAL_TYPE.EDIT,
+        currentModalType,
         selectedGridIdUpdateFields,
         grid.name,
       );
@@ -226,6 +230,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
     setInputs,
     selectedGridIdUpdateFields,
     gridIsLoading,
+    currentModalType,
   ]);
 
   useEffect(() => {
