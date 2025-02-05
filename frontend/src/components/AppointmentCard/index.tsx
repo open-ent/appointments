@@ -7,11 +7,9 @@ import {
   Box,
   ClickAwayListener,
   Divider,
-  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
-import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -26,7 +24,6 @@ import { UserPicture } from "../UserPicture";
 import {
   bottomRightBoxStyle,
   bottomWrapperBoxStyle,
-  CancelButtonBox,
   dateBoxStyle,
   dividerStyle,
   iconsStyle,
@@ -53,11 +50,6 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
   const isAppointmentFromNotif = useMemo(
     () => appointmentIdFromNotify === appointment.id,
     [appointmentIdFromNotify, appointment.id],
-  );
-
-  const canCancelRequest = useMemo(
-    () => dayjs().add(24, "hour").isBefore(appointment.beginDate),
-    [appointment.beginDate],
   );
 
   const appointmentCardRef = useRef<HTMLDivElement | null>(null);
@@ -184,37 +176,14 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
         </Box>
         {appointment.state === APPOINTMENT_STATE.CREATED &&
           (appointment.isRequester ? (
-            <Tooltip
-              title={
-                canCancelRequest
-                  ? ""
-                  : t("appointments.cannot.cancel.request.tooltip")
-              }
-              placement="bottom"
-              arrow
-              componentsProps={{
-                tooltip: {
-                  style: {
-                    width: "210px",
-                  },
-                },
-              }}
+            <Button
+              variant="outlined"
+              color="error"
+              fullWidth
+              onClick={handleCancelRequestClick}
             >
-              <CancelButtonBox
-                onClick={(event) => event.stopPropagation()}
-                canCancelRequest={canCancelRequest}
-              >
-                <Button
-                  variant="outlined"
-                  color="error"
-                  fullWidth
-                  disabled={!canCancelRequest}
-                  onClick={handleCancelRequestClick}
-                >
-                  {t("appointments.cancel.request")}
-                </Button>
-              </CancelButtonBox>
-            </Tooltip>
+              {t("appointments.cancel.request")}
+            </Button>
           ) : (
             <Box sx={twoButtonsBoxStyle}>
               <Button

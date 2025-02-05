@@ -10,7 +10,10 @@ import {
 import { isActionAvailable } from "@edifice.io/client";
 
 import { useTranslation } from "react-i18next";
-import { APPOINTMENTS } from "~/core/constants";
+import {
+  APPOINTMENTS,
+  defaultMinHoursBeforeCancellation,
+} from "~/core/constants";
 import { useStructure } from "~/hooks/useStructure";
 import { useActions } from "~/services/queries";
 import { MODAL_TYPE } from "./enum";
@@ -42,6 +45,8 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
   const [appointmentIdFromNotify, setAppointmentIdFromNotify] = useState<
     number | null
   >(null);
+  const [minHoursBeforeCancellation, setMinHoursBeforeCancellation] =
+    useState<number>(defaultMinHoursBeforeCancellation);
 
   const [displayModals, setDisplayModals] = useState<DisplayModalsState>(
     initialDisplayModalsState,
@@ -64,6 +69,11 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
     return () => clearInterval(intervalId);
   }, [t]);
 
+  useEffect(() => {
+    if (window?.config?.minHoursBeforeCancellation)
+      setMinHoursBeforeCancellation(window?.config?.minHoursBeforeCancellation);
+  }, []);
+
   const value = useMemo<GlobalProviderContextProps>(
     () => ({
       isMultiStructure,
@@ -76,6 +86,7 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
       displayModals,
       setDisplayModals,
       handleDisplayModal,
+      minHoursBeforeCancellation,
     }),
     [
       isMultiStructure,
@@ -85,6 +96,7 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
       appointmentIdFromNotify,
       getStructureNameById,
       displayModals,
+      minHoursBeforeCancellation,
     ],
   );
 

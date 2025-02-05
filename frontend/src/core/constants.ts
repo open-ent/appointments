@@ -246,3 +246,5 @@ export const GRID_MODAL_VALUES = {
     instructionKey: "",
   },
 };
+
+export const defaultMinHoursBeforeCancellation = 24;

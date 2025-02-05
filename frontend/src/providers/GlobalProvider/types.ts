@@ -1,7 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
-import { MODAL_TYPE } from "./enum";
 import { Structure } from "~/hooks/types";
+import { MODAL_TYPE } from "./enum";
 
 export interface GlobalProviderContextProps {
   isMultiStructure: boolean;
@@ -14,6 +14,7 @@ export interface GlobalProviderContextProps {
   displayModals: DisplayModalsState;
   setDisplayModals: Dispatch<SetStateAction<DisplayModalsState>>;
   handleDisplayModal: (modalType: MODAL_TYPE) => void;
+  minHoursBeforeCancellation: number;
 }
 
 export interface GlobalProviderProps {

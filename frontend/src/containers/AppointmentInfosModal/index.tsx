@@ -28,6 +28,7 @@ import {
   TIME_FORMAT,
 } from "~/core/constants";
 import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
+import { useGlobal } from "~/providers/GlobalProvider";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 import {
   bottomContainerStyle,
@@ -48,6 +49,7 @@ import { AppointmentInfosModalProps } from "./types";
 export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   appointment,
 }) => {
+  const { minHoursBeforeCancellation } = useGlobal();
   const {
     handleCloseAppointmentModal,
     handleAcceptAppointment,
@@ -56,8 +58,11 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   const { t } = useTranslation(APPOINTMENTS);
 
   const canCancelRequest = useMemo(
-    () => dayjs().add(24, "hour").isBefore(appointment.beginDate),
-    [appointment],
+    () =>
+      dayjs()
+        .add(minHoursBeforeCancellation, "hour")
+        .isBefore(appointment.beginDate),
+    [appointment.beginDate, minHoursBeforeCancellation],
   );
 
   return (
@@ -138,39 +143,21 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
         <DialogActions>
           {appointment.state === APPOINTMENT_STATE.CREATED &&
             (appointment.isRequester ? (
-              <Tooltip
-                title={
-                  canCancelRequest
-                    ? ""
-                    : t("appointments.cannot.cancel.request.tooltip")
-                }
-                placement="top"
-                arrow
-                componentsProps={{
-                  tooltip: {
-                    style: {
-                      width: "210px",
-                    },
-                  },
-                }}
-              >
-                <Box sx={oneButtonBoxStyle}>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    sx={oneButtonStyle}
-                    disabled={!canCancelRequest}
-                    onClick={() =>
-                      handleOpenDialogModal(
-                        CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
-                        appointment.id,
-                      )
-                    }
-                  >
-                    {t("appointments.cancel.request")}
-                  </Button>
-                </Box>
-              </Tooltip>
+              <Box sx={oneButtonBoxStyle}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  sx={oneButtonStyle}
+                  onClick={() =>
+                    handleOpenDialogModal(
+                      CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
+                      appointment.id,
+                    )
+                  }
+                >
+                  {t("appointments.cancel.request")}
+                </Button>
+              </Box>
             ) : (
               <Box sx={twoButtonsBoxStyle}>
                 <Button
@@ -204,7 +191,9 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               title={
                 canCancelRequest
                   ? ""
-                  : t("appointments.cannot.cancel.request.tooltip")
+                  : t("appointments.cannot.cancel.request.tooltip", {
+                      hours: minHoursBeforeCancellation,
+                    })
               }
               placement="top"
               arrow

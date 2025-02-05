@@ -98,7 +98,7 @@
   "appointments.last.appointment": "Dernier rdv : {{date}}",
 
   "appointments.cancel.request": "Annuler la demande",
-  "appointments.cannot.cancel.request.tooltip": "Impossible d'annuler un rendez-vous moins de 24h avant",
+  "appointments.cannot.cancel.request.tooltip": "Impossible d'annuler un rendez-vous moins de {{hours}}h avant",
   "appointments.cancel.appointment": "Annuler le rendez-vous",
 
   "appointments.appointments": "Rendez-vous",

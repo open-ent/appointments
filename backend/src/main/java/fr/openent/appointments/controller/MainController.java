@@ -1,12 +1,13 @@
 package fr.openent.appointments.controller;
 
+import fr.openent.appointments.config.AppConfig;
 import fr.openent.appointments.core.constants.WorkflowRight;
 import fr.openent.appointments.security.ViewRight;
+import fr.openent.appointments.service.ServiceFactory;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Get;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
-import fr.wseduc.webutils.http.Renders;
 
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;
@@ -15,10 +16,14 @@ import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.http.filter.ResourceFilter;
 import org.entcore.common.http.filter.SuperAdminFilter;
 
+import static fr.openent.appointments.core.constants.Constants.CAMEL_MIN_HOURS_BEFORE_CANCELLATION;
+
 public class MainController extends ControllerHelper {
 
-    public MainController() {
-        super();
+    private final AppConfig appConfig;
+
+    public MainController(ServiceFactory serviceFactory) {
+        this.appConfig = serviceFactory.appConfig();
     }
 
     @Get("")
@@ -26,7 +31,9 @@ public class MainController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void view(HttpServerRequest request) {
-        renderView(request, new JsonObject(), "index.html", null);
+        JsonObject params = new JsonObject()
+            .put(CAMEL_MIN_HOURS_BEFORE_CANCELLATION, appConfig.minHoursBeforeCancellation());
+        renderView(request, params, "index.html", null);
     }
 
     @Get("/config")

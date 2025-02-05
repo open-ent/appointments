@@ -32,7 +32,7 @@ public class Appointments extends BaseServer {
         ServiceFactory serviceFactory = new ServiceFactory(vertx, appConfig, repositoryFactory, timelineHelper);
 
         // Controller
-        addController(new MainController());
+        addController(new MainController(serviceFactory));
         addController(new GridController(serviceFactory));
         addController(new TimeSlotController(serviceFactory));
         addController(new CommunicationController(serviceFactory));
