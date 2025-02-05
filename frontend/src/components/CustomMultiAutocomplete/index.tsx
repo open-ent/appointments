@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import { chipStyle, TextFieldStyle } from "./style";
+import { APPOINTMENTS } from "~/core/constants";
 
 export const CustomMultiAutocomplete: FC = () => {
   const {
@@ -19,7 +20,7 @@ export const CustomMultiAutocomplete: FC = () => {
   } = useGridModal();
 
   const selectedPublic = inputs.public;
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   return (
     <Autocomplete

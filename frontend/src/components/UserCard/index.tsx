@@ -4,6 +4,9 @@ import { Box, Tooltip, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
+import { APPOINTMENTS } from "~/core/constants";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
+import { UserPicture } from "../UserPicture";
 import {
   displayNameStyle,
   functionsStyle,
@@ -17,8 +20,6 @@ import {
   WrapperUserCard,
 } from "./style";
 import { UserCardProps } from "./types";
-import { UserPicture } from "../UserPicture";
-import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 
 export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
   ({ infos }, ref) => {
@@ -32,7 +33,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
     const [isEllipsisDisplayName, setIsEllipsisDisplayName] = useState(false);
     const [isEllipsisfunctions, setIsEllipsisfunctions] = useState(false);
 
-    const { t } = useTranslation("appointments");
+    const { t } = useTranslation(APPOINTMENTS);
     const { handleOnClickCard } = useBookAppointmentModal();
 
     const displayNameRef = useRef<HTMLDivElement>(null);

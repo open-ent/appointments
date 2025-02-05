@@ -14,7 +14,11 @@ import {
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
-import { APPOINTMENT_STATE_VALUES, TIME_FORMAT } from "~/core/constants";
+import {
+  APPOINTMENT_STATE_VALUES,
+  APPOINTMENTS,
+  TIME_FORMAT,
+} from "~/core/constants";
 import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
@@ -36,7 +40,7 @@ import { AppointmentCardProps } from "./types";
 import { AppointmentStateIcon } from "./utils";
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const theme = useTheme();
   const { appointmentIdFromNotify, setAppointmentIdFromNotify } = useGlobal();
 

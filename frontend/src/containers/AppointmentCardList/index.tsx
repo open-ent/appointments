@@ -7,6 +7,7 @@ import { AppointmentCard } from "~/components/AppointmentCard";
 import {
   APPOINTMENT_CARD_WIDTH,
   APPOINTMENT_CARDS_GAP,
+  APPOINTMENTS,
   MY_APPOINTMENTS_LIST_STATE_VALUES,
 } from "~/core/constants";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
@@ -22,7 +23,7 @@ export const AppointmentCardList: FC<AppointmentCardListProps> = ({
   appointmentsType,
   myAppointments,
 }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const { handleChangeLimit, handleChangePage, limits, pages, maxPages } =
     useMyAppointments();
 

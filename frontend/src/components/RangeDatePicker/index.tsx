@@ -5,13 +5,14 @@ import { Box } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useTranslation } from "react-i18next";
 
+import { APPOINTMENTS } from "~/core/constants";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import { boxStyle, datePickerStyle, removeIconStyle } from "./style";
 import { shouldDisableEndDate, shouldDisableStartDate } from "./utils";
 
 export const RangeDatePicker: FC = () => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const {
     inputs: {

@@ -1,7 +1,16 @@
-import { createContext, FC, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  FC,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { isActionAvailable } from "@edifice.io/client";
 
+import { useTranslation } from "react-i18next";
+import { APPOINTMENTS } from "~/core/constants";
 import { useStructure } from "~/hooks/useStructure";
 import { useActions } from "~/services/queries";
 import { MODAL_TYPE } from "./enum";
@@ -27,6 +36,7 @@ export const useGlobal = () => {
 export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
   const { isMultiStructure, structures, getStructureNameById } = useStructure();
   const { data: actions } = useActions();
+  const { t } = useTranslation(APPOINTMENTS);
   const hasAccessRight = isActionAvailable("access", actions) ?? false;
   const hasManageRight = isActionAvailable("manage", actions) ?? false;
   const [appointmentIdFromNotify, setAppointmentIdFromNotify] = useState<
@@ -43,6 +53,16 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({ children }) => {
       [modalType]: !prevState[modalType],
     }));
   };
+
+  useEffect(() => {
+    const checkTitle = () => {
+      if (document.title !== t("appointments.title")) {
+        document.title = t("appointments.title");
+      }
+    };
+    const intervalId = setInterval(checkTitle, 250);
+    return () => clearInterval(intervalId);
+  }, [t]);
 
   const value = useMemo<GlobalProviderContextProps>(
     () => ({

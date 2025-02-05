@@ -23,9 +23,10 @@ import {
   emptyStateSvgStyle,
   headerStyle,
 } from "./style";
+import { APPOINTMENTS } from "~/core/constants";
 
 export const MyAvailability: FC = () => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const [gridCardSize, setGridCardSize] = useState<GRID_CARD_SIZE>(
     GRID_CARD_SIZE.LARGE,

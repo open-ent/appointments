@@ -19,6 +19,16 @@ import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
+import { AppointmentStateIcon } from "~/components/AppointmentCard/utils";
+import { UserPicture } from "~/components/UserPicture";
+import {
+  APPOINTMENT_STATE_VALUES,
+  APPOINTMENTS,
+  TEXT_DATE_FORMAT,
+  TIME_FORMAT,
+} from "~/core/constants";
+import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
+import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 import {
   bottomContainerStyle,
   dialogContentStyle,
@@ -34,15 +44,6 @@ import {
   userInfosBoxStyle,
 } from "./style";
 import { AppointmentInfosModalProps } from "./types";
-import { AppointmentStateIcon } from "~/components/AppointmentCard/utils";
-import { UserPicture } from "~/components/UserPicture";
-import {
-  APPOINTMENT_STATE_VALUES,
-  TEXT_DATE_FORMAT,
-  TIME_FORMAT,
-} from "~/core/constants";
-import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
-import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 
 export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   appointment,
@@ -52,7 +53,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
     handleAcceptAppointment,
     handleOpenDialogModal,
   } = useMyAppointments();
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const canCancelRequest = useMemo(
     () => dayjs().add(24, "hour").isBefore(appointment.beginDate),

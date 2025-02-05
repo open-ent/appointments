@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { DISPLAY_DATE_FORMAT } from "~/core/constants";
+import { APPOINTMENTS, DISPLAY_DATE_FORMAT } from "~/core/constants";
 import { CONFIRM_MODAL_TYPE, GRID_STATE } from "~/core/enums";
 import { useAvailability } from "~/providers/AvailabilityProvider";
 import { GRID_CARD_SIZE } from "~/providers/AvailabilityProvider/enum";
@@ -42,7 +42,7 @@ import {
 import { GridCardProps } from "./types";
 
 export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { isMultiStructure, getStructureNameById } = useGlobal();
   const { handleOpenDialogModal, handleOpenGridModal } = useAvailability();

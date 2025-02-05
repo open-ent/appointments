@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { DialogModalProps } from "~/components/DialogModal/types";
-import { TOAST_VALUES } from "~/core/constants";
+import { APPOINTMENTS, TOAST_VALUES } from "~/core/constants";
 import {
   APPOINTMENT_STATE,
   CONFIRM_MODAL_TYPE,
@@ -61,7 +61,7 @@ export const useMyAppointments = () => {
 export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   children,
 }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const { appointmentIdFromNotify } = useGlobal();
   const [pages, setPages] = useState<AppointmentListInfoType>(initialPages);
   const [maxPages, setMaxPages] =

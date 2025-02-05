@@ -11,7 +11,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { DialogModalProps } from "~/components/DialogModal/types";
-import { GRID_PER_PAGE, TOAST_VALUES } from "~/core/constants";
+import { APPOINTMENTS, GRID_PER_PAGE, TOAST_VALUES } from "~/core/constants";
 import { CONFIRM_MODAL_TYPE, GRID_STATE } from "~/core/enums";
 import { useGetAvailableAppointmentsQuery } from "~/services/api/AppointmentService";
 import {
@@ -57,7 +57,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
 }) => {
   const { hasManageRight } = useGlobal();
   const { setInputs, handleDisplayGridModal } = useGridModal();
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const [gridPages, setGridPages] = useState<GridPages>(initialPages);
   const [grids, setGrids] = useState<GridList>(initialGrids);
   const [gridsLength, setGridsLength] =

@@ -16,6 +16,11 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { UserPicture } from "~/components/UserPicture";
+import { APPOINTMENTS, DURATION_VALUES } from "~/core/constants";
+import { DURATION } from "~/core/enums";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
+import { ellipsisWithWrapStyle } from "~/styles/textStyles";
 import {
   bottomUserInfoStyle,
   displayNameStyle,
@@ -30,18 +35,13 @@ import {
   wrapperUserInfoStyle,
 } from "./style";
 import { BookAppointmentGridInfosProps } from "./types";
-import { UserPicture } from "~/components/UserPicture";
-import { DURATION_VALUES } from "~/core/constants";
-import { DURATION } from "~/core/enums";
-import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
-import { ellipsisWithWrapStyle } from "~/styles/textStyles";
 
 // this container is the first part of BookAppointmentModal
 export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   userInfos,
 }) => {
   const { picture, displayName, functions, isAvailable } = userInfos;
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const { grids, gridInfos, selectedGrid, handleGridChange } =
     useBookAppointmentModal();
 

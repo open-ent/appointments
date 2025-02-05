@@ -6,6 +6,12 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { Box, Divider, Modal, Typography, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { BOOK_APPOINTMENT_MODAL_BREAKPOINT } from "~/core/breakpoints";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
+import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
+import { BookAppointmentGridInfos } from "../BookAppointmentGridInfos";
+import { BookAppointmentWeekSlotsDesktop } from "../BookAppointmentWeekSlotsDesktop";
+import { BookAppointmentWeekSlotsMobile } from "../BookAppointmentWeekSlotsMobile";
 import {
   closeIconStyle,
   contentBoxStyle,
@@ -15,12 +21,7 @@ import {
   submitButtonStyle,
 } from "./style";
 import { BookAppointmentModalProps } from "./types";
-import { BookAppointmentGridInfos } from "../BookAppointmentGridInfos";
-import { BookAppointmentWeekSlotsDesktop } from "../BookAppointmentWeekSlotsDesktop";
-import { BookAppointmentWeekSlotsMobile } from "../BookAppointmentWeekSlotsMobile";
-import { BOOK_APPOINTMENT_MODAL_BREAKPOINT } from "~/core/breakpoints";
-import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
-import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
+import { APPOINTMENTS } from "~/core/constants";
 
 export const BookAppointmentModal: FC<BookAppointmentModalProps> = ({
   userInfos,
@@ -31,7 +32,7 @@ export const BookAppointmentModal: FC<BookAppointmentModalProps> = ({
     handleSubmitAppointment,
     handleCloseModal,
   } = useBookAppointmentModal();
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const isMobile = useMediaQuery(
     `(max-width: ${BOOK_APPOINTMENT_MODAL_BREAKPOINT}px)`,
   );

@@ -4,6 +4,14 @@ import { Loader } from "@cgi-learning-hub/ui";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { CustomDateCalendar } from "~/components/CustomDateCalendar";
+import { DialogModal } from "~/components/DialogModal";
+import { AppointmentsEmptyState } from "~/components/SVG/AppointmentsEmptyState";
+import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
+import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/enum";
+import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
+import { AppointmentCardList } from "../AppointmentCardList";
+import { AppointmentInfosModal } from "../AppointmentInfosModal";
 import {
   customCalendarBoxStyle,
   emptyStateLeftBoxStyle,
@@ -12,14 +20,7 @@ import {
   loaderBoxStyle,
   mainContainerStyle,
 } from "./style";
-import { AppointmentCardList } from "../AppointmentCardList";
-import { AppointmentInfosModal } from "../AppointmentInfosModal";
-import { CustomDateCalendar } from "~/components/CustomDateCalendar";
-import { DialogModal } from "~/components/DialogModal";
-import { AppointmentsEmptyState } from "~/components/SVG/AppointmentsEmptyState";
-import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
-import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/enum";
-import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
+import { APPOINTMENTS } from "~/core/constants";
 
 export const MyAppointments: FC = () => {
   const {
@@ -29,7 +30,7 @@ export const MyAppointments: FC = () => {
     selectedAppointment,
   } = useMyAppointments();
   const isMobile = useMediaQuery("(max-width:620px)");
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const theme = useTheme();
 
   const myPendingAppointments =

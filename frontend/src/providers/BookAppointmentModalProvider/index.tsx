@@ -31,6 +31,7 @@ import {
   transformStringToDayjs,
   transformTimeSlotsToDaySlots,
 } from "./utils";
+import { APPOINTMENTS } from "~/core/constants";
 
 const BookAppointmentModalProviderContext =
   createContext<BookAppointmentModalProviderContextProps | null>(null);
@@ -64,7 +65,7 @@ export const BookAppointmentModalProvider: FC<
   const [isVideoCallOptionChecked, setIsVideoCallOptionChecked] =
     useState(false);
 
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const { data: grids } = useGetAvailableUserMinimalGridsQuery(
     selectedUser?.userId ?? "",

@@ -8,6 +8,10 @@ import { Box, Checkbox, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 
+import { DaySlots } from "~/components/DaySlots";
+import { APPOINTMENTS, DAY_VALUES } from "~/core/constants";
+import { isToday } from "~/core/utils";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import {
   ArrowButton,
   ColumnHeader,
@@ -27,13 +31,9 @@ import {
   weekDayStyle,
   weekSlotsWrapperStyle,
 } from "./style";
-import { DaySlots } from "~/components/DaySlots";
-import { DAY_VALUES } from "~/core/constants";
-import { isToday } from "~/core/utils";
-import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 
 export const BookAppointmentWeekSlotsDesktop: FC = () => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const {
     gridInfos,

@@ -4,6 +4,11 @@ import { Loader, SearchInput } from "@cgi-learning-hub/ui";
 import { Box, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { FindAppointmentsEmptyState } from "~/components/SVG/FindAppointmentsEmptyState";
+import { UserCard } from "~/components/UserCard";
+import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
+import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
+import { BookAppointmentModal } from "../BookAppointmentModal";
 import {
   containerStyle,
   emptyStateBoxStyle,
@@ -12,11 +17,7 @@ import {
   listCardStyle,
   searchInputStyle,
 } from "./style";
-import { BookAppointmentModal } from "../BookAppointmentModal";
-import { FindAppointmentsEmptyState } from "~/components/SVG/FindAppointmentsEmptyState";
-import { UserCard } from "~/components/UserCard";
-import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
-import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
+import { APPOINTMENTS } from "~/core/constants";
 
 export const FindAppointments: FC = () => {
   const {
@@ -28,7 +29,7 @@ export const FindAppointments: FC = () => {
     handleSearch,
   } = useFindAppointments();
   const { selectedUser } = useBookAppointmentModal();
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
 

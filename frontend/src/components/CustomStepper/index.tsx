@@ -14,6 +14,7 @@ import {
   stepperStyle,
 } from "./style";
 import { CustomStepperProps } from "./types";
+import { APPOINTMENTS } from "~/core/constants";
 
 export const CustomStepper: FC<CustomStepperProps> = ({
   page,
@@ -22,7 +23,7 @@ export const CustomStepper: FC<CustomStepperProps> = ({
   handleNext,
   handleSubmit,
 }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   return (
     <MobileStepper

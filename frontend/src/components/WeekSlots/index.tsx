@@ -11,7 +11,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { DAY_VALUES } from "~/core/constants";
+import { APPOINTMENTS, DAY_VALUES } from "~/core/constants";
 import { DAY } from "~/core/enums";
 import { Slot } from "~/core/types";
 import { useGridModal } from "~/providers/GridModalProvider";
@@ -28,7 +28,7 @@ import {
 } from "./style";
 
 export const WeekSlots: FC = () => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const {
     inputs,
     errorInputs: { slots },

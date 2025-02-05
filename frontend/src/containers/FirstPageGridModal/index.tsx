@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 
 import { ColorPicker } from "~/components/ColorPicker";
 import { CustomMultiAutocomplete } from "~/components/CustomMultiAutocomplete";
-import { MAX_STRING_LENGTH } from "~/core/constants";
+import { APPOINTMENTS, MAX_STRING_LENGTH } from "~/core/constants";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
@@ -23,7 +23,7 @@ import { pageGridModalStyle } from "../GridModal/style";
 import { colorStyle, firstLineStyle, nameStyle, selectStyle } from "./style";
 
 export const FirstPageGridModal: FC = () => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const { isMultiStructure } = useGlobal();
   const {
     inputs,

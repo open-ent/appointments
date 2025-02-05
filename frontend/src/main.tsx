@@ -20,7 +20,7 @@ import "~/i18n";
 
 import "react-toastify/dist/ReactToastify.css";
 
-import { TOAST_CONFIG } from "./core/constants";
+import { APPOINTMENTS, TOAST_CONFIG } from "./core/constants";
 import { AvailabilityProvider } from "./providers/AvailabilityProvider";
 import { BookAppointmentModalProvider } from "./providers/BookAppointmentModalProvider";
 import { FindAppointmentsProvider } from "./providers/FindAppointmentsProvider";
@@ -60,7 +60,7 @@ root.render(
     <Provider store={store}>
       <EdificeClientProvider
         params={{
-          app: "appointments",
+          app: APPOINTMENTS,
         }}
       >
         <EdificeThemeProvider>

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { CONFIRM_MODAL_VALUES } from "~/core/constants";
+import { APPOINTMENTS, CONFIRM_MODAL_VALUES } from "~/core/constants";
 import {
   buttonsBoxStyle,
   buttonStyle,
@@ -29,7 +29,7 @@ export const DialogModal: FC<DialogModalProps> = ({
   handleCancel,
   handleConfirm,
 }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const title = t(CONFIRM_MODAL_VALUES[type].titleKey);
   const description = t(CONFIRM_MODAL_VALUES[type].descriptionKey);
   const question = t(CONFIRM_MODAL_VALUES[type].questionKey);

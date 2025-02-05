@@ -28,9 +28,10 @@ import {
 } from "./style";
 import { DailySlotProps } from "./types";
 import { getEndOptions, getStartOptions } from "./utils";
+import { APPOINTMENTS } from "~/core/constants";
 
 export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const {
     inputs: { weekSlots, duration },
     errorInputs: { slots },

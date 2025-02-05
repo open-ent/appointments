@@ -6,7 +6,7 @@ import { Box, Collapse, Pagination, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { GridCard } from "~/components/GridCard";
-import { GRID_PER_PAGE } from "~/core/constants";
+import { APPOINTMENTS, GRID_PER_PAGE } from "~/core/constants";
 import { useAvailability } from "~/providers/AvailabilityProvider";
 import { GRID_TYPE } from "~/providers/AvailabilityProvider/enum";
 import {
@@ -19,7 +19,7 @@ import {
 import { GridListProps } from "./types";
 
 export const GridList: FC<GridListProps> = ({ gridType, cardSize }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const {
     gridPages: { [gridType]: page },
     gridTypeLengths: {

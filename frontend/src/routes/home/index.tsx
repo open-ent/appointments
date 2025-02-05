@@ -21,6 +21,7 @@ import {
   tabsStyle,
   titleStyle,
 } from "./style";
+import { APPOINTMENTS } from "~/core/constants";
 
 export interface AppProps {
   _id: string;
@@ -42,7 +43,7 @@ export const Home: FC = () => {
   const [tabValue, setTabValue] = useState(
     !hasManageRight && initialTabValue === 2 ? 0 : initialTabValue,
   );
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const handleChange = useCallback(
     (_: SyntheticEvent, newValue: number) => {

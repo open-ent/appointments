@@ -10,7 +10,7 @@ import {
 
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { TOAST_VALUES } from "~/core/constants";
+import { APPOINTMENTS, TOAST_VALUES } from "~/core/constants";
 import { CONFIRM_MODAL_TYPE } from "~/core/enums";
 import {
   useBlurGridInputsReturnType,
@@ -62,7 +62,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   const { structures, hasManageRight } = useGlobal();
   const [createGrid] = useCreateGridMutation();
   const [editGrid] = useEditGridMutation();
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const [selectedGridId, setSelectedGridId] = useState<number>(-1);
   const [selectedGridName, setSelectedGridName] = useState<string>("");

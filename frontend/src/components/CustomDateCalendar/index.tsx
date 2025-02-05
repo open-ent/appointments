@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useTranslation } from "react-i18next";
 
+import { isToday } from "~/core/utils";
 import {
   appointmentsLegendStyle,
   calandarStyle,
@@ -17,14 +18,14 @@ import {
 } from "./style";
 import { CustomDateCalendarProps } from "./types";
 import { isWithAcceptedAppointment } from "./utils";
-import { isToday } from "~/core/utils";
+import { APPOINTMENTS } from "~/core/constants";
 
 dayjs.extend(isoWeek);
 
 export const CustomDateCalendar: FC<CustomDateCalendarProps> = ({
   acceptedAppointmentsDates,
 }) => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [nbWeeksOfCurrentMonth, setNbWeeksOfCurrentMonth] = useState(0);
 

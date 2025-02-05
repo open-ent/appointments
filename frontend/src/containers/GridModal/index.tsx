@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@cgi-learning-hub/ui";
 import { CustomStepper } from "~/components/CustomStepper";
 import { DialogModal } from "~/components/DialogModal";
-import { GRID_MODAL_VALUES } from "~/core/constants";
+import { APPOINTMENTS, GRID_MODAL_VALUES } from "~/core/constants";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
@@ -22,7 +22,7 @@ import {
 } from "./style";
 
 export const GridModal: FC = () => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const {
     isDisplayFirstPage,

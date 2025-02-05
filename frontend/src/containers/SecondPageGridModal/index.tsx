@@ -11,7 +11,11 @@ import { useTranslation } from "react-i18next";
 
 import { RangeDatePicker } from "~/components/RangeDatePicker";
 import { WeekSlots } from "~/components/WeekSlots";
-import { DURATION_VALUES, PERIODICITY_VALUES } from "~/core/constants";
+import {
+  APPOINTMENTS,
+  DURATION_VALUES,
+  PERIODICITY_VALUES,
+} from "~/core/constants";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import { pageGridModalStyle } from "../GridModal/style";
@@ -23,7 +27,7 @@ import {
 } from "./style";
 
 export const SecondPageGridModal: FC = () => {
-  const { t } = useTranslation("appointments");
+  const { t } = useTranslation(APPOINTMENTS);
 
   const {
     inputs,
