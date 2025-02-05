@@ -1,6 +1,5 @@
-import { Select, styled, SxProps } from "@mui/material";
+import { SxProps } from "@mui/material";
 
-import { CustomSelectProps } from "./types";
 import { flexEndBoxStyle, spaceBetweenBoxStyle } from "~/styles/boxStyles";
 
 export const firstLineStyle: SxProps = {
@@ -19,10 +18,10 @@ export const colorStyle: SxProps = {
   gap: "1rem",
 };
 
-export const CustomSelect = styled(Select)<CustomSelectProps>(
-  ({ isDisabled }) => ({
-    "& .MuiSelect-icon": {
-      display: isDisabled && "none",
+export const selectStyle: SxProps = {
+  "&.Mui-disabled": {
+    "& .MuiSelect-icon ": {
+      display: "none",
     },
-  }),
-);
+  },
+};

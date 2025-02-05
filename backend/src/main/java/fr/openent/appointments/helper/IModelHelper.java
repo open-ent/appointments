@@ -122,21 +122,21 @@ public class IModelHelper {
     }
 
     /**
-     * See {@link #sqlResultToIModel(Promise, Class, String)}
+     * See {@link #resultToIModel(Promise, Class, String)}
      */
-    public static <T extends IModel<T>> Handler<Either<String, JsonArray>> sqlResultToIModel(Promise<List<T>> promise, Class<T> modelClass) {
-        return sqlResultToIModel(promise, modelClass, null);
+    public static <T extends IModel<T>> Handler<Either<String, JsonArray>> resultToIModel(Promise<List<T>> promise, Class<T> modelClass) {
+        return resultToIModel(promise, modelClass, null);
     }
 
     /**
-     * Complete a promise from the result of a sql query, while converting this result into a list of model.
+     * Complete a promise from the result of a query, while converting this result into a list of model.
      *
      * @param promise the promise we want to complete
      * @param modelClass the class of the model we want to convert
-     * @param errorMessage a message logged when the sql query fail
+     * @param errorMessage a message logged when the query fail
      * @param <T> the type of the model
      */
-    public static <T extends IModel<T>> Handler<Either<String, JsonArray>> sqlResultToIModel(Promise<List<T>> promise, Class<T> modelClass, String errorMessage) {
+    public static <T extends IModel<T>> Handler<Either<String, JsonArray>> resultToIModel(Promise<List<T>> promise, Class<T> modelClass, String errorMessage) {
         return event -> {
             if (event.isLeft()) {
                 if (errorMessage != null) {
@@ -150,21 +150,21 @@ public class IModelHelper {
     }
 
     /**
-     * See {@link #sqlUniqueResultToIModel(Promise, Class, String)}
+     * See {@link #uniqueResultToIModel(Promise, Class, String)}
      */
-    public static <T extends IModel<T>> Handler<Either<String, JsonObject>> sqlUniqueResultToIModel(Promise<Optional<T>> promise, Class<T> modelClass) {
-        return sqlUniqueResultToIModel(promise, modelClass, null);
+    public static <T extends IModel<T>> Handler<Either<String, JsonObject>> uniqueResultToIModel(Promise<Optional<T>> promise, Class<T> modelClass) {
+        return uniqueResultToIModel(promise, modelClass, null);
     }
 
     /**
-     * Complete a promise from the result of a sql query, while converting this result into a model.
+     * Complete a promise from the result of a query, while converting this result into a model.
      *
      * @param promise the promise we want to complete
      * @param modelClass the class of the model we want to convert
-     * @param errorMessage a message logged when the sql query fail
+     * @param errorMessage a message logged when the query fail
      * @param <T> the type of the model
      */
-    public static <T extends IModel<T>> Handler<Either<String, JsonObject>> sqlUniqueResultToIModel(Promise<Optional<T>> promise, Class<T> modelClass, String errorMessage) {
+    public static <T extends IModel<T>> Handler<Either<String, JsonObject>> uniqueResultToIModel(Promise<Optional<T>> promise, Class<T> modelClass, String errorMessage) {
         return event -> {
             if (event.isLeft()) {
                 if (errorMessage != null) {

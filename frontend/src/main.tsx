@@ -69,12 +69,12 @@ root.render(
               <GlobalProvider>
                 <FindAppointmentsProvider>
                   <BookAppointmentModalProvider>
-                    <AvailabilityProvider>
-                      <GridModalProvider>
+                    <GridModalProvider>
+                      <AvailabilityProvider>
                         <ToastContainer {...TOAST_CONFIG} />
                         <RouterProvider router={router} />
-                      </GridModalProvider>
-                    </AvailabilityProvider>
+                      </AvailabilityProvider>
+                    </GridModalProvider>
                   </BookAppointmentModalProvider>
                 </FindAppointmentsProvider>
               </GlobalProvider>

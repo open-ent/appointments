@@ -51,7 +51,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
                 .add(isVideoCall);
 
         String errorMessage = "[Appointemnts@DefaultAppointmentRepository::create] Failed to create appointment : ";
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Appointment.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, Appointment.class, errorMessage)));
         return promise.future();
     }
 
@@ -73,7 +73,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
                 .addAll(new JsonArray(availableStates));
 
         String errorMessage = "[Appointemnts@DefaultAppointmentRepository::getAvailableAppointments] Failed to get available appointments : ";
-        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Appointment.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, Appointment.class, errorMessage)));
 
         return promise.future();
     }
@@ -108,7 +108,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
         query += " ORDER BY ts.begin_date";
 
         String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::getAppointments] Failed to get appointments for user %s : ", userId);
-        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, AppointmentWithInfos.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, AppointmentWithInfos.class, errorMessage)));
 
         return promise.future();
     }
@@ -132,7 +132,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
         JsonArray params = new JsonArray().add(appointmentId);
 
         String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::get] Failed to get appointment %d : ", appointmentId);
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, AppointmentWithInfos.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, AppointmentWithInfos.class, errorMessage)));
 
         return promise.future();
     }
@@ -151,7 +151,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
         JsonArray params = new JsonArray().add(state.getValue()).add(appointmentId);
 
         String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::updateState] Failed to update state of appointment %d : ", appointmentId);
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Appointment.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, Appointment.class, errorMessage)));
 
         return promise.future();
     }
@@ -182,7 +182,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
         }
 
         String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::getAppointmentsByGridId] Failed to get appointments for grid %d : ", gridId);
-        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Appointment.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, Appointment.class, errorMessage)));
 
         return promise.future();
     }

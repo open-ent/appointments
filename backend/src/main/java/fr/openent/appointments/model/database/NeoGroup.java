@@ -7,43 +7,15 @@ import io.vertx.core.json.JsonObject;
 import static fr.openent.appointments.core.constants.Fields.ID;
 import static fr.openent.appointments.core.constants.Fields.NAME;
 
-public class NeoGroup implements IModel<NeoGroup> {
+public class NeoGroup extends BaseNeoEntity implements IModel<NeoGroup> {
 
-    private String id;
-    private String name;
-
-    // Constructor
-
-    public NeoGroup() {}
-
-    public NeoGroup(JsonObject neoGroup) {
-        this.setId(neoGroup.getString(ID, null));
-        this.setName(neoGroup.getString(NAME, null));
+    public NeoGroup(JsonObject neoEntity) {
+        super(neoEntity);
     }
 
-    // Getter
-
-    public String getId() {
-        return id;
+    public NeoGroup(String id, String name) {
+        super(id, name);
     }
-
-    public String getName() {
-        return name;
-    }
-
-    // Setter
-
-    public NeoGroup setId(String id) {
-        this.id = id;
-        return this;
-    }
-
-    public NeoGroup setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    // Functions
 
     public JsonObject toJson() {
         return IModelHelper.toJson(this, false, false);

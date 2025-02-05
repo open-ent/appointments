@@ -15,9 +15,14 @@ export const datePickerStyle: SxProps = {
     color: PURPLE,
     fontSize: "2rem",
   },
+  "& .MuiIconButton-root": {
+    "&.Mui-disabled": {
+      opacity: 0.5,
+    },
+  },
 };
 
 export const removeIconStyle: SxProps = {
   height: "100%",
-  paddingTop: "2rem",
+  paddingTop: "1.5rem",
 };

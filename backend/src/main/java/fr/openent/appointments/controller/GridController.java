@@ -103,7 +103,7 @@ public class GridController extends ControllerHelper {
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> {
                 composeInfos.put(CAMEL_USER_ID, user.getUserId());
-                return gridService.getGridById(gridId);
+                return gridService.getGridWithDailySlots(gridId);
             })
             .onSuccess(grid -> {
                 if (!grid.getOwnerId().equals(composeInfos.getString(CAMEL_USER_ID))) {

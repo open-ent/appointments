@@ -3,10 +3,10 @@ import { FC, KeyboardEvent, useState } from "react";
 import { Box, ClickAwayListener } from "@mui/material";
 import { CirclePicker, ColorResult } from "react-color";
 
-import { circlePickerStyle, colorPickerIconStyle } from "./style";
-import { HexaColor } from "./types";
 import { ColorPickerIcon } from "~/components/SVG/ColorPickerIcon";
 import { useGridModal } from "~/providers/GridModalProvider";
+import { circlePickerStyle, colorPickerIconStyle } from "./style";
+import { HexaColor } from "./types";
 
 export const ColorPicker: FC = () => {
   const [isCirclePickerVisible, setIsCirclePickerVisible] = useState(false);

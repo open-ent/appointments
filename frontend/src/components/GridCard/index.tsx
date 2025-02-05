@@ -23,6 +23,7 @@ import { CONFIRM_MODAL_TYPE, GRID_STATE } from "~/core/enums";
 import { useAvailability } from "~/providers/AvailabilityProvider";
 import { GRID_CARD_SIZE } from "~/providers/AvailabilityProvider/enum";
 import { useGlobal } from "~/providers/GlobalProvider";
+import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import {
   buttonsBoxStyle,
   cardWrapperStyle,
@@ -44,7 +45,7 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
   const { t } = useTranslation("appointments");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { isMultiStructure, getStructureNameById } = useGlobal();
-  const { handleOpenDialogModal } = useAvailability();
+  const { handleOpenDialogModal, handleOpenGridModal } = useAvailability();
 
   const handleClickedMoreButton = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -56,6 +57,11 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
 
   const handleOpenConfirmModal = (type: CONFIRM_MODAL_TYPE) => {
     handleOpenDialogModal(grid.id, type);
+    handleCloseMenu();
+  };
+
+  const handleOpenEditModal = () => {
+    handleOpenGridModal(GRID_MODAL_TYPE.EDIT, grid.id);
     handleCloseMenu();
   };
 
@@ -101,7 +107,11 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
       {size === GRID_CARD_SIZE.LARGE ? (
         !(grid.state === GRID_STATE.CLOSED) ? (
           <Box sx={buttonsBoxStyle}>
-            <Button variant="outlined" startIcon={<EditIcon />}>
+            <Button
+              variant="outlined"
+              startIcon={<EditIcon />}
+              onClick={() => handleOpenGridModal(GRID_MODAL_TYPE.EDIT, grid.id)}
+            >
               {t("appointments.edit")}
             </Button>
             {grid.state === GRID_STATE.OPEN ? (
@@ -159,7 +169,7 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
               </MenuItem>
             ) : (
               <>
-                <MenuItem>
+                <MenuItem onClick={handleOpenEditModal}>
                   <EditIcon />
                   {t("appointments.edit")}
                 </MenuItem>

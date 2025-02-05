@@ -12,6 +12,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import org.entcore.common.sql.Sql;
+import org.entcore.common.sql.SqlResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +61,20 @@ public class DefaultDailySlotRepository implements DailySlotRepository {
         TransactionHelper.executeTransactionAndGetJsonObjectResults(transactionElements, errorMessage)
             .onSuccess(result -> promise.complete(IModelHelper.toList(result, DailySlot.class)))
             .onFailure(promise::fail);
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<List<DailySlot>> getByGridId(Long gridId) {
+        Promise<List<DailySlot>> promise = Promise.promise();
+
+        String query = "SELECT * FROM " + DB_DAILY_SLOT_TABLE + " WHERE " + GRID_ID + " = ?";
+
+        JsonArray params = new JsonArray().add(gridId);
+
+        String errorMessage = String.format("[Appointments@DefaultDailySlotRepository::getByGridId] Fail to get daily slots by grid id %s : ", gridId);
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, DailySlot.class, errorMessage)));
 
         return promise.future();
     }

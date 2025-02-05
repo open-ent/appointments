@@ -14,6 +14,7 @@ public class Constants {
     public static final String CAMEL_END_DATE = "endDate";
     public static final String CAMEL_END_TIME = "endTime";
     public static final String CAMEL_GRID_ID = "gridId";
+    public static final String CAMEL_GROUP_ID = "groupId";
     public static final String CAMEL_GROUPS_IDS = "groupsIds";
     public static final String CAMEL_HTTP_STATUS = "httpStatus";
     public static final String CAMEL_IS_REQUESTER = "isRequester";
@@ -45,6 +46,8 @@ public class Constants {
     public static final String FUNCTIONS = "functions";
     public static final String FRENCH_NOW = "NOW() AT TIME ZONE 'Europe/Paris'";
     public static final String FRENCH_TIME_ZONE = "Europe/Paris";
+    public static final String GRID = "grid";
+    public static final String GROUPS = "groups";
     public static final String HOST = "host";
     public static final String LIMIT = "limit";
     public static final String MESSAGE = "message";
@@ -54,6 +57,7 @@ public class Constants {
     public static final String PROFILES = "profiles";
     public static final String SEARCH = "search";
     public static final String STATEMENT = "statement";
+    public static final String STRUCTURE = "structure";
     public static final String STRUCTURES = "structures";
     public static final String STATES = "states";
     public static final String TITLE = "title";

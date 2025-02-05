@@ -1,6 +1,7 @@
 export enum GRID_MODAL_TYPE {
-  CREATION = "creation",
-  EDIT = "edit",
+  CREATION = "CREATION",
+  EDIT = "EDIT",
+  CONSULTATION = "CONSULTATION",
 }
 
 export enum PAGE_TYPE {

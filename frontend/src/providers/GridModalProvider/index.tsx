@@ -8,6 +8,10 @@ import {
   useState,
 } from "react";
 
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import { TOAST_VALUES } from "~/core/constants";
+import { CONFIRM_MODAL_TYPE } from "~/core/enums";
 import {
   useBlurGridInputsReturnType,
   useUpdateGridInputsReturnType,
@@ -15,8 +19,17 @@ import {
 import { useBlurGridInputs } from "~/hooks/useBlurGridInputs";
 import { useUpdateGridInputs } from "~/hooks/useUpdateGridInputs";
 import { useGetCommunicationGroupsQuery } from "~/services/api/CommunicationService";
-import { useGetMyGridsNameQuery } from "~/services/api/GridService";
+import {
+  useCreateGridMutation,
+  useEditGridMutation,
+  useGetMyGridsNameQuery,
+} from "~/services/api/GridService";
+import {
+  CreateGridPayload,
+  EditGridPayload,
+} from "~/services/api/GridService/types";
 import { useGlobal } from "../GlobalProvider";
+import { GRID_MODAL_TYPE, PAGE_TYPE } from "./enum";
 import {
   GridModalInputs,
   GridModalProviderContextProps,
@@ -25,8 +38,12 @@ import {
 } from "./types";
 import {
   durationOptions,
+  gridInputsToCreateGridPayload,
+  gridInputsToEditGridPayload,
   initialErrorInputs,
   initialGridModalInputs,
+  isErrorsEmpty,
+  newErrorInputs,
   periodicityOptions,
 } from "./utils";
 
@@ -43,10 +60,32 @@ export const useGridModal = () => {
 
 export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   const { structures, hasManageRight } = useGlobal();
+  const [createGrid] = useCreateGridMutation();
+  const [editGrid] = useEditGridMutation();
+  const { t } = useTranslation("appointments");
+
+  const [selectedGridId, setSelectedGridId] = useState<number>(-1);
+  const [selectedGridName, setSelectedGridName] = useState<string>("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [modalType, setModalType] = useState<GRID_MODAL_TYPE>(
+    GRID_MODAL_TYPE.CREATION,
+  );
+
+  const [confirmModalType, setConfirmModalType] = useState<CONFIRM_MODAL_TYPE>(
+    CONFIRM_MODAL_TYPE.CANCEL_GRID_CREATION,
+  );
+
+  const [page, setPage] = useState<PAGE_TYPE>(PAGE_TYPE.FIRST);
 
   const [inputs, setInputs] = useState<GridModalInputs>(
     initialGridModalInputs(structures),
   );
+
+  const [errorInputs, setErrorInputs] =
+    useState<InputsErrors>(initialErrorInputs);
 
   useEffect(() => {
     if (structures.length)
@@ -65,22 +104,19 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
     skip: !hasManageRight,
   });
 
-  const [errorInputs, setErrorInputs] =
-    useState<InputsErrors>(initialErrorInputs);
-
   const updateGridModalInputs: useUpdateGridInputsReturnType =
     useUpdateGridInputs(
       inputs,
       setInputs,
       setErrorInputs,
       structures,
-      existingGridsNames ?? [],
+      existingGridsNames?.filter((name) => name !== selectedGridName) ?? [],
     );
 
   const blurGridModalInputs: useBlurGridInputsReturnType = useBlurGridInputs(
     inputs,
     setErrorInputs,
-    existingGridsNames ?? [],
+    existingGridsNames?.filter((name) => name !== selectedGridName) ?? [],
   );
 
   const updateFirstPageErrors = useCallback(() => {
@@ -93,6 +129,128 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
     setErrorInputs(initialErrorInputs);
   }, [structures]);
 
+  const handleSubmit = useCallback(async () => {
+    const newErrors = newErrorInputs(blurGridModalInputs);
+    setErrorInputs(newErrors);
+    if (!isErrorsEmpty(newErrors)) return;
+
+    if (modalType === GRID_MODAL_TYPE.EDIT) {
+      setConfirmModalType(CONFIRM_MODAL_TYPE.CONFIRM_GRID_EDIT);
+      setIsDialogOpen(true);
+      return;
+    }
+
+    const payload: CreateGridPayload = gridInputsToCreateGridPayload(
+      inputs,
+      groups ?? [],
+    );
+    try {
+      await createGrid(payload).unwrap();
+      toast.success(t(TOAST_VALUES.CREATE_GRID.i18nKeySuccess));
+      resetInputs();
+      setPage(PAGE_TYPE.FIRST);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast.error(t(TOAST_VALUES.CREATE_GRID.i18nKeyError));
+    }
+  }, [
+    blurGridModalInputs,
+    modalType,
+    inputs,
+    groups,
+    createGrid,
+    t,
+    resetInputs,
+  ]);
+
+  const handlePrev = () => {
+    setPage(PAGE_TYPE.FIRST);
+  };
+
+  const handleNext = useCallback(() => {
+    const newErrors = {
+      name: blurGridModalInputs.newNameError,
+      videoCallLink: blurGridModalInputs.newVideoCallLinkError,
+      validityPeriod: "",
+      weekSlots: "",
+      slots: {
+        ids: [],
+        error: "",
+      },
+    };
+    setErrorInputs(newErrors);
+    if (newErrors.name || newErrors.videoCallLink) return;
+    setPage(PAGE_TYPE.SECOND);
+  }, [blurGridModalInputs]);
+
+  const handleCancel = useCallback(() => {
+    switch (modalType) {
+      case GRID_MODAL_TYPE.CREATION:
+        setConfirmModalType(CONFIRM_MODAL_TYPE.CANCEL_GRID_CREATION);
+        setIsDialogOpen(true);
+        break;
+      case GRID_MODAL_TYPE.EDIT:
+        setConfirmModalType(CONFIRM_MODAL_TYPE.CANCEL_GRID_EDIT);
+        setIsDialogOpen(true);
+        break;
+      default:
+        break;
+    }
+  }, [modalType]);
+
+  const handleCancelDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleConfirmDialog = useCallback(async () => {
+    if (confirmModalType === CONFIRM_MODAL_TYPE.CONFIRM_GRID_EDIT) {
+      const payload: EditGridPayload = gridInputsToEditGridPayload(
+        inputs,
+        selectedGridId ?? 0,
+      );
+      try {
+        await editGrid(payload).unwrap();
+        toast.success(t(TOAST_VALUES.EDIT_GRID.i18nKeySuccess));
+      } catch (error) {
+        console.error(error);
+        toast.error(t(TOAST_VALUES.EDIT_GRID.i18nKeyError));
+      }
+    }
+    setIsDialogOpen(false);
+    resetInputs();
+    setPage(PAGE_TYPE.FIRST);
+    setIsModalOpen(false);
+  }, [confirmModalType, editGrid, inputs, resetInputs, selectedGridId, t]);
+
+  const handleDisplayGridModal = useCallback(
+    (type: GRID_MODAL_TYPE, gridId?: number, gridName?: string) => {
+      setModalType(type);
+      if (type === GRID_MODAL_TYPE.EDIT) {
+        setSelectedGridId(gridId ?? -1);
+        setSelectedGridName(gridName ?? "");
+      }
+      setIsModalOpen(true);
+    },
+    [setIsModalOpen],
+  );
+
+  const isDisplayFirstPage = useMemo(
+    () =>
+      modalType === GRID_MODAL_TYPE.EDIT ||
+      modalType === GRID_MODAL_TYPE.CONSULTATION ||
+      page === PAGE_TYPE.FIRST,
+    [modalType, page],
+  );
+
+  const isDisplaySecondPage = useMemo(
+    () =>
+      modalType === GRID_MODAL_TYPE.EDIT ||
+      modalType === GRID_MODAL_TYPE.CONSULTATION ||
+      page === PAGE_TYPE.SECOND,
+    [modalType, page],
+  );
+
   useEffect(() => {
     if (inputs.structure.id && hasManageRight) refetchGroups();
   }, [hasManageRight, inputs.structure, refetchGroups]);
@@ -103,7 +261,6 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       setInputs,
       errorInputs,
       setErrorInputs,
-      existingGridsNames: existingGridsNames ?? [],
       structureOptions: structures,
       publicOptions: groups ?? [],
       durationOptions,
@@ -112,17 +269,42 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       blurGridModalInputs,
       updateFirstPageErrors,
       resetInputs,
+      isDisplayFirstPage,
+      isDisplaySecondPage,
+      handlePrev,
+      handleNext,
+      handleSubmit,
+      isModalOpen,
+      handleCancel,
+      isDialogOpen,
+      handleCancelDialog,
+      handleConfirmDialog,
+      handleDisplayGridModal,
+      page,
+      modalType,
+      confirmModalType,
     }),
     [
       inputs,
       errorInputs,
-      existingGridsNames,
       structures,
       groups,
       updateGridModalInputs,
       blurGridModalInputs,
       updateFirstPageErrors,
       resetInputs,
+      isDisplayFirstPage,
+      isDisplaySecondPage,
+      handleNext,
+      handleSubmit,
+      isModalOpen,
+      handleCancel,
+      isDialogOpen,
+      handleConfirmDialog,
+      handleDisplayGridModal,
+      page,
+      modalType,
+      confirmModalType,
     ],
   );
 

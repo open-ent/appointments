@@ -9,17 +9,18 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { RangeDatePicker } from "~/components/RangeDatePicker";
+import { WeekSlots } from "~/components/WeekSlots";
+import { DURATION_VALUES, PERIODICITY_VALUES } from "~/core/constants";
+import { useGridModal } from "~/providers/GridModalProvider";
+import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
+import { pageGridModalStyle } from "../GridModal/style";
 import {
   itemStyle,
   periodicityItemStyle,
   slotDurationItemStyle,
   validityPeriodStyle,
 } from "./style";
-import { pageGridModalStyle } from "../GridModal/style";
-import { RangeDatePicker } from "~/components/RangeDatePicker";
-import { WeekSlots } from "~/components/WeekSlots";
-import { DURATION_VALUES, PERIODICITY_VALUES } from "~/core/constants";
-import { useGridModal } from "~/providers/GridModalProvider";
 
 export const SecondPageGridModal: FC = () => {
   const { t } = useTranslation("appointments");
@@ -33,6 +34,7 @@ export const SecondPageGridModal: FC = () => {
       handleSlotDurationChange,
       handlePeriodicityChange,
     },
+    modalType,
   } = useGridModal();
 
   return (
@@ -48,7 +50,11 @@ export const SecondPageGridModal: FC = () => {
       <Box sx={itemStyle}>
         <Typography>{t("appointments.grid.slot.duration") + " *"}</Typography>
         <Box sx={validityPeriodStyle}>
-          <ToggleButtonGroup exclusive value={inputs.duration}>
+          <ToggleButtonGroup
+            disabled={modalType !== GRID_MODAL_TYPE.CREATION}
+            exclusive
+            value={inputs.duration}
+          >
             {durationOptions.map((option) => (
               <ToggleButton
                 key={option}
@@ -65,7 +71,11 @@ export const SecondPageGridModal: FC = () => {
       <Box sx={itemStyle}>
         <Typography>{t("appointments.grid.periodicity") + " *"}</Typography>
         <Box sx={validityPeriodStyle}>
-          <ToggleButtonGroup exclusive value={inputs.periodicity}>
+          <ToggleButtonGroup
+            disabled={modalType !== GRID_MODAL_TYPE.CREATION}
+            exclusive
+            value={inputs.periodicity}
+          >
             {periodicityOptions.map((option) => (
               <ToggleButton
                 key={option}

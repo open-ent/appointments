@@ -1,7 +1,9 @@
 import { Dayjs } from "dayjs";
 
 import { HexaColor } from "~/components/ColorPicker/types";
-import { DAY, DURATION, GRID_STATE } from "~/core/enums";
+import { DAY, DURATION, GRID_STATE, PERIODICITY } from "~/core/enums";
+import { Structure } from "~/hooks/types";
+import { Group } from "../CommunicationService/types";
 
 interface DailySlotPayload {
   day: DAY;
@@ -90,4 +92,42 @@ export interface GetTimeSlotsPayload {
 export interface UpdateGridStatePayload {
   gridId: number;
   deleteAppointments: boolean;
+}
+
+interface DailySlot {
+  id: number;
+  day: DAY;
+  beginTime: string; // format HH:mm
+  endTime: string; // format HH:mm
+}
+
+export interface GetGridByIdResponse {
+  id: number;
+  name: string;
+  color: HexaColor;
+  beginDate: string;
+  endDate: string;
+  structure: Structure;
+  duration: DURATION;
+  periodicity: PERIODICITY;
+  groups: Group[];
+  videoCallLink: string;
+  place: string;
+  documentId: string;
+  publicComment: string;
+  dailySlots: DailySlot[];
+}
+
+export interface EditGridBody {
+  name: string;
+  color: string;
+  videoCallLink: string;
+  place: string;
+  documentId: string;
+  publicComment: string;
+}
+
+export interface EditGridPayload {
+  gridId: number;
+  body: EditGridBody;
 }

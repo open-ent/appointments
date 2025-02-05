@@ -6,6 +6,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import { MobileStepper } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { PAGE_TYPE } from "~/providers/GridModalProvider/enum";
 import {
   backButtonStyle,
   nextButtonStyle,
@@ -13,7 +14,6 @@ import {
   stepperStyle,
 } from "./style";
 import { CustomStepperProps } from "./types";
-import { PAGE_TYPE } from "~/containers/GridModal/enum";
 
 export const CustomStepper: FC<CustomStepperProps> = ({
   page,

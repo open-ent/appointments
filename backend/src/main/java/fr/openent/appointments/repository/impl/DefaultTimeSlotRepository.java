@@ -118,7 +118,7 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
         JsonArray params = new JsonArray().add(timeSlotId);
 
         String errorMessage = "[Appointments@DefaultTimeSlotRepository::getTimeSlotById] Fail to get time slot by id : " + timeSlotId;
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, TimeSlot.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, TimeSlot.class, errorMessage)));
 
         return promise.future();
     }
@@ -149,7 +149,7 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
         }
 
         String errorMessage = "[Appointments@DefaultTimeSlotRepository::getAvailableByGridAndDates] Fail to get available timeslots for gridId : " + gridId;
-        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, TimeSlot.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, TimeSlot.class, errorMessage)));
 
         return promise.future();
     }
@@ -175,7 +175,7 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                 .add(DateHelper.formatDate(date != null ? date : LocalDate.now()));
 
         String errorMessage = "[Appointments@DefaultTimeSlotRepository::getNextAvailableTimeslot] Fail to get next available timeslots for gridId : " + gridId;
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, TimeSlot.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, TimeSlot.class, errorMessage)));
 
         return promise.future();
     }

@@ -62,7 +62,7 @@ public class DefaultGridRepository implements GridRepository {
         query += "ORDER BY " + CREATION_DATE + " DESC";
 
         String errorMessage = String.format("[Appointments@DefaultGridRepository::getMyGrids] Fail to get grids for userId %s : ", userId);
-        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, Grid.class, errorMessage)));
 
         return promise.future();
     }
@@ -106,7 +106,7 @@ public class DefaultGridRepository implements GridRepository {
         JsonArray params = new JsonArray(usersIds);
 
         String errorMessage = String.format("[Appointments@DefaultGridRepository::getGridsByUserIds] Fail to get grids for usersIds %s : ", usersIds);
-        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, Grid.class, errorMessage)));
 
         return promise.future();
     }
@@ -125,7 +125,7 @@ public class DefaultGridRepository implements GridRepository {
         JsonArray params = new JsonArray();
 
         String errorMessage = String.format("[Appointments@DefaultGridRepository::getGridsGroupsCanAccess] Fail to get grids the groups %s can access : ", groupsIds);
-        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, Grid.class, errorMessage)));
 
         return promise.future();
     }
@@ -157,7 +157,7 @@ public class DefaultGridRepository implements GridRepository {
                 .addAll(new JsonArray(availableAppointmentStates));
 
         String errorMessage = String.format("[Appointments@DefaultGridRepository::getGridsWithAvailableTimeSlots] Failed to get grids with available timeslots from grid ids %s : ", gridsIds);
-        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.sqlResultToIModel(promise, Grid.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, Grid.class, errorMessage)));
 
         return promise.future();
     }
@@ -190,7 +190,7 @@ public class DefaultGridRepository implements GridRepository {
         JsonArray params = new JsonArray().add(gridId);
 
         String errorMessage = String.format("[Appointments@DefaultGridRepository::get] Fail to get grid with id %d : ", gridId);
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Grid.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, Grid.class, errorMessage)));
 
         return promise.future();
     }
@@ -278,7 +278,7 @@ public class DefaultGridRepository implements GridRepository {
         params.add(gridId);
 
         String errorMessage = "[Appointments@DefaultGridRepository::updateFields] Fail to update grid fields : ";
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Grid.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, Grid.class, errorMessage)));
 
         return promise.future();
     }
@@ -369,7 +369,7 @@ public class DefaultGridRepository implements GridRepository {
                 .add(GridState.OPEN.getValue());
 
         String errorMessage = "[Appointments@DefaultGridRepository::insert] Fail to insert grid : ";
-        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.sqlUniqueResultToIModel(promise, Grid.class, errorMessage)));
+        sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, Grid.class, errorMessage)));
         return promise.future();
     }
 

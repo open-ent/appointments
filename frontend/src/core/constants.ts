@@ -1,6 +1,7 @@
 import { SvgIconProps } from "@mui/material";
 import { Theme, ToastPosition } from "react-toastify";
 
+import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/enum";
 import {
   APPOINTMENT_STATE,
@@ -134,6 +135,18 @@ export const CONFIRM_MODAL_VALUES = {
     questionKey: "",
     options: [],
   },
+  [CONFIRM_MODAL_TYPE.CANCEL_GRID_EDIT]: {
+    titleKey: "appointments.modify.grid.abandon.title",
+    descriptionKey: "appointments.modify.grid.abandon.message",
+    questionKey: "",
+    options: [],
+  },
+  [CONFIRM_MODAL_TYPE.CONFIRM_GRID_EDIT]: {
+    titleKey: "appointments.modify.grid.confirm.title",
+    descriptionKey: "appointments.modify.grid.confirm.message",
+    questionKey: "",
+    options: [],
+  },
   [CONFIRM_MODAL_TYPE.REJECT_REQUEST]: {
     titleKey: "appointments.confirm.modal.reject.request.title",
     descriptionKey: "appointments.confirm.modal.reject.request.description",
@@ -183,6 +196,10 @@ export const TOAST_VALUES = {
     i18nKeySuccess: "appointments.toast.create.grid.success",
     i18nKeyError: "appointments.toast.create.grid.error",
   },
+  [TOAST_TYPE.EDIT_GRID]: {
+    i18nKeySuccess: "appointments.toast.edit.grid.success",
+    i18nKeyError: "appointments.toast.edit.grid.error",
+  },
   [TOAST_TYPE.ACCEPT_APPOINTMENT]: {
     i18nKeySuccess: "appointments.toast.accept.appointment.success",
     i18nKeyError: "appointments.toast.accept.appointment.error",
@@ -210,5 +227,20 @@ export const TOAST_VALUES = {
   [TOAST_TYPE.RESTORE_GRID]: {
     i18nKeySuccess: "appointments.toast.restore.grid.success",
     i18nKeyError: "appointments.toast.restore.grid.error",
+  },
+};
+
+export const GRID_MODAL_VALUES = {
+  [GRID_MODAL_TYPE.CREATION]: {
+    titleKey: "appointments.create.grid.title",
+    instructionKey: "appointments.grid.required",
+  },
+  [GRID_MODAL_TYPE.EDIT]: {
+    titleKey: "appointments.modify.grid.title",
+    instructionKey: "appointments.grid.required",
+  },
+  [GRID_MODAL_TYPE.CONSULTATION]: {
+    titleKey: "appointments.consultation.grid.title",
+    instructionKey: "appointments.grid.required",
   },
 };

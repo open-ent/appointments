@@ -13,6 +13,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 
+import { useGridModal } from "~/providers/GridModalProvider";
+import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import {
   beginAndEndBoxStyle,
   beginAndEndWrapperStyle,
@@ -26,7 +28,6 @@ import {
 } from "./style";
 import { DailySlotProps } from "./types";
 import { getEndOptions, getStartOptions } from "./utils";
-import { useGridModal } from "~/providers/GridModalProvider";
 
 export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
   const { t } = useTranslation("appointments");
@@ -34,6 +35,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
     inputs: { weekSlots, duration },
     errorInputs: { slots },
     updateGridModalInputs: { handleDeleteSlot, handleSlotChange },
+    modalType,
   } = useGridModal();
 
   const isSlotError =
@@ -50,6 +52,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
               onChange={(e) =>
                 handleSlotChange(day, slot, e.target.value, "begin")
               }
+              disabled={modalType !== GRID_MODAL_TYPE.CREATION}
               sx={selectStyle}
               value={slot.begin.parseToString()}
               renderValue={(value: string) => (
@@ -74,6 +77,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
               onChange={(e) =>
                 handleSlotChange(day, slot, e.target.value, "end")
               }
+              disabled={modalType !== GRID_MODAL_TYPE.CREATION}
               sx={selectStyle}
               value={slot.end.parseToString()}
               label="test"
@@ -93,12 +97,14 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
           </FormControl>
         </Box>
       </Box>
-      <IconButton
-        onClick={() => handleDeleteSlot(day, slot.id)}
-        sx={iconButtonStyle}
-      >
-        <DeleteIcon sx={iconStyle} />
-      </IconButton>
+      {modalType === GRID_MODAL_TYPE.CREATION && (
+        <IconButton
+          onClick={() => handleDeleteSlot(day, slot.id)}
+          sx={iconButtonStyle}
+        >
+          <DeleteIcon sx={iconStyle} />
+        </IconButton>
+      )}
     </StyledDailySlotBox>
   );
 };

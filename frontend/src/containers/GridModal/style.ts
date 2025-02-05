@@ -51,3 +51,9 @@ export const instructionStyle: SxProps = {
   ...ITALIC_FONT,
   marginBottom: "1rem",
 };
+
+export const bottomButtonBoxStyle: SxProps = {
+  display: "flex",
+  justifyContent: "flex-end",
+  gap: "2.4rem",
+};

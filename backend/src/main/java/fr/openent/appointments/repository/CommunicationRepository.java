@@ -1,6 +1,7 @@
 package fr.openent.appointments.repository;
 
 import fr.openent.appointments.model.database.NeoGroup;
+import fr.openent.appointments.model.database.NeoStructure;
 import fr.openent.appointments.model.database.NeoUser;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
@@ -43,4 +44,20 @@ public interface CommunicationRepository {
      * @return A Future containing a {@link NeoUser}.
      */
     Future<Optional<NeoUser>> getUserFromId(String userId, List<String> structuresIds);
+
+    /**
+     * Retrieves Structure from its ID.
+     *
+     * @param structureId The ID of the structure we want to retrieve.
+     * @return A Future containing a {@link NeoStructure}.
+     */
+    Future<Optional<NeoStructure>> getStructure(String structureId);
+
+    /**
+     * Retrieves Groups from a list of groupId
+     *
+     * @param groupIds The list of groupIds we want to retrieve.
+     * @return A Future containing a {@link List} of {@link NeoGroup}.
+     */
+    Future<List<NeoGroup>> getGroups(List<String> groupIds);
 }

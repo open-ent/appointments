@@ -1,6 +1,8 @@
+import { GridModalInputs } from "~/providers/GridModalProvider/types";
 import { emptySplitApi } from "../EmptySplitService";
 import {
   CreateGridPayload,
+  EditGridPayload,
   GetMyGridsPayload,
   GetTimeSlotsPayload,
   GridInfos,
@@ -9,7 +11,10 @@ import {
   TimeSlots,
   UpdateGridStatePayload,
 } from "./types";
-import { transformResponseToMyGridsResponse } from "./utils";
+import {
+  transformResponseToCompleteGridResponse,
+  transformResponseToMyGridsResponse,
+} from "./utils";
 
 export const gridApi = emptySplitApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,6 +25,11 @@ export const gridApi = emptySplitApi.injectEndpoints({
         body,
       }),
       invalidatesTags: ["MyGrids", "Availability"],
+    }),
+    getGridById: builder.query<GridModalInputs, number>({
+      query: (gridId) => `/grids/${gridId}`,
+      transformResponse: transformResponseToCompleteGridResponse,
+      providesTags: ["MyGrids"],
     }),
     getMyGrids: builder.query<MyGrids, GetMyGridsPayload>({
       query: (body) => {
@@ -37,6 +47,7 @@ export const gridApi = emptySplitApi.injectEndpoints({
     }),
     getMyGridsName: builder.query<string[], void>({
       query: () => "/grids/names",
+      providesTags: ["MyGrids"],
     }),
     getAvailableUserMinimalGrids: builder.query<NameWithId[], string>({
       query: (userId) => `/users/${userId}/grids/minimal`,
@@ -79,11 +90,20 @@ export const gridApi = emptySplitApi.injectEndpoints({
       }),
       invalidatesTags: ["MyGrids", "Availability"],
     }),
+    editGrid: builder.mutation<void, EditGridPayload>({
+      query: ({ gridId, body }) => ({
+        url: `/grids/${gridId}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["MyGrids", "Availability"],
+    }),
   }),
 });
 
 export const {
   useCreateGridMutation,
+  useGetGridByIdQuery,
   useGetMyGridsQuery,
   useGetMyGridsNameQuery,
   useGetAvailableUserMinimalGridsQuery,
@@ -92,4 +112,5 @@ export const {
   useDeleteGridMutation,
   useSuspendGridMutation,
   useRestoreGridMutation,
+  useEditGridMutation,
 } = gridApi;

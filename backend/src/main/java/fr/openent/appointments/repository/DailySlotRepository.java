@@ -15,4 +15,13 @@ public interface DailySlotRepository {
      *         return a {@link List} of the {@link DailySlot} created and their details.
      */
     Future<List<DailySlot>> create(Long gridId, List<DailySlotPayload> dailySlots);
+
+    /**
+     * Get all daily slots for a specific grid.
+     *
+     * @param gridId the grid id to get the daily slots from
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *         return a {@link List} of the {@link DailySlot} found.
+     */
+    Future<List<DailySlot>> getByGridId(Long gridId);
 }

@@ -17,6 +17,7 @@ export const dayLabelStyle = {
 
 export const slotsBoxStyle = {
   ...flexStartBoxStyle,
+  minHeight: "3.6rem",
   flexWrap: "wrap",
 };
 
@@ -27,4 +28,8 @@ export const iconStyle = {
 
 export const errorStyle = {
   marginLeft: "1rem",
+};
+
+export const noSlotStyle = {
+  marginLeft: "1.5rem",
 };

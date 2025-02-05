@@ -6,14 +6,16 @@ import { Autocomplete, Checkbox, Chip, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 
-import { chipStyle, TextFieldStyle } from "./style";
 import { useGridModal } from "~/providers/GridModalProvider";
+import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
+import { chipStyle, TextFieldStyle } from "./style";
 
 export const CustomMultiAutocomplete: FC = () => {
   const {
     publicOptions,
     inputs,
     updateGridModalInputs: { handlePublicChange },
+    modalType,
   } = useGridModal();
 
   const selectedPublic = inputs.public;
@@ -23,6 +25,7 @@ export const CustomMultiAutocomplete: FC = () => {
     <Autocomplete
       multiple
       options={publicOptions}
+      disabled={modalType !== GRID_MODAL_TYPE.CREATION}
       disableCloseOnSelect
       getOptionLabel={(option) => option.groupName}
       isOptionEqualToValue={(option, value) => option.groupId === value.groupId}

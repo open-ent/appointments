@@ -2,6 +2,7 @@ package fr.openent.appointments.service;
 
 import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.model.database.Appointment;
+import fr.openent.appointments.model.response.GridWithDailySlots;
 import fr.openent.appointments.model.response.MinimalGrid;
 import fr.openent.appointments.model.response.ListGridsResponse;
 import fr.openent.appointments.model.database.Grid;
@@ -48,6 +49,14 @@ public interface GridService {
      * @return A Future containing a JsonArray with the grid data.
      */
     Future<Grid> getGridById(Long gridId);
+
+    /**
+     * Retrieves a specific grid with its dailySlots by its ID.
+     *
+     * @param gridId The ID of the grid to retrieve.
+     * @return A Future containing a JsonArray with the grid data.
+     */
+    Future<GridWithDailySlots> getGridWithDailySlots(Long gridId);
 
     /**
      * Retrieves a specific grid by timeSlotId.
