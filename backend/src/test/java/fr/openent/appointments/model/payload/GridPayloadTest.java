@@ -38,7 +38,7 @@ public class GridPayloadTest {
                 .put(CAMEL_END_TIME, "17:00"))))
             .put(CAMEL_VIDEO_CALL_LINK, "http://example.com")
             .put(PLACE, "Office")
-            .put(CAMEL_DOCUMENT_ID, "doc-123")
+            .put(CAMEL_DOCUMENTS_IDS, new JsonArray(Arrays.asList("doc-123", "doc-456")))
             .put(CAMEL_PUBLIC_COMMENT, "Test comment");
 
         GridPayload gridPayload = new GridPayload(validJson);
@@ -54,7 +54,7 @@ public class GridPayloadTest {
         ctx.assertFalse(gridPayload.getDailySlots().isEmpty());
         ctx.assertEquals("http://example.com", gridPayload.getVideoCallLink());
         ctx.assertEquals("Office", gridPayload.getPlace());
-        ctx.assertEquals("doc-123", gridPayload.getDocumentId());
+        ctx.assertEquals(Arrays.asList("doc-123", "doc-456"), gridPayload.getDocumentsIds());
         ctx.assertEquals("Test comment", gridPayload.getPublicComment());
         ctx.assertTrue(gridPayload.isValid());
     }
@@ -78,7 +78,7 @@ public class GridPayloadTest {
             )))
             .put(CAMEL_VIDEO_CALL_LINK, "http://example.com")
             .put(PLACE, "Office")
-            .put(CAMEL_DOCUMENT_ID, "doc-123")
+            .put(CAMEL_DOCUMENTS_IDS, new JsonArray(Arrays.asList("doc-123", "doc-456")))
             .put(CAMEL_PUBLIC_COMMENT, "Test comment");
 
         GridPayload gridPayload = new GridPayload(invalidJson);
@@ -125,7 +125,7 @@ public class GridPayloadTest {
             )))
             .put(CAMEL_VIDEO_CALL_LINK, "http://example.com")
             .put(PLACE, "Office")
-            .put(CAMEL_DOCUMENT_ID, "doc-123")
+            .put(CAMEL_DOCUMENTS_IDS, new JsonArray(Arrays.asList("doc-123", "doc-456")))
             .put(CAMEL_PUBLIC_COMMENT, "Test comment");
 
         GridPayload gridPayload = new GridPayload(validJson);

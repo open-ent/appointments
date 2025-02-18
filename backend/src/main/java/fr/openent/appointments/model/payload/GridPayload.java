@@ -33,7 +33,7 @@ public class GridPayload implements IModel<GridPayload> {
     private List<TimeSlotPayload> timeSlots;
     private String videoCallLink;
     private String place;
-    private String documentId;
+    private List<String> documentsIds;
     private String publicComment;
 
     public GridPayload(JsonObject grid) {
@@ -52,7 +52,10 @@ public class GridPayload implements IModel<GridPayload> {
         this.dailySlots = IModelHelper.toList(grid.getJsonArray(CAMEL_DAILY_SLOTS, new JsonArray()), DailySlotPayload.class);
         this.videoCallLink = grid.getString(CAMEL_VIDEO_CALL_LINK, null);
         this.place = grid.getString(PLACE, null);
-        this.documentId = grid.getString(CAMEL_DOCUMENT_ID, null);
+        this.documentsIds = grid.getJsonArray(CAMEL_DOCUMENTS_IDS, new JsonArray())
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
         this.publicComment = grid.getString(CAMEL_PUBLIC_COMMENT, null);
     }
 
@@ -106,8 +109,8 @@ public class GridPayload implements IModel<GridPayload> {
         return place;
     }
 
-    public String getDocumentId() {
-        return documentId;
+    public List<String> getDocumentsIds() {
+        return documentsIds;
     }
 
     public String getPublicComment() {
@@ -176,8 +179,8 @@ public class GridPayload implements IModel<GridPayload> {
         return this;
     }
 
-    public GridPayload setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public GridPayload setDocumentsIds(List<String> documentsIds) {
+        this.documentsIds = documentsIds;
         return this;
     }
 
@@ -258,7 +261,7 @@ public class GridPayload implements IModel<GridPayload> {
             .put(CAMEL_TIME_SLOTS, new JsonArray(this.timeSlots.stream().map(TimeSlotPayload::toString).collect(Collectors.toList())))
             .put(CAMEL_VIDEO_CALL_LINK, this.videoCallLink)
             .put(PLACE, this.place)
-            .put(CAMEL_DOCUMENT_ID, this.documentId)
+            .put(CAMEL_DOCUMENTS_IDS, new JsonArray(this.documentsIds))
             .put(CAMEL_PUBLIC_COMMENT, this.publicComment)
             .toString();
     }

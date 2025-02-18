@@ -38,6 +38,7 @@ export const GridModal: FC = () => {
     page,
     modalType,
     confirmModalType,
+    isSubmitButtonLoading,
   } = useGridModal();
 
   const handleClose = () => {
@@ -53,7 +54,11 @@ export const GridModal: FC = () => {
               <Typography variant="h3">
                 {t(GRID_MODAL_VALUES[modalType].titleKey)}
               </Typography>
-              <IconButton sx={closeIconStyle} onClick={handleCancel}>
+              <IconButton
+                disabled={isSubmitButtonLoading}
+                sx={closeIconStyle}
+                onClick={handleCancel}
+              >
                 <CloseIcon />
               </IconButton>
             </Box>
@@ -67,6 +72,7 @@ export const GridModal: FC = () => {
             {modalType === GRID_MODAL_TYPE.CREATION && (
               <CustomStepper
                 page={page}
+                isSubmitButtonLoading={isSubmitButtonLoading}
                 handleCancel={handleCancel}
                 handlePrev={handlePrev}
                 handleNext={handleNext}
@@ -89,6 +95,7 @@ export const GridModal: FC = () => {
       <DialogModal
         open={isDialogOpen}
         type={confirmModalType}
+        isSubmitButtonLoading={isSubmitButtonLoading}
         handleCancel={handleCancelDialog}
         handleConfirm={handleConfirmDialog}
       />

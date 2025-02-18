@@ -22,6 +22,31 @@ export const APPOINTMENT_CARDS_GAP = 40;
 
 export const APPOINTMENT_CARD_WIDTH = 270; // 230 width + 40 gap
 
+export const MAX_FILE_PER_GRID = 5;
+
+export const MAX_TOTAL_FILE_SIZE_PER_GRID_MO = 100; // Mo
+
+export const MAX_TOTAL_FILE_SIZE_PER_GRID_O =
+  MAX_TOTAL_FILE_SIZE_PER_GRID_MO * 1024 * 1024;
+
+export const ALLOWED_DOCUMENT_EXTENSIONS = [
+  ".pdf",
+  ".csv",
+  ".ods",
+  ".xls",
+  ".xlsx",
+  ".doc",
+  ".docx",
+  ".odt",
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".svg",
+  ".odp",
+  ".ppt",
+  ".pptx",
+];
+
 export const DURATION_VALUES = {
   [DURATION.FIFTEEN_MINUTES]: {
     displayValue: "15min",

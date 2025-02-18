@@ -11,10 +11,7 @@ import fr.openent.appointments.model.response.MinimalAppointment;
 import fr.openent.appointments.repository.AppointmentRepository;
 import fr.openent.appointments.repository.CommunicationRepository;
 import fr.openent.appointments.repository.RepositoryFactory;
-import fr.openent.appointments.service.AppointmentService;
-import fr.openent.appointments.service.NotifyService;
-import fr.openent.appointments.service.ServiceFactory;
-import fr.openent.appointments.service.TimeSlotService;
+import fr.openent.appointments.service.*;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -29,11 +26,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static fr.openent.appointments.core.constants.Constants.CAMEL_NEO_USER;
 import static fr.openent.appointments.core.constants.Fields.STATE;
 
 public class DefaultAppointmentService implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final CommunicationRepository communicationRepository;
+    private final EventBusService eventBusService;
     private final TimeSlotService timeSlotService;
     private final NotifyService notifyService;
     private final Long limitHoursBeforeCancelAppointment;
@@ -41,6 +40,7 @@ public class DefaultAppointmentService implements AppointmentService {
     public DefaultAppointmentService(ServiceFactory serviceFactory, RepositoryFactory repositoryFactory) {
         this.appointmentRepository = repositoryFactory.appointmentRepository();
         this.communicationRepository = repositoryFactory.communicationRepository();
+        this.eventBusService = serviceFactory.eventBusService();
         this.timeSlotService = serviceFactory.timeSlotService();
         this.notifyService = serviceFactory.notifyService();
         this.limitHoursBeforeCancelAppointment = serviceFactory.appConfig().minHoursBeforeCancellation();
@@ -166,23 +166,30 @@ public class DefaultAppointmentService implements AppointmentService {
 
         Boolean isRequester = appointment.getRequesterId().equals(userInfos.getUserId());
         String otherUserId = isRequester ? appointment.getOwnerId() : appointment.getRequesterId();
+
+        JsonObject composeInfos = new JsonObject();
         communicationRepository.getUserFromId(otherUserId, userInfos.getStructures())
-                .onSuccess(user -> {
-                    if (user.isPresent()) {
-                        NeoUser otherUser = user.get();
-                        promise.complete(new AppointmentResponse(appointment, isRequester, otherUser.getDisplayName(), otherUser.getFunctions(), otherUser.getPicture()));
-                    }
-                    else {
-                        String errorMessage = "User not found";
-                        LogHelper.logError(this, "buildAppointmentResponse", errorMessage, "");
-                        promise.fail(errorMessage);
-                    }
-                })
-                .onFailure(err -> {
-                    String errorMessage = "Failed to build appointment response";
-                    LogHelper.logError(this, "buildAppointmentResponse", errorMessage, err.getMessage());
-                    promise.complete(null);
-                });
+            .compose(user -> {
+                if (user.isPresent()) {
+                    NeoUser otherUser = user.get();
+                    composeInfos.put(CAMEL_NEO_USER, otherUser);
+                    return eventBusService.getDocumentResponseFromGrid(userInfos.getUserId(), appointment.getDocumentsIds());
+                }
+                else {
+                    String errorMessage = "User not found";
+                    LogHelper.logError(this, "buildAppointmentResponse", errorMessage, "");
+                    return Future.failedFuture(errorMessage);
+                }
+            })
+            .onSuccess(documents -> {
+                NeoUser otherUser = (NeoUser) composeInfos.getValue(CAMEL_NEO_USER);
+                promise.complete(new AppointmentResponse(appointment, isRequester, otherUser, documents));
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to build appointment response";
+                LogHelper.logError(this, "buildAppointmentResponse", errorMessage, err.getMessage());
+                promise.complete(null);
+            });
 
         return promise.future();
     }

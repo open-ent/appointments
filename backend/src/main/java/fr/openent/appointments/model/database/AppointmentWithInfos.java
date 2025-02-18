@@ -7,6 +7,10 @@ import fr.openent.appointments.model.IModel;
 import io.vertx.core.json.JsonObject;
 import static fr.openent.appointments.core.constants.Fields.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
 
@@ -20,7 +24,7 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
     private String ownerId;
     private String videoCallLink;
     private String place;
-    private String documentId;
+    private List<String> documentsIds;
     private String publicComment;
 
     public AppointmentWithInfos(JsonObject appointmentWithInfos) {
@@ -34,8 +38,16 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
         this.ownerId = appointmentWithInfos.getString(OWNER_ID, null);
         this.videoCallLink = appointmentWithInfos.getString(VIDEO_CALL_LINK, null);
         this.place = appointmentWithInfos.getString(PLACE, null);
-        this.documentId = appointmentWithInfos.getString(DOCUMENT_ID, null);
         this.publicComment = appointmentWithInfos.getString(PUBLIC_COMMENT, null);
+
+        String stringDocumentsIds = appointmentWithInfos.getString(DOCUMENTS_IDS, "");
+
+        if (stringDocumentsIds.length() > 2) {
+            String cleanedDocumentsIds = stringDocumentsIds.substring(1, stringDocumentsIds.length() - 1);
+            this.documentsIds = Arrays.asList(cleanedDocumentsIds.split(",\\s*"));
+        } else {
+            this.documentsIds = new ArrayList<>();
+        }
     }
 
     // Getters
@@ -80,8 +92,8 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
         return this.place;
     }
 
-    public String getDocumentId() {
-        return this.documentId;
+    public List<String> getDocumentsIds() {
+        return this.documentsIds;
     }
 
     public String getPublicComment() {
@@ -140,8 +152,8 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
         return this;
     }
 
-    public AppointmentWithInfos setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public AppointmentWithInfos setDocumentsIds(List<String> documentsIds) {
+        this.documentsIds = documentsIds;
         return this;
     }
 

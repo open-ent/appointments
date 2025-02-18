@@ -9,7 +9,7 @@ import {
   EditGridBody,
   EditGridPayload,
 } from "~/services/api/GridService/types";
-import { GridModalInputs, InputsErrors } from "./types";
+import { GridModalInputs, InputsErrors, MyCustomFile } from "./types";
 
 export const initialPublic: Public[] = [];
 export const initialWeekSlots: WeekSlotsModel = {
@@ -39,6 +39,7 @@ export const initialGridModalInputs = (
   duration: DURATION.FIFTEEN_MINUTES,
   periodicity: PERIODICITY.WEEKLY,
   weekSlots: initialWeekSlots,
+  documents: [],
 });
 
 export const initialErrorInputs: InputsErrors = {
@@ -63,6 +64,7 @@ export const periodicityOptions: PERIODICITY[] = Object.values(
 export const gridInputsToCreateGridPayload = (
   inputs: GridModalInputs,
   publicOptions: Public[],
+  files: MyCustomFile[],
 ): CreateGridPayload => {
   return {
     name: inputs.name.trimEnd(),
@@ -90,7 +92,7 @@ export const gridInputsToCreateGridPayload = (
     ),
     videoCallLink: inputs.isVideoCall ? inputs.videoCallLink : "",
     place: inputs.location,
-    documentId: "",
+    documentsIds: files.map((file) => file.workspaceId),
     publicComment: inputs.publicComment,
   };
 };
@@ -98,13 +100,14 @@ export const gridInputsToCreateGridPayload = (
 export const gridInputsToEditGridPayload = (
   inputs: GridModalInputs,
   gridId: number,
+  files: MyCustomFile[],
 ): EditGridPayload => {
   const body: EditGridBody = {
     name: inputs.name.trimEnd(),
     color: inputs.color,
     videoCallLink: inputs.isVideoCall ? inputs.videoCallLink : "",
     place: inputs.location,
-    documentId: "",
+    documentsIds: files.map((file) => file.workspaceId),
     publicComment: inputs.publicComment,
   };
 
@@ -132,3 +135,14 @@ export const isErrorsEmpty = (errors: InputsErrors) =>
     errors.weekSlots ||
     errors.slots.ids.length
   );
+
+export const createMyCustomFile = (file: File): MyCustomFile => {
+  return {
+    id: crypto.randomUUID(),
+    workspaceId: "",
+    file: file,
+    name: file.name,
+    size: file.size,
+    isDeletable: true,
+  };
+};

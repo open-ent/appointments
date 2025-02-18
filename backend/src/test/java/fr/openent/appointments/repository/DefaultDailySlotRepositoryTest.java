@@ -50,7 +50,7 @@ public class DefaultDailySlotRepositoryTest {
     private static final List<String> TEST_TARGET_PUBLIC_IDS = Arrays.asList("1", "2", "3");
     private static final String TEST_VIDEO_CALL_LINK = "http://example.com";
     private static final String TEST_PLACE = "Room A";
-    private static final String TEST_DOCUMENT_ID = "docId";
+    private static final List<String> TEST_DOCUMENTS_IDS = Arrays.asList("1", "2", "3");
     private static final String TEST_PUBLIC_COMMENT = "Comment here";
     private static final String TEST_OPEN_STATE = GridState.OPEN.getValue();
     private static final String TEST_SUSPENDED_STATE = GridState.SUSPENDED.getValue();

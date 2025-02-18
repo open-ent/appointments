@@ -54,9 +54,10 @@ public interface GridService {
      * Retrieves a specific grid with its dailySlots by its ID.
      *
      * @param gridId The ID of the grid to retrieve.
+     * @param userId The ID of the user for which we want to retrieve grids.
      * @return A Future containing a JsonArray with the grid data.
      */
-    Future<GridWithDailySlots> getGridWithDailySlots(Long gridId);
+    Future<GridWithDailySlots> getGridWithDailySlots(Long gridId, String userId);
 
     /**
      * Retrieves a specific grid by timeSlotId.

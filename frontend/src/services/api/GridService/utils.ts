@@ -68,5 +68,6 @@ export const transformResponseToCompleteGridResponse = (
         [DAY.SATURDAY]: [],
       } as WeekSlotsModel,
     ),
+    documents: response.documents,
   };
 };

@@ -23,7 +23,7 @@ export interface CreateGridPayload {
   dailySlots: DailySlotPayload[];
   videoCallLink: string;
   place: string;
-  documentId: string;
+  documentsIds: string[];
   publicComment: string;
 }
 
@@ -64,12 +64,20 @@ export interface NameWithId {
   name: string;
 }
 
+export interface Document {
+  id: string;
+  name: string;
+  size: number;
+  ownerId: string;
+  ownerName: string;
+}
+
 export interface GridInfos {
   duration: DURATION;
   videoCallLink: string;
   place: string;
   publicComment: string;
-  documentId: string;
+  documents: Document[];
 }
 
 export interface TimeSlot {
@@ -113,7 +121,7 @@ export interface GetGridByIdResponse {
   groups: Group[];
   videoCallLink: string;
   place: string;
-  documentId: string;
+  documents: Document[];
   publicComment: string;
   dailySlots: DailySlot[];
 }
@@ -123,7 +131,7 @@ export interface EditGridBody {
   color: string;
   videoCallLink: string;
   place: string;
-  documentId: string;
+  documentsIds: string[];
   publicComment: string;
 }
 

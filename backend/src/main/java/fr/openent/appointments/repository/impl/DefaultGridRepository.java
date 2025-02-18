@@ -246,14 +246,14 @@ public class DefaultGridRepository implements GridRepository {
         String color = grid.getColor();
         String videoCallLink = grid.getVideoCallLink();
         String place = grid.getPlace();
-        String documentId = grid.getDocumentId();
+        List<String> documentsIds = grid.getDocumentsIds();
         String publicComment = grid.getPublicComment();
 
         boolean isNameUpdatable = name != null && !name.isEmpty();
         boolean isColorUpdatable = color != null;
         boolean isVideoCallLinkUpdatable = videoCallLink != null;
         boolean isPlaceUpdatable = place != null;
-        boolean isDocumentIdUpdatable = documentId != null;
+        boolean isDocumentsIdsUpdatable = documentsIds != null;
         boolean isPublicCommentUpdatable = publicComment != null;
 
         String query = "UPDATE " + DB_GRID_TABLE + " SET " + UPDATING_DATE + " = ?, ";
@@ -261,7 +261,7 @@ public class DefaultGridRepository implements GridRepository {
         if (isColorUpdatable) query += COLOR + " = ?, ";
         if (isVideoCallLinkUpdatable) query += VIDEO_CALL_LINK + " = ?, ";
         if (isPlaceUpdatable) query += PLACE + " = ?, ";
-        if (isDocumentIdUpdatable) query += DOCUMENT_ID + " = ?, ";
+        if (isDocumentsIdsUpdatable) query += DOCUMENTS_IDS + " = ?, ";
         if (isPublicCommentUpdatable) query += PUBLIC_COMMENT + " = ?, ";
         query = query.substring(0, query.length() - 2) + " WHERE " + ID + " = ? RETURNING *";
 
@@ -273,7 +273,7 @@ public class DefaultGridRepository implements GridRepository {
         if (isColorUpdatable) params.add(color);
         if (isVideoCallLinkUpdatable) params.add(videoCallLink);
         if (isPlaceUpdatable) params.add(place);
-        if (isDocumentIdUpdatable) params.add(documentId);
+        if (isDocumentsIdsUpdatable) params.add(documentsIds.toString());
         if (isPublicCommentUpdatable) params.add(publicComment);
         params.add(gridId);
 
@@ -343,7 +343,7 @@ public class DefaultGridRepository implements GridRepository {
                 TARGET_PUBLIC_LIST_ID,
                 VIDEO_CALL_LINK,
                 PLACE,
-                DOCUMENT_ID,
+                DOCUMENTS_IDS,
                 PUBLIC_COMMENT,
                 STATE);
 
@@ -364,7 +364,7 @@ public class DefaultGridRepository implements GridRepository {
                 .add(grid.getTargetPublicIds().toString())
                 .add(grid.getVideoCallLink())
                 .add(grid.getPlace())
-                .add(grid.getDocumentId())
+                .add(grid.getDocumentsIds().toString())
                 .add(grid.getPublicComment())
                 .add(GridState.OPEN.getValue());
 

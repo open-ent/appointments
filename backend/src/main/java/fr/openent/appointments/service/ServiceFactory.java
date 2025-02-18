@@ -14,6 +14,7 @@ public class ServiceFactory {
     private final Vertx vertx;
     private final AppConfig appConfig;
     private final TimelineHelper timelineHelper;
+    private final EventBusService eventBusService;
     private final TimeSlotService timeSlotService;
     private final GridService gridService;
     private final CommunicationService communicationService;
@@ -24,6 +25,7 @@ public class ServiceFactory {
         this.vertx = vertx;
         this.appConfig = appConfig;
         this.timelineHelper = timelineHelper;
+        this.eventBusService = new DefaultEventBusService(this);
         this.notifyService = new DefaultNotifyService(this, repositoryFactory);
         this.timeSlotService = new DefaultTimeSlotService(this, repositoryFactory);
         this.gridService = new DefaultGridService(this, repositoryFactory);
@@ -44,6 +46,10 @@ public class ServiceFactory {
     }
 
     public TimelineHelper timelineHelper() { return this.timelineHelper; }
+
+    public EventBusService eventBusService() {
+        return this.eventBusService;
+    }
 
     public TimeSlotService timeSlotService() {
         return this.timeSlotService;

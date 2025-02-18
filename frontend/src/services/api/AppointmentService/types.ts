@@ -2,6 +2,8 @@ import { Dayjs } from "dayjs";
 
 import { APPOINTMENT_STATE } from "~/core/enums";
 
+import { Document } from "../GridService/types";
+
 export interface BookAppointmentPayload {
   timeSlotId: number;
   isVideoCall?: boolean;
@@ -19,13 +21,13 @@ export interface GetAppointmentsDatesPayload {
 
 export interface AppointmentResponse extends MyMinimalAppointmentResponse {
   place: string;
-  documentId: string;
+  documents: Document[];
   publicComment: string;
 }
 
 export interface Appointment extends MyMinimalAppointment {
   place: string;
-  documentId: string;
+  documents: Document[];
   publicComment: string;
 }
 

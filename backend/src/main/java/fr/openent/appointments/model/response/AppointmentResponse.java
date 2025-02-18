@@ -4,6 +4,7 @@ import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.model.IModel;
 import fr.openent.appointments.model.database.AppointmentWithInfos;
+import fr.openent.appointments.model.database.NeoUser;
 import io.vertx.core.json.JsonObject;
 
 import java.time.LocalDateTime;
@@ -21,14 +22,14 @@ public class AppointmentResponse implements IModel<AppointmentResponse> {
     private AppointmentState state;
     private Boolean isRequester;
     private String place;
-    private String documentId;
+    private List<DocumentResponse> documents;
     private String publicComment;
 
-    public AppointmentResponse(AppointmentWithInfos appointment, Boolean isRequester, String displayName, List<String> functions, String picture) {
+    public AppointmentResponse(AppointmentWithInfos appointment, Boolean isRequester, NeoUser neoUser, List<DocumentResponse> documents) {
         this.id = appointment.getId();
-        this.displayName = displayName;
-        this.functions = functions;
-        this.picture = picture;
+        this.displayName = neoUser.getDisplayName();
+        this.functions = neoUser.getFunctions();
+        this.picture = neoUser.getPicture();
         this.beginDate = appointment.getBeginDate();
         this.endDate = appointment.getEndDate();
         this.isVideoCall = appointment.getIsVideoCall();
@@ -36,7 +37,7 @@ public class AppointmentResponse implements IModel<AppointmentResponse> {
         this.state = appointment.getState();
         this.isRequester = isRequester;
         this.place = appointment.getPlace();
-        this.documentId = appointment.getDocumentId();
+        this.documents = documents;
         this.publicComment = appointment.getPublicComment();
     }
 
@@ -86,8 +87,8 @@ public class AppointmentResponse implements IModel<AppointmentResponse> {
         return place;
     }
 
-    public String getDocumentId() {
-        return documentId;
+    public List<DocumentResponse> getDocuments() {
+        return documents;
     }
 
     public String getPublicComment() {
@@ -151,8 +152,8 @@ public class AppointmentResponse implements IModel<AppointmentResponse> {
         return this;
     }
 
-    public AppointmentResponse setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public AppointmentResponse setDocuments(List<DocumentResponse> documents) {
+        this.documents = documents;
         return this;
     }
 

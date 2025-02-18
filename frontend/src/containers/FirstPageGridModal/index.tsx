@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import {
   Box,
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -14,13 +15,31 @@ import { useTranslation } from "react-i18next";
 
 import { ColorPicker } from "~/components/ColorPicker";
 import { CustomMultiAutocomplete } from "~/components/CustomMultiAutocomplete";
-import { APPOINTMENTS, MAX_STRING_LENGTH } from "~/core/constants";
+import {
+  ALLOWED_DOCUMENT_EXTENSIONS,
+  APPOINTMENTS,
+  MAX_FILE_PER_GRID,
+  MAX_STRING_LENGTH,
+  MAX_TOTAL_FILE_SIZE_PER_GRID_MO,
+} from "~/core/constants";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
-import { flexStartBoxStyle } from "~/styles/boxStyles";
+import { flexStartBoxStyle, spaceBetweenBoxStyle } from "~/styles/boxStyles";
 import { pageGridModalStyle } from "../GridModal/style";
-import { colorStyle, firstLineStyle, nameStyle, selectStyle } from "./style";
+import {
+  addDocumentStyle,
+  colorStyle,
+  docsInfosStyle,
+  firstLineStyle,
+  nameStyle,
+  selectStyle,
+  VisuallyHiddenInput,
+} from "./style";
+
+import { FileList, Tooltip } from "@cgi-learning-hub/ui";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { displaySize } from "./utils";
 
 export const FirstPageGridModal: FC = () => {
   const { t } = useTranslation(APPOINTMENTS);
@@ -39,7 +58,16 @@ export const FirstPageGridModal: FC = () => {
     },
     blurGridModalInputs: { handleNameBlur, handleVideoCallLinkBlur },
     modalType,
+    files,
+    totalFilesSize,
+    handleAddFile,
+    handleDeleteFile,
   } = useGridModal();
+
+  const isAddDocumentDisabled = useMemo(
+    () => files.length >= MAX_FILE_PER_GRID,
+    [files.length],
+  );
 
   return (
     <Box sx={pageGridModalStyle}>
@@ -128,6 +156,47 @@ export const FirstPageGridModal: FC = () => {
         error={inputs.publicComment.length === MAX_STRING_LENGTH}
         disabled={modalType === GRID_MODAL_TYPE.CONSULTATION}
       />
+      <Box sx={spaceBetweenBoxStyle}>
+        <Tooltip
+          title={
+            isAddDocumentDisabled && t("appointments.max.number.files.exceeded")
+          }
+          disableHoverListener={false}
+        >
+          <Box>
+            <Button
+              component="label"
+              variant="outlined"
+              color="secondary"
+              tabIndex={-1}
+              startIcon={<UploadFileIcon />}
+              sx={addDocumentStyle}
+              disabled={isAddDocumentDisabled}
+            >
+              {t("appointments.grid.add.document")}
+              <VisuallyHiddenInput
+                type="file"
+                accept={ALLOWED_DOCUMENT_EXTENSIONS.join(",")}
+                onChange={handleAddFile}
+              />
+            </Button>
+          </Box>
+        </Tooltip>
+        <Box sx={docsInfosStyle}>
+          <Typography>
+            {t("appointments.max.number.files", {
+              maxNumber: MAX_FILE_PER_GRID,
+            })}
+          </Typography>
+          <Typography>
+            {t("appointments.total.size.files", {
+              totalSize: displaySize(totalFilesSize),
+              maxSize: MAX_TOTAL_FILE_SIZE_PER_GRID_MO,
+            })}
+          </Typography>
+        </Box>
+      </Box>
+      <FileList files={files} onDelete={handleDeleteFile} />
     </Box>
   );
 };

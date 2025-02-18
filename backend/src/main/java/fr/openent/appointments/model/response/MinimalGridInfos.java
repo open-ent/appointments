@@ -7,35 +7,25 @@ import fr.openent.appointments.model.database.Grid;
 import io.vertx.core.json.JsonObject;
 
 import java.time.Duration;
-
-import static fr.openent.appointments.core.constants.Constants.CAMEL_DOCUMENT_ID;
-import static fr.openent.appointments.core.constants.Constants.CAMEL_PUBLIC_COMMENT;
+import java.util.List;
+import java.util.stream.Collectors;
 import static fr.openent.appointments.core.constants.Fields.*;
 
 public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalGridInfos> {
     private Duration duration;
     private String videoCallLink;
     private String place;
-    private String documentId;
+    private List<DocumentResponse> documents;
     private String publicComment;
 
     // Constructor
 
-    public MinimalGridInfos(JsonObject grid) {
-        super(grid);
-        this.duration = DateHelper.parseDuration(grid.getString(DURATION,null));
-        this.videoCallLink = grid.getString(CAMEL_DOCUMENT_ID, null);
-        this.place = grid.getString(PLACE, null);
-        this.documentId = grid.getString(CAMEL_DOCUMENT_ID, null);
-        this.publicComment = grid.getString(CAMEL_PUBLIC_COMMENT, null);
-    }
-
-    public MinimalGridInfos(Grid grid) {
+    public MinimalGridInfos(Grid grid, List<DocumentResponse> documents) {
         super(grid);
         this.setDuration(grid.getDuration());
         this.setVideoCallLink(grid.getVideoCallLink());
         this.setPlace(grid.getPlace());
-        this.setDocumentId(grid.getDocumentId());
+        this.setDocuments(documents);
         this.setPublicComment(grid.getPublicComment());
     }
 
@@ -53,8 +43,8 @@ public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalG
         return place;
     }
 
-    public String getDocumentId() {
-        return documentId;
+    public List<DocumentResponse> getDocuments() {
+        return documents;
     }
 
     public String getPublicComment() {
@@ -78,8 +68,8 @@ public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalG
         return this;
     }
 
-    public MinimalGridInfos setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public MinimalGridInfos setDocuments(List<DocumentResponse> documents) {
+        this.documents = documents;
         return this;
     }
 

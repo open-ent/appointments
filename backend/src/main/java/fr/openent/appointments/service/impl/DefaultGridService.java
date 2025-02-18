@@ -1,12 +1,13 @@
 package fr.openent.appointments.service.impl;
 
+import fr.openent.appointments.helper.EventBusHelper;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.database.*;
-import fr.openent.appointments.model.response.GridWithDailySlots;
-import fr.openent.appointments.model.response.MinimalGrid;
-import fr.openent.appointments.model.response.ListGridsResponse;
-import fr.openent.appointments.model.response.MinimalGridInfos;
+import fr.openent.appointments.model.response.*;
+import fr.openent.appointments.model.workspace.CompleteDocument;
 import fr.openent.appointments.repository.*;
+import fr.openent.appointments.service.EventBusService;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -28,6 +29,8 @@ import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 
 import static fr.openent.appointments.core.constants.Constants.*;
+import static fr.openent.appointments.core.constants.EbFields.*;
+import static fr.openent.appointments.helper.JsonHelper.jsonArrayToList;
 
 /**
  * Default implementation of the GridService interface.
@@ -36,6 +39,7 @@ public class DefaultGridService implements GridService {
     private static final Logger log = LoggerFactory.getLogger(DefaultGridService.class);
 
     private final EventBus eb;
+    private final EventBusService eventBusService;
     private final GridRepository gridRepository;
     private final TimeSlotRepository timeSlotRepository;
     private final DailySlotRepository dailySlotRepository;
@@ -43,6 +47,7 @@ public class DefaultGridService implements GridService {
 
     public DefaultGridService(ServiceFactory serviceFactory, RepositoryFactory repositoryFactory) {
         this.eb = serviceFactory.eventBus();
+        this.eventBusService = serviceFactory.eventBusService();
         this.gridRepository = repositoryFactory.gridRepository();
         this.timeSlotRepository = repositoryFactory.timeSlotRepository();
         this.dailySlotRepository = repositoryFactory.dailySlotRepository();
@@ -93,7 +98,7 @@ public class DefaultGridService implements GridService {
     }
 
     @Override
-    public Future<GridWithDailySlots> getGridWithDailySlots(Long gridId) {
+    public Future<GridWithDailySlots> getGridWithDailySlots(Long gridId, String userId) {
         Promise<GridWithDailySlots> promise = Promise.promise();
         
         JsonObject composeInfos = new JsonObject();
@@ -115,13 +120,21 @@ public class DefaultGridService implements GridService {
                 composeInfos.put(STRUCTURE, neoStructure.get());
                 return dailySlotRepository.getByGridId(gridId);
             })
-            .onSuccess(dailySlots -> {
+            .compose(dailySlots -> {
+                composeInfos.put(CAMEL_DAILY_SLOTS, dailySlots);
+                Grid grid = (Grid) composeInfos.getValue(GRID);
+                return eventBusService.getDocumentResponseFromGrid(userId, grid.getDocumentsIds());
+            })
+            .onSuccess(documents -> {
                 Grid grid = (Grid) composeInfos.getValue(GRID);
                 NeoStructure structure = (NeoStructure) composeInfos.getValue(STRUCTURE);
                 List<NeoGroup> groups = composeInfos.getJsonArray(GROUPS).stream()
                         .map(group -> (NeoGroup) group)
                         .collect(Collectors.toList());
-                promise.complete(new GridWithDailySlots(grid, structure, groups, dailySlots));
+                List<DailySlot> dailySlots = composeInfos.getJsonArray(CAMEL_DAILY_SLOTS).stream()
+                        .map(dailySlot -> (DailySlot) dailySlot)
+                        .collect(Collectors.toList());
+                promise.complete(new GridWithDailySlots(grid, structure, groups, dailySlots, documents));
             })
             .onFailure(err -> {
                 String errorMessage = "Failed to get grid by id";
@@ -177,23 +190,30 @@ public class DefaultGridService implements GridService {
     public Future<MinimalGridInfos> getMinimalGridInfosById(UserInfos user, Long gridId) {
         Promise<MinimalGridInfos> promise = Promise.promise();
 
+        JsonObject composeInfos = new JsonObject();
+
         gridRepository.getGridsGroupsCanAccess(user.getGroupsIds())
             .compose(userGrids -> {
                 if (!userGrids.stream().map(Grid::getId).collect(Collectors.toList()).contains(gridId)) {
                     String errorMessage = String.format("The grid with id %s is not shared to the connected user", gridId);
                     return Future.failedFuture(errorMessage);
                 }
-
                 return gridRepository.get(gridId);
             })
-            .onSuccess(optionalGrid -> {
+            .compose(optionalGrid -> {
                 if (!optionalGrid.isPresent()) {
                     String errorMessage = "No grid found for id " + gridId;
-                    promise.fail(errorMessage);
+                    return Future.failedFuture(errorMessage);
                 }
-                else {
-                    promise.complete(new MinimalGridInfos(optionalGrid.get()));
-                }
+                return Future.succeededFuture(optionalGrid.get());
+            })
+            .compose(grid -> {
+                composeInfos.put(GRID, grid);
+                return eventBusService.getDocumentResponseFromGrid(user.getUserId(), grid.getDocumentsIds());
+            })
+            .onSuccess(documents -> {
+                Grid grid = (Grid) composeInfos.getValue(GRID);
+                promise.complete(new MinimalGridInfos(grid, documents));
             })
             .onFailure(err -> {
                 String errorMessage = "Failed to get grid with id " + gridId;

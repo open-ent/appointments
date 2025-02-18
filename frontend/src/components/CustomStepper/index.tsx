@@ -6,6 +6,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import { MobileStepper } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { APPOINTMENTS } from "~/core/constants";
 import { PAGE_TYPE } from "~/providers/GridModalProvider/enum";
 import {
   backButtonStyle,
@@ -14,10 +15,10 @@ import {
   stepperStyle,
 } from "./style";
 import { CustomStepperProps } from "./types";
-import { APPOINTMENTS } from "~/core/constants";
 
 export const CustomStepper: FC<CustomStepperProps> = ({
   page,
+  isSubmitButtonLoading,
   handleCancel,
   handlePrev,
   handleNext,
@@ -59,6 +60,7 @@ export const CustomStepper: FC<CustomStepperProps> = ({
             sx={saveButtonStyle}
             variant="contained"
             startIcon={<SaveIcon />}
+            loading={isSubmitButtonLoading}
           >
             {t("appointments.save")}
           </Button>

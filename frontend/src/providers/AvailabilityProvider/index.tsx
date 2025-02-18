@@ -56,7 +56,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
   children,
 }) => {
   const { hasManageRight } = useGlobal();
-  const { setInputs, handleDisplayGridModal } = useGridModal();
+  const { setInputs, handleDisplayGridModal, initFiles } = useGridModal();
   const { t } = useTranslation(APPOINTMENTS);
   const [gridPages, setGridPages] = useState<GridPages>(initialPages);
   const [grids, setGrids] = useState<GridList>(initialGrids);
@@ -217,6 +217,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
   useEffect(() => {
     if (!gridIsLoading && selectedGridIdUpdateFields && grid) {
       setInputs(grid);
+      initFiles(grid.documents ?? []);
       handleDisplayGridModal(
         currentModalType,
         selectedGridIdUpdateFields,
@@ -231,6 +232,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
     selectedGridIdUpdateFields,
     gridIsLoading,
     currentModalType,
+    initFiles,
   ]);
 
   useEffect(() => {

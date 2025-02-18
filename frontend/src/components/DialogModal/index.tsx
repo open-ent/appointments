@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 
 import {
   Box,
-  Button,
   FormControl,
   FormControlLabel,
   Modal,
@@ -10,6 +9,8 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
+
+import { Button } from "@cgi-learning-hub/ui";
 import { useTranslation } from "react-i18next";
 
 import { APPOINTMENTS, CONFIRM_MODAL_VALUES } from "~/core/constants";
@@ -25,6 +26,7 @@ import { DialogModalProps } from "./types";
 export const DialogModal: FC<DialogModalProps> = ({
   open,
   type,
+  isSubmitButtonLoading = false,
   showOptions = true,
   handleCancel,
   handleConfirm,
@@ -76,6 +78,7 @@ export const DialogModal: FC<DialogModalProps> = ({
               onClick={() => handleConfirm(selectedOption || undefined)}
               sx={buttonStyle}
               variant="contained"
+              loading={isSubmitButtonLoading}
             >
               {t("appointments.confirm")}
             </Button>

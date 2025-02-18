@@ -1,7 +1,8 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, ReactNode, SetStateAction } from "react";
 
 import { Dayjs } from "dayjs";
 
+import { CustomFile } from "@cgi-learning-hub/ui";
 import { HexaColor } from "~/components/ColorPicker/types";
 import { CONFIRM_MODAL_TYPE, DURATION, PERIODICITY } from "~/core/enums";
 import { WeekSlotsModel } from "~/core/types";
@@ -12,6 +13,8 @@ import {
 } from "~/hooks/types";
 import { Public } from "~/services/api/CommunicationService/types";
 import { GRID_MODAL_TYPE, PAGE_TYPE } from "./enum";
+
+import { Document } from "~/services/api/GridService/types";
 
 export interface GridModalProviderContextProps {
   inputs: GridModalInputs;
@@ -44,6 +47,12 @@ export interface GridModalProviderContextProps {
   page: PAGE_TYPE;
   modalType: GRID_MODAL_TYPE;
   confirmModalType: CONFIRM_MODAL_TYPE;
+  files: MyCustomFile[];
+  totalFilesSize: number;
+  handleAddFile: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleDeleteFile: (file: MyCustomFile) => void;
+  initFiles: (documents: Document[]) => void;
+  isSubmitButtonLoading: boolean;
 }
 
 export interface GridModalProviderProps {
@@ -66,6 +75,7 @@ export interface GridModalInputs {
   duration: DURATION;
   periodicity: PERIODICITY;
   weekSlots: WeekSlotsModel;
+  documents: Document[];
 }
 
 export interface InputsErrors {
@@ -77,4 +87,10 @@ export interface InputsErrors {
     ids: number[];
     error: string;
   };
+}
+
+export interface MyCustomFile extends CustomFile {
+  id: string;
+  file: File;
+  workspaceId: string;
 }

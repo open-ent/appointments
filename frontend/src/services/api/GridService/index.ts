@@ -96,7 +96,7 @@ export const gridApi = emptySplitApi.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["MyGrids", "Availability"],
+      invalidatesTags: ["MyGrids", "Availability", "MyAppointments"],
     }),
   }),
 });

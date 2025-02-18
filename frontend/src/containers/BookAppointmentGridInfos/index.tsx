@@ -1,5 +1,6 @@
 import { FC } from "react";
 
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ChatIcon from "@mui/icons-material/Chat";
 import PlaceIcon from "@mui/icons-material/Place";
 import TimerIcon from "@mui/icons-material/Timer";
@@ -12,6 +13,7 @@ import {
   MenuItem,
   Select,
   Skeleton,
+  Stack,
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
@@ -36,6 +38,8 @@ import {
 } from "./style";
 import { BookAppointmentGridInfosProps } from "./types";
 
+import { Link } from "@cgi-learning-hub/ui";
+
 // this container is the first part of BookAppointmentModal
 export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   userInfos,
@@ -45,7 +49,8 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   const { grids, gridInfos, selectedGrid, handleGridChange } =
     useBookAppointmentModal();
 
-  const { duration, videoCallLink, place, publicComment } = gridInfos || {};
+  const { duration, videoCallLink, place, publicComment, documents } =
+    gridInfos || {};
 
   return (
     <Box sx={wrapperUserInfoStyle}>
@@ -104,6 +109,23 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
             <Box sx={itemStyle}>
               <PlaceIcon />
               <Typography sx={ellipsisWithWrapStyle}>{place}</Typography>
+            </Box>
+          )}
+          {!!(documents && documents.length) && (
+            <Box sx={itemStyle}>
+              <AttachFileIcon />
+              <Stack direction="column">
+                {documents.map((doc) => (
+                  <Link
+                    key={doc.id}
+                    href={`/workspace/document/${doc.id}`}
+                    underline="hover"
+                    target="_blank"
+                  >
+                    <Typography>{doc.name}</Typography>
+                  </Link>
+                ))}
+              </Stack>
             </Box>
           )}
           {!!publicComment && (

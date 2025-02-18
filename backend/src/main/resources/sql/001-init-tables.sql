@@ -45,7 +45,7 @@ CREATE TABLE appointments.grid (
     target_public_list_id varchar(2000) NOT NULL,
     video_call_link varchar(255) NOT NULL,
     place varchar(255) NOT NULL,
-    document_id varchar(255) NOT NULL,
+    documents_ids varchar(255) NOT NULL,
     public_comment varchar(255) NOT NULL,
     state appointments.G_STATE NOT NULL
 );

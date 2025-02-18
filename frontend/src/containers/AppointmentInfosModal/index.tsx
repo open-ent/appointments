@@ -12,6 +12,7 @@ import {
   Tooltip,
   Typography,
 } from "@cgi-learning-hub/ui";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CommentIcon from "@mui/icons-material/Comment";
 import EventIcon from "@mui/icons-material/Event";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -126,6 +127,23 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               <Box sx={rowInfoStyle}>
                 <PlaceIcon sx={greyIconStyle} />
                 <Typography variant="h5">{appointment.place}</Typography>
+              </Box>
+            )}
+            {!!(appointment.documents && appointment.documents.length) && (
+              <Box sx={rowInfoStyle}>
+                <AttachFileIcon sx={greyIconStyle} />
+                <Box>
+                  {appointment.documents.map((doc) => (
+                    <Link
+                      key={doc.id}
+                      href={`/workspace/document/${doc.id}`}
+                      underline="hover"
+                      target="_blank"
+                    >
+                      <Typography variant="h5">{doc.name}</Typography>
+                    </Link>
+                  ))}
+                </Box>
               </Box>
             )}
             {appointment.publicComment && (
