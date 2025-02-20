@@ -31,6 +31,7 @@ public class Constants {
     public static final String CAMEL_TARGET_PUBLIC_LIST_ID = "targetPublicListId";
     public static final String CAMEL_TIME_SLOTS = "timeSlots";
     public static final String CAMEL_TIME_SLOT_ID = "timeSlotId";
+    public static final String CAMEL_THEME_PLATFORM = "themePlatform";
     public static final String CAMEL_VIDEO_CALL_LINK = "videoCallLink";
     public static final String CAMEL_USER_NAME = "userName";
     public static final String CAMEL_USER_ID = "userId";
@@ -40,6 +41,7 @@ public class Constants {
     // kebab-case constants
     public static final String KEBAB_CLOSING_CRON = "closing-cron";
     public static final String KEBAB_MIN_HOURS_BEFORE_CANCELLATION = "min-hours-before-cancellation";
+    public static final String KEBAB_THEME_PLATFORM = "theme-platform";
 
     // Other constants
     public static final String ACTION = "action";

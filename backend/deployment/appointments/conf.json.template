@@ -16,6 +16,7 @@
       "mode": "${mode}",
       "entcore.port" : 8009,
       "closing-cron": "${closingCron}",
-      "min-hours-before-cancellation": ${minHoursBeforeCancellation}
+      "min-hours-before-cancellation": ${minHoursBeforeCancellation},
+      "theme-platform": "${themePlatform}"
     }
 }

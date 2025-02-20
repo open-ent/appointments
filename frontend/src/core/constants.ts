@@ -273,3 +273,5 @@ export const GRID_MODAL_VALUES = {
 };
 
 export const DEFAULT_MIN_HOURS_BEFORE_MODIFICATION = 24;
+
+export const DEFAULT_THEME = "default";

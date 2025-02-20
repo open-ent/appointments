@@ -10,12 +10,14 @@ public class AppConfig {
     private final String mode;
     private final String closingCron;
     private final Long minHoursBeforeCancellation;
+    private final String themePlatform;
 
     public AppConfig(JsonObject config) {
         this.host = config.getString(HOST);
         this.mode = config.getString(MODE);
         this.closingCron = config.getString(KEBAB_CLOSING_CRON, "0 0 0 */1 * ? *");
         this.minHoursBeforeCancellation = config.getLong(KEBAB_MIN_HOURS_BEFORE_CANCELLATION, 24L);
+        this.themePlatform = config.getString(KEBAB_THEME_PLATFORM, "default");
     }
 
     public String host() {
@@ -32,5 +34,9 @@ public class AppConfig {
 
     public Long minHoursBeforeCancellation() {
         return this.minHoursBeforeCancellation;
+    }
+
+    public String themePlatform() {
+        return this.themePlatform;
     }
 }

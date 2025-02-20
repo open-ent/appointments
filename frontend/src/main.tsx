@@ -1,6 +1,9 @@
 import React from "react";
 
-import { ThemeProvider as ThemeProviderCGI } from "@cgi-learning-hub/theme";
+import {
+  ThemeProvider as ThemeProviderCGI,
+  ThemeProviderProps,
+} from "@cgi-learning-hub/theme";
 import "@edifice.io/bootstrap/dist/index.css";
 import { EdificeClientProvider, EdificeThemeProvider } from "@edifice.io/react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -22,7 +25,12 @@ import "react-toastify/dist/ReactToastify.css";
 
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
-import { APPOINTMENTS, TOAST_CONFIG } from "./core/constants";
+import {
+  APPOINTMENTS,
+  DEFAULT_MIN_HOURS_BEFORE_MODIFICATION,
+  DEFAULT_THEME,
+  TOAST_CONFIG,
+} from "./core/constants";
 import { AvailabilityProvider } from "./providers/AvailabilityProvider";
 import { BookAppointmentModalProvider } from "./providers/BookAppointmentModalProvider";
 import { FindAppointmentsProvider } from "./providers/FindAppointmentsProvider";
@@ -34,6 +42,16 @@ import { options } from "./styles/theme";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement!);
+
+// Config
+
+const minHoursBeforeCancellation = parseInt(
+  rootElement?.getAttribute("data-min-hours") ??
+    DEFAULT_MIN_HOURS_BEFORE_MODIFICATION.toString(),
+);
+
+const themePlatform = (rootElement?.getAttribute("data-theme") ??
+  DEFAULT_THEME) as ThemeProviderProps["themeId"];
 
 if (process.env.NODE_ENV !== "production") {
   import("@axe-core/react").then((axe) => {
@@ -68,9 +86,14 @@ root.render(
         }}
       >
         <EdificeThemeProvider>
-          <ThemeProviderCGI themeId={"default"} options={options}>
+          <ThemeProviderCGI
+            themeId={themePlatform ?? "default"}
+            options={options}
+          >
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
-              <GlobalProvider>
+              <GlobalProvider
+                minHoursBeforeCancellation={minHoursBeforeCancellation}
+              >
                 <FindAppointmentsProvider>
                   <BookAppointmentModalProvider>
                     <GridModalProvider>

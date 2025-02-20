@@ -17,6 +17,7 @@ import org.entcore.common.http.filter.ResourceFilter;
 import org.entcore.common.http.filter.SuperAdminFilter;
 
 import static fr.openent.appointments.core.constants.Constants.CAMEL_MIN_HOURS_BEFORE_CANCELLATION;
+import static fr.openent.appointments.core.constants.Constants.CAMEL_THEME_PLATFORM;
 
 public class MainController extends ControllerHelper {
 
@@ -32,7 +33,8 @@ public class MainController extends ControllerHelper {
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void view(HttpServerRequest request) {
         JsonObject params = new JsonObject()
-            .put(CAMEL_MIN_HOURS_BEFORE_CANCELLATION, appConfig.minHoursBeforeCancellation());
+            .put(CAMEL_MIN_HOURS_BEFORE_CANCELLATION, appConfig.minHoursBeforeCancellation())
+            .put(CAMEL_THEME_PLATFORM, appConfig.themePlatform());
         renderView(request, params, "index.html", null);
     }
 
