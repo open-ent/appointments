@@ -6,7 +6,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
-} from "@mui/material";
+} from "@cgi-learning-hub/ui";
 import { useTranslation } from "react-i18next";
 
 import { RangeDatePicker } from "~/components/RangeDatePicker";

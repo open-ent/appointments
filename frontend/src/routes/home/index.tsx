@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useCallback, useEffect, useState } from "react";
 
+import { Box, Tab, Tabs, Typography } from "@cgi-learning-hub/ui";
 import { ID } from "@edifice.io/client";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
@@ -9,10 +9,10 @@ import { AppointmentsIcon } from "~/components/SVG/AppointmentsIcon";
 import { FindAppointments } from "~/containers/FindAppointments";
 import { MyAppointments } from "~/containers/MyAppointments";
 import { MyAvailability } from "~/containers/MyAvailability";
+import { APPOINTMENTS } from "~/core/constants";
 import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { MyAppointmentsProvider } from "~/providers/MyAppointmentsProvider";
-import { PURPLE } from "~/styles/color.constants";
 import {
   appointmentsIconStyle,
   contentStyle,
@@ -21,7 +21,6 @@ import {
   tabsStyle,
   titleStyle,
 } from "./style";
-import { APPOINTMENTS } from "~/core/constants";
 
 export interface AppProps {
   _id: string;
@@ -70,9 +69,16 @@ export const Home: FC = () => {
     <Box sx={homeStyle}>
       <Box sx={titleStyle}>
         <Box sx={appointmentsIconStyle}>
-          <AppointmentsIcon fill={PURPLE} />
+          <AppointmentsIcon />
         </Box>
-        <Typography variant="h1">{t("appointments.title")}</Typography>
+        <Typography
+          variant="h1"
+          color="primary"
+          fontFamily="Comfortaa"
+          fontWeight="bold"
+        >
+          {t("appointments.title")}
+        </Typography>
       </Box>
       <Box sx={contentStyle}>
         <Tabs

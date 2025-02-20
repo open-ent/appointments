@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/material";
+import { SxProps } from "@cgi-learning-hub/ui";
 
 import { centerBoxStyle, columnBoxStyle } from "~/styles/boxStyles";
 import { ITALIC_FONT } from "~/styles/fontStyle.constants";

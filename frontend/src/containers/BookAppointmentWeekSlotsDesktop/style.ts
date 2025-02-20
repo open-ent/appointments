@@ -1,19 +1,17 @@
-import { common, IconButton } from "@cgi-learning-hub/ui";
-import { Box, styled, SxProps } from "@mui/material";
+import { Box, common, IconButton, styled, SxProps } from "@cgi-learning-hub/ui";
 
+import {
+  columnBoxStyle,
+  flexStartBoxStyle,
+  spaceBetweenBoxStyle,
+} from "~/styles/boxStyles";
+import { BOLD_FONT, ITALIC_FONT } from "~/styles/fontStyle.constants";
 import {
   ArrowButtonProps,
   ColumnHeaderProps,
   ColumnSlotsWrapperProps,
   NoSlotsProps,
 } from "./types";
-import {
-  columnBoxStyle,
-  flexStartBoxStyle,
-  spaceBetweenBoxStyle,
-} from "~/styles/boxStyles";
-import { LIGHTER_GREY, PURPLE } from "~/styles/color.constants";
-import { BOLD_FONT, ITALIC_FONT } from "~/styles/fontStyle.constants";
 
 export const globalContainerStyle: SxProps = {
   display: "flex",
@@ -51,10 +49,18 @@ export const ArrowButton = styled(IconButton)<ArrowButtonProps>(
 );
 
 export const ColumnHeader = styled(Box)<ColumnHeaderProps>(
-  ({ isEmpty, isToday }) => ({
+  ({
+    isEmpty,
+    isToday,
+    theme: {
+      palette: {
+        primary: { main },
+      },
+    },
+  }) => ({
     opacity: isEmpty ? "0.5" : "1",
     minWidth: "7.5rem",
-    color: isToday ? PURPLE : "inherit",
+    color: isToday ? main : "inherit",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -142,7 +148,7 @@ export const emptyStateStyle: SxProps = {
   justifyContent: "center",
   alignItems: "center",
   borderRadius: "0.5rem",
-  backgroundColor: LIGHTER_GREY,
+  backgroundColor: "grey.light",
   width: "100%",
   height: "100%",
   boxShadow: "0px 2px 8px 0px rgba(156, 156, 156, 0.25)",

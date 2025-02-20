@@ -1,7 +1,5 @@
 import { FC } from "react";
 
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
   FormControl,
@@ -9,10 +7,13 @@ import {
   MenuItem,
   Select,
   Typography,
-} from "@mui/material";
+} from "@cgi-learning-hub/ui";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 
+import { APPOINTMENTS } from "~/core/constants";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import {
@@ -28,7 +29,6 @@ import {
 } from "./style";
 import { DailySlotProps } from "./types";
 import { getEndOptions, getStartOptions } from "./utils";
-import { APPOINTMENTS } from "~/core/constants";
 
 export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
   const { t } = useTranslation(APPOINTMENTS);

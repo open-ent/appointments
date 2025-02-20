@@ -1,26 +1,21 @@
 import { FC, useState } from "react";
 
 import {
-  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
-  Modal,
   Radio,
   RadioGroup,
   Typography,
-} from "@mui/material";
+} from "@cgi-learning-hub/ui";
 
 import { Button } from "@cgi-learning-hub/ui";
 import { useTranslation } from "react-i18next";
 
 import { APPOINTMENTS, CONFIRM_MODAL_VALUES } from "~/core/constants";
-import {
-  buttonsBoxStyle,
-  buttonStyle,
-  cancelButtonStyle,
-  contentBoxStyle,
-  modalBoxStyle,
-} from "./style";
 import { DialogModalProps } from "./types";
 
 export const DialogModal: FC<DialogModalProps> = ({
@@ -45,46 +40,45 @@ export const DialogModal: FC<DialogModalProps> = ({
   };
 
   return (
-    <Modal open={open}>
-      <Box sx={modalBoxStyle}>
-        <Box sx={contentBoxStyle}>
-          <Typography variant="h3">{title}</Typography>
-          <Typography variant="h5">{description}</Typography>
-          {showOptions && question && options.length && (
-            <>
-              <Typography variant="body1">{question}</Typography>
-              <FormControl>
-                <RadioGroup
-                  value={selectedOption}
-                  onChange={(e) => handleOptionChange(e.target.value)}
-                >
-                  {options.map((option) => (
-                    <FormControlLabel
-                      key={option}
-                      value={option}
-                      control={<Radio />}
-                      label={option}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </>
-          )}
-          <Box sx={buttonsBoxStyle}>
-            <Button onClick={handleCancel} sx={cancelButtonStyle}>
-              {t("appointments.cancel")}
-            </Button>
-            <Button
-              onClick={() => handleConfirm(selectedOption || undefined)}
-              sx={buttonStyle}
-              variant="contained"
-              loading={isSubmitButtonLoading}
-            >
-              {t("appointments.confirm")}
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </Modal>
+    <Dialog open={open} showCloseButton onClose={handleCancel}>
+      <DialogTitle fontWeight="bold" fontSize="2rem">
+        {title}
+      </DialogTitle>
+      <DialogContent>
+        <Typography variant="h5">{description}</Typography>
+        {showOptions && question && options.length && (
+          <>
+            <Typography variant="body1">{question}</Typography>
+            <FormControl>
+              <RadioGroup
+                value={selectedOption}
+                onChange={(e) => handleOptionChange(e.target.value)}
+              >
+                {options.map((option) => (
+                  <FormControlLabel
+                    key={option}
+                    value={option}
+                    control={<Radio />}
+                    label={option}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button variant="text" onClick={handleCancel}>
+          {t("appointments.cancel")}
+        </Button>
+        <Button
+          onClick={() => handleConfirm(selectedOption || undefined)}
+          variant="contained"
+          loading={isSubmitButtonLoading}
+        >
+          {t("appointments.confirm")}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

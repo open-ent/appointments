@@ -1,5 +1,4 @@
 import { columnBoxStyle, flexStartBoxStyle } from "~/styles/boxStyles";
-import { PURPLE } from "~/styles/color.constants";
 
 export const dayBoxStyle = {
   ...flexStartBoxStyle,
@@ -22,7 +21,7 @@ export const slotsBoxStyle = {
 };
 
 export const iconStyle = {
-  color: PURPLE,
+  color: "primary.main",
   fontSize: "2rem",
 };
 

@@ -1,9 +1,8 @@
 import { FC } from "react";
 
-import { Button } from "@cgi-learning-hub/ui";
+import { Button, MobileStepper } from "@cgi-learning-hub/ui";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import SaveIcon from "@mui/icons-material/Save";
-import { MobileStepper } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { APPOINTMENTS } from "~/core/constants";

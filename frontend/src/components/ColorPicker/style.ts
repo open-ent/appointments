@@ -1,4 +1,4 @@
-import { Box, styled, SxProps } from "@mui/material";
+import { Box, styled, SxProps } from "@cgi-learning-hub/ui";
 import { PickerBoxProps } from "./types";
 
 export const circlePickerStyle: SxProps = {

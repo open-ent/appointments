@@ -1,14 +1,11 @@
-import { Box, styled, SxProps } from "@mui/material";
+import { Box, styled, SxProps } from "@cgi-learning-hub/ui";
 
-import { StatusCircleProps } from "./types";
 import { columnBoxStyle, flexStartBoxStyle } from "~/styles/boxStyles";
 import {
-  BLACK,
-  GREY,
-  LIGHTER_GREY,
   USER_STATUS_AVAILABLE_COLOR,
   USER_STATUS_UNAVAILABLE_COLOR,
 } from "~/styles/color.constants";
+import { StatusCircleProps } from "./types";
 
 export const wrapperUserInfoStyle: SxProps = {
   ...columnBoxStyle,
@@ -24,7 +21,7 @@ export const topUserInfoStyle: SxProps = {
 
 export const bottomUserInfoStyle: SxProps = {
   ...columnBoxStyle,
-  backgroundColor: LIGHTER_GREY,
+  backgroundColor: "grey.light",
   padding: "1.6rem",
   gap: "1rem",
   borderRadius: ".5rem",
@@ -40,14 +37,14 @@ export const bottomUserInfoStyle: SxProps = {
   },
   "& .MuiSvgIcon-root": {
     fontSize: "2.3rem",
-    color: GREY,
+    color: "grey.dark",
   },
 };
 
 export const skeletonStyle: SxProps = {
   height: "21rem",
   borderRadius: ".5rem",
-  backgroundColor: LIGHTER_GREY,
+  backgroundColor: "grey.light",
 };
 
 export const itemStyle: SxProps = {
@@ -110,14 +107,3 @@ export const StatusCircle = styled(Box)<StatusCircleProps>(
       : USER_STATUS_UNAVAILABLE_COLOR,
   }),
 );
-
-export const displayNameStyle: SxProps = {
-  fontSize: "2rem",
-  fontWeight: "bold",
-  color: BLACK,
-};
-
-export const functionsStyle: SxProps = {
-  fontSize: "1.3rem",
-  color: BLACK,
-};

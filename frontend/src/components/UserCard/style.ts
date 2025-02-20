@@ -1,18 +1,15 @@
-import { Box, styled, SxProps } from "@mui/material";
+import { Box, styled, SxProps } from "@cgi-learning-hub/ui";
 
-import { StatusColorProps, WrapperUserCardProps } from "./types";
 import {
   columnBoxStyle,
   flexStartBoxStyle,
   spaceBetweenBoxStyle,
 } from "~/styles/boxStyles";
 import {
-  BLACK,
-  GREY,
   USER_STATUS_AVAILABLE_COLOR,
   USER_STATUS_UNAVAILABLE_COLOR,
 } from "~/styles/color.constants";
-import { BOLD_FONT, ITALIC_FONT } from "~/styles/fontStyle.constants";
+import { StatusColorProps, WrapperUserCardProps } from "./types";
 
 export const WrapperUserCard = styled(Box, {
   shouldForwardProp: (prop) => prop !== "isAvailable",
@@ -67,33 +64,6 @@ export const textWrapperStyle: SxProps = {
   height: "100%",
   alignItems: "flex-start",
   flexDirection: "column",
-};
-
-export const displayNameStyle: SxProps = {
-  ...BOLD_FONT,
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-};
-
-export const functionsStyle: SxProps = {
-  fontSize: "1.3rem",
-  color: BLACK,
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-};
-
-export const lastAppointmentDateStyle: SxProps = {
-  ...ITALIC_FONT,
-  fontSize: "1.3rem",
-  color: BLACK,
-};
-
-export const statusStyle: SxProps = {
-  ...BOLD_FONT,
-  fontSize: "1.3rem",
-  color: GREY,
 };
 
 export const topTextWrapperStyle: SxProps = {

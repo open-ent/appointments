@@ -6,7 +6,7 @@ import {
   SyntheticEvent,
 } from "react";
 
-import { SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@cgi-learning-hub/ui";
 import { Dayjs } from "dayjs";
 
 import { HexaColor } from "~/components/ColorPicker/types";

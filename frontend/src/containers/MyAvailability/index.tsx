@@ -1,12 +1,12 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 
-import { Loader } from "@cgi-learning-hub/ui";
+import { Box, Button, Loader, Typography } from "@cgi-learning-hub/ui";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { Box, Button, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { DialogModal } from "~/components/DialogModal";
 import { AvailabilityEmptyState } from "~/components/SVG/AvailabilityEmptyState";
+import { APPOINTMENTS } from "~/core/constants";
 import { useAvailability } from "~/providers/AvailabilityProvider";
 import {
   GRID_CARD_SIZE,
@@ -14,7 +14,6 @@ import {
 } from "~/providers/AvailabilityProvider/enum";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
-import { PURPLE } from "~/styles/color.constants";
 import { GridList } from "../GridList";
 import { GridModal } from "../GridModal";
 import {
@@ -23,7 +22,6 @@ import {
   emptyStateSvgStyle,
   headerStyle,
 } from "./style";
-import { APPOINTMENTS } from "~/core/constants";
 
 export const MyAvailability: FC = () => {
   const { t } = useTranslation(APPOINTMENTS);
@@ -74,7 +72,7 @@ export const MyAvailability: FC = () => {
       <GridModal />
       <Box ref={boxRef} sx={availabilityContainerStyle}>
         <Box sx={headerStyle}>
-          <Typography variant="h2">
+          <Typography variant="h2" color="primary" fontWeight="bold">
             {t("appointments.my.availability")}
           </Typography>
           <Button
@@ -93,7 +91,7 @@ export const MyAvailability: FC = () => {
               {t("appointments.grid.empty.state")}
             </Typography>
             <Box sx={emptyStateSvgStyle}>
-              <AvailabilityEmptyState fill={PURPLE} />
+              <AvailabilityEmptyState />
             </Box>
           </>
         ) : (

@@ -1,12 +1,20 @@
 import { FC } from "react";
 
-import { Button, IconButton } from "@cgi-learning-hub/ui";
-import CloseIcon from "@mui/icons-material/Close";
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Modal,
+  Typography,
+  useMediaQuery,
+} from "@cgi-learning-hub/ui";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import { Box, Divider, Modal, Typography, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { BOOK_APPOINTMENT_MODAL_BREAKPOINT } from "~/core/breakpoints";
+import { APPOINTMENTS } from "~/core/constants";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
 import { BookAppointmentGridInfos } from "../BookAppointmentGridInfos";
@@ -21,7 +29,6 @@ import {
   submitButtonStyle,
 } from "./style";
 import { BookAppointmentModalProps } from "./types";
-import { APPOINTMENTS } from "~/core/constants";
 
 export const BookAppointmentModal: FC<BookAppointmentModalProps> = ({
   userInfos,
@@ -38,42 +45,40 @@ export const BookAppointmentModal: FC<BookAppointmentModalProps> = ({
   );
 
   return (
-    <>
-      <Modal open={isModalOpen} onClose={handleCloseModal} disableAutoFocus>
-        <ModalContainer isMobile={isMobile}>
-          <Box sx={contentBoxStyle}>
-            <Box sx={spaceBetweenBoxStyle}>
-              <Typography variant="h3">
-                {t("appointments.book.appointment.modal.title")}
-              </Typography>
-              <IconButton sx={closeIconStyle} onClick={handleCloseModal}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-            <ContentWrapper isMobile={isMobile}>
-              <BookAppointmentGridInfos userInfos={userInfos} />
-              {isMobile ? (
-                <BookAppointmentWeekSlotsMobile />
-              ) : (
-                <>
-                  <Divider sx={dividerStyle} orientation="vertical" flexItem />
-                  <BookAppointmentWeekSlotsDesktop />
-                </>
-              )}
-            </ContentWrapper>
-            <Box sx={submitButtonStyle}>
-              <Button
-                disabled={!selectedSlotId}
-                variant="contained"
-                onClick={handleSubmitAppointment}
-                startIcon={<EventAvailableIcon />}
-              >
-                {t("appointments.book.appointment.modal.submit")}
-              </Button>
-            </Box>
+    <Modal open={isModalOpen} onClose={handleCloseModal} disableAutoFocus>
+      <ModalContainer isMobile={isMobile}>
+        <Box sx={contentBoxStyle}>
+          <Box sx={spaceBetweenBoxStyle}>
+            <Typography variant="h2" fontWeight="bold" color="text.primary">
+              {t("appointments.book.appointment.modal.title")}
+            </Typography>
+            <IconButton sx={closeIconStyle} onClick={handleCloseModal}>
+              <CloseRoundedIcon />
+            </IconButton>
           </Box>
-        </ModalContainer>
-      </Modal>
-    </>
+          <ContentWrapper isMobile={isMobile}>
+            <BookAppointmentGridInfos userInfos={userInfos} />
+            {isMobile ? (
+              <BookAppointmentWeekSlotsMobile />
+            ) : (
+              <>
+                <Divider sx={dividerStyle} orientation="vertical" flexItem />
+                <BookAppointmentWeekSlotsDesktop />
+              </>
+            )}
+          </ContentWrapper>
+          <Box sx={submitButtonStyle}>
+            <Button
+              disabled={!selectedSlotId}
+              variant="contained"
+              onClick={handleSubmitAppointment}
+              startIcon={<EventAvailableIcon />}
+            >
+              {t("appointments.book.appointment.modal.submit")}
+            </Button>
+          </Box>
+        </Box>
+      </ModalContainer>
+    </Modal>
   );
 };

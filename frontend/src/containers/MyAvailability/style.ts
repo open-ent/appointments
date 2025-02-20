@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/material";
+import { SxProps } from "@cgi-learning-hub/ui";
 
 import { columnBoxStyle, spaceBetweenBoxStyle } from "~/styles/boxStyles";
 

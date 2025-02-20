@@ -1,7 +1,7 @@
 import { FC } from "react";
 
+import { Box, IconButton, Modal, Typography } from "@cgi-learning-hub/ui";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, IconButton, Modal, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@cgi-learning-hub/ui";
@@ -51,7 +51,7 @@ export const GridModal: FC = () => {
         <Box sx={modalBoxStyle}>
           <Box sx={contentBoxStyle}>
             <Box sx={spaceBetweenBoxStyle}>
-              <Typography variant="h3">
+              <Typography variant="h2" fontWeight="bold" color="text.primary">
                 {t(GRID_MODAL_VALUES[modalType].titleKey)}
               </Typography>
               <IconButton

@@ -25,3 +25,9 @@ export interface DisplayModalsState {
   [MODAL_TYPE.GRID]: boolean;
   [MODAL_TYPE.CONFIRMATION]: boolean;
 }
+
+export interface CustomWindow extends Window {
+  config?: {
+    minHoursBeforeCancellation: number;
+  };
+}

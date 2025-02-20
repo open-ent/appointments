@@ -1,18 +1,20 @@
-import { Box, styled, SxProps } from "@mui/material";
+import { Box, styled, SxProps, TypographyProps } from "@cgi-learning-hub/ui";
 
 import { columnBoxStyle, flexStartBoxStyle } from "~/styles/boxStyles";
 import { StyledCardProps } from "./types";
 
 export const StyledCard = styled(Box)<StyledCardProps>(({
   isAnimated,
-  theme,
+  theme: {
+    palette: { primary: light },
+  },
 }) => {
   return {
     ...columnBoxStyle,
     padding: "2.4rem",
     borderRadius: "1rem",
     boxShadow: isAnimated
-      ? `0px 2px 8px 4px ${theme.palette.primary.light}`
+      ? `0px 2px 8px 4px ${light}`
       : "0px 2px 8px 0px rgba(176, 176, 176, 0.25)",
     minWidth: "23rem",
     maxWidth: "23rem",
@@ -23,13 +25,13 @@ export const StyledCard = styled(Box)<StyledCardProps>(({
     },
     "@keyframes flash": {
       "0%": {
-        boxShadow: `0px 2px 8px 4px ${theme.palette.primary.light}`,
+        boxShadow: `0px 2px 8px 4px ${light}`,
       },
       "50%": {
-        boxShadow: `0px 2px 16px 8px ${theme.palette.primary.light}`,
+        boxShadow: `0px 2px 16px 8px ${light}`,
       },
       "100%": {
-        boxShadow: `0px 2px 8px 4px ${theme.palette.primary.light}`,
+        boxShadow: `0px 2px 8px 4px ${light}`,
       },
     },
     animation: isAnimated ? "flash 1s ease-in-out" : "none",
@@ -64,11 +66,6 @@ export const bottomRightBoxStyle: SxProps = {
   height: "7rem",
 };
 
-export const dividerStyle: SxProps = {
-  borderColor: "divider",
-  borderWidth: "0 0 0 1px",
-};
-
 export const iconsStyle: SxProps = {
   fontSize: "1.6rem",
 };
@@ -86,4 +83,17 @@ export const twoButtonsBoxStyle: SxProps = {
 
 export const twoButtonsStyle = {
   width: "50%",
+};
+
+export const nameTypoStyle = {
+  variant: "body1" as TypographyProps["variant"],
+  fontWeight: "bold",
+  color: "text.primary",
+  fontSize: "1.6rem",
+};
+
+export const functionTypoStyle = {
+  variant: "body1" as TypographyProps["variant"],
+  color: "text.primary",
+  fontSize: "1.3rem",
 };

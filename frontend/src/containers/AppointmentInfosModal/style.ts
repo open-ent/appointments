@@ -1,4 +1,4 @@
-import { SxProps, Theme } from "@mui/material";
+import { SxProps, Theme } from "@cgi-learning-hub/ui";
 
 import { centerBoxStyle } from "~/styles/boxStyles";
 
@@ -7,13 +7,6 @@ export const modalStyle: SxProps = {
   maxWidth: "44rem",
   maxHeight: "80vh",
   height: "fit-content",
-
-  "& .MuiDialogTitle-root": {
-    padding: "2rem",
-    fontSize: "2rem",
-    fontWeight: "bold",
-    color: "primary.main",
-  },
 
   "& .MuiSvgIcon-root": {
     width: "2rem",

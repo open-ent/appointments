@@ -1,15 +1,15 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 
-import { Button, EllipsisWithTooltip } from "@cgi-learning-hub/ui";
-import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import {
   Box,
+  Button,
   ClickAwayListener,
   Divider,
+  EllipsisWithTooltip,
   Typography,
-  useTheme,
-} from "@mui/material";
+} from "@cgi-learning-hub/ui";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -25,8 +25,9 @@ import {
   bottomRightBoxStyle,
   bottomWrapperBoxStyle,
   dateBoxStyle,
-  dividerStyle,
+  functionTypoStyle,
   iconsStyle,
+  nameTypoStyle,
   pictureStyle,
   rowBoxStyle,
   StyledCard,
@@ -38,7 +39,6 @@ import { AppointmentStateIcon } from "./utils";
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
   const { t } = useTranslation(APPOINTMENTS);
-  const theme = useTheme();
   const { appointmentIdFromNotify, setAppointmentIdFromNotify } = useGlobal();
 
   const {
@@ -117,40 +117,36 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
     <ClickAwayListener onClickAway={() => setIsAnimated(false)}>
       <StyledCard
         ref={appointmentCardRef}
-        theme={theme}
         isAnimated={isAnimated}
         onClick={handleCardClick}
       >
         <Box sx={pictureStyle}>
           <UserPicture picture={appointment.picture} />
         </Box>
-        <EllipsisWithTooltip
-          typographyProps={{ variant: "h5", fontWeight: "bold" }}
-        >
+        <EllipsisWithTooltip typographyProps={nameTypoStyle}>
           {appointment.displayName}
         </EllipsisWithTooltip>
-        <EllipsisWithTooltip typographyProps={{ variant: "body1" }}>
+        <EllipsisWithTooltip typographyProps={functionTypoStyle}>
           {appointment.functions.join(", ")}
         </EllipsisWithTooltip>
         <Box sx={bottomWrapperBoxStyle}>
           <Box sx={dateBoxStyle}>
-            <Typography fontSize={"3.6rem"} lineHeight={"1.2"}>
+            <Typography fontSize="3.6rem" lineHeight="1.2" color="text.primary">
               {appointment.beginDate.format("D")}
             </Typography>
-            <Typography variant="body1">
+            <Typography fontSize="1.3rem" color="text.primary">
               {appointment.beginDate.format("MMM")}
             </Typography>
           </Box>
-          <Divider
-            sx={dividerStyle}
-            orientation="vertical"
-            variant="middle"
-            flexItem
-          />
+          <Divider orientation="vertical" variant="middle" flexItem />
           <Box sx={bottomRightBoxStyle}>
             <Box sx={rowBoxStyle}>
               <AccessTimeFilledIcon sx={iconsStyle} />
-              <Typography variant="body1">
+              <Typography
+                variant="body2"
+                fontSize="1.3rem"
+                color="text.primary"
+              >
                 {appointment.beginDate.format(TIME_FORMAT)} -{" "}
                 {appointment.endDate.format(TIME_FORMAT)}
               </Typography>
@@ -160,14 +156,22 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
                 state={appointment.state}
                 isRequester={appointment.isRequester}
               />
-              <Typography variant="body1">
+              <Typography
+                variant="body2"
+                fontSize="1.3rem"
+                color="text.primary"
+              >
                 {t(APPOINTMENT_STATE_VALUES[appointment.state].i18nKey)}
               </Typography>
             </Box>
             {appointment.isVideoCall && appointment.videoCallLink && (
               <Box sx={rowBoxStyle}>
                 <VideoCameraFrontIcon sx={iconsStyle} color="primary" />
-                <Typography variant="body1">
+                <Typography
+                  variant="body2"
+                  fontSize="1.3rem"
+                  color="text.primary"
+                >
                   {t("appointments.videoconference")}
                 </Typography>
               </Box>

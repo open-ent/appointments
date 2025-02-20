@@ -1,27 +1,28 @@
-import { Button, common } from "@cgi-learning-hub/ui";
-import { Box, styled, SxProps } from "@mui/material";
+import { Box, Button, styled, SxProps } from "@cgi-learning-hub/ui";
 
 import { TimeSlotProps, TimeSlotWrapperProps } from "./types";
-import { BLACK, LIGHTER_PURPLE, PURPLE } from "~/styles/color.constants";
-import { IMPORTANT } from "~/styles/fontStyle.constants";
 
-export const TimeSlot = styled(Button)<TimeSlotProps>(({ selected }) => ({
-  width: "6.2rem",
-  minHeight: "3.4rem",
-  borderRadius: ".8rem !important",
-  backgroundColor: selected ? PURPLE + IMPORTANT : LIGHTER_PURPLE + IMPORTANT,
-  color: selected ? common.white + IMPORTANT : BLACK + IMPORTANT,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  fontWeight: "bold" + IMPORTANT,
-  fontSize: "1.3rem" + IMPORTANT,
-  cursor: "pointer",
-  "&:hover": {
-    backgroundColor: PURPLE + IMPORTANT,
-    color: common.white + IMPORTANT,
-  },
-}));
+export const TimeSlot = styled(Button)<TimeSlotProps>(
+  ({ selected, theme }) => ({
+    width: "6.2rem",
+    minHeight: "3.4rem",
+    borderRadius: ".8rem !important",
+    backgroundColor: selected
+      ? theme.palette.primary.main
+      : theme.palette.primary.light,
+    color: selected ? theme.palette.common.white : theme.palette.common.black,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontWeight: "bold !important",
+    fontSize: "1.3rem !important",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.common.white,
+    },
+  }),
+);
 
 export const skeletonStyle: SxProps = {
   width: "6.2rem",

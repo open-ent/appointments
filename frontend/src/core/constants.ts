@@ -1,4 +1,4 @@
-import { SvgIconProps } from "@mui/material";
+import { SvgIconProps } from "@cgi-learning-hub/ui";
 import { Theme, ToastPosition } from "react-toastify";
 
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
@@ -272,4 +272,4 @@ export const GRID_MODAL_VALUES = {
   },
 };
 
-export const defaultMinHoursBeforeCancellation = 24;
+export const DEFAULT_MIN_HOURS_BEFORE_MODIFICATION = 24;

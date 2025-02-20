@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 
-import { Box, Tooltip, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@cgi-learning-hub/ui";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
@@ -8,13 +8,9 @@ import { APPOINTMENTS } from "~/core/constants";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { UserPicture } from "../UserPicture";
 import {
-  displayNameStyle,
-  functionsStyle,
-  lastAppointmentDateStyle,
   pictureStyle,
   statusBoxStyle,
   StatusColor,
-  statusStyle,
   textWrapperStyle,
   topTextWrapperStyle,
   WrapperUserCard,
@@ -74,8 +70,13 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               placement="top"
             >
               <Typography
-                variant="h5"
-                sx={displayNameStyle}
+                variant="body1"
+                fontSize="1.6rem"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                fontWeight="bold"
+                color="text.primary"
                 ref={displayNameRef}
               >
                 {displayName}
@@ -85,11 +86,24 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               title={isEllipsisfunctions ? functions.join(", ") : ""}
               placement="bottom"
             >
-              <Typography sx={functionsStyle} ref={functionsRef}>
+              <Typography
+                variant="body2"
+                fontSize="1.3rem"
+                color="text.primary"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                ref={functionsRef}
+              >
                 {functions.join(", ")}
               </Typography>
             </Tooltip>
-            <Typography sx={lastAppointmentDateStyle}>
+            <Typography
+              variant="body2"
+              fontSize="1.3rem"
+              color="text.primary"
+              fontStyle="italic"
+            >
               {!!lastAppointmentDate &&
                 t("appointments.last.appointment", {
                   date: lastAppointmentDateDisplayFormat,
@@ -98,7 +112,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
           </Box>
           <Box sx={statusBoxStyle}>
             <StatusColor isAvailable={isAvailable} />
-            <Typography sx={statusStyle}>
+            <Typography color="grey.dark" fontWeight="bold" fontSize="1.3rem">
               {t("appointments." + (isAvailable ? "available" : "unavailable"))}
             </Typography>
           </Box>

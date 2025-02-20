@@ -1,11 +1,11 @@
 import { FC, useCallback, useEffect, useRef } from "react";
 
-import { Loader, SearchInput } from "@cgi-learning-hub/ui";
-import { Box, Typography } from "@mui/material";
+import { Box, Loader, SearchInput, Typography } from "@cgi-learning-hub/ui";
 import { useTranslation } from "react-i18next";
 
 import { FindAppointmentsEmptyState } from "~/components/SVG/FindAppointmentsEmptyState";
 import { UserCard } from "~/components/UserCard";
+import { APPOINTMENTS } from "~/core/constants";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { BookAppointmentModal } from "../BookAppointmentModal";
@@ -17,7 +17,6 @@ import {
   listCardStyle,
   searchInputStyle,
 } from "./style";
-import { APPOINTMENTS } from "~/core/constants";
 
 export const FindAppointments: FC = () => {
   const {

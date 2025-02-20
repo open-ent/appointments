@@ -1,13 +1,13 @@
 import { FC } from "react";
 
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@cgi-learning-hub/ui";
 
-import { UserPictureProps } from "./types";
 import { NoAvatar } from "../SVG/NoAvatar";
-import { GREY } from "~/styles/color.constants";
+import { UserPictureProps } from "./types";
 
 export const UserPicture: FC<UserPictureProps> = ({ picture }) => {
   const isPictureValid = !!picture && picture.startsWith("/userbook/avatar/");
+  const theme = useTheme();
   return isPictureValid ? (
     <Box
       alt="user picture"
@@ -16,6 +16,6 @@ export const UserPicture: FC<UserPictureProps> = ({ picture }) => {
       sx={{ objectFit: "cover" }}
     />
   ) : (
-    <NoAvatar fill={GREY} />
+    <NoAvatar fill={theme.palette.text.secondary} />
   );
 };

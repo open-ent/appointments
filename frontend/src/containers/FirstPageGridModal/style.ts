@@ -1,4 +1,4 @@
-import { styled, SxProps } from "@mui/material";
+import { styled, SxProps } from "@cgi-learning-hub/ui";
 
 import { flexEndBoxStyle, spaceBetweenBoxStyle } from "~/styles/boxStyles";
 

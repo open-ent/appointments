@@ -1,7 +1,7 @@
 import { FC, useMemo } from "react";
 
+import { Box } from "@cgi-learning-hub/ui";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Box } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useTranslation } from "react-i18next";
 

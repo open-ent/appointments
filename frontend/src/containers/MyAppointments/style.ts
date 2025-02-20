@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/material";
+import { SxProps } from "@cgi-learning-hub/ui";
 
 export const loaderBoxStyle: SxProps = {
   marginTop: "4rem",

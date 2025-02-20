@@ -1,7 +1,6 @@
-import { SxProps } from "@mui/material";
+import { SxProps } from "@cgi-learning-hub/ui";
 
 import { columnBoxStyle } from "~/styles/boxStyles";
-import { BLACK } from "~/styles/color.constants";
 import { ITALIC_FONT } from "~/styles/fontStyle.constants";
 
 export const pageGridModalStyle = {
@@ -43,7 +42,7 @@ export const contentBoxStyle: SxProps = {
 export const closeIconStyle = {
   "& > .MuiSvgIcon-root": {
     fontSize: "2.4rem",
-    color: BLACK,
+    color: "text.primary",
   },
 };
 

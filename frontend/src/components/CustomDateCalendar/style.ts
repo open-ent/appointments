@@ -1,4 +1,4 @@
-import { Box, styled, Theme } from "@mui/material";
+import { Box, styled, Theme } from "@cgi-learning-hub/ui";
 
 import { StyledDayProps } from "./types";
 

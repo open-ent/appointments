@@ -1,4 +1,4 @@
-import { PAGE_TYPE } from "~/containers/GridModal/enum";
+import { PAGE_TYPE } from "~/providers/GridModalProvider/enum";
 
 export interface CustomStepperProps {
   page: PAGE_TYPE;

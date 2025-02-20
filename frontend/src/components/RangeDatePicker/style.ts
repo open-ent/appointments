@@ -1,7 +1,6 @@
-import { SxProps } from "@mui/material";
+import { SxProps } from "@cgi-learning-hub/ui";
 
 import { flexStartBoxStyle } from "~/styles/boxStyles";
-import { PURPLE } from "~/styles/color.constants";
 
 export const boxStyle: SxProps = {
   ...flexStartBoxStyle,
@@ -12,7 +11,7 @@ export const boxStyle: SxProps = {
 export const datePickerStyle: SxProps = {
   width: "17rem",
   "& .MuiSvgIcon-root": {
-    color: PURPLE,
+    color: "primary.main",
     fontSize: "2rem",
   },
   "& .MuiIconButton-root": {

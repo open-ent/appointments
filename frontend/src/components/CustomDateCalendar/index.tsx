@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from "react";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Typography } from "@cgi-learning-hub/ui";
 import { DateCalendar } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useTranslation } from "react-i18next";
 
+import { APPOINTMENTS } from "~/core/constants";
 import { isToday } from "~/core/utils";
 import {
   appointmentsLegendStyle,
@@ -18,7 +19,6 @@ import {
 } from "./style";
 import { CustomDateCalendarProps } from "./types";
 import { isWithAcceptedAppointment } from "./utils";
-import { APPOINTMENTS } from "~/core/constants";
 
 dayjs.extend(isoWeek);
 

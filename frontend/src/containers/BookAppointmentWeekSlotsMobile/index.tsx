@@ -1,9 +1,14 @@
 import { FC } from "react";
 
-import { Button, common } from "@cgi-learning-hub/ui";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Typography,
+  common,
+} from "@cgi-learning-hub/ui";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { Box, Checkbox, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid4v } from "uuid";
 
@@ -21,7 +26,6 @@ import {
   nextTimeSlotStyle,
   nextTimeSlotTextStyle,
   noSlotStyle,
-  videoCallOptionStyle,
   weekDayStyle,
   weekSlotsWrapperStyle,
 } from "./style";
@@ -108,7 +112,7 @@ export const BookAppointmentWeekSlotsMobile: FC = () => {
             onChange={handleVideoCallCheckboxChange}
             checked={isVideoCallOptionChecked}
           />
-          <Typography sx={videoCallOptionStyle}>
+          <Typography color="text.primary" fontSize="1.4rem">
             {t("appointments.book.appointment.modal.video.call.option")}
           </Typography>
         </Box>

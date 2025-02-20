@@ -1,13 +1,13 @@
 import { FC, useMemo } from "react";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
   Box,
   Divider,
   FormHelperText,
   IconButton,
   Typography,
-} from "@mui/material";
+} from "@cgi-learning-hub/ui";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useTranslation } from "react-i18next";
 
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";

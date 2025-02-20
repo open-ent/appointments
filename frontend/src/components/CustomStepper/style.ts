@@ -1,5 +1,4 @@
 import { flexStartBoxStyle } from "~/styles/boxStyles";
-import { LIGHT_GREY, PURPLE } from "~/styles/color.constants";
 
 export const stepperStyle = {
   ...flexStartBoxStyle,
@@ -13,12 +12,12 @@ const stepperButtonStyle = {
 
 export const backButtonStyle = {
   ...stepperButtonStyle,
-  color: LIGHT_GREY,
+  color: "text.secondary",
 };
 
 export const nextButtonStyle = {
   ...stepperButtonStyle,
-  color: PURPLE,
+  color: "primary",
 };
 
 export const saveButtonStyle = {

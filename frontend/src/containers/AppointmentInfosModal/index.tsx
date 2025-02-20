@@ -79,11 +79,11 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             </Box>
             <Box sx={userInfosBoxStyle}>
               <EllipsisWithTooltip
-                typographyProps={{ variant: "h3", fontWeight: "bold" }}
+                typographyProps={{ fontSize: "1.8rem", fontWeight: "bold" }}
               >
                 {appointment.displayName}
               </EllipsisWithTooltip>
-              <EllipsisWithTooltip typographyProps={{ variant: "h5" }}>
+              <EllipsisWithTooltip typographyProps={{ fontSize: "1.6rem" }}>
                 {appointment.functions?.join(", ")}
               </EllipsisWithTooltip>
             </Box>
@@ -94,7 +94,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 state={appointment.state}
                 isRequester={appointment.isRequester}
               />
-              <Typography variant="h5">
+              <Typography fontSize="1.6rem" color="text.primary">
                 {t(APPOINTMENT_STATE_VALUES[appointment.state].i18nKey)}
               </Typography>
             </Box>
@@ -102,11 +102,11 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               <Box sx={rowInfoStyle}>
                 <VideoCameraFrontIcon color="primary" />
                 <Box>
-                  <Typography variant="h5">
+                  <Typography fontSize="1.6rem" color="text.primary">
                     {t("appointments.my.appointment.infos.modal.video.call")}
                   </Typography>
                   <Link href={appointment.videoCallLink} color={"primary"}>
-                    <Typography variant="h5">
+                    <Typography fontSize="1.6rem" color="text.primary">
                       {appointment.videoCallLink}
                     </Typography>
                   </Link>
@@ -115,7 +115,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             )}
             <Box sx={rowInfoStyle}>
               <EventIcon sx={greyIconStyle} />
-              <Typography variant="h5">
+              <Typography fontSize="1.6rem" color="text.primary">
                 {t("appointments.my.appointment.infos.modal.date", {
                   date: appointment.beginDate.format(TEXT_DATE_FORMAT),
                   beginTime: appointment.beginDate.format(TIME_FORMAT),
@@ -126,7 +126,9 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             {appointment.place && (
               <Box sx={rowInfoStyle}>
                 <PlaceIcon sx={greyIconStyle} />
-                <Typography variant="h5">{appointment.place}</Typography>
+                <Typography fontSize="1.6rem" color="text.primary">
+                  {appointment.place}
+                </Typography>
               </Box>
             )}
             {!!(appointment.documents && appointment.documents.length) && (
@@ -140,7 +142,9 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                       underline="hover"
                       target="_blank"
                     >
-                      <Typography variant="h5">{doc.name}</Typography>
+                      <Typography fontSize="1.6rem" color="text.primary">
+                        {doc.name}
+                      </Typography>
                     </Link>
                   ))}
                 </Box>
@@ -149,7 +153,11 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             {appointment.publicComment && (
               <Box sx={rowInfoStyle}>
                 <CommentIcon sx={greyIconStyle} />
-                <Typography variant="h5" whiteSpace={"pre-line"}>
+                <Typography
+                  fontSize="1.6rem"
+                  color="text.primary"
+                  whiteSpace={"pre-line"}
+                >
                   {appointment.publicComment}
                 </Typography>
               </Box>

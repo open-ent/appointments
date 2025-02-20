@@ -1,12 +1,13 @@
 import { FC } from "react";
 
-import { Loader } from "@cgi-learning-hub/ui";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Loader, Typography, useMediaQuery } from "@cgi-learning-hub/ui";
+import { useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { CustomDateCalendar } from "~/components/CustomDateCalendar";
 import { DialogModal } from "~/components/DialogModal";
 import { AppointmentsEmptyState } from "~/components/SVG/AppointmentsEmptyState";
+import { APPOINTMENTS } from "~/core/constants";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 import { MY_APPOINTMENTS_LIST_STATE } from "~/providers/MyAppointmentsProvider/enum";
 import { spaceBetweenBoxStyle } from "~/styles/boxStyles";
@@ -20,7 +21,6 @@ import {
   loaderBoxStyle,
   mainContainerStyle,
 } from "./style";
-import { APPOINTMENTS } from "~/core/constants";
 
 export const MyAppointments: FC = () => {
   const {

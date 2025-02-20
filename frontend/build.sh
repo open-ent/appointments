@@ -103,6 +103,10 @@ lintFixDocker() {
   docker-compose run --rm node sh -c "pnpm run fix && pnpm run check-types"
 }
 
+checkTypes() {
+  docker-compose run --rm node sh -c "pnpm run check-types"
+}
+
 checkQualityCode() {
   docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "pnpm run format:check && pnpm run lint"
 }
@@ -208,6 +212,9 @@ do
       ;;
     lintFixDocker)
       lintFixDocker
+      ;;
+    checkTypes)
+      checkTypes
       ;;
     checkQualityCode)
       checkQualityCode

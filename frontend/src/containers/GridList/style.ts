@@ -1,8 +1,8 @@
-import { Box, styled, SxProps } from "@mui/material";
+import { Box, styled, SxProps } from "@cgi-learning-hub/ui";
 
-import { GridListTitleProps } from "./types";
 import { columnBoxStyle } from "~/styles/boxStyles";
 import { ITALIC_FONT } from "~/styles/fontStyle.constants";
+import { GridListTitleProps } from "./types";
 
 export const gridListStyle: SxProps = {
   ...columnBoxStyle,

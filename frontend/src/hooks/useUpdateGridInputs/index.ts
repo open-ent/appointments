@@ -7,7 +7,7 @@ import {
   useCallback,
 } from "react";
 
-import { SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@cgi-learning-hub/ui";
 import dayjs, { Dayjs } from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 

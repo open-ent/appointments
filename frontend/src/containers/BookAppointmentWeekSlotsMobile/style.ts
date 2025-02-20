@@ -1,13 +1,12 @@
-import { Box, styled, SxProps } from "@mui/material";
+import { Box, styled, SxProps } from "@cgi-learning-hub/ui";
 
-import { DaySlotsHeaderProps, RowSlotsWrapperProps } from "./types";
 import {
   centerBoxStyle,
   columnBoxStyle,
   flexStartBoxStyle,
 } from "~/styles/boxStyles";
-import { BLACK, LIGHTER_GREY, PURPLE } from "~/styles/color.constants";
 import { BOLD_FONT, ITALIC_FONT } from "~/styles/fontStyle.constants";
+import { DaySlotsHeaderProps, RowSlotsWrapperProps } from "./types";
 
 export const weekSlotsWrapperStyle: SxProps = {
   ...columnBoxStyle,
@@ -29,8 +28,15 @@ export const RowSlotsWrapper = styled(Box)<RowSlotsWrapperProps>(
 );
 
 export const DaySlotsHeader = styled(Box)<DaySlotsHeaderProps>(
-  ({ isToday }) => ({
-    color: isToday ? PURPLE : "inherit",
+  ({
+    isToday,
+    theme: {
+      palette: {
+        primary: { main },
+      },
+    },
+  }) => ({
+    color: isToday ? main : "inherit",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -51,11 +57,6 @@ export const dayStyle: SxProps = {
   fontSize: "1.3rem",
 };
 
-export const videoCallOptionStyle: SxProps = {
-  color: BLACK,
-  fontSize: "1.4rem",
-};
-
 export const containerStyle: SxProps = {
   display: "flex",
   flexDirection: "column",
@@ -69,7 +70,7 @@ export const noSlotStyle: SxProps = {
   ...centerBoxStyle,
   padding: "1rem 2rem",
   margin: "0 2rem",
-  backgroundColor: LIGHTER_GREY,
+  backgroundColor: "grey.light",
   boxShadow: "0px 2px 8px 0px rgba(156, 156, 156, 0.25)",
   borderRadius: "0.5rem",
   fontStyle: "italic",

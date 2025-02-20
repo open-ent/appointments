@@ -1,12 +1,5 @@
 import { FC, useEffect, useState } from "react";
 
-import BusinessIcon from "@mui/icons-material/Business";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import EditIcon from "@mui/icons-material/Edit";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
-import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import {
   Box,
   Button,
@@ -15,7 +8,14 @@ import {
   MenuItem,
   Tooltip,
   Typography,
-} from "@mui/material";
+} from "@cgi-learning-hub/ui";
+import BusinessIcon from "@mui/icons-material/Business";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import EditIcon from "@mui/icons-material/Edit";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { useTranslation } from "react-i18next";
 
 import { APPOINTMENTS, DISPLAY_DATE_FORMAT } from "~/core/constants";
@@ -33,7 +33,6 @@ import {
   leftTextWrapperStyle,
   moreButtonBoxStyle,
   moreButtonStyle,
-  nameTextStyle,
   secondLineBoxStyle,
   StateDot,
   stateStyle,
@@ -80,7 +79,14 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
         <ColorDot color={grid.color} />
         <Box sx={leftTextWrapperStyle}>
           <Box sx={firstLineBoxStyle}>
-            <Typography variant="h5" sx={nameTextStyle}>
+            <Typography
+              variant="body1"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              noWrap
+              fontSize="1.6rem"
+              color="text.primary"
+            >
               {grid.name}
             </Typography>
             {isMultiStructure && (
@@ -94,7 +100,11 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
             )}
           </Box>
           <Box sx={secondLineBoxStyle}>
-            <Typography variant="body1">
+            <Typography
+              variant="body2"
+              fontSize="1.4rem"
+              color="text.secondary"
+            >
               {t("appointments.grid.from.date.to.date", {
                 beginDate: grid.beginDate.format(DISPLAY_DATE_FORMAT),
                 endDate: grid.endDate.format(DISPLAY_DATE_FORMAT),
@@ -102,7 +112,11 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
             </Typography>
             <Box sx={stateStyle}>
               <StateDot state={grid.state} />
-              <Typography variant="body1">
+              <Typography
+                variant="body2"
+                fontSize="1.4rem"
+                color="text.secondary"
+              >
                 {t(`appointments.grid.state.${grid.state.toLowerCase()}`)}
               </Typography>
             </Box>
