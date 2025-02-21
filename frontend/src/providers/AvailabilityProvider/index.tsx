@@ -217,7 +217,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
   useEffect(() => {
     if (!gridIsLoading && selectedGridIdUpdateFields && grid) {
       setInputs(grid);
-      initFiles(grid.documents ?? []);
+      initFiles(grid.documents ?? [], currentModalType);
       handleDisplayGridModal(
         currentModalType,
         selectedGridIdUpdateFields,

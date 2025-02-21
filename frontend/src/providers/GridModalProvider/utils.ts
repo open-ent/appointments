@@ -44,6 +44,7 @@ export const initialGridModalInputs = (
 
 export const initialErrorInputs: InputsErrors = {
   name: "",
+  location: "",
   videoCallLink: "",
   validityPeriod: "",
   weekSlots: "",
@@ -121,6 +122,7 @@ export const newErrorInputs = (
   blurGridModalInputs: useBlurGridInputsReturnType,
 ): InputsErrors => ({
   name: blurGridModalInputs.newNameError,
+  location: blurGridModalInputs.newLocationError,
   videoCallLink: blurGridModalInputs.newVideoCallLinkError,
   validityPeriod: blurGridModalInputs.newValidityPeriodError,
   weekSlots: blurGridModalInputs.newWeekSlotsError,

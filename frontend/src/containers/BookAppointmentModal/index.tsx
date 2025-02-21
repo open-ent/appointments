@@ -24,7 +24,6 @@ import {
   closeIconStyle,
   contentBoxStyle,
   ContentWrapper,
-  dividerStyle,
   ModalContainer,
   submitButtonStyle,
 } from "./style";
@@ -62,7 +61,7 @@ export const BookAppointmentModal: FC<BookAppointmentModalProps> = ({
               <BookAppointmentWeekSlotsMobile />
             ) : (
               <>
-                <Divider sx={dividerStyle} orientation="vertical" flexItem />
+                <Divider orientation="vertical" flexItem />
                 <BookAppointmentWeekSlotsDesktop />
               </>
             )}

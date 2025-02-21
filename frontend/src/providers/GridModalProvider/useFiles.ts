@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { APPOINTMENTS, MAX_TOTAL_FILE_SIZE_PER_GRID_O } from "~/core/constants";
 import { Document } from "~/services/api/GridService/types";
+import { GRID_MODAL_TYPE } from "./enum";
 import { MyCustomFile } from "./types";
 import { createMyCustomFile } from "./utils";
 
@@ -46,7 +47,7 @@ export const useFiles = () => {
     return updatedFiles;
   };
 
-  const initFiles = (documents: Document[]) => {
+  const initFiles = (documents: Document[], modalType: GRID_MODAL_TYPE) => {
     const createFileFromDocument = (document: Document) => {
       const blob = new Blob([new Uint8Array(document.size)]);
       return new File([blob], document.name);
@@ -58,7 +59,7 @@ export const useFiles = () => {
       name: document.name,
       size: document.size,
       ownerName: document.ownerName,
-      isDeletable: true,
+      isDeletable: modalType !== GRID_MODAL_TYPE.CONSULTATION,
     })) as MyCustomFile[];
     setFiles(newFiles);
     return setTotalFilesSize(

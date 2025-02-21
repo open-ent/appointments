@@ -27,10 +27,13 @@ export const useBlurGridInputs = (
   );
 
   const newNameError = inputs.name
-    ? existingGridsNames.includes(inputs.name)
+    ? existingGridsNames.includes(inputs.name.trimEnd())
       ? SAME_GRID_ALREADY_EXISTS_ERROR
       : ""
     : FIELD_REQUIRED_ERROR;
+
+  const newLocationError =
+    inputs.location.length || inputs.isVideoCall ? "" : FIELD_REQUIRED_ERROR;
 
   const newVideoCallLinkError =
     inputs.isVideoCall && !inputs.videoCallLink ? FIELD_REQUIRED_ERROR : "";
@@ -61,17 +64,23 @@ export const useBlurGridInputs = (
     updateErrorInputs("name", newNameError);
   };
 
+  const handleLocationBlur = () => {
+    updateErrorInputs("location", newLocationError);
+  };
+
   const handleVideoCallLinkBlur = () => {
     updateErrorInputs("videoCallLink", newVideoCallLinkError);
   };
 
   return {
     newNameError,
+    newLocationError,
     newVideoCallLinkError,
     newValidityPeriodError,
     newWeekSlotsError,
     newSlotsError,
     handleNameBlur,
+    handleLocationBlur,
     handleVideoCallLinkBlur,
   };
 };

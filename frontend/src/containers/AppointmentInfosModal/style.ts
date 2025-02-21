@@ -7,10 +7,20 @@ export const modalStyle: SxProps = {
   maxWidth: "44rem",
   maxHeight: "80vh",
   height: "fit-content",
+  overflowY: "scroll",
 
   "& .MuiSvgIcon-root": {
     width: "2rem",
     height: "2rem",
+  },
+
+  "&::-webkit-scrollbar": {
+    width: "0.8rem",
+    height: "0.8rem",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "rgba(170,170,170,1)",
+    borderRadius: "0.3rem",
   },
 };
 

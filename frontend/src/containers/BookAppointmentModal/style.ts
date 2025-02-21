@@ -48,10 +48,6 @@ export const closeIconStyle = {
   },
 };
 
-export const dividerStyle: SxProps = {
-  borderColor: "divider",
-};
-
 export const ContentWrapper = styled(Box)<ContentWrapperProps>(
   ({ isMobile }) => ({
     ...(isMobile ? columnBoxStyle : flexStartBoxStyle),

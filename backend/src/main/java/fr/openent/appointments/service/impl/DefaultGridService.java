@@ -123,7 +123,7 @@ public class DefaultGridService implements GridService {
             .compose(dailySlots -> {
                 composeInfos.put(CAMEL_DAILY_SLOTS, dailySlots);
                 Grid grid = (Grid) composeInfos.getValue(GRID);
-                return eventBusService.getDocumentResponseFromGrid(userId, grid.getDocumentsIds());
+                return eventBusService.getDocumentResponseFromGrid(grid.getOwnerId(), grid.getDocumentsIds());
             })
             .onSuccess(documents -> {
                 Grid grid = (Grid) composeInfos.getValue(GRID);
@@ -209,7 +209,7 @@ public class DefaultGridService implements GridService {
             })
             .compose(grid -> {
                 composeInfos.put(GRID, grid);
-                return eventBusService.getDocumentResponseFromGrid(user.getUserId(), grid.getDocumentsIds());
+                return eventBusService.getDocumentResponseFromGrid(grid.getOwnerId(), grid.getDocumentsIds());
             })
             .onSuccess(documents -> {
                 Grid grid = (Grid) composeInfos.getValue(GRID);

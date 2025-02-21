@@ -1,6 +1,12 @@
 import { FC } from "react";
 
-import { Box, IconButton, Modal, Typography } from "@cgi-learning-hub/ui";
+import {
+  Alert,
+  Box,
+  IconButton,
+  Modal,
+  Typography,
+} from "@cgi-learning-hub/ui";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
 
@@ -62,11 +68,16 @@ export const GridModal: FC = () => {
                 <CloseIcon />
               </IconButton>
             </Box>
-            {GRID_MODAL_VALUES[modalType].instructionKey && (
-              <Typography sx={instructionStyle}>
-                {t(GRID_MODAL_VALUES[modalType].instructionKey)}
-              </Typography>
+            {modalType === GRID_MODAL_TYPE.EDIT && (
+              <Alert severity="info">
+                <Typography variant="body1">
+                  {t("appointments.modify.grid.alert")}
+                </Typography>
+              </Alert>
             )}
+            <Typography sx={instructionStyle}>
+              {t(GRID_MODAL_VALUES[modalType].instructionKey)}
+            </Typography>
             {isDisplayFirstPage && <FirstPageGridModal />}
             {isDisplaySecondPage && <SecondPageGridModal />}
             {modalType === GRID_MODAL_TYPE.CREATION && (

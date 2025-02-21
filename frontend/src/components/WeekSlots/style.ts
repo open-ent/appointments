@@ -1,3 +1,4 @@
+import { SxProps } from "@mui/material";
 import { columnBoxStyle, flexStartBoxStyle } from "~/styles/boxStyles";
 
 export const dayBoxStyle = {
@@ -31,4 +32,8 @@ export const errorStyle = {
 
 export const noSlotStyle = {
   marginLeft: "1.5rem",
+};
+
+export const dividerStyle: SxProps = {
+  borderColor: "primary.main",
 };

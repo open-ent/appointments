@@ -172,6 +172,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
     } catch (error) {
       console.error(error);
       toast.error(t(TOAST_VALUES.CREATE_GRID.i18nKeyError));
+      setIsSubmitButtonLoading(false);
     }
   }, [
     blurGridModalInputs,
@@ -192,6 +193,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   const handleNext = useCallback(() => {
     const newErrors = {
       name: blurGridModalInputs.newNameError,
+      location: blurGridModalInputs.newLocationError,
       videoCallLink: blurGridModalInputs.newVideoCallLinkError,
       validityPeriod: "",
       weekSlots: "",
@@ -217,12 +219,13 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
         break;
       case GRID_MODAL_TYPE.CONSULTATION:
         resetInputs();
+        resetFiles();
         setIsModalOpen(false);
         break;
       default:
         break;
     }
-  }, [modalType, resetInputs]);
+  }, [modalType, resetFiles, resetInputs]);
 
   const handleCancelDialog = () => {
     setIsDialogOpen(false);
@@ -244,10 +247,12 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       } catch (error) {
         console.error(error);
         toast.error(t(TOAST_VALUES.EDIT_GRID.i18nKeyError));
+        setIsSubmitButtonLoading(false);
       }
     }
     setIsDialogOpen(false);
     resetInputs();
+    resetFiles();
     setPage(PAGE_TYPE.FIRST);
     setIsModalOpen(false);
     setIsSubmitButtonLoading(false);
@@ -255,6 +260,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
     confirmModalType,
     editGrid,
     inputs,
+    resetFiles,
     resetInputs,
     saveInWorkspace,
     selectedGridId,

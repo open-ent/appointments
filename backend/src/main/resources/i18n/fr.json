@@ -12,6 +12,7 @@
   "appointments.consultation.grid.title": "Consulter votre grille passée",
 
   "appointments.modify.grid.title": "Modifier votre grille horaire",
+  "appointments.modify.grid.alert": "Les champs impactant la prise de rendez-vous ne sont pas modifiables (public, validité, créneaux, ...).",
   "appointments.modify.grid.confirm.title": "Modifier votre grille ?",
   "appointments.modify.grid.confirm.message": "Si vous confirmez, les informations saisies seront enregistrées et les modifications seront prises en compte pour tous les rendez-vous concernés.",
   "appointments.modify.grid.abandon.title": "Abandonner les modifications ?",
@@ -35,7 +36,7 @@
   "appointments.grid.name": "Nom de la grille horaire",
   "appointments.grid.color": "Couleur d'affichage",
   "appointments.grid.structure": "Établissement concerné",
-  "appointments.grid.location": "Lieu (bâtiment, numéro de salle)",
+  "appointments.grid.location": "Lieu {{required}}(bâtiment, numéro de salle)",
   "appointments.grid.public": "Public",
   "appointments.grid.videoconference": "Visioconférence possible",
   "appointments.grid.videoconference.link": "Lien de la visioconférence",
@@ -55,13 +56,13 @@
 
   "appointments.grid.empty.state": "Vous n’avez pas encore défini de grille horaire.",
   "appointments.grid.in.progress.empty.state": "Vous n’avez pas encore défini de grille horaire pour les jours à venir.",
-  "appointments.grid.in.progress": "Grille en cours",
+  "appointments.grid.in.progress": "Grilles en cours",
   "appointments.grid.passed": "Grilles passées",
 
   "appointments.grid.from.date.to.date": "Du {{beginDate}} au {{endDate}}",
-  "appointments.grid.state.open": "Ouverte",
+  "appointments.grid.state.open": "Active",
   "appointments.grid.state.suspended": "Suspendue",
-  "appointments.grid.state.closed": "Fermée",
+  "appointments.grid.state.closed": "Expirée",
 
   "appointments.find.empty.state.search.bar": "Utilisez la barre de recherche pour voir les personnes disponibles.",
   "appointments.find.empty.state.no.user": "Aucune personne ne correspond à votre recherche.",

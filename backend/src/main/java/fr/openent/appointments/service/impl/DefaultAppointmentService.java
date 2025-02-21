@@ -173,7 +173,7 @@ public class DefaultAppointmentService implements AppointmentService {
                 if (user.isPresent()) {
                     NeoUser otherUser = user.get();
                     composeInfos.put(CAMEL_NEO_USER, otherUser);
-                    return eventBusService.getDocumentResponseFromGrid(userInfos.getUserId(), appointment.getDocumentsIds());
+                    return eventBusService.getDocumentResponseFromGrid(otherUserId, appointment.getDocumentsIds());
                 }
                 else {
                     String errorMessage = "User not found";
@@ -281,18 +281,22 @@ public class DefaultAppointmentService implements AppointmentService {
                     LogHelper.logError(this, functionName, "User is not in appointment", "");
                     return Future.failedFuture("User is not in appointment");
                 }
-                composeInfos.put(STATE, appointmentWithInfos.getState().getValue());
+                AppointmentState currentState = appointmentWithInfos.getState();
+                composeInfos.put(STATE, currentState.getValue());
                 if ( (targetState == AppointmentState.ACCEPTED || targetState == AppointmentState.REFUSED) && !isOwnerOfAppointment(appointmentWithInfos, userInfos.getUserId())) {
                     String errorMessage = "User is not the owner of the appointment";
                     LogHelper.logError(this, functionName, errorMessage, "");
                     return Future.failedFuture(errorMessage);
                 }
-                if (targetState == AppointmentState.CANCELED && !isBeforeLimitHoursAppointment(appointmentWithInfos.getBeginDate())) {
+                if (targetState == AppointmentState.CANCELED &&
+                    currentState == AppointmentState.ACCEPTED &&
+                    !isBeforeLimitHoursAppointment(appointmentWithInfos.getBeginDate()))
+                {
                     String errorMessage = "Appointment cannot be canceled less than " + limitHoursBeforeCancelAppointment + " hours before";
                     LogHelper.logError(this, functionName, errorMessage, "");
                     return Future.failedFuture(errorMessage);
                 }
-                if (!isValidAction(AppointmentState.getAppointmentState((String) composeInfos.getValue(STATE)), targetState)) {
+                if (!isValidAction(currentState, targetState)) {
                     String errorMessage = "Invalid action";
                     LogHelper.logError(this, functionName, errorMessage, "");
                     return Future.failedFuture(errorMessage);
@@ -301,8 +305,10 @@ public class DefaultAppointmentService implements AppointmentService {
             })
             .onSuccess(updatedAppointment -> {
                 if (updatedAppointment.isPresent()) {
-                    promise.complete(updatedAppointment.get());
-                    notifyService.notifyAppointmentUpdate(request, userInfos, AppointmentState.getAppointmentState((String) composeInfos.getValue(STATE)), appointmentId);
+                    Appointment appointmentUpdated = updatedAppointment.get();
+                    promise.complete(appointmentUpdated);
+                    AppointmentState previousState = AppointmentState.getAppointmentState((String) composeInfos.getValue(STATE));
+                    notifyService.notifyAppointmentUpdate(request, userInfos, previousState, appointmentId);
                 } else {
                     LogHelper.logError(this, functionName, "Failed to update appointment", "");
                     promise.fail("Failed to update appointment");

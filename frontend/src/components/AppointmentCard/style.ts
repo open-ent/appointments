@@ -6,7 +6,9 @@ import { StyledCardProps } from "./types";
 export const StyledCard = styled(Box)<StyledCardProps>(({
   isAnimated,
   theme: {
-    palette: { primary: light },
+    palette: {
+      primary: { light },
+    },
   },
 }) => {
   return {

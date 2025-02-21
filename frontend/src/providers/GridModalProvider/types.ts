@@ -51,7 +51,7 @@ export interface GridModalProviderContextProps {
   totalFilesSize: number;
   handleAddFile: (event: ChangeEvent<HTMLInputElement>) => void;
   handleDeleteFile: (file: MyCustomFile) => void;
-  initFiles: (documents: Document[]) => void;
+  initFiles: (documents: Document[], modalType: GRID_MODAL_TYPE) => void;
   isSubmitButtonLoading: boolean;
 }
 
@@ -80,6 +80,7 @@ export interface GridModalInputs {
 
 export interface InputsErrors {
   name: string;
+  location: string;
   videoCallLink: string;
   validityPeriod: string;
   weekSlots: string;

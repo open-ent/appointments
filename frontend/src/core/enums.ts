@@ -16,7 +16,7 @@ export enum DAY {
 
 export enum PERIODICITY {
   WEEKLY = "WEEKLY",
-  BIWEEKLY = "BIWEEKLY",
+  FORTNIGHTLY = "FORTNIGHTLY",
 }
 
 export enum GRID_STATE {

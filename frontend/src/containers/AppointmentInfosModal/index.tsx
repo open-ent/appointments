@@ -105,8 +105,8 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                   <Typography fontSize="1.6rem" color="text.primary">
                     {t("appointments.my.appointment.infos.modal.video.call")}
                   </Typography>
-                  <Link href={appointment.videoCallLink} color={"primary"}>
-                    <Typography fontSize="1.6rem" color="text.primary">
+                  <Link href={appointment.videoCallLink} target="_blank">
+                    <Typography fontSize="1.6rem">
                       {appointment.videoCallLink}
                     </Typography>
                   </Link>
@@ -142,9 +142,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                       underline="hover"
                       target="_blank"
                     >
-                      <Typography fontSize="1.6rem" color="text.primary">
-                        {doc.name}
-                      </Typography>
+                      <Typography fontSize="1.6rem">{doc.name}</Typography>
                     </Link>
                   ))}
                 </Box>

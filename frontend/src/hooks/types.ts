@@ -57,11 +57,13 @@ export type useUpdateGridInputsType = (
 
 export interface useBlurGridInputsReturnType {
   newNameError: string;
+  newLocationError: string;
   newVideoCallLinkError: string;
   newValidityPeriodError: string;
   newWeekSlotsError: string;
   newSlotsError: { ids: number[]; error: string };
   handleNameBlur: () => void;
+  handleLocationBlur: () => void;
   handleVideoCallLinkBlur: () => void;
 }
 

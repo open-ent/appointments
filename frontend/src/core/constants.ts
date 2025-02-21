@@ -98,7 +98,7 @@ export const PERIODICITY_VALUES = {
     numberOfWeeks: 1,
     i18nKey: "appointments.grid.periodicity.weekly",
   },
-  [PERIODICITY.BIWEEKLY]: {
+  [PERIODICITY.FORTNIGHTLY]: {
     numberOfWeeks: 2,
     i18nKey: "appointments.grid.periodicity.biweekly",
   },

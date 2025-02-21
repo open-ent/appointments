@@ -56,7 +56,11 @@ export const FirstPageGridModal: FC = () => {
       handleVideoCallLinkChange,
       handlePublicCommentChange,
     },
-    blurGridModalInputs: { handleNameBlur, handleVideoCallLinkBlur },
+    blurGridModalInputs: {
+      handleNameBlur,
+      handleVideoCallLinkBlur,
+      handleLocationBlur,
+    },
     modalType,
     files,
     totalFilesSize,
@@ -111,10 +115,15 @@ export const FirstPageGridModal: FC = () => {
         </Select>
       </FormControl>
       <TextField
-        label={t("appointments.grid.location")}
+        label={t("appointments.grid.location", {
+          required: inputs.isVideoCall ? "" : "* ",
+        })}
         variant="outlined"
         value={inputs.location}
         onChange={handleLocationChange}
+        onBlur={handleLocationBlur}
+        error={!!errorInputs.location}
+        helperText={t(errorInputs.location)}
         disabled={modalType === GRID_MODAL_TYPE.CONSULTATION}
       />
       <CustomMultiAutocomplete />
@@ -171,7 +180,10 @@ export const FirstPageGridModal: FC = () => {
               tabIndex={-1}
               startIcon={<UploadFileIcon />}
               sx={addDocumentStyle}
-              disabled={isAddDocumentDisabled}
+              disabled={
+                modalType === GRID_MODAL_TYPE.CONSULTATION ||
+                isAddDocumentDisabled
+              }
             >
               {t("appointments.grid.add.document")}
               <VisuallyHiddenInput

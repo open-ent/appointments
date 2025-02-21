@@ -20,6 +20,7 @@ import { DailySlot } from "../DailySlot";
 import {
   dayBoxStyle,
   dayLabelStyle,
+  dividerStyle,
   errorStyle,
   iconStyle,
   noSlotStyle,
@@ -58,7 +59,12 @@ export const WeekSlots: FC = () => {
               <Typography sx={dayLabelStyle}>
                 {t(DAY_VALUES[day].i18nKey)}
               </Typography>
-              <Divider flexItem variant="middle" orientation="vertical" />
+              <Divider
+                sx={dividerStyle}
+                flexItem
+                variant="middle"
+                orientation="vertical"
+              />
               <Box>
                 <Box sx={slotsBoxStyle}>
                   {timeSlots.map((slot) => (

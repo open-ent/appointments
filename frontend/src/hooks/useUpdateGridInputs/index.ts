@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import { HexaColor } from "~/components/ColorPicker/types";
 import { DAY, DURATION, PERIODICITY } from "~/core/enums";
 import {
+  FIELD_REQUIRED_ERROR,
   INVALID_SLOT_ERROR,
   SAME_GRID_ALREADY_EXISTS_ERROR,
 } from "~/core/i18nKeys";
@@ -81,7 +82,12 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   };
 
   const handleLocationChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateInputField("location", formatString(e.target.value));
+    const newLocation = formatString(e.target.value);
+    updateInputField("location", newLocation);
+    if (!inputs.isVideoCall && !newLocation.length) {
+      return updateErrorInputs("location", FIELD_REQUIRED_ERROR);
+    }
+    updateErrorInputs("location", "");
   };
 
   const handlePublicChange = (_: SyntheticEvent, value: Public[]) => {
@@ -89,12 +95,16 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   };
 
   const handleIsVideoCallChange = () => {
-    updateInputField("isVideoCall", !inputs.isVideoCall);
+    if (inputs.isVideoCall && !inputs.location.length) {
+      updateErrorInputs("location", FIELD_REQUIRED_ERROR);
+    } else {
+      updateErrorInputs("location", "");
+    }
+    return updateInputField("isVideoCall", !inputs.isVideoCall);
   };
 
   const handleVideoCallLinkChange = (e: ChangeEvent<HTMLInputElement>) => {
     updateInputField("videoCallLink", formatString(e.target.value));
-    updateErrorInputs("videoCallLink", "");
   };
 
   const handlePublicCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
