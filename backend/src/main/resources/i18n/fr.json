@@ -9,7 +9,7 @@
   "appointments.create.grid.abandon.title": "Abandonner la création de la grille ?",
   "appointments.create.grid.abandon.message": "Si vous confirmez, les informations saisies seront perdues.",
 
-  "appointments.consultation.grid.title": "Consulter votre grille passée",
+  "appointments.consultation.grid.title": "Consulter votre grille expirée",
 
   "appointments.modify.grid.title": "Modifier votre grille horaire",
   "appointments.modify.grid.alert": "Les champs impactant la prise de rendez-vous ne sont pas modifiables (public, validité, créneaux, ...).",
@@ -57,7 +57,7 @@
   "appointments.grid.empty.state": "Vous n’avez pas encore défini de grille horaire.",
   "appointments.grid.in.progress.empty.state": "Vous n’avez pas encore défini de grille horaire pour les jours à venir.",
   "appointments.grid.in.progress": "Grilles en cours",
-  "appointments.grid.passed": "Grilles passées",
+  "appointments.grid.passed": "Grilles expirées",
 
   "appointments.grid.from.date.to.date": "Du {{beginDate}} au {{endDate}}",
   "appointments.grid.state.open": "Active",

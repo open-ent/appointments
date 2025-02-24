@@ -89,3 +89,12 @@ export const moreButtonStyle: SxProps = {
     fontSize: "2.4rem",
   },
 };
+
+export const menuStyle: SxProps = {
+  ".MuiSvgIcon-root": {
+    fontSize: "2rem",
+  },
+  ".MuiMenuItem-root": {
+    gap: ".8rem",
+  },
+};

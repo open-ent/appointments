@@ -59,7 +59,7 @@ export const GridList: FC<GridListProps> = ({ gridType, cardSize }) => {
             onClick={handleChangeExpanded}
             isExpandable={isExpandable}
           >
-            <Typography variant="h4">
+            <Typography fontSize="1.8rem">
               {t(
                 `appointments.grid.${
                   gridType === GRID_TYPE.IN_PROGRESS ? "in.progress" : "passed"

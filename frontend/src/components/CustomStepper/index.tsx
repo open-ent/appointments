@@ -43,6 +43,7 @@ export const CustomStepper: FC<CustomStepperProps> = ({
             startIcon={<KeyboardArrowLeft />}
             variant="text"
             sx={backButtonStyle}
+            disabled={isSubmitButtonLoading}
           >
             {t("appointments.back")}
           </Button>

@@ -16,7 +16,7 @@ export const ModalContainer = styled(Box)<{ isMobile: boolean }>(
     width: "calc( min(110rem, 95%))",
     maxWidth: isMobile ? "60rem" : "default",
     height: "80vh",
-    maxHeight: "fit-content",
+    maxHeight: "63rem",
     background: "white",
     borderRadius: ".5rem",
   }),

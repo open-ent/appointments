@@ -74,7 +74,7 @@ export const MyAppointments: FC = () => {
           <Typography variant="h3" color="primary" fontWeight="bold">
             {t("appointments.my.appointments")}
           </Typography>
-          <Typography fontStyle={"italic"} variant="h5">
+          <Typography fontStyle={"italic"} fontSize="1.6rem">
             {t("appointments.my.appointments.accepted.empty.state")}
           </Typography>
           <Box sx={emptyStateSVGStyle}>

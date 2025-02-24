@@ -131,12 +131,12 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
 
         String query = "SELECT DISTINCT ts.* FROM " + DB_TIME_SLOT_TABLE + " ts " +
                 "JOIN " + DB_GRID_TABLE + " g ON ts.grid_id = g.id " +
-                "LEFT JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
-                "WHERE (a.id IS NULL OR a.state NOT IN " +
-                Sql.listPrepared(availableAppointmentStates) + ") AND ts.grid_id = ? " +
-                "AND ts.begin_date >= " + FRENCH_NOW;
+                "WHERE ts.grid_id = ? " +
+                "AND ts.begin_date >= " + FRENCH_NOW + " " +
+                "AND NOT EXISTS (SELECT 1 FROM " + DB_APPOINTMENT_TABLE + " a WHERE a.time_slot_id = ts.id AND a.state IN " +
+                Sql.listPrepared(availableAppointmentStates) + ")";
 
-        JsonArray params = new JsonArray().addAll(new JsonArray(availableAppointmentStates)).add(gridId);
+        JsonArray params = new JsonArray().add(gridId).addAll(new JsonArray(availableAppointmentStates));
 
         if (beginDate != null) {
             query += "AND ts.begin_date >= ? ";

@@ -203,7 +203,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       },
     };
     setErrorInputs(newErrors);
-    if (newErrors.name || newErrors.videoCallLink) return;
+    if (newErrors.name || newErrors.videoCallLink || newErrors.location) return;
     setPage(PAGE_TYPE.SECOND);
   }, [blurGridModalInputs]);
 

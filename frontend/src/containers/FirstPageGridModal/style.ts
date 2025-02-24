@@ -30,6 +30,15 @@ export const VisuallyHiddenInput = styled("input")({
   display: "none",
 });
 
+export const documentBoxStyle: SxProps = {
+  display: "flex",
+  justifyContent: "space-between",
+  gap: "1rem",
+  "@media (max-width: 550px)": {
+    flexDirection: "column",
+  },
+};
+
 export const addDocumentStyle: SxProps = {
   minWidth: "fit-content",
 };
@@ -38,4 +47,7 @@ export const docsInfosStyle: SxProps = {
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-end",
+  "@media (max-width: 550px)": {
+    alignItems: "flex-start",
+  },
 };

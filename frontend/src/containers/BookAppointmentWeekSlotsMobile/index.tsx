@@ -55,7 +55,7 @@ export const BookAppointmentWeekSlotsMobile: FC = () => {
         <ArrowButton isVisible={canGoPrev} onClick={handlePreviousWeek}>
           <KeyboardArrowLeftIcon />
         </ArrowButton>
-        <Typography variant="h5" fontWeight={"bold"}>
+        <Typography fontSize="1.6rem" fontWeight={"bold"}>
           {t("appointments.book.appointment.modal.change.week")}
         </Typography>
         <ArrowButton isVisible={canGoNext} onClick={handleNextWeek}>

@@ -135,13 +135,15 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
           {!!publicComment && (
             <Box sx={itemComStyle}>
               <ChatIcon />
-              <Typography
-                color="text.primary"
-                sx={ellipsisWithWrapStyle}
-                fontStyle="italic"
-              >
-                {publicComment}
-              </Typography>
+              <Box sx={itemComStyle}>
+                <Typography
+                  color="text.primary"
+                  sx={ellipsisWithWrapStyle}
+                  fontStyle="italic"
+                >
+                  {publicComment}
+                </Typography>
+              </Box>
             </Box>
           )}
         </Box>

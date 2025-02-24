@@ -31,6 +31,7 @@ import {
   firstLineBoxStyle,
   leftBoxStyle,
   leftTextWrapperStyle,
+  menuStyle,
   moreButtonBoxStyle,
   moreButtonStyle,
   secondLineBoxStyle,
@@ -184,6 +185,7 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
             anchorEl={anchorEl}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
+            sx={menuStyle}
           >
             {grid.state === GRID_STATE.CLOSED ? (
               <MenuItem onClick={handleOpenConsultModal}>

@@ -25,12 +25,13 @@ import {
 import { useGlobal } from "~/providers/GlobalProvider";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
-import { flexStartBoxStyle, spaceBetweenBoxStyle } from "~/styles/boxStyles";
+import { flexStartBoxStyle } from "~/styles/boxStyles";
 import { pageGridModalStyle } from "../GridModal/style";
 import {
   addDocumentStyle,
   colorStyle,
   docsInfosStyle,
+  documentBoxStyle,
   firstLineStyle,
   nameStyle,
   selectStyle,
@@ -165,7 +166,7 @@ export const FirstPageGridModal: FC = () => {
         error={inputs.publicComment.length === MAX_STRING_LENGTH}
         disabled={modalType === GRID_MODAL_TYPE.CONSULTATION}
       />
-      <Box sx={spaceBetweenBoxStyle}>
+      <Box sx={documentBoxStyle}>
         <Tooltip
           title={
             isAddDocumentDisabled && t("appointments.max.number.files.exceeded")

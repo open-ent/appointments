@@ -39,13 +39,22 @@ export const DialogModal: FC<DialogModalProps> = ({
     setSelectedOption(option);
   };
 
+  const handleClose = (_: object, reason: string) => {
+    if (reason === "backdropClick") return;
+    return handleCancel();
+  };
+
   return (
-    <Dialog open={open} showCloseButton onClose={handleCancel}>
+    <Dialog
+      open={open}
+      showCloseButton={!isSubmitButtonLoading}
+      onClose={handleClose}
+    >
       <DialogTitle fontWeight="bold" fontSize="2rem">
         {title}
       </DialogTitle>
       <DialogContent>
-        <Typography variant="h5">{description}</Typography>
+        <Typography fontSize="1.6rem">{description}</Typography>
         {showOptions && question && options.length && (
           <>
             <Typography variant="body1">{question}</Typography>
@@ -68,7 +77,11 @@ export const DialogModal: FC<DialogModalProps> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button variant="text" onClick={handleCancel}>
+        <Button
+          variant="text"
+          onClick={handleCancel}
+          disabled={isSubmitButtonLoading}
+        >
           {t("appointments.cancel")}
         </Button>
         <Button
