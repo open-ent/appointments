@@ -7,6 +7,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 
 import fr.openent.appointments.repository.RepositoryFactory;
+import org.entcore.common.events.EventStore;
 import org.entcore.common.notification.TimelineHelper;
 
 public class ServiceFactory {
@@ -15,17 +16,19 @@ public class ServiceFactory {
     private final AppConfig appConfig;
     private final TimelineHelper timelineHelper;
     private final EventBusService eventBusService;
+    private final EventStore eventStore;
     private final TimeSlotService timeSlotService;
     private final GridService gridService;
     private final CommunicationService communicationService;
     private final AppointmentService appointmentService;
     private final NotifyService notifyService;
 
-    public ServiceFactory(Vertx vertx, AppConfig appConfig, RepositoryFactory repositoryFactory, TimelineHelper timelineHelper) {
+    public ServiceFactory(Vertx vertx, EventStore eventStore, AppConfig appConfig, RepositoryFactory repositoryFactory, TimelineHelper timelineHelper) {
         this.vertx = vertx;
         this.appConfig = appConfig;
         this.timelineHelper = timelineHelper;
         this.eventBusService = new DefaultEventBusService(this);
+        this.eventStore = eventStore;
         this.notifyService = new DefaultNotifyService(this, repositoryFactory);
         this.timeSlotService = new DefaultTimeSlotService(this, repositoryFactory);
         this.gridService = new DefaultGridService(this, repositoryFactory);
@@ -39,6 +42,10 @@ public class ServiceFactory {
 
     public EventBus eventBus() {
         return this.vertx.eventBus();
+    }
+
+    public EventStore eventStore() {
+        return this.eventStore;
     }
 
     public AppConfig appConfig() {

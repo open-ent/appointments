@@ -13,18 +13,22 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;
 
 import org.entcore.common.controller.ControllerHelper;
+import org.entcore.common.events.EventStore;
 import org.entcore.common.http.filter.ResourceFilter;
 import org.entcore.common.http.filter.SuperAdminFilter;
 
 import static fr.openent.appointments.core.constants.Constants.CAMEL_MIN_HOURS_BEFORE_CANCELLATION;
 import static fr.openent.appointments.core.constants.Constants.CAMEL_THEME_PLATFORM;
+import static fr.openent.appointments.enums.Events.ACCESS;
 
 public class MainController extends ControllerHelper {
 
     private final AppConfig appConfig;
+    private final EventStore eventStore;
 
     public MainController(ServiceFactory serviceFactory) {
         this.appConfig = serviceFactory.appConfig();
+        this.eventStore = serviceFactory.eventStore();
     }
 
     @Get("")
@@ -36,6 +40,7 @@ public class MainController extends ControllerHelper {
             .put(CAMEL_MIN_HOURS_BEFORE_CANCELLATION, appConfig.minHoursBeforeCancellation())
             .put(CAMEL_THEME_PLATFORM, appConfig.themePlatform());
         renderView(request, params, "index.html", null);
+        eventStore.createAndStoreEvent(ACCESS.name(), request);
     }
 
     @Get("/config")

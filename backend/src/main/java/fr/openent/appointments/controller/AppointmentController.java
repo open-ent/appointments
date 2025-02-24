@@ -23,6 +23,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.controller.ControllerHelper;
+import org.entcore.common.events.EventStore;
 import org.entcore.common.http.filter.ResourceFilter;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -33,13 +34,16 @@ import java.util.stream.IntStream;
 
 import static fr.openent.appointments.core.constants.Constants.*;
 import static fr.openent.appointments.core.constants.Fields.*;
+import static fr.openent.appointments.enums.Events.CREATE;
 
 public class AppointmentController extends ControllerHelper {
+    private final EventStore eventStore;
     private final AppointmentService appointmentService;
     private final GridService gridService;
     private final NotifyService notifyService;
 
     public AppointmentController(ServiceFactory serviceFactory) {
+        this.eventStore = serviceFactory.eventStore();
         this.appointmentService = serviceFactory.appointmentService();
         this.gridService = serviceFactory.gridService();
         this.notifyService = serviceFactory.notifyService();
@@ -50,6 +54,7 @@ public class AppointmentController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value="", type= ActionType.RESOURCE)
     public void createAppointment(final HttpServerRequest request) {
+        eventStore.createAndStoreEvent(CREATE.name(), request, new JsonObject().put(KEBAB_RESOURCE_TYPE, APPOINTMENT));
         Long timeSlotId = ParamHelper.getParam(CAMEL_TIME_SLOT_ID, request, Long.class, true, "createAppointment");
         if(request.response().ended()) return;
 

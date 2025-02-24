@@ -8,6 +8,8 @@ import fr.openent.appointments.service.ServiceFactory;
 import fr.wseduc.cron.CronTrigger;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.Promise;
+import org.entcore.common.events.EventStore;
+import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.notification.TimelineHelper;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.neo4j.Neo4j;
@@ -20,6 +22,7 @@ public class Appointments extends BaseServer {
         super.start(startPromise);
 
         EventBus eb = getEventBus(vertx);
+        EventStore eventStore = EventStoreFactory.getFactory().getEventStore(Appointments.class.getSimpleName());
         AppConfig appConfig = new AppConfig(config);
         TimelineHelper timelineHelper = new TimelineHelper(vertx, eb, config);
 
@@ -29,7 +32,7 @@ public class Appointments extends BaseServer {
 
         // Factory
         RepositoryFactory repositoryFactory = new RepositoryFactory(sql, neo4j);
-        ServiceFactory serviceFactory = new ServiceFactory(vertx, appConfig, repositoryFactory, timelineHelper);
+        ServiceFactory serviceFactory = new ServiceFactory(vertx, eventStore, appConfig, repositoryFactory, timelineHelper);
 
         // Controller
         addController(new MainController(serviceFactory));

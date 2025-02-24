@@ -5,7 +5,7 @@
       "port": 8483,
       "app-name" : "Appointments",
       "app-address" : "/appointments",
-      "app-icon" : "${host}/appointments/public/img/logo-appointments.svg",
+      "app-icon" : "appointments-large",
       "host": "${host}",
       "ssl" : $ssl,
       "sql" : true,

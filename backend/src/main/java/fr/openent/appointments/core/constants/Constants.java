@@ -42,10 +42,12 @@ public class Constants {
     public static final String KEBAB_CLOSING_CRON = "closing-cron";
     public static final String KEBAB_MIN_HOURS_BEFORE_CANCELLATION = "min-hours-before-cancellation";
     public static final String KEBAB_THEME_PLATFORM = "theme-platform";
+    public static final String KEBAB_RESOURCE_TYPE = "resource-type";
 
     // Other constants
     public static final String ACTION = "action";
     public static final String ALL = "all";
+    public static final String APPOINTMENT = "appointment";
     public static final String APPOINTMENTS = "Appointments";
     public static final String APPOINTMENTS_ADDRESS = "fr.openent.appointments";
     public static final String BODY = "body";

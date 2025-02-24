@@ -21,6 +21,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 import org.entcore.common.controller.ControllerHelper;
+import org.entcore.common.events.EventStore;
 import org.entcore.common.http.filter.ResourceFilter;
 
 import fr.openent.appointments.model.payload.GridPayload;
@@ -36,13 +37,16 @@ import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Constants.*;
 import static fr.openent.appointments.core.constants.Fields.OWNER_ID;
+import static fr.openent.appointments.enums.Events.CREATE;
 
 public class GridController extends ControllerHelper {
+    private final EventStore eventStore;
     private final GridService gridService;
     private final AppointmentService appointmentService;
     private final NotifyService notifyService;
 
     public GridController(ServiceFactory serviceFactory) {
+        this.eventStore = serviceFactory.eventStore();
         this.gridService = serviceFactory.gridService();
         this.appointmentService = serviceFactory.appointmentService();
         this.notifyService = serviceFactory.notifyService();
@@ -162,6 +166,7 @@ public class GridController extends ControllerHelper {
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void createGrid(final HttpServerRequest request) {
+        eventStore.createAndStoreEvent(CREATE.name(), request, new JsonObject().put(KEBAB_RESOURCE_TYPE, GRID));
         RequestUtils.bodyToJson(request, body -> {
             GridPayload gridPayload = new GridPayload(body);
             if (!gridPayload.isValid()) {
