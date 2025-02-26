@@ -23,7 +23,6 @@ import { UserPicture } from "~/components/UserPicture";
 import { APPOINTMENTS, DURATION_VALUES } from "~/core/constants";
 import { DURATION } from "~/core/enums";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
-import { ellipsisWithWrapStyle } from "~/styles/textStyles";
 import {
   bottomUserInfoStyle,
   itemStyle,
@@ -140,14 +139,16 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
             <Box sx={itemStyle}>
               <ChatIcon />
               <Stack maxWidth="90%">
-                <Typography
-                  variant="body2"
-                  color="text.primary"
-                  sx={ellipsisWithWrapStyle}
-                  fontStyle="italic"
+                <EllipsisWithTooltip
+                  typographyProps={{
+                    variant: "body2",
+                    color: "text.primary",
+                    fontStyle: "italic",
+                    whiteSpace: "pre-line",
+                  }}
                 >
                   {publicComment}
-                </Typography>
+                </EllipsisWithTooltip>
               </Stack>
             </Box>
           )}

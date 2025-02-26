@@ -49,6 +49,7 @@ export interface useUpdateGridInputsReturnType {
 
 export type useUpdateGridInputsType = (
   inputs: GridModalInputs,
+  setIsPublicCommentOverLimit: Dispatch<SetStateAction<boolean>>,
   setInputs: Dispatch<SetStateAction<GridModalInputs>>,
   setErrorInputs: Dispatch<SetStateAction<InputsErrors>>,
   structureOptions: Structure[],

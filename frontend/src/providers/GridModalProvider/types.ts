@@ -53,6 +53,7 @@ export interface GridModalProviderContextProps {
   handleDeleteFile: (file: MyCustomFile) => void;
   initFiles: (documents: Document[], modalType: GRID_MODAL_TYPE) => void;
   isSubmitButtonLoading: boolean;
+  isPublicCommentOverLimit: boolean;
 }
 
 export interface GridModalProviderProps {

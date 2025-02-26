@@ -100,6 +100,9 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   const [errorInputs, setErrorInputs] =
     useState<InputsErrors>(initialErrorInputs);
 
+  const [isPublicCommentOverLimit, setIsPublicCommentOverLimit] =
+    useState<boolean>(false);
+
   useEffect(() => {
     if (structures.length)
       setInputs((prev) => ({
@@ -120,6 +123,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   const updateGridModalInputs: useUpdateGridInputsReturnType =
     useUpdateGridInputs(
       inputs,
+      setIsPublicCommentOverLimit,
       setInputs,
       setErrorInputs,
       structures,
@@ -138,6 +142,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   }, [blurGridModalInputs]);
 
   const resetInputs = useCallback(() => {
+    setIsPublicCommentOverLimit(false);
     setInputs(initialGridModalInputs(structures));
     setErrorInputs(initialErrorInputs);
   }, [structures]);
@@ -333,6 +338,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       handleDeleteFile,
       initFiles,
       isSubmitButtonLoading,
+      isPublicCommentOverLimit,
     }),
     [
       inputs,
@@ -361,6 +367,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       handleDeleteFile,
       initFiles,
       isSubmitButtonLoading,
+      isPublicCommentOverLimit,
     ],
   );
 

@@ -20,7 +20,6 @@ import {
   ALLOWED_DOCUMENT_EXTENSIONS,
   APPOINTMENTS,
   MAX_FILE_PER_GRID,
-  MAX_STRING_LENGTH,
   MAX_TOTAL_FILE_SIZE_PER_GRID_MO,
 } from "~/core/constants";
 import { useGlobal } from "~/providers/GlobalProvider";
@@ -68,6 +67,7 @@ export const FirstPageGridModal: FC = () => {
     totalFilesSize,
     handleAddFile,
     handleDeleteFile,
+    isPublicCommentOverLimit,
   } = useGridModal();
 
   const isAddDocumentDisabled = useMemo(
@@ -168,10 +168,9 @@ export const FirstPageGridModal: FC = () => {
         value={inputs.publicComment}
         onChange={handlePublicCommentChange}
         helperText={
-          inputs.publicComment.length === MAX_STRING_LENGTH &&
-          t("appointments.grid.comment.text.helper")
+          isPublicCommentOverLimit && t("appointments.grid.comment.text.helper")
         }
-        error={inputs.publicComment.length === MAX_STRING_LENGTH}
+        error={isPublicCommentOverLimit}
         disabled={modalType === GRID_MODAL_TYPE.CONSULTATION}
       />
       <Box sx={documentBoxStyle}>

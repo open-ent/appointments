@@ -12,6 +12,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 
 import { HexaColor } from "~/components/ColorPicker/types";
+import { MAX_STRING_LENGTH } from "~/core/constants";
 import { DAY, DURATION, PERIODICITY } from "~/core/enums";
 import {
   FIELD_REQUIRED_ERROR,
@@ -34,6 +35,7 @@ import { formatString, handleConflictingSlot } from "./utils";
 
 export const useUpdateGridInputs: useUpdateGridInputsType = (
   inputs: GridModalInputs,
+  setIsPublicCommentOverLimit: Dispatch<SetStateAction<boolean>>,
   setInputs: Dispatch<SetStateAction<GridModalInputs>>,
   setErrorInputs: Dispatch<SetStateAction<InputsErrors>>,
   structureOptions: Structure[],
@@ -108,6 +110,7 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   };
 
   const handlePublicCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setIsPublicCommentOverLimit(e.target.value.length > MAX_STRING_LENGTH);
     updateInputField("publicComment", formatString(e.target.value));
   };
 
