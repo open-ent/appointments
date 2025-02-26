@@ -101,14 +101,14 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             {appointment.isVideoCall && (
               <Box sx={rowInfoStyle}>
                 <VideoCameraFrontIcon color="primary" />
-                <Box>
+                <Box maxWidth="90%">
                   <Typography variant="body1" color="text.primary">
                     {t("appointments.my.appointment.infos.modal.video.call")}
                   </Typography>
                   <Link href={appointment.videoCallLink} target="_blank">
-                    <Typography variant="body1">
+                    <EllipsisWithTooltip typographyProps={{ variant: "body1" }}>
                       {appointment.videoCallLink}
-                    </Typography>
+                    </EllipsisWithTooltip>
                   </Link>
                 </Box>
               </Box>
@@ -126,15 +126,21 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             {appointment.place && (
               <Box sx={rowInfoStyle}>
                 <PlaceIcon sx={greyIconStyle} />
-                <Typography variant="body1" color="text.primary">
+                <EllipsisWithTooltip
+                  typographyProps={{
+                    whiteSpace: "wrap",
+                    variant: "body1",
+                    color: "text.primary",
+                  }}
+                >
                   {appointment.place}
-                </Typography>
+                </EllipsisWithTooltip>
               </Box>
             )}
             {!!(appointment.documents && appointment.documents.length) && (
               <Box sx={rowInfoStyle}>
                 <AttachFileIcon sx={greyIconStyle} />
-                <Box>
+                <Box maxWidth="90%">
                   {appointment.documents.map((doc) => (
                     <Link
                       key={doc.id}
@@ -142,7 +148,11 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                       underline="hover"
                       target="_blank"
                     >
-                      <Typography variant="body1">{doc.name}</Typography>
+                      <EllipsisWithTooltip
+                        typographyProps={{ variant: "body1" }}
+                      >
+                        {doc.name}
+                      </EllipsisWithTooltip>
                     </Link>
                   ))}
                 </Box>
@@ -151,13 +161,15 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             {appointment.publicComment && (
               <Box sx={rowInfoStyle}>
                 <CommentIcon sx={greyIconStyle} />
-                <Typography
-                  variant="body1"
-                  color="text.primary"
-                  whiteSpace={"pre-line"}
+                <EllipsisWithTooltip
+                  typographyProps={{
+                    variant: "body1",
+                    color: "text.primary",
+                    whiteSpace: "pre-line",
+                  }}
                 >
                   {appointment.publicComment}
-                </Typography>
+                </EllipsisWithTooltip>
               </Box>
             )}
           </Box>

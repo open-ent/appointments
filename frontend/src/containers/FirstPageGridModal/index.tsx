@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
@@ -129,11 +130,18 @@ export const FirstPageGridModal: FC = () => {
       />
       <CustomMultiAutocomplete />
       <Box sx={flexStartBoxStyle}>
-        <Typography>{t("appointments.grid.videoconference")}</Typography>
-        <Switch
-          checked={inputs.isVideoCall}
-          onChange={handleIsVideoCallChange}
+        <FormControlLabel
+          value={t("appointments.grid.videoconference")}
           disabled={modalType !== GRID_MODAL_TYPE.CREATION}
+          control={
+            <Switch
+              checked={inputs.isVideoCall}
+              onChange={handleIsVideoCallChange}
+            />
+          }
+          label={t("appointments.grid.videoconference")}
+          labelPlacement="start"
+          sx={{ marginLeft: "0px" }}
         />
       </Box>
       {inputs.isVideoCall && (

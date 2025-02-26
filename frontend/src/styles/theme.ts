@@ -10,7 +10,7 @@ export const options: ThemeOptions = {
       fontSize: "2rem",
     },
     h3: {
-      fontSize: "2rem",
+      fontSize: "1.8rem",
     },
     h4: {
       fontSize: "1.8rem",

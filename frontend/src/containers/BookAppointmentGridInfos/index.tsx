@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import {
   Box,
+  EllipsisWithTooltip,
   FormControl,
   InputLabel,
   MenuItem,
@@ -25,7 +26,6 @@ import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvide
 import { ellipsisWithWrapStyle } from "~/styles/textStyles";
 import {
   bottomUserInfoStyle,
-  itemComStyle,
   itemStyle,
   pictureBoxStyle,
   pictureStyle,
@@ -110,19 +110,17 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
           {!!place && (
             <Box sx={itemStyle}>
               <PlaceIcon />
-              <Typography
-                variant="body2"
-                color="text.primary"
-                sx={ellipsisWithWrapStyle}
+              <EllipsisWithTooltip
+                typographyProps={{ variant: "body2", color: "text.primary" }}
               >
                 {place}
-              </Typography>
+              </EllipsisWithTooltip>
             </Box>
           )}
           {!!(documents && documents.length) && (
             <Box sx={itemStyle}>
               <AttachFileIcon />
-              <Stack direction="column">
+              <Stack direction="column" maxWidth="90%">
                 {documents.map((doc) => (
                   <Link
                     key={doc.id}
@@ -130,16 +128,18 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
                     underline="hover"
                     target="_blank"
                   >
-                    <Typography variant="body2">{doc.name}</Typography>
+                    <EllipsisWithTooltip typographyProps={{ variant: "body2" }}>
+                      {doc.name}
+                    </EllipsisWithTooltip>
                   </Link>
                 ))}
               </Stack>
             </Box>
           )}
           {!!publicComment && (
-            <Box sx={itemComStyle}>
+            <Box sx={itemStyle}>
               <ChatIcon />
-              <Box sx={itemComStyle}>
+              <Stack maxWidth="90%">
                 <Typography
                   variant="body2"
                   color="text.primary"
@@ -148,7 +148,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
                 >
                   {publicComment}
                 </Typography>
-              </Box>
+              </Stack>
             </Box>
           )}
         </Box>

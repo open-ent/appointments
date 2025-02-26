@@ -5,7 +5,7 @@ import { centerBoxStyle } from "~/styles/boxStyles";
 export const modalStyle: SxProps = {
   minWidth: "44rem",
   maxWidth: "44rem",
-  maxHeight: "80vh",
+  maxHeight: "90vh",
   height: "fit-content",
   overflowY: "scroll",
 
@@ -55,11 +55,13 @@ export const bottomContainerStyle: SxProps = {
   display: "flex",
   flexDirection: "column",
   gap: "1.6rem",
+  maxWidth: "100%",
 };
 
 export const rowInfoStyle: SxProps = {
   display: "flex",
   gap: "1.6rem",
+  maxWidth: "100%",
 };
 
 export const twoButtonsBoxStyle: SxProps = {

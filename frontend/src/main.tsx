@@ -25,6 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
+import { useTranslation } from "react-i18next";
 import {
   APPOINTMENTS,
   DEFAULT_MIN_HOURS_BEFORE_MODIFICATION,
@@ -78,41 +79,50 @@ const queryClient = new QueryClient({
 
 dayjs.locale("fr");
 
-root.render(
-  <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
-      <EdificeClientProvider
-        params={{
-          app: APPOINTMENTS,
-        }}
-      >
-        <EdificeThemeProvider>
-          <ThemeProviderCGI
-            themeId={themePlatform ?? "default"}
-            options={options}
-          >
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
-              <GlobalProvider
-                minHoursBeforeCancellation={minHoursBeforeCancellation}
+const App = () => {
+  const { t } = useTranslation(APPOINTMENTS);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <EdificeClientProvider
+          params={{
+            app: t("appointments.title"),
+          }}
+        >
+          <EdificeThemeProvider>
+            <ThemeProviderCGI
+              themeId={themePlatform ?? "default"}
+              options={options}
+            >
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                adapterLocale="fr"
               >
-                <FindAppointmentsProvider>
-                  <BookAppointmentModalProvider>
-                    <GridModalProvider>
-                      <AvailabilityProvider>
-                        <MyAppointmentsProvider>
-                          <ToastContainer {...TOAST_CONFIG} />
-                          <RouterProvider router={router} />
-                        </MyAppointmentsProvider>
-                      </AvailabilityProvider>
-                    </GridModalProvider>
-                  </BookAppointmentModalProvider>
-                </FindAppointmentsProvider>
-              </GlobalProvider>
-            </LocalizationProvider>
-          </ThemeProviderCGI>
-        </EdificeThemeProvider>
-      </EdificeClientProvider>
-    </Provider>
-    <ReactQueryDevtools initialIsOpen={false} />
-  </QueryClientProvider>,
-);
+                <GlobalProvider
+                  minHoursBeforeCancellation={minHoursBeforeCancellation}
+                >
+                  <FindAppointmentsProvider>
+                    <BookAppointmentModalProvider>
+                      <GridModalProvider>
+                        <AvailabilityProvider>
+                          <MyAppointmentsProvider>
+                            <ToastContainer {...TOAST_CONFIG} />
+                            <RouterProvider router={router} />
+                          </MyAppointmentsProvider>
+                        </AvailabilityProvider>
+                      </GridModalProvider>
+                    </BookAppointmentModalProvider>
+                  </FindAppointmentsProvider>
+                </GlobalProvider>
+              </LocalizationProvider>
+            </ThemeProviderCGI>
+          </EdificeThemeProvider>
+        </EdificeClientProvider>
+      </Provider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+};
+
+root.render(<App />);

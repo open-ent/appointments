@@ -61,7 +61,7 @@ export const AppointmentCardList: FC<AppointmentCardListProps> = ({
 
   return (
     <Box ref={containerRef} sx={containerStyle}>
-      <Typography variant="h3" color="primary" fontWeight="bold">
+      <Typography variant="h2" color="primary" fontWeight="bold">
         {t(MY_APPOINTMENTS_LIST_STATE_VALUES[appointmentsType].i18nTitleKey)}
       </Typography>
       {!myAppointments.total ? (

@@ -39,6 +39,16 @@ export const bottomUserInfoStyle: SxProps = {
     fontSize: "2.3rem",
     color: "grey.dark",
   },
+  "&::-webkit-scrollbar": {
+    width: "0.6rem",
+    height: "0.8rem",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "divider",
+    borderRadius: "0.3rem",
+  },
+  maxHeight: "31rem",
+  overflowY: "auto",
 };
 
 export const skeletonStyle: SxProps = {
@@ -51,20 +61,7 @@ export const itemStyle: SxProps = {
   ...flexStartBoxStyle,
   alignItems: "flex-start",
   gap: "1rem",
-};
-
-export const itemComStyle: SxProps = {
-  ...itemStyle,
-  maxHeight: "118px",
-  overflowY: "auto",
-  "&::-webkit-scrollbar": {
-    width: "0.6rem",
-    height: "0.8rem",
-  },
-  "&::-webkit-scrollbar-thumb": {
-    backgroundColor: "divider",
-    borderRadius: "0.3rem",
-  },
+  maxWidth: "100%",
 };
 
 export const pictureStyle: SxProps = {

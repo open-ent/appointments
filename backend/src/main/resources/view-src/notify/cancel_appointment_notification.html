@@ -1,22 +1,16 @@
 <span>
   {{#i18n}}timeline.appointments.cancelled.appointment.first{{/i18n}}
   {{#userUri}}
-    <a href="{{#host}}{{userUri}}{{/host}}">
-      {{#userName}}{{userName}}{{/userName}}
-    </a>
-  {{/userUri}}
-  {{^userUri}}
-    {{#userName}}{{userName}}{{/userName}}.
-  {{/userUri}}
+  <a href="{{#host}}{{userUri}}{{/host}}">
+    {{#userName}}{{userName}}{{/userName}}
+  </a>
+  {{/userUri}} {{^userUri}} {{#userName}}{{userName}}{{/userName}}. {{/userUri}}
   {{#i18n}}timeline.appointments.cancelled.appointment.second{{/i18n}}
   <br />
   {{#i18n}}timeline.appointments.cancelled.appointment.consult.app{{/i18n}}
   {{#appointmentUri}}
-    <a href="{{#host}}{{appointmentUri}}{{/host}}">
-      {{#i18n}}appointments{{/i18n}}.
-    </a>
-  {{/appointmentUri}}
-  {{^appointmentUri}}
-    {{#i18n}}appointments{{/i18n}}.
+  <a href="{{#host}}{{appointmentUri}}{{/host}}">
+    {{#i18n}}appointments{{/i18n}}</a
+  >. {{/appointmentUri}} {{^appointmentUri}} {{#i18n}}appointments{{/i18n}}.
   {{/appointmentUri}}
 </span>

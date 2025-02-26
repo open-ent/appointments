@@ -71,7 +71,7 @@ export const MyAppointments: FC = () => {
     return (
       <Box sx={spaceBetweenBoxStyle}>
         <Box sx={emptyStateLeftBoxStyle}>
-          <Typography variant="h3" color="primary" fontWeight="bold">
+          <Typography variant="h2" color="primary" fontWeight="bold">
             {t("appointments.my.appointments")}
           </Typography>
           <Typography fontStyle={"italic"} variant="body1">

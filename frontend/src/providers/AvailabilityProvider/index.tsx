@@ -21,6 +21,7 @@ import {
   useRestoreGridMutation,
   useSuspendGridMutation,
 } from "~/services/api/GridService";
+import { MyGrids } from "~/services/api/GridService/types";
 import { useGlobal } from "../GlobalProvider";
 import { useGridModal } from "../GridModalProvider";
 import { GRID_MODAL_TYPE } from "../GridModalProvider/enum";
@@ -254,43 +255,43 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
     isAvailableAppointmentsFetching,
   ]);
 
+  const updateGrids = useCallback(
+    (gridType: GRID_TYPE, data: MyGrids | undefined) => {
+      const grids = data?.grids;
+      const gridsLength = data?.total;
+
+      if (grids) {
+        setGrids((prevGrids) => ({
+          ...prevGrids,
+          [gridType]: grids,
+        }));
+      }
+
+      if (gridsLength !== undefined) {
+        setGridsLength((prevGridsLength) => ({
+          ...prevGridsLength,
+          [gridType]: gridsLength,
+        }));
+
+        const currentPage = gridPages[gridType];
+        if (currentPage > 1 && gridsLength <= 5 * (currentPage - 1)) {
+          setGridPages((prevGridPages) => ({
+            ...prevGridPages,
+            [gridType]: currentPage - 1,
+          }));
+        }
+      }
+    },
+    [gridPages],
+  );
+
   useEffect(() => {
-    const myInProgressGrids = myInProgressData?.grids;
-    const myInProgressGridsLength = myInProgressData?.total;
-
-    if (myInProgressGrids) {
-      setGrids((prevGrids) => ({
-        ...prevGrids,
-        [GRID_TYPE.IN_PROGRESS]: myInProgressGrids,
-      }));
-    }
-
-    if (myInProgressGridsLength !== undefined) {
-      setGridsLength((prevGridsLength) => ({
-        ...prevGridsLength,
-        [GRID_TYPE.IN_PROGRESS]: myInProgressGridsLength,
-      }));
-    }
-  }, [myInProgressData]);
+    updateGrids(GRID_TYPE.IN_PROGRESS, myInProgressData);
+  }, [gridPages, myInProgressData, updateGrids]);
 
   useEffect(() => {
-    const myClosedGrids = myClosedData?.grids;
-    const myClosedGridsLength = myClosedData?.total;
-
-    if (myClosedGrids) {
-      setGrids((prevGrids) => ({
-        ...prevGrids,
-        [GRID_TYPE.CLOSED]: myClosedGrids,
-      }));
-    }
-
-    if (myClosedGridsLength !== undefined) {
-      setGridsLength((prevGridsLength) => ({
-        ...prevGridsLength,
-        [GRID_TYPE.CLOSED]: myClosedGridsLength,
-      }));
-    }
-  }, [myClosedData]);
+    updateGrids(GRID_TYPE.CLOSED, myClosedData);
+  }, [gridPages, myClosedData, updateGrids]);
 
   const isLoading = isLoadingInProgress || isLoadingClosed;
 

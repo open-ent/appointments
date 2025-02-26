@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import {
   Box,
   Button,
+  EllipsisWithTooltip,
   IconButton,
   Menu,
   MenuItem,
@@ -80,15 +81,14 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
         <ColorDot color={grid.color} />
         <Box sx={leftTextWrapperStyle}>
           <Box sx={firstLineBoxStyle}>
-            <Typography
-              variant="body1"
-              overflow="hidden"
-              textOverflow="ellipsis"
-              noWrap
-              color="text.primary"
+            <EllipsisWithTooltip
+              typographyProps={{
+                variant: "body1",
+                color: "text.primary",
+              }}
             >
               {grid.name}
-            </Typography>
+            </EllipsisWithTooltip>
             {isMultiStructure && (
               <Tooltip
                 title={getStructureNameById(grid.structureId)}
