@@ -65,7 +65,7 @@ export const AppointmentCardList: FC<AppointmentCardListProps> = ({
         {t(MY_APPOINTMENTS_LIST_STATE_VALUES[appointmentsType].i18nTitleKey)}
       </Typography>
       {!myAppointments.total ? (
-        <Typography fontStyle="italic" fontSize="1.6rem">
+        <Typography fontStyle="italic" variant="body1">
           {t(
             MY_APPOINTMENTS_LIST_STATE_VALUES[appointmentsType]
               .i18nEmptyStateKey,

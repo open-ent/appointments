@@ -208,7 +208,7 @@ public class DefaultGridRepositoryTest {
                 .add(TEST_PLACE)
                 .add(TEST_DOCUMENTS_IDS.toString())
                 .add(TEST_PUBLIC_COMMENT)
-                .add(GridState.OPEN.getValue());
+                .add(GridState.CLOSED.getValue());
 
         doAnswer((Answer<Void>) invocation -> {
             String queryResult = invocation.getArgument(0);

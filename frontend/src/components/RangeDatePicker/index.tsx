@@ -21,14 +21,15 @@ export const RangeDatePicker: FC = () => {
     errorInputs: { validityPeriod: validityPeriodError },
     updateGridModalInputs: { handleStartDateChange, handleEndDateChange },
     modalType,
+    isSubmitButtonLoading,
   } = useGridModal();
 
   const isStartError = !!validityPeriodError && !startDate;
   const isEndError = !!validityPeriodError && !endDate;
 
   const disabled = useMemo(
-    () => modalType !== GRID_MODAL_TYPE.CREATION,
-    [modalType],
+    () => isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION,
+    [isSubmitButtonLoading, modalType],
   );
 
   return (

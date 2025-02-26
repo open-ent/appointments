@@ -83,7 +83,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               >
                 {appointment.displayName}
               </EllipsisWithTooltip>
-              <EllipsisWithTooltip typographyProps={{ fontSize: "1.6rem" }}>
+              <EllipsisWithTooltip>
                 {appointment.functions?.join(", ")}
               </EllipsisWithTooltip>
             </Box>
@@ -94,7 +94,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 state={appointment.state}
                 isRequester={appointment.isRequester}
               />
-              <Typography fontSize="1.6rem" color="text.primary">
+              <Typography variant="body1" color="text.primary">
                 {t(APPOINTMENT_STATE_VALUES[appointment.state].i18nKey)}
               </Typography>
             </Box>
@@ -102,11 +102,11 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               <Box sx={rowInfoStyle}>
                 <VideoCameraFrontIcon color="primary" />
                 <Box>
-                  <Typography fontSize="1.6rem" color="text.primary">
+                  <Typography variant="body1" color="text.primary">
                     {t("appointments.my.appointment.infos.modal.video.call")}
                   </Typography>
                   <Link href={appointment.videoCallLink} target="_blank">
-                    <Typography fontSize="1.6rem">
+                    <Typography variant="body1">
                       {appointment.videoCallLink}
                     </Typography>
                   </Link>
@@ -115,7 +115,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             )}
             <Box sx={rowInfoStyle}>
               <EventIcon sx={greyIconStyle} />
-              <Typography fontSize="1.6rem" color="text.primary">
+              <Typography variant="body1" color="text.primary">
                 {t("appointments.my.appointment.infos.modal.date", {
                   date: appointment.beginDate.format(TEXT_DATE_FORMAT),
                   beginTime: appointment.beginDate.format(TIME_FORMAT),
@@ -126,7 +126,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             {appointment.place && (
               <Box sx={rowInfoStyle}>
                 <PlaceIcon sx={greyIconStyle} />
-                <Typography fontSize="1.6rem" color="text.primary">
+                <Typography variant="body1" color="text.primary">
                   {appointment.place}
                 </Typography>
               </Box>
@@ -142,7 +142,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                       underline="hover"
                       target="_blank"
                     >
-                      <Typography fontSize="1.6rem">{doc.name}</Typography>
+                      <Typography variant="body1">{doc.name}</Typography>
                     </Link>
                   ))}
                 </Box>
@@ -152,7 +152,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
               <Box sx={rowInfoStyle}>
                 <CommentIcon sx={greyIconStyle} />
                 <Typography
-                  fontSize="1.6rem"
+                  variant="body1"
                   color="text.primary"
                   whiteSpace={"pre-line"}
                 >

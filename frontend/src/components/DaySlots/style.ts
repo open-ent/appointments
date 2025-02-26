@@ -1,4 +1,4 @@
-import { Box, Button, styled, SxProps } from "@cgi-learning-hub/ui";
+import { alpha, Box, Button, styled, SxProps } from "@cgi-learning-hub/ui";
 
 import { TimeSlotProps, TimeSlotWrapperProps } from "./types";
 
@@ -9,7 +9,7 @@ export const TimeSlot = styled(Button)<TimeSlotProps>(
     borderRadius: ".8rem !important",
     backgroundColor: selected
       ? theme.palette.primary.main
-      : theme.palette.primary.light,
+      : alpha(theme.palette.primary.main, 0.2),
     color: selected ? theme.palette.common.white : theme.palette.common.black,
     display: "flex",
     justifyContent: "center",

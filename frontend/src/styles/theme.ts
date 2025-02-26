@@ -16,9 +16,12 @@ export const options: ThemeOptions = {
       fontSize: "1.8rem",
     },
     body1: {
-      fontSize: "1.4rem",
+      fontSize: "1.6rem",
     },
     body2: {
+      fontSize: "1.4rem",
+    },
+    caption: {
       fontSize: "1.2rem",
     },
   },

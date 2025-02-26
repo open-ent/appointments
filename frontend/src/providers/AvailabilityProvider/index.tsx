@@ -173,7 +173,7 @@ export const AvailabilityProvider: FC<AvailabilityProviderProps> = ({
 
   const handleCancelDialogModal = useCallback(() => {
     setSelectedGridIdUpdateState(null);
-    setDialogModalProps(initialDialogModalProps);
+    setDialogModalProps((prev) => ({ ...prev, open: false }));
   }, []);
 
   const handleConfirmDialogModal = useCallback(

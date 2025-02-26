@@ -20,6 +20,7 @@ import org.entcore.common.sql.SqlResult;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 import static fr.openent.appointments.core.constants.Constants.FRENCH_NOW;
 import static fr.openent.appointments.core.constants.Constants.FRENCH_TIME_ZONE;
 import static fr.openent.appointments.core.constants.DateFormat.DATE_TIME_FORMAT_2;
-import static fr.openent.appointments.enums.GridState.CLOSED;
+import static fr.openent.appointments.enums.GridState.*;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.SqlTables.*;
 
@@ -350,6 +351,8 @@ public class DefaultGridRepository implements GridRepository {
         String query = "INSERT INTO "+ DB_GRID_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
                 "VALUES " + Sql.listPrepared(sqlColumns) + " RETURNING *";
 
+        GridState state = grid.getEndDate().isBefore(ChronoLocalDate.from(ZonedDateTime.now(ZoneId.of(FRENCH_TIME_ZONE)))) ? CLOSED : OPEN;
+
         JsonArray params = new JsonArray()
                 .add(grid.getGridName())
                 .add(userId)
@@ -366,7 +369,7 @@ public class DefaultGridRepository implements GridRepository {
                 .add(grid.getPlace())
                 .add(grid.getDocumentsIds().toString())
                 .add(grid.getPublicComment())
-                .add(GridState.OPEN.getValue());
+                .add(state.getValue());
 
         String errorMessage = "[Appointments@DefaultGridRepository::insert] Fail to insert grid : ";
         sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, Grid.class, errorMessage)));

@@ -15,12 +15,12 @@ public class MetaData implements IModel<MetaData> {
     private Long size;
 
     public MetaData(JsonObject  data) {
-        this.charSet = data.getString(CHARSET);
-        this.contentTransferEncoding = data.getString(CONTENT_TRANSFER_ENCODING);
-        this.contentType = data.getString(CONTENT_TYPE);
-        this.fileName = data.getString(FILENAME);
-        this.name = data.getString(NAME);
-        this.size = data.getLong(SIZE);
+        this.charSet = data.getString(CHARSET, "");
+        this.contentTransferEncoding = data.getString(CONTENT_TRANSFER_ENCODING, "");
+        this.contentType = data.getString(CONTENT_TYPE, "");
+        this.fileName = data.getString(FILENAME, "");
+        this.name = data.getString(NAME, "");
+        this.size = data.getLong(SIZE, 0L);
     }
 
     // Getters

@@ -36,6 +36,7 @@ import { BookAppointmentModalProvider } from "./providers/BookAppointmentModalPr
 import { FindAppointmentsProvider } from "./providers/FindAppointmentsProvider";
 import { GlobalProvider } from "./providers/GlobalProvider";
 import { GridModalProvider } from "./providers/GridModalProvider";
+import { MyAppointmentsProvider } from "./providers/MyAppointmentsProvider";
 import { router } from "./routes";
 import { setupStore } from "./store";
 import { options } from "./styles/theme";
@@ -98,8 +99,10 @@ root.render(
                   <BookAppointmentModalProvider>
                     <GridModalProvider>
                       <AvailabilityProvider>
-                        <ToastContainer {...TOAST_CONFIG} />
-                        <RouterProvider router={router} />
+                        <MyAppointmentsProvider>
+                          <ToastContainer {...TOAST_CONFIG} />
+                          <RouterProvider router={router} />
+                        </MyAppointmentsProvider>
                       </AvailabilityProvider>
                     </GridModalProvider>
                   </BookAppointmentModalProvider>

@@ -25,7 +25,7 @@ public class CompleteDocument implements IModel<CompleteDocument> {
         this.created = document.getString(CREATED);
         this.file = document.getString(FILE);
         this.isShared = document.getBoolean(CAMEL_IS_SHARED);
-        this.metaData = new MetaData(document.getJsonObject(METADATA));
+        this.metaData = new MetaData(document.getJsonObject(METADATA, new JsonObject()));
         this.modified = document.getString(MODIFIED);
         this.name = document.getString(NAME);
         this.owner = document.getString(OWNER);

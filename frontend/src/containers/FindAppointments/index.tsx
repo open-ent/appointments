@@ -73,7 +73,7 @@ export const FindAppointments: FC = () => {
         />
         {!users.length && !isFetching && (
           <Box sx={emptyStateBoxStyle}>
-            <Typography variant="body1" sx={emptyStateTextStyle}>
+            <Typography variant="body2" sx={emptyStateTextStyle}>
               {!search
                 ? t("appointments.find.empty.state.search.bar")
                 : t("appointments.find.empty.state.no.user")}

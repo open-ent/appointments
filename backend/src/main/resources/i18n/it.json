@@ -101,9 +101,10 @@
   "appointments.max.number.files.exceeded": "Limite de fichiers atteinte",
   "appointments.total.size.files": "Taille totale des fichiers : {{totalSize}}/{{maxSize}}Mo",
   "appointments.total.size.files.exceeded": "Le fichier dépasse la taille totale maximale.",
+  "appointments.not.allowed.extension": "L'extension du fichier n'est pas autorisée.",
 
   "appointments.cancel.request": "Annuler la demande",
-  "appointments.cannot.cancel.request.tooltip": "Impossible d'annuler un rendez-vous moins de {{hours}}h avant",
+  "appointments.cannot.cancel.request.tooltip": "Annulation indisponible moins de {{hours}}h avant le rendez-vous",
   "appointments.cancel.appointment": "Annuler le rendez-vous",
 
   "appointments.appointments": "Rendez-vous",

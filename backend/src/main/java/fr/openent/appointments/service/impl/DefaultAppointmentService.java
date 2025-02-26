@@ -173,7 +173,7 @@ public class DefaultAppointmentService implements AppointmentService {
                 if (user.isPresent()) {
                     NeoUser otherUser = user.get();
                     composeInfos.put(CAMEL_NEO_USER, otherUser);
-                    return eventBusService.getDocumentResponseFromGrid(otherUserId, appointment.getDocumentsIds());
+                    return eventBusService.getDocumentResponseFromGrid(appointment.getOwnerId(), appointment.getDocumentsIds());
                 }
                 else {
                     String errorMessage = "User not found";

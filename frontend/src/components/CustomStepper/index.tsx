@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { Button, MobileStepper } from "@cgi-learning-hub/ui";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import SaveIcon from "@mui/icons-material/Save";
 import { useTranslation } from "react-i18next";
 
@@ -40,7 +40,7 @@ export const CustomStepper: FC<CustomStepperProps> = ({
         ) : (
           <Button
             onClick={handlePrev}
-            startIcon={<KeyboardArrowLeft />}
+            startIcon={<KeyboardArrowLeftRoundedIcon />}
             variant="text"
             sx={backButtonStyle}
             disabled={isSubmitButtonLoading}

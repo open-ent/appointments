@@ -16,7 +16,7 @@ export const ModalContainer = styled(Box)<{ isMobile: boolean }>(
     width: "calc( min(110rem, 95%))",
     maxWidth: isMobile ? "60rem" : "default",
     height: "80vh",
-    maxHeight: "63rem",
+    maxHeight: "55rem",
     background: "white",
     borderRadius: ".5rem",
   }),
@@ -44,7 +44,7 @@ export const contentBoxStyle: SxProps = {
 export const closeIconStyle = {
   "& > .MuiSvgIcon-root": {
     fontSize: "2.4rem",
-    color: "text.primary",
+    color: "text.secondary",
   },
 };
 

@@ -39,6 +39,7 @@ export const SecondPageGridModal: FC = () => {
       handlePeriodicityChange,
     },
     modalType,
+    isSubmitButtonLoading,
   } = useGridModal();
 
   return (
@@ -55,7 +56,9 @@ export const SecondPageGridModal: FC = () => {
         <Typography>{t("appointments.grid.slot.duration") + " *"}</Typography>
         <Box sx={validityPeriodStyle}>
           <ToggleButtonGroup
-            disabled={modalType !== GRID_MODAL_TYPE.CREATION}
+            disabled={
+              isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION
+            }
             exclusive
             value={inputs.duration}
           >
@@ -76,7 +79,9 @@ export const SecondPageGridModal: FC = () => {
         <Typography>{t("appointments.grid.periodicity") + " *"}</Typography>
         <Box sx={validityPeriodStyle}>
           <ToggleButtonGroup
-            disabled={modalType !== GRID_MODAL_TYPE.CREATION}
+            disabled={
+              isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION
+            }
             exclusive
             value={inputs.periodicity}
           >

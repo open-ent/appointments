@@ -142,11 +142,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
           <Box sx={bottomRightBoxStyle}>
             <Box sx={rowBoxStyle}>
               <AccessTimeFilledIcon sx={iconsStyle} />
-              <Typography
-                variant="body2"
-                fontSize="1.3rem"
-                color="text.primary"
-              >
+              <Typography fontSize="1.3rem" color="text.primary">
                 {appointment.beginDate.format(TIME_FORMAT)} -{" "}
                 {appointment.endDate.format(TIME_FORMAT)}
               </Typography>
@@ -156,22 +152,14 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
                 state={appointment.state}
                 isRequester={appointment.isRequester}
               />
-              <Typography
-                variant="body2"
-                fontSize="1.3rem"
-                color="text.primary"
-              >
+              <Typography fontSize="1.3rem" color="text.primary">
                 {t(APPOINTMENT_STATE_VALUES[appointment.state].i18nKey)}
               </Typography>
             </Box>
             {appointment.isVideoCall && appointment.videoCallLink && (
               <Box sx={rowBoxStyle}>
                 <VideoCameraFrontIcon sx={iconsStyle} color="primary" />
-                <Typography
-                  variant="body2"
-                  fontSize="1.3rem"
-                  color="text.primary"
-                >
+                <Typography fontSize="1.3rem" color="text.primary">
                   {t("appointments.videoconference")}
                 </Typography>
               </Box>

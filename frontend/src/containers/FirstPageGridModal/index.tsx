@@ -196,12 +196,12 @@ export const FirstPageGridModal: FC = () => {
           </Box>
         </Tooltip>
         <Box sx={docsInfosStyle}>
-          <Typography>
+          <Typography variant="body2">
             {t("appointments.max.number.files", {
               maxNumber: MAX_FILE_PER_GRID,
             })}
           </Typography>
-          <Typography>
+          <Typography variant="body2">
             {t("appointments.total.size.files", {
               totalSize: displaySize(totalFilesSize),
               maxSize: MAX_TOTAL_FILE_SIZE_PER_GRID_MO,
@@ -209,7 +209,7 @@ export const FirstPageGridModal: FC = () => {
           </Typography>
         </Box>
       </Box>
-      <FileList files={files} onDelete={handleDeleteFile} />
+      {!!files.length && <FileList files={files} onDelete={handleDeleteFile} />}
     </Box>
   );
 };

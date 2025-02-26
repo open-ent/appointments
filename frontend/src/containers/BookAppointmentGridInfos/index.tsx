@@ -78,11 +78,11 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
             </InputLabel>
             <Select
               variant="standard"
-              value={selectedGrid?.name ?? ""}
-              onChange={(e) => handleGridChange(e.target.value as string)}
+              value={selectedGrid?.id ?? ""}
+              onChange={(e) => handleGridChange(e.target.value as number)}
             >
               {grids?.map((grid) => (
-                <MenuItem key={grid.id} value={grid.name}>
+                <MenuItem key={grid.id} value={grid.id}>
                   {grid.name}
                 </MenuItem>
               ))}
@@ -90,7 +90,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
           </FormControl>
           <Box sx={itemStyle}>
             {videoCallLink ? <VideoCameraFrontIcon /> : <VideocamOffIcon />}
-            <Typography color="text.primary">
+            <Typography variant="body2" color="text.primary">
               {t(
                 `appointments.book.appointment.modal.video.call.${
                   videoCallLink ? "possible" : "impossible"
@@ -100,7 +100,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
           </Box>
           <Box sx={itemStyle}>
             <TimerIcon />
-            <Typography color="text.primary">
+            <Typography variant="body2" color="text.primary">
               {t("appointments.slots") +
                 " : " +
                 DURATION_VALUES[duration ?? DURATION.FIFTEEN_MINUTES]
@@ -110,7 +110,11 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
           {!!place && (
             <Box sx={itemStyle}>
               <PlaceIcon />
-              <Typography color="text.primary" sx={ellipsisWithWrapStyle}>
+              <Typography
+                variant="body2"
+                color="text.primary"
+                sx={ellipsisWithWrapStyle}
+              >
                 {place}
               </Typography>
             </Box>
@@ -126,7 +130,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
                     underline="hover"
                     target="_blank"
                   >
-                    <Typography>{doc.name}</Typography>
+                    <Typography variant="body2">{doc.name}</Typography>
                   </Link>
                 ))}
               </Stack>
@@ -137,6 +141,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
               <ChatIcon />
               <Box sx={itemComStyle}>
                 <Typography
+                  variant="body2"
                   color="text.primary"
                   sx={ellipsisWithWrapStyle}
                   fontStyle="italic"

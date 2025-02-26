@@ -37,11 +37,15 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
     errorInputs: { slots },
     updateGridModalInputs: { handleDeleteSlot, handleSlotChange },
     modalType,
+    isSubmitButtonLoading,
   } = useGridModal();
 
   const isSlotError =
     slots.ids.some((item) => item === slot.id) &&
     (!slot.begin.time || !slot.end.time);
+
+  const isDisabled =
+    isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION;
 
   return (
     <StyledDailySlotBox isSlotError={isSlotError}>
@@ -53,13 +57,15 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
               onChange={(e) =>
                 handleSlotChange(day, slot, e.target.value, "begin")
               }
-              disabled={modalType !== GRID_MODAL_TYPE.CREATION}
+              disabled={isDisabled}
               sx={selectStyle}
               value={slot.begin.parseToString()}
               renderValue={(value: string) => (
                 <Box sx={boxValueStyle}>
                   <AccessTimeIcon sx={iconStyle} />
-                  <Typography sx={timeInputStyle}>{value}</Typography>
+                  <Typography variant="body2" sx={timeInputStyle}>
+                    {value}
+                  </Typography>
                 </Box>
               )}
             >
@@ -78,14 +84,16 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
               onChange={(e) =>
                 handleSlotChange(day, slot, e.target.value, "end")
               }
-              disabled={modalType !== GRID_MODAL_TYPE.CREATION}
+              disabled={isDisabled}
               sx={selectStyle}
               value={slot.end.parseToString()}
               label="test"
               renderValue={(value) => (
                 <Box sx={boxValueStyle}>
                   <AccessTimeIcon sx={iconStyle} />
-                  <Typography sx={timeInputStyle}>{value}</Typography>
+                  <Typography variant="body2" sx={timeInputStyle}>
+                    {value}
+                  </Typography>
                 </Box>
               )}
             >
@@ -102,6 +110,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
         <IconButton
           onClick={() => handleDeleteSlot(day, slot.id)}
           sx={iconButtonStyle}
+          disabled={isDisabled}
         >
           <DeleteIcon sx={iconStyle} />
         </IconButton>

@@ -42,7 +42,7 @@ export const contentBoxStyle: SxProps = {
 export const closeIconStyle = {
   "& > .MuiSvgIcon-root": {
     fontSize: "2.4rem",
-    color: "text.primary",
+    color: "text.secondary",
   },
 };
 

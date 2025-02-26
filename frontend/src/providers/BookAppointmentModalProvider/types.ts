@@ -21,7 +21,7 @@ export interface BookAppointmentModalProviderContextProps {
   nextAvailableTimeSlot: Dayjs | null;
   isGridTimeSlotsFetching: boolean;
   isVideoCallOptionChecked: boolean;
-  handleGridChange: (gridName: string) => void;
+  handleGridChange: (gridId: number) => void;
   handleOnClickSlot: (slotId: number) => void;
   handleNextWeek: () => void;
   handlePreviousWeek: () => void;

@@ -5,12 +5,14 @@ import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.helper.ParamHelper;
 import fr.openent.appointments.model.database.Appointment;
+import fr.openent.appointments.model.database.NeoGroup;
 import fr.openent.appointments.service.AppointmentService;
 import fr.openent.appointments.service.NotifyService;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Get;
 import fr.wseduc.rs.Post;
 import fr.wseduc.rs.Put;
+import fr.wseduc.webutils.I18n;
 import fr.wseduc.webutils.request.RequestUtils;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
@@ -94,6 +96,17 @@ public class GridController extends ControllerHelper {
             });
     }
 
+    private List<NeoGroup> formatGroupList(final HttpServerRequest request, List<NeoGroup> groups) {
+        String language = I18n.acceptLanguage(request);
+
+        groups.forEach(group -> {
+            String formattedName = UserUtils.groupDisplayName(group.getName(), null, language);
+            group.setName(formattedName);
+        });
+
+        return groups;
+    }
+
     @Get("/grids/:gridId")
     @ApiDoc("Get grid by id")
     @ResourceFilter(ViewRight.class)
@@ -116,6 +129,7 @@ public class GridController extends ControllerHelper {
                     unauthorized(request, errorMessage);
                     return;
                 }
+                grid.setGroups(formatGroupList(request, grid.getGroups()));
                 renderJson(request, grid.toJson());
             })
             .onFailure(error -> {

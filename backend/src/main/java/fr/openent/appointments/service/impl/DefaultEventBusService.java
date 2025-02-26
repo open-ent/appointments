@@ -42,6 +42,12 @@ public class DefaultEventBusService implements EventBusService {
 
         EventBusHelper.requestJsonArray(WORKSPACE_EB_ADDRESS, eb, ebMessage)
                 .onSuccess(documents -> {
+                    if (documents == null) {
+                        String errorMessage = "Error while getting documents from grid";
+                        LogHelper.logError(this, "getDocumentResponseFromGrid", errorMessage);
+                        promise.complete(new ArrayList<>());
+                        return;
+                    }
                     // all documents of user
                     List<CompleteDocument> completeDocuments = documents.stream()
                             .map(JsonObject::mapFrom)

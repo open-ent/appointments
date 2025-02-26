@@ -88,14 +88,13 @@ export const twoButtonsStyle = {
 };
 
 export const nameTypoStyle = {
-  variant: "body1" as TypographyProps["variant"],
+  variant: "body2" as TypographyProps["variant"],
   fontWeight: "bold",
   color: "text.primary",
-  fontSize: "1.6rem",
 };
 
 export const functionTypoStyle = {
-  variant: "body1" as TypographyProps["variant"],
+  variant: "body2" as TypographyProps["variant"],
   color: "text.primary",
   fontSize: "1.3rem",
 };

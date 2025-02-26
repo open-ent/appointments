@@ -71,7 +71,6 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
             >
               <Typography
                 variant="body1"
-                fontSize="1.6rem"
                 whiteSpace="nowrap"
                 overflow="hidden"
                 textOverflow="ellipsis"
@@ -87,7 +86,6 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               placement="bottom"
             >
               <Typography
-                variant="body2"
                 fontSize="1.3rem"
                 color="text.primary"
                 whiteSpace="nowrap"
@@ -99,7 +97,6 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
               </Typography>
             </Tooltip>
             <Typography
-              variant="body2"
               fontSize="1.3rem"
               color="text.primary"
               fontStyle="italic"

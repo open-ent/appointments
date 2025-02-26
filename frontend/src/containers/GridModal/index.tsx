@@ -7,7 +7,7 @@ import {
   Modal,
   Typography,
 } from "@cgi-learning-hub/ui";
-import CloseIcon from "@mui/icons-material/Close";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@cgi-learning-hub/ui";
@@ -65,12 +65,12 @@ export const GridModal: FC = () => {
                 sx={closeIconStyle}
                 onClick={handleCancel}
               >
-                <CloseIcon />
+                <CloseRoundedIcon />
               </IconButton>
             </Box>
             {modalType === GRID_MODAL_TYPE.EDIT && (
               <Alert severity="info">
-                <Typography variant="body1">
+                <Typography variant="body2">
                   {t("appointments.modify.grid.alert")}
                 </Typography>
               </Alert>

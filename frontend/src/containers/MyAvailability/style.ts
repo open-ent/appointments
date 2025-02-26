@@ -4,6 +4,7 @@ import { columnBoxStyle, spaceBetweenBoxStyle } from "~/styles/boxStyles";
 
 export const headerStyle = {
   ...spaceBetweenBoxStyle,
+  alignItems: "flex-start",
   gap: "2rem",
   flexWrap: "wrap",
 };

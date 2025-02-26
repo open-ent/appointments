@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { Box, Skeleton } from "@cgi-learning-hub/ui";
-import CloseIcon from "@mui/icons-material/Close";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import {
@@ -38,7 +38,7 @@ export const DaySlots: FC<DaySlotsProps> = ({ slots, isMobile }) => {
           ))
         ) : (
           <Box sx={noSlotsStyle}>
-            <CloseIcon />
+            <CloseRoundedIcon />
           </Box>
         )
       ) : (

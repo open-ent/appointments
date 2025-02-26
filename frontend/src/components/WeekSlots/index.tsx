@@ -35,6 +35,7 @@ export const WeekSlots: FC = () => {
     errorInputs: { slots },
     updateGridModalInputs: { handleAddSlot },
     modalType,
+    isSubmitButtonLoading,
   } = useGridModal();
 
   const entries = Object.entries(inputs.weekSlots) as [DAY, Slot[]][];
@@ -71,7 +72,10 @@ export const WeekSlots: FC = () => {
                     <DailySlot key={slot.id} day={day} slot={slot} />
                   ))}
                   {modalType === GRID_MODAL_TYPE.CREATION ? (
-                    <IconButton onClick={() => handleAddSlot(day)}>
+                    <IconButton
+                      disabled={isSubmitButtonLoading}
+                      onClick={() => handleAddSlot(day)}
+                    >
                       <AddCircleIcon sx={iconStyle} />
                     </IconButton>
                   ) : (

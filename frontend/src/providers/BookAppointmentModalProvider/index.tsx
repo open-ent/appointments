@@ -12,6 +12,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
+import { APPOINTMENTS } from "~/core/constants";
 import { useBookAppointmentMutation } from "~/services/api/AppointmentService";
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
 import {
@@ -31,7 +32,6 @@ import {
   transformStringToDayjs,
   transformTimeSlotsToDaySlots,
 } from "./utils";
-import { APPOINTMENTS } from "~/core/constants";
 
 const BookAppointmentModalProviderContext =
   createContext<BookAppointmentModalProviderContextProps | null>(null);
@@ -112,9 +112,9 @@ export const BookAppointmentModalProvider: FC<
   }, [nextAvailableTimeSlot]);
 
   const handleGridChange = useCallback(
-    (gridName: string) => {
+    (gridId: number) => {
       if (!grids) return;
-      const newGrid = grids.find((grid) => grid.name === gridName);
+      const newGrid = grids.find((grid) => grid.id === gridId);
       if (!newGrid) return;
       setCanGoNext(true);
       setCanGoPrev(false);

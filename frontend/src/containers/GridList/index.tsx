@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { Box, Collapse, Pagination, Typography } from "@cgi-learning-hub/ui";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -37,6 +37,10 @@ export const GridList: FC<GridListProps> = ({ gridType, cardSize }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(
     gridType === GRID_TYPE.IN_PROGRESS || !isExpandable,
   );
+
+  useEffect(() => {
+    if (!isExpandable) setIsExpanded(true);
+  }, [isExpandable]);
 
   const handleChangeExpanded = () => {
     if (gridType === GRID_TYPE.CLOSED && isExpandable)

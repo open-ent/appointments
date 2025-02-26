@@ -12,7 +12,6 @@ import { MyAvailability } from "~/containers/MyAvailability";
 import { APPOINTMENTS } from "~/core/constants";
 import { useFindAppointments } from "~/providers/FindAppointmentsProvider";
 import { useGlobal } from "~/providers/GlobalProvider";
-import { MyAppointmentsProvider } from "~/providers/MyAppointmentsProvider";
 import {
   appointmentsIconStyle,
   contentStyle,
@@ -94,11 +93,7 @@ export const Home: FC = () => {
         </Tabs>
         <Box sx={tabItemStyle}>
           {tabValue === 0 && <FindAppointments />}
-          {tabValue === 1 && (
-            <MyAppointmentsProvider>
-              <MyAppointments />
-            </MyAppointmentsProvider>
-          )}
+          {tabValue === 1 && <MyAppointments />}
           {tabValue === 2 && hasManageRight && <MyAvailability />}
         </Box>
       </Box>

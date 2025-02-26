@@ -66,11 +66,11 @@ export const CustomDateCalendar: FC<CustomDateCalendarProps> = ({
       <Box sx={legendStyle}>
         <Box sx={legendRowStyle}>
           <Box sx={todayLegendStyle}></Box>
-          <Typography variant="body1">{t("appointments.today")}</Typography>
+          <Typography variant="body2">{t("appointments.today")}</Typography>
         </Box>
         <Box sx={legendRowStyle}>
           <Box sx={appointmentsLegendStyle}></Box>
-          <Typography variant="body1">
+          <Typography variant="body2">
             {t("appointments.appointments")}
           </Typography>
         </Box>

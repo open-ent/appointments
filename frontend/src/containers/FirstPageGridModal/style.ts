@@ -9,7 +9,7 @@ export const firstLineStyle: SxProps = {
 };
 
 export const nameStyle: SxProps = {
-  flex: "1 1 60%",
+  flex: "1 1 50%",
 };
 
 export const colorStyle: SxProps = {

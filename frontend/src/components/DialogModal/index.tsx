@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  Stack,
   Typography,
 } from "@cgi-learning-hub/ui";
 
@@ -40,7 +41,7 @@ export const DialogModal: FC<DialogModalProps> = ({
   };
 
   const handleClose = (_: object, reason: string) => {
-    if (reason === "backdropClick") return;
+    if (reason === "backdropClick" && isSubmitButtonLoading) return;
     return handleCancel();
   };
 
@@ -54,27 +55,29 @@ export const DialogModal: FC<DialogModalProps> = ({
         {title}
       </DialogTitle>
       <DialogContent>
-        <Typography fontSize="1.6rem">{description}</Typography>
-        {showOptions && question && options.length && (
-          <>
-            <Typography variant="body1">{question}</Typography>
-            <FormControl>
-              <RadioGroup
-                value={selectedOption}
-                onChange={(e) => handleOptionChange(e.target.value)}
-              >
-                {options.map((option) => (
-                  <FormControlLabel
-                    key={option}
-                    value={option}
-                    control={<Radio />}
-                    label={option}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
-          </>
-        )}
+        <Stack gap={1}>
+          <Typography variant="body1">{description}</Typography>
+          {showOptions && question && options.length && (
+            <>
+              <Typography variant="body1">{question}</Typography>
+              <FormControl>
+                <RadioGroup
+                  value={selectedOption}
+                  onChange={(e) => handleOptionChange(e.target.value)}
+                >
+                  {options.map((option) => (
+                    <FormControlLabel
+                      key={option}
+                      value={option}
+                      control={<Radio />}
+                      label={option}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </>
+          )}
+        </Stack>
       </DialogContent>
       <DialogActions>
         <Button

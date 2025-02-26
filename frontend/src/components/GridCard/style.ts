@@ -53,6 +53,7 @@ export const StateDot = styled(Box)<StateDotProps>(({ state }) => ({
 export const cardWrapperStyle: SxProps = {
   display: "flex",
   justifyContent: "space-between",
+  alignItems: "center",
   borderRadius: "0.5rem",
   boxShadow: "0px 0px 6px 0px #0000001F",
   padding: "1.2rem",
@@ -78,6 +79,7 @@ export const buttonsBoxStyle: SxProps = {
   justifyContent: "center",
   flex: "0 0 auto",
   marginLeft: "1.6rem",
+  maxHeight: "3.8rem",
 };
 
 export const moreButtonBoxStyle: SxProps = {

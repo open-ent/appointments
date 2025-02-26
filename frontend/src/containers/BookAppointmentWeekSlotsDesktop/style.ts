@@ -72,7 +72,7 @@ export const ColumnSlotsWrapper = styled(Box)<ColumnSlotsWrapperProps>(
   ({ isEmpty, isVideoCallOptionVisible }) => ({
     opacity: isEmpty ? "0.5" : "1",
     minWidth: "7.5rem",
-    height: isVideoCallOptionVisible ? "39rem" : "44rem",
+    height: isVideoCallOptionVisible ? "31rem" : "36rem",
     minHeight: "18rem",
   }),
 );
@@ -115,7 +115,7 @@ export const GoToNextTimeSlot = styled(Box)<NoSlotsProps>(
     justifyContent: "center",
     alignItems: "center",
     minHeight: "14rem",
-    height: isVideoCallOptionVisible ? "34.6rem" : "39.6rem",
+    height: isVideoCallOptionVisible ? "26.6rem" : "31.6rem",
     width: "100%",
   }),
 );
@@ -131,7 +131,7 @@ export const NoSlots = styled(Box)<NoSlotsProps>(
     justifyContent: "center",
     alignItems: "center",
     minHeight: "18rem",
-    height: isVideoCallOptionVisible ? "39rem" : "44rem",
+    height: isVideoCallOptionVisible ? "31rem" : "36rem",
     width: "100%",
     padding: "2rem",
   }),

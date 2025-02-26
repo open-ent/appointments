@@ -7,8 +7,8 @@ import {
   Typography,
   common,
 } from "@cgi-learning-hub/ui";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
+import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import { useTranslation } from "react-i18next";
 import { v4 as uuid4v } from "uuid";
 
@@ -53,13 +53,13 @@ export const BookAppointmentWeekSlotsMobile: FC = () => {
     <Box sx={containerStyle}>
       <Box sx={spaceBetweenBoxStyle}>
         <ArrowButton isVisible={canGoPrev} onClick={handlePreviousWeek}>
-          <KeyboardArrowLeftIcon />
+          <KeyboardArrowLeftRoundedIcon />
         </ArrowButton>
-        <Typography fontSize="1.6rem" fontWeight={"bold"}>
+        <Typography variant="body1" fontWeight={"bold"}>
           {t("appointments.book.appointment.modal.change.week")}
         </Typography>
         <ArrowButton isVisible={canGoNext} onClick={handleNextWeek}>
-          <KeyboardArrowRightIcon />
+          <KeyboardArrowRightRoundedIcon />
         </ArrowButton>
       </Box>
       <Box sx={flexStartBoxStyle}>
@@ -98,7 +98,7 @@ export const BookAppointmentWeekSlotsMobile: FC = () => {
                   {nextAvailableTimeSlot.format("dddd D MMMM")}
                 </Typography>
               </Box>
-              <KeyboardArrowRightIcon sx={{ color: common.black }} />
+              <KeyboardArrowRightRoundedIcon sx={{ color: common.black }} />
             </Button>
           ) : (
             <Typography variant="body2" sx={noSlotStyle}>
@@ -112,7 +112,7 @@ export const BookAppointmentWeekSlotsMobile: FC = () => {
             onChange={handleVideoCallCheckboxChange}
             checked={isVideoCallOptionChecked}
           />
-          <Typography color="text.primary" fontSize="1.4rem">
+          <Typography color="text.primary" variant="body2">
             {t("appointments.book.appointment.modal.video.call.option")}
           </Typography>
         </Box>
