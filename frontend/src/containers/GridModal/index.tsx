@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 
 import {
   Alert,
@@ -47,15 +47,27 @@ export const GridModal: FC = () => {
     isSubmitButtonLoading,
   } = useGridModal();
 
+  const topModalRef = useRef<HTMLDivElement>(null);
+
   const handleClose = () => {
     if (modalType === GRID_MODAL_TYPE.CONSULTATION) handleCancel();
+  };
+
+  const handleGoToSecondPage = () => {
+    handleNext();
+    topModalRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleGoToFirstPage = () => {
+    handlePrev();
+    topModalRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <>
       <Modal open={isModalOpen} onClose={handleClose}>
         <Box sx={modalBoxStyle}>
-          <Box sx={contentBoxStyle}>
+          <Box sx={contentBoxStyle} ref={topModalRef}>
             <Box sx={spaceBetweenBoxStyle}>
               <Typography variant="h2" fontWeight="bold" color="text.primary">
                 {t(GRID_MODAL_VALUES[modalType].titleKey)}
@@ -85,8 +97,8 @@ export const GridModal: FC = () => {
                 page={page}
                 isSubmitButtonLoading={isSubmitButtonLoading}
                 handleCancel={handleCancel}
-                handlePrev={handlePrev}
-                handleNext={handleNext}
+                handlePrev={handleGoToFirstPage}
+                handleNext={handleGoToSecondPage}
                 handleSubmit={handleSubmit}
               />
             )}

@@ -3,8 +3,8 @@ import { SxProps, Theme } from "@cgi-learning-hub/ui";
 import { centerBoxStyle } from "~/styles/boxStyles";
 
 export const modalStyle: SxProps = {
-  minWidth: "44rem",
-  maxWidth: "44rem",
+  width: "44rem",
+  maxWidth: "100%",
   maxHeight: "90vh",
   height: "fit-content",
   overflowY: "scroll",
@@ -85,7 +85,7 @@ export const userInfosBoxStyle: SxProps = {
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-around",
-  maxWidth: "78%",
+  minWidth: "0",
 };
 
 export const greyIconStyle: SxProps<Theme> = (theme: Theme) => ({

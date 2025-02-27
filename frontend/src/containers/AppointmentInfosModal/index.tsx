@@ -106,9 +106,15 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                     {t("appointments.my.appointment.infos.modal.video.call")}
                   </Typography>
                   <Link href={appointment.videoCallLink} target="_blank">
-                    <EllipsisWithTooltip typographyProps={{ variant: "body1" }}>
+                    <Typography
+                      variant="body1"
+                      whiteSpace="wrap"
+                      sx={{
+                        wordBreak: "break-all",
+                      }}
+                    >
                       {appointment.videoCallLink}
-                    </EllipsisWithTooltip>
+                    </Typography>
                   </Link>
                 </Box>
               </Box>

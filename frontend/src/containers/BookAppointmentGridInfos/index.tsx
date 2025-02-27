@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import {
   Box,
@@ -41,13 +41,23 @@ import { Link } from "@cgi-learning-hub/ui";
 export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   userInfos,
 }) => {
+  const selectRef = useRef<HTMLSelectElement>(null);
   const { picture, displayName, functions, isAvailable } = userInfos;
   const { t } = useTranslation(APPOINTMENTS);
   const { grids, gridInfos, selectedGrid, handleGridChange } =
     useBookAppointmentModal();
+  const [minWidthSelect, setMinWidthSelect] = useState(0);
 
   const { duration, videoCallLink, place, publicComment, documents } =
     gridInfos || {};
+
+  useEffect(() => {
+    if (selectRef.current) {
+      const computedStyle = window.getComputedStyle(selectRef.current);
+      setMinWidthSelect(parseFloat(computedStyle.width));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectRef.current]);
 
   return (
     <Box sx={wrapperUserInfoStyle}>
@@ -79,10 +89,15 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
               variant="standard"
               value={selectedGrid?.id ?? ""}
               onChange={(e) => handleGridChange(e.target.value as number)}
+              ref={selectRef}
             >
               {grids?.map((grid) => (
-                <MenuItem key={grid.id} value={grid.id}>
-                  {grid.name}
+                <MenuItem
+                  key={grid.id}
+                  value={grid.id}
+                  sx={{ maxWidth: minWidthSelect }}
+                >
+                  <EllipsisWithTooltip>{grid.name}</EllipsisWithTooltip>
                 </MenuItem>
               ))}
             </Select>

@@ -1,8 +1,9 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Box,
   Button,
+  EllipsisWithTooltip,
   FormControl,
   FormControlLabel,
   InputLabel,
@@ -44,6 +45,8 @@ import { displaySize } from "./utils";
 
 export const FirstPageGridModal: FC = () => {
   const { t } = useTranslation(APPOINTMENTS);
+  const selectRef = useRef<HTMLSelectElement>(null);
+  const [minWidthSelect, setMinWidthSelect] = useState(0);
   const { isMultiStructure } = useGlobal();
   const {
     inputs,
@@ -74,6 +77,14 @@ export const FirstPageGridModal: FC = () => {
     () => files.length >= MAX_FILE_PER_GRID,
     [files.length],
   );
+
+  useEffect(() => {
+    if (selectRef.current) {
+      const computedStyle = window.getComputedStyle(selectRef.current);
+      setMinWidthSelect(parseFloat(computedStyle.width));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectRef.current]);
 
   return (
     <Box sx={pageGridModalStyle}>
@@ -108,10 +119,15 @@ export const FirstPageGridModal: FC = () => {
           onChange={handleStructureChange}
           sx={selectStyle}
           disabled={!isMultiStructure || modalType !== GRID_MODAL_TYPE.CREATION}
+          ref={selectRef}
         >
           {structureOptions.map((structure: { id: string; name: string }) => (
-            <MenuItem key={structure.id} value={structure.id}>
-              {structure.name}
+            <MenuItem
+              key={structure.id}
+              value={structure.id}
+              sx={{ maxWidth: minWidthSelect }}
+            >
+              <EllipsisWithTooltip>{structure.name}</EllipsisWithTooltip>
             </MenuItem>
           ))}
         </Select>
