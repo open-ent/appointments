@@ -1,5 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 
+import { HOUR, MINUTE } from "~/core/dayjs.const";
 import { ITime, TimeObject } from "./types";
 
 export class Time implements ITime {
@@ -26,8 +27,8 @@ export class Time implements ITime {
     }
 
     return dayjs()
-      .set("hour", this.time.hour)
-      .set("minute", this.time.minute)
-      .startOf("minute");
+      .set(HOUR, this.time.hour)
+      .set(MINUTE, this.time.minute)
+      .startOf(MINUTE);
   }
 }

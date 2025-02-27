@@ -7,6 +7,7 @@ import isoWeek from "dayjs/plugin/isoWeek";
 import { useTranslation } from "react-i18next";
 
 import { APPOINTMENTS } from "~/core/constants";
+import { MONTH } from "~/core/dayjs.const";
 import { isToday } from "~/core/utils";
 import {
   appointmentsLegendStyle,
@@ -30,8 +31,8 @@ export const CustomDateCalendar: FC<CustomDateCalendarProps> = ({
   const [nbWeeksOfCurrentMonth, setNbWeeksOfCurrentMonth] = useState(0);
 
   useEffect(() => {
-    const firstDayOfCurrentMonth = currentMonth.startOf("month");
-    const lastDayOfCurrentMonth = currentMonth.endOf("month");
+    const firstDayOfCurrentMonth = currentMonth.startOf(MONTH);
+    const lastDayOfCurrentMonth = currentMonth.endOf(MONTH);
 
     const firstWeek = firstDayOfCurrentMonth.isoWeek();
     const lastWeek = lastDayOfCurrentMonth.isoWeek();
@@ -51,7 +52,7 @@ export const CustomDateCalendar: FC<CustomDateCalendarProps> = ({
                   acceptedAppointmentsDates,
                 )}
                 isToday={isToday(day)}
-                isMonthDay={currentMonth.isSame(day, "month")}
+                isMonthDay={currentMonth.isSame(day, MONTH)}
                 nbWeeksOfCurrentMonth={nbWeeksOfCurrentMonth}
               >
                 {day.date()}

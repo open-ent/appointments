@@ -196,6 +196,7 @@ public class GridPayload implements IModel<GridPayload> {
                 this.beginDate != null &&
                 this.endDate != null &&
                 this.beginDate.isBefore(this.endDate) &&
+                this.endDate.isBefore(this.beginDate.plusYears(1)) &&
                 !this.color.isEmpty() &&
                 !this.structureId.isEmpty() &&
                 this.duration != null &&

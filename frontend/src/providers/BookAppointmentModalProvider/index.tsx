@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { APPOINTMENTS } from "~/core/constants";
+import { DAY, WEEK } from "~/core/dayjs.const";
 import { useBookAppointmentMutation } from "~/services/api/AppointmentService";
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
 import {
@@ -79,8 +80,8 @@ export const BookAppointmentModalProvider: FC<
     useGetTimeSlotsByGridIdAndDateQuery(
       {
         gridId: selectedGrid?.id ?? 0,
-        beginDate: currentDay.startOf("week").format("YYYY-MM-DD"),
-        endDate: currentDay.startOf("week").add(5, "day").format("YYYY-MM-DD"),
+        beginDate: currentDay.startOf(WEEK).format("YYYY-MM-DD"),
+        endDate: currentDay.startOf(WEEK).add(5, DAY).format("YYYY-MM-DD"),
       },
       { skip: !selectedGrid },
     );
@@ -98,11 +99,11 @@ export const BookAppointmentModalProvider: FC<
   };
 
   const handleNextWeek = () => {
-    setCurrentDay((prev) => prev.add(1, "week"));
+    setCurrentDay((prev) => prev.add(1, WEEK));
   };
 
   const handlePreviousWeek = () => {
-    setCurrentDay((prev) => prev.subtract(1, "week"));
+    setCurrentDay((prev) => prev.subtract(1, WEEK));
   };
 
   const handleNextTimeSlot = useCallback(() => {
@@ -199,13 +200,13 @@ export const BookAppointmentModalProvider: FC<
   }, [currentDay, isGridTimeSlotsFetching]);
 
   useEffect(() => {
-    if (grids && !selectedGrid) {
+    if (grids) {
       setSelectedGrid(grids[0]);
     }
-  }, [grids, selectedGrid]);
+  }, [grids, isModalOpen]);
 
   useEffect(() => {
-    if (currentDay.isSame(dayjs(), "week")) {
+    if (currentDay.isSame(dayjs(), WEEK)) {
       setCanGoPrev(false);
     } else {
       setCanGoPrev(true);

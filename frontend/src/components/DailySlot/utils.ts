@@ -3,6 +3,7 @@ import duration from "dayjs/plugin/duration";
 import isBetween from "dayjs/plugin/isBetween";
 
 import { DURATION_VALUES } from "~/core/constants";
+import { DAY, HOUR, MINUTE } from "~/core/dayjs.const";
 import { DURATION } from "~/core/enums";
 import { Time } from "~/core/models/Time";
 import { Slot } from "~/core/types";
@@ -25,16 +26,16 @@ export const generateTimeSlots = (
   intervalInMinutes: number,
   isEnd: boolean,
 ): Time[] => {
-  const start = dayjs().startOf("day").add(7, "hour");
-  const end = dayjs().startOf("day").add(22, "hour");
+  const start = dayjs().startOf(DAY).add(7, HOUR);
+  const end = dayjs().startOf(DAY).add(22, HOUR);
 
-  const totalMinutesInDay = end.diff(start, "minute");
+  const totalMinutesInDay = end.diff(start, MINUTE);
   const totalIntervals = Math.floor(totalMinutesInDay / intervalInMinutes);
 
   return Array.from({ length: totalIntervals }, (_, i) => {
     const currentTime = start.add(
       (isEnd ? i + 1 : i) * intervalInMinutes,
-      "minute",
+      MINUTE,
     );
     return new Time({
       hour: currentTime.hour(),

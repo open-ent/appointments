@@ -46,6 +46,7 @@ import {
   userInfosBoxStyle,
 } from "./style";
 import { AppointmentInfosModalProps } from "./types";
+import { HOUR } from "~/core/dayjs.const";
 
 export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   appointment,
@@ -61,7 +62,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   const canCancelRequest = useMemo(
     () =>
       dayjs()
-        .add(minHoursBeforeCancellation, "hour")
+        .add(minHoursBeforeCancellation, HOUR)
         .isBefore(appointment.beginDate),
     [appointment.beginDate, minHoursBeforeCancellation],
   );

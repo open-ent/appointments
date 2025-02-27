@@ -1,6 +1,7 @@
 import dayjs, { Dayjs } from "dayjs";
 
 import { DAY_VALUES } from "~/core/constants";
+import { DAY as STRING_DAY, WEEK } from "~/core/dayjs.const";
 import { DAY } from "~/core/enums";
 import { Time } from "~/core/models/Time";
 import { TimeSlots } from "~/services/api/GridService/types";
@@ -32,7 +33,9 @@ export const transformTimeSlotsToDaySlots = (
 ): DaySlots[] => {
   const daySlots: DaySlots[] = Object.values(DAY).map((day) => ({
     weekDay: day,
-    day: currentDay.startOf("week").add(DAY_VALUES[day].numberOfWeekDay, "day"),
+    day: currentDay
+      .startOf(WEEK)
+      .add(DAY_VALUES[day].numberOfWeekDay, STRING_DAY),
     slots: [],
   }));
 
@@ -65,7 +68,9 @@ export const transformTimeSlotsToDaySlots = (
 export const loadingDaySlots = (currentDay: Dayjs): DaySlots[] => {
   return Object.values(DAY).map((day) => ({
     weekDay: day,
-    day: currentDay.startOf("week").add(DAY_VALUES[day].numberOfWeekDay, "day"),
+    day: currentDay
+      .startOf(WEEK)
+      .add(DAY_VALUES[day].numberOfWeekDay, STRING_DAY),
     slots: null,
   }));
 };
