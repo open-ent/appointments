@@ -1,31 +1,31 @@
 {
-  "appointments": "Rendez-vous",
+  "appointments": "Citas",
 
-  "appointments.new_appointment_notification": "Réception d'une demande de rendez-vous",
-  "timeline.appointments.received.new.appointment.request": "Vous avez reçu une demande de rendez-vous de ",
-  "timeline.appointments.consult.app": "Consultez l'application ",
-  "timeline.appointments.to.respond": " pour y répondre.",
+  "appointments.new_appointment_notification": "Recepción de una solicitud de cita",
+  "timeline.appointments.received.new.appointment.request": "Has recibido una solicitud de cita de ",
+  "timeline.appointments.consult.app": "Consulta la aplicación ",
+  "timeline.appointments.to.respond": " para responder.",
 
-  "appointments.accept_request_notification": "Demande de rendez-vous acceptée",
-  "timeline.appointments.accepted.appointment.request": " a accepté votre demande de rendez-vous.",
-  "timeline.appointments.accepted.appointment.request.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+  "appointments.accept_request_notification": "Solicitud de cita aceptada",
+  "timeline.appointments.accepted.appointment.request": " ha aceptado tu solicitud de cita.",
+  "timeline.appointments.accepted.appointment.request.consult.app": "Para ver los detalles de tu cita, consulta la aplicación ",
 
-  "appointments.reject_request_notification": "Demande de rendez-vous refusée",
-  "timeline.appointments.rejected.appointment.request": " a refusé votre demande de rendez-vous.",
-  "timeline.appointments.rejected.appointment.request.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+  "appointments.reject_request_notification": "Solicitud de cita rechazada",
+  "timeline.appointments.rejected.appointment.request": " ha rechazado tu solicitud de cita.",
+  "timeline.appointments.rejected.appointment.request.consult.app": "Para ver los detalles de tu cita, consulta la aplicación ",
 
-  "appointments.cancel_request_notification": "Demande de rendez-vous annulée",
-  "timeline.appointments.cancelled.appointment.request": " a annulé sa demande de rendez-vous.",
-  "timeline.appointments.cancelled.appointment.request.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+  "appointments.cancel_request_notification": "Solicitud de cita cancelada",
+  "timeline.appointments.cancelled.appointment.request": " ha cancelado su solicitud de cita.",
+  "timeline.appointments.cancelled.appointment.request.consult.app": "Para ver los detalles de tu cita, consulta la aplicación ",
 
-  "appointments.cancel_appointment_notification": "Rendez-vous annulé",
-  "timeline.appointments.cancelled.appointment.first": "Le rendez-vous avec ",
-  "timeline.appointments.cancelled.appointment.second": " a été annulé.",
-  "timeline.appointments.cancelled.appointment.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+  "appointments.cancel_appointment_notification": "Cita cancelada",
+  "timeline.appointments.cancelled.appointment.first": "La cita con ",
+  "timeline.appointments.cancelled.appointment.second": " ha sido cancelada.",
+  "timeline.appointments.cancelled.appointment.consult.app": "Para ver los detalles de tu cita, consulta la aplicación ",
 
-  "appointments.update_grid_notification": "Des informations sur votre rendez-vous ont été mises à jour",
-  "timeline.appointments.update.grid.first": "Des informations concernant votre rendez-vous avec ",
-  "timeline.appointments.update.grid.second": " ont été modifiées.",
-  "timeline.appointments.update.grid.consult.app": "Consultez l'application ",
-  "timeline.appointments.update.grid.to.know.more": " pour en savoir plus."
+  "appointments.update_grid_notification": "Se han actualizado los detalles de tu cita",
+  "timeline.appointments.update.grid.first": "Se ha modificado información sobre tu cita con ",
+  "timeline.appointments.update.grid.second": ".",
+  "timeline.appointments.update.grid.consult.app": "Consulta la aplicación ",
+  "timeline.appointments.update.grid.to.know.more": " para obtener más información."
 }

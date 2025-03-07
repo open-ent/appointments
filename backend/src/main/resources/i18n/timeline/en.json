@@ -1,31 +1,31 @@
 {
-  "appointments": "Rendez-vous",
+  "appointments": "Appointments",
 
-  "appointments.new_appointment_notification": "Réception d'une demande de rendez-vous",
-  "timeline.appointments.received.new.appointment.request": "Vous avez reçu une demande de rendez-vous de ",
-  "timeline.appointments.consult.app": "Consultez l'application ",
-  "timeline.appointments.to.respond": " pour y répondre.",
+  "appointments.new_appointment_notification": "New appointment request received",
+  "timeline.appointments.received.new.appointment.request": "You have received an appointment request from ",
+  "timeline.appointments.consult.app": "Check the application ",
+  "timeline.appointments.to.respond": " to respond.",
 
-  "appointments.accept_request_notification": "Demande de rendez-vous acceptée",
-  "timeline.appointments.accepted.appointment.request": " a accepté votre demande de rendez-vous.",
-  "timeline.appointments.accepted.appointment.request.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+  "appointments.accept_request_notification": "Appointment request accepted",
+  "timeline.appointments.accepted.appointment.request": " has accepted your appointment request.",
+  "timeline.appointments.accepted.appointment.request.consult.app": "To view the details of your appointment, please check the application ",
 
-  "appointments.reject_request_notification": "Demande de rendez-vous refusée",
-  "timeline.appointments.rejected.appointment.request": " a refusé votre demande de rendez-vous.",
-  "timeline.appointments.rejected.appointment.request.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+  "appointments.reject_request_notification": "Appointment request rejected",
+  "timeline.appointments.rejected.appointment.request": " has rejected your appointment request.",
+  "timeline.appointments.rejected.appointment.request.consult.app": "To view the details of your appointment, please check the application ",
 
-  "appointments.cancel_request_notification": "Demande de rendez-vous annulée",
-  "timeline.appointments.cancelled.appointment.request": " a annulé sa demande de rendez-vous.",
-  "timeline.appointments.cancelled.appointment.request.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+  "appointments.cancel_request_notification": "Appointment request canceled",
+  "timeline.appointments.cancelled.appointment.request": " has canceled their appointment request.",
+  "timeline.appointments.cancelled.appointment.request.consult.app": "To view the details of your appointment, please check the application ",
 
-  "appointments.cancel_appointment_notification": "Rendez-vous annulé",
-  "timeline.appointments.cancelled.appointment.first": "Le rendez-vous avec ",
-  "timeline.appointments.cancelled.appointment.second": " a été annulé.",
-  "timeline.appointments.cancelled.appointment.consult.app": "Pour visualiser les détails de votre rendez-vous, veuillez consulter l'application ",
+  "appointments.cancel_appointment_notification": "Appointment canceled",
+  "timeline.appointments.cancelled.appointment.first": "The appointment with ",
+  "timeline.appointments.cancelled.appointment.second": " has been canceled.",
+  "timeline.appointments.cancelled.appointment.consult.app": "To view the details of your appointment, please check the application ",
 
-  "appointments.update_grid_notification": "Des informations sur votre rendez-vous ont été mises à jour",
-  "timeline.appointments.update.grid.first": "Des informations concernant votre rendez-vous avec ",
-  "timeline.appointments.update.grid.second": " ont été modifiées.",
-  "timeline.appointments.update.grid.consult.app": "Consultez l'application ",
-  "timeline.appointments.update.grid.to.know.more": " pour en savoir plus."
+  "appointments.update_grid_notification": "Your appointment details have been updated",
+  "timeline.appointments.update.grid.first": "Information regarding your appointment with ",
+  "timeline.appointments.update.grid.second": " has been modified.",
+  "timeline.appointments.update.grid.consult.app": "Check the application ",
+  "timeline.appointments.update.grid.to.know.more": " to learn more."
 }
