@@ -8,8 +8,10 @@ import {
   useState,
 } from "react";
 
+import { MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML } from "~/core/constants";
 import { useGetCommunicationUsersQuery } from "~/services/api/CommunicationService";
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
+import { useGlobal } from "../GlobalProvider";
 import {
   FindAppointmentsProviderContextProps,
   FindAppointmentsProviderProps,
@@ -34,6 +36,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
 }) => {
   const [users, setUsers] = useState<UserCardInfos[]>([]);
   const [page, setPage] = useState(1);
+  const { isConnectedUserADML } = useGlobal();
   const [search, setSearch] = useState("");
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
   const {
@@ -46,7 +49,12 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       page,
       limit: NUMBER_MORE_USERS,
     },
-    { skip: !search },
+    {
+      skip:
+        !search ||
+        (isConnectedUserADML &&
+          search.length < MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML),
+    },
   );
 
   useEffect(() => {

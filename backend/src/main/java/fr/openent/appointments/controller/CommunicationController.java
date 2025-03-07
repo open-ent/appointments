@@ -93,9 +93,19 @@ public class CommunicationController extends BaseController {
         Long limit = (Long) paramValues.get(LIMIT);
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user-> {
+                if(user.isADML() && search.length()<3){
+                    String errorMessage = "Search query must be at least 3 characters long for ADML users";
+                    LogHelper.logError(this, "getUsersICanCommunicateWith", errorMessage);
+                    badRequest(request);
+                    return Future.failedFuture(errorMessage);
+                }
+                return Future.succeededFuture(user);
+            })
             .compose(user -> communicationService.getUsersICanCommunicateWith(user, search, page, limit))
             .onSuccess(listUserAppointmentResponse -> renderJson(request, IModelHelper.toJsonArray(listUserAppointmentResponse)))
             .onFailure(err -> {
+                if(request.response().ended()) return;
                 String errorMessage = "Failed to retrieve users I can communicate with";
                 LogHelper.logError(this, "getUsersICanCommunicateWith", errorMessage, err.getMessage());
                 renderError(request);

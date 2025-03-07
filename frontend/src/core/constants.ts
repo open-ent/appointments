@@ -29,6 +29,8 @@ export const MAX_TOTAL_FILE_SIZE_PER_GRID_MO = 100; // Mo
 export const MAX_TOTAL_FILE_SIZE_PER_GRID_O =
   MAX_TOTAL_FILE_SIZE_PER_GRID_MO * 1024 * 1024;
 
+export const MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML = 3;
+
 export const ALLOWED_DOCUMENT_EXTENSIONS = [
   ".pdf",
   ".csv",

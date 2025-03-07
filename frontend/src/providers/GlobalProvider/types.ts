@@ -15,6 +15,7 @@ export interface GlobalProviderContextProps {
   setDisplayModals: Dispatch<SetStateAction<DisplayModalsState>>;
   handleDisplayModal: (modalType: MODAL_TYPE) => void;
   minHoursBeforeCancellation: number;
+  isConnectedUserADML: boolean;
 }
 
 export interface GlobalProviderProps {

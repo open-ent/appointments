@@ -9,6 +9,7 @@ import {
 
 import { isActionAvailable } from "@edifice.io/client";
 
+import { useUser } from "@edifice.io/react";
 import { useTranslation } from "react-i18next";
 import { APPOINTMENTS } from "~/core/constants";
 import { useStructure } from "~/hooks/useStructure";
@@ -50,6 +51,9 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({
     initialDisplayModalsState,
   );
 
+  const { user } = useUser();
+  const isConnectedUserADML = !!user?.functions?.ADMIN_LOCAL;
+
   const handleDisplayModal = (modalType: MODAL_TYPE) => {
     setDisplayModals((prevState) => ({
       ...prevState,
@@ -80,6 +84,7 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({
       setDisplayModals,
       handleDisplayModal,
       minHoursBeforeCancellation,
+      isConnectedUserADML,
     }),
     [
       isMultiStructure,
@@ -90,6 +95,7 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({
       getStructureNameById,
       displayModals,
       minHoursBeforeCancellation,
+      isConnectedUserADML,
     ],
   );
 
