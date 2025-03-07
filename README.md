@@ -2,10 +2,10 @@
 
 ## À propos de l'application appointments
 
-- Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright CGI
+- Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Département de Seine-et-Marne, Département de l'Essonne, Région Nouvelle Aquitaine, Ville de Paris, Région de Hauts-de-France
 - Développeur(s) : CGI
 - Mainteneur(s) : CGI
-- Financeur(s) : CGI
+- Financeur(s) : Département de Seine-et-Marne, Département de l'Essonne, Région Nouvelle Aquitaine, Ville de Paris, Région de Hauts-de-France
 - Description : Module permettant de prendre des rendez-vous en fonction de grilles de disponibilité
 
 ## Présentation du module
