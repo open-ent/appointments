@@ -180,7 +180,6 @@ public class GridController extends ControllerHelper {
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
     public void createGrid(final HttpServerRequest request) {
-        eventStore.createAndStoreEvent(CREATE.name(), request, new JsonObject().put(KEBAB_RESOURCE_TYPE, GRID));
         RequestUtils.bodyToJson(request, body -> {
             GridPayload gridPayload = new GridPayload(body);
             if (!gridPayload.isValid()) {
@@ -192,7 +191,10 @@ public class GridController extends ControllerHelper {
 
             gridPayload.buildTimeSlots();
             gridService.createGrid(request, gridPayload)
-                .onSuccess(grid -> renderJson(request, grid.toJson()))
+                .onSuccess(grid -> {
+                    eventStore.createAndStoreEvent(CREATE.name(), request, new JsonObject().put(KEBAB_RESOURCE_TYPE, GRID));
+                    renderJson(request, grid.toJson());
+                })
                 .onFailure(err -> {
                     String errorMessage = "Failed to create grid";
                     LogHelper.logError(this, "createGrid", errorMessage, err.getMessage());

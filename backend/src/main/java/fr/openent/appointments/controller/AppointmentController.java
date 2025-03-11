@@ -54,7 +54,6 @@ public class AppointmentController extends ControllerHelper {
     @ResourceFilter(ViewRight.class)
     @SecuredAction(value="", type= ActionType.RESOURCE)
     public void createAppointment(final HttpServerRequest request) {
-        eventStore.createAndStoreEvent(CREATE.name(), request, new JsonObject().put(KEBAB_RESOURCE_TYPE, APPOINTMENT));
         Long timeSlotId = ParamHelper.getParam(CAMEL_TIME_SLOT_ID, request, Long.class, true, "createAppointment");
         if(request.response().ended()) return;
 
@@ -95,6 +94,7 @@ public class AppointmentController extends ControllerHelper {
             })
             .compose(appointment -> {
                 composeInfo.put(CAMEL_APPOINTMENT_ID, appointment.getId());
+                eventStore.createAndStoreEvent(CREATE.name(), request, new JsonObject().put(KEBAB_RESOURCE_TYPE, APPOINTMENT));
                 renderJson(request, appointment.toJson());
                 return gridService.getGridByTimeSlotId(timeSlotId);
             })
