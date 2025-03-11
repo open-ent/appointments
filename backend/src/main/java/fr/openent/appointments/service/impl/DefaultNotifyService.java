@@ -28,13 +28,18 @@ public class DefaultNotifyService implements NotifyService {
         this.appointmentRepository = repositoryFactory.appointmentRepository();
     }
 
+    private String urlToRedirectToAppointment(Long appointmentId){
+        return APPOINTMENTS_URI + (appointmentId == null ? "" : "#/?appointmentId=" + appointmentId);
+    }
+
     @Override
     public void notifyNewAppointment(HttpServerRequest request, UserInfos requesterUser, String targetUserId, Long appointmentId) {
         JsonObject params = new JsonObject()
-            .put(CAMEL_USER_NAME, requesterUser.getUsername())
+            .put(USERNAME, requesterUser.getUsername())
             .put(CAMEL_USER_URI, USERBOOK_ANNUAIRE_URI + requesterUser.getUserId())
-            .put(CAMEL_APPOINTMENT_URI, APPOINTMENTS_URI + (appointmentId == null ? "" : "#/?appointmentId=" + appointmentId))
-            .put(CAMEL_PUSH_NOTIF, new JsonObject().put(TITLE, NOTIF_NAME_NEW_APPOINTMENT).put(BODY, ""));
+            .put(CAMEL_APPOINTMENT_URI, urlToRedirectToAppointment(appointmentId))
+            .put(CAMEL_RESOURCE_URI, urlToRedirectToAppointment(appointmentId)) // for mobile
+            .put(CAMEL_PUSH_NOTIF, new JsonObject().put(TITLE, NOTIF_NAME_NEW_APPOINTMENT).put(BODY, "")); // for mobile
 
         List<String> targetUsers = Collections.singletonList(targetUserId);
 
@@ -53,7 +58,6 @@ public class DefaultNotifyService implements NotifyService {
                 return null;
         }
     }
-
 
     @Override
     public void notifyAppointmentUpdate(HttpServerRequest request, UserInfos actionUserInfos, AppointmentState prevState, Long appointmentId){
@@ -79,10 +83,11 @@ public class DefaultNotifyService implements NotifyService {
                 String otherUserId = requesterUserId.equals(actionUserInfos.getUserId()) ? ownerUserId : requesterUserId;
 
                 JsonObject params = new JsonObject()
-                    .put(CAMEL_USER_NAME, actionUserInfos.getUsername())
+                    .put(USERNAME, actionUserInfos.getUsername())
                     .put(CAMEL_USER_URI, USERBOOK_ANNUAIRE_URI + actionUserInfos.getUserId())
-                    .put(CAMEL_APPOINTMENT_URI, APPOINTMENTS_URI + "#/?appointmentId="+appointmentId)
-                    .put(CAMEL_PUSH_NOTIF, new JsonObject().put(TITLE, notifName).put(BODY, ""));
+                    .put(CAMEL_APPOINTMENT_URI, urlToRedirectToAppointment(appointmentId))
+                    .put(CAMEL_RESOURCE_URI, urlToRedirectToAppointment(appointmentId)) // for mobile
+                    .put(CAMEL_PUSH_NOTIF, new JsonObject().put(TITLE, notifName).put(BODY, "")); // for mobile
 
                 List<String> targetUsers = Collections.singletonList(otherUserId);
 
@@ -103,10 +108,11 @@ public class DefaultNotifyService implements NotifyService {
             String targetUserId = appointment.getRequesterId();
 
             JsonObject params = new JsonObject()
-                .put(CAMEL_USER_NAME, actionUserInfos.getUsername())
+                .put(USERNAME, actionUserInfos.getUsername())
                 .put(CAMEL_USER_URI, USERBOOK_ANNUAIRE_URI + actionUserInfos.getUserId())
-                .put(CAMEL_APPOINTMENT_URI, APPOINTMENTS_URI + "#/?appointmentId="+appointment.getId())
-                .put(CAMEL_PUSH_NOTIF, new JsonObject().put(TITLE, notifName).put(BODY, ""));
+                .put(CAMEL_APPOINTMENT_URI, urlToRedirectToAppointment(appointment.getId()))
+                .put(CAMEL_RESOURCE_URI, urlToRedirectToAppointment(appointment.getId())) // for mobile
+                .put(CAMEL_PUSH_NOTIF, new JsonObject().put(TITLE, notifName).put(BODY, "")); // for mobile
 
             List<String> targetUsers = Collections.singletonList(targetUserId);
 
