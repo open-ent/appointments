@@ -24,6 +24,7 @@ import io.vertx.core.json.JsonObject;
 
 import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventStore;
+import org.entcore.common.http.filter.IgnoreCsrf;
 import org.entcore.common.http.filter.ResourceFilter;
 
 import fr.openent.appointments.model.payload.GridPayload;
@@ -179,6 +180,7 @@ public class GridController extends ControllerHelper {
     @ApiDoc("Create grid")
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
+    @IgnoreCsrf
     public void createGrid(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, body -> {
             GridPayload gridPayload = new GridPayload(body);
@@ -207,6 +209,7 @@ public class GridController extends ControllerHelper {
     @ApiDoc("Update grid")
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
+    @IgnoreCsrf
     public void updateGrid(final HttpServerRequest request) {
         Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "updateGrid");
         if (request.response().ended()) return;
@@ -306,6 +309,7 @@ public class GridController extends ControllerHelper {
     @ApiDoc("Delete grid with the possibility to delete all appointments associated")
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
+    @IgnoreCsrf
     public void deleteGrid(final HttpServerRequest request) {
         handleGridOperation(request, gridService::deleteGrid, "deleteGrid");
     }
@@ -314,6 +318,7 @@ public class GridController extends ControllerHelper {
     @ApiDoc("Suspend grid with the possibility to delete all appointments associated")
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
+    @IgnoreCsrf
     public void suspendGrid(final HttpServerRequest request) {
         handleGridOperation(request, gridService::suspendGrid, "suspendGrid");
     }
@@ -322,6 +327,7 @@ public class GridController extends ControllerHelper {
     @ApiDoc("Restore grid")
     @ResourceFilter(ManageRight.class)
     @SecuredAction(value = "", type = ActionType.RESOURCE)
+    @IgnoreCsrf
     public void restoreGrid(final HttpServerRequest request) {
         // For restoreGrid, deleteAppointments is irrelevant, so we use a lambda that ignores it.
         handleGridOperation(request, (gridId, deleteAppointments) -> gridService.restoreGrid(gridId), "restoreGrid");

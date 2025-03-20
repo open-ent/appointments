@@ -3,6 +3,7 @@
     "config": {
       "main":"fr.openent.appointments.Appointments",
       "port": 8483,
+      "csrf-token": ${csrfToken},
       "app-name" : "Appointments",
       "app-address" : "/appointments",
       "app-icon" : "appointments-large",
