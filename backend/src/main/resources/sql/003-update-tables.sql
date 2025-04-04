@@ -1,0 +1,1 @@
+ALTER TABLE appointments.grid ALTER COLUMN target_public_list_id TYPE varchar(10000);
