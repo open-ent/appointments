@@ -103,7 +103,6 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
     private String getCommunicationQuery(boolean isIncoming, String structureId) {
         // first part of the query is to get groups that can communicate with me
         // second part is to get groups that can communicate with groups I am in
-        // third part is to get groups I am in
         return "MATCH (g:Group)"+ (isIncoming ? "-[:COMMUNIQUE]-> " : "<-[:COMMUNIQUE]- ")+ "(u:User { id: {userId}}) " +
                 "WHERE exists(g.id) " +
                 "OPTIONAL MATCH (sg:Structure)<-[:DEPENDS]-(g) " +
@@ -119,19 +118,6 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
 
                 "MATCH (u:User {id: {userId}})-[:IN]->(ug:Group) " +
                 "MATCH (g:Group)" + (isIncoming ? "-[:COMMUNIQUE]->(ug) " : "<-[:COMMUNIQUE]-(ug) ")+
-                "WHERE exists(g.id) " +
-                "OPTIONAL MATCH (sg:Structure)<-[:DEPENDS]-(g) " +
-                "OPTIONAL MATCH (sc:Structure)<-[:BELONGS]-(c:Class)<-[:DEPENDS]-(g) " +
-                "WITH COALESCE(sg, sc) as s, c, g " +
-                (structureId != null ? "WHERE s.id = {structureId} " : "") +
-                "WITH s, c, g " +
-                "RETURN DISTINCT " +
-                "   g.id as id, " +
-                "   g.name as name " +
-
-                "UNION " +
-
-                "MATCH (u:User {id: {userId}})-[:IN]->(g:Group) " +
                 "WHERE exists(g.id) " +
                 "OPTIONAL MATCH (sg:Structure)<-[:DEPENDS]-(g) " +
                 "OPTIONAL MATCH (sc:Structure)<-[:BELONGS]-(c:Class)<-[:DEPENDS]-(g) " +
