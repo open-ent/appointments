@@ -390,4 +390,23 @@ public class DefaultGridRepository implements GridRepository {
 
         return promise.future();
     }
+
+    @Override
+    public Future<List<Grid>> getAllGridsByState(List<GridState> gridStates) {
+        Promise<List<Grid>> promise = Promise.promise();
+
+        String query = "SELECT * FROM " + DB_GRID_TABLE;
+        JsonArray params = new JsonArray();
+
+        // Filtering by states
+        if (gridStates != null && !gridStates.isEmpty()) {
+            query += " WHERE " + STATE + " IN " + Sql.listPrepared(gridStates);
+            params.addAll(new JsonArray(gridStates.stream().map(GridState::getValue).collect(Collectors.toList())));
+        }
+
+        String errorMessage = "[Appointments@DefaultGridRepository::getAllGridsByState] Fail to get grids by state : ";
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, Grid.class, errorMessage)));
+
+        return promise.future();
+    }
 }

@@ -36,6 +36,7 @@ public class Constants {
     public static final String CAMEL_VIDEO_CALL_LINK = "videoCallLink";
     public static final String CAMEL_USER_NAME = "userName";
     public static final String CAMEL_USER_ID = "userId";
+    public static final String CAMEL_USERS_IDS = "usersIds";
     public static final String CAMEL_USER_INFO = "userInfo";
     public static final String CAMEL_USER_URI = "userUri";
 

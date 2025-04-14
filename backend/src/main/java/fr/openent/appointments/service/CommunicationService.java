@@ -11,16 +11,18 @@ import java.util.List;
 public interface CommunicationService {
     
     /**
-     * Retrieves all groups that can communicate with the current user.
+     * Retrieves all groups that the current user can communicate with.
      *
      * @param userId The ID of the user whose groups are to be retrieved.
      * @param structureId The ID of the structure the user selected.
      * @return A Future containing a JsonArray of groups.
      */
-    Future<List<NeoGroup>> getGroupsCanCommunicateWithMe(String userId, String structureId);
+    Future<List<NeoGroup>> getGroupsICanCommunicateWith(String userId, String structureId);
 
     /**
-     * Retrieves all people that the current user can communicate with.
+     * Retrieves users that the current user can communicate with
+     * or users that shared a grid with the current user.
+     * Those users are filtered by the search value and by manage grid rights.
      *
      * @param userInfos The current user's information.
      * @param search The search value we want filter users with.
@@ -28,5 +30,5 @@ public interface CommunicationService {
      * @param limit The number of items per page.
      * @return A Future containing a JsonArray of groups.
      */
-    Future<List<UserAppointment>> getUsersICanCommunicateWith(UserInfos userInfos, String search, Long page, Long limit);
+    Future<List<UserAppointment>> getUsers(UserInfos userInfos, String search, Long page, Long limit);
 }

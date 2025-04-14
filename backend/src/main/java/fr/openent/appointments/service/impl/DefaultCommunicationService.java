@@ -44,14 +44,14 @@ public class DefaultCommunicationService implements CommunicationService {
 
 
     @Override
-    public Future<List<NeoGroup>> getGroupsCanCommunicateWithMe(String userId, String structureId){
+    public Future<List<NeoGroup>> getGroupsICanCommunicateWith(String userId, String structureId){
         Promise<List<NeoGroup>> promise = Promise.promise();
 
-        communicationRepository.getGroupsCanCommunicateWithMe(userId, structureId)
+        communicationRepository.getGroupsICanCommunicateWith(userId, structureId)
             .onSuccess(promise::complete)
             .onFailure(err -> {
-                String errorMessage = "Failed to retrieve groups allow to communicate with me";
-                LogHelper.logError(this, "getGroupsCanCommunicateWithMe", errorMessage, err.getMessage());
+                String errorMessage = "Failed to retrieve groups I can communicate with";
+                LogHelper.logError(this, "getGroupsICanCommunicateWith", errorMessage, err.getMessage());
                 promise.fail(err);
             });
 
@@ -59,18 +59,30 @@ public class DefaultCommunicationService implements CommunicationService {
     }
 
     @Override
-    public Future<List<UserAppointment>> getUsersICanCommunicateWith(UserInfos userInfos, String search, Long page, Long limit) {
+    public Future<List<UserAppointment>> getUsers(UserInfos userInfos, String search, Long page, Long limit) {
         Promise<List<UserAppointment>> promise = Promise.promise();
 
+        List<String> allUsersIds = new ArrayList<>();
+
         communicationRepository.getGroupsICanCommunicateWith(userInfos.getUserId())
-            .compose(groups -> {
-                List<String> groupsIds = groups.stream()
+            .compose(neoGroups -> {
+                List<String> groupsIdsICanCommunicateWith = neoGroups.stream()
                         .map(NeoGroup::getId)
                         .collect(Collectors.toList());
-                return getUsersFromGroupsIds(userInfos, groupsIds);
+                return communicationRepository.getUsersFromGroupsIds(groupsIdsICanCommunicateWith);
             })
-            .compose(users -> {
-                List<NeoUser> filteredUsers = filterNeoUsersBySearchAndPagination(users, search, page, limit);
+            .compose(neoUsers -> {
+                allUsersIds.addAll(neoUsers.stream()
+                        .map(NeoUser::getId)
+                        .collect(Collectors.toList()));
+                return gridService.getUserIdsWhoSharedAGridWithMe(userInfos);
+            })
+            .compose(usersIds -> {
+                allUsersIds.addAll(usersIds);
+                return communicationRepository.getUsersFromUsersIdsWithGoodRight(allUsersIds, userInfos.getStructures());
+            })
+            .compose(neoUsers -> {
+                List<NeoUser> filteredUsers = filterNeoUsersBySearchAndPagination(neoUsers, search, page, limit);
                 return getGridsAndBuildListUserAppointementResponse(userInfos, filteredUsers);
             })
             .onSuccess(promise::complete)
@@ -84,20 +96,6 @@ public class DefaultCommunicationService implements CommunicationService {
     }
 
     // Private functions
-
-    private Future<List<NeoUser>> getUsersFromGroupsIds(UserInfos userInfos, List<String> groupsIds) {
-        Promise<List<NeoUser>> promise = Promise.promise();
-
-        communicationRepository.getUsersFromGroupsIds(groupsIds, userInfos.getStructures())
-            .onSuccess(promise::complete)
-            .onFailure(err -> {
-                String errorMessage = "Failed to retrieve users from groupsIds and current user id ";
-                LogHelper.logError(this, "getUsersFromGroupsIds", errorMessage, err.getMessage());
-                promise.fail(err);
-            });
-
-        return promise.future();
-    }
 
     private List<NeoUser> filterNeoUsersBySearchAndPagination(List<NeoUser> users, String search, Long page, Long limit) {
         List<NeoUser> uniqueAndFilteredUsers = new ArrayList<>(users.stream()

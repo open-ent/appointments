@@ -131,4 +131,14 @@ public interface GridRepository {
      *          return a List of appointments associated with the grid if deleteAppointments is true
      */
     Future<List<Appointment>> updateState(Long gridId, GridState state, boolean deleteAppointments);
+
+    /**
+     * Retrieves all grids associated with a specific state.
+     *
+     * @param gridStates the states of the grids to be retrieved.
+     * @return a {@link Future} representing the asynchronous operation, which will
+     *         return a {@link List<Grid>} containing the details of the grids associated
+     *         with the specified state.
+     */
+    Future<List<Grid>> getAllGridsByState(List<GridState> gridStates);
 }

@@ -320,6 +320,34 @@ public class DefaultGridService implements GridService {
         return gridRepository.closeAllPassedGrids();
     }
 
+    @Override
+    public Future<List<String>> getUserIdsWhoSharedAGridWithMe(UserInfos user){
+        Promise<List<String>> promise = Promise.promise();
+
+        List<GridState> gridStates = new ArrayList<>();
+        gridStates.add(GridState.OPEN);
+        gridStates.add(GridState.SUSPENDED);
+
+        gridRepository.getAllGridsByState(gridStates)
+            .onSuccess(grids -> {
+                List<String> ownersIds = grids.stream()
+                        .filter(grid -> grid.getTargetPublicListId()
+                                .stream()
+                                .anyMatch(user.getGroupsIds()::contains))
+                        .map(Grid::getOwnerId)
+                        .distinct()
+                        .collect(Collectors.toList());
+                promise.complete(ownersIds);
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to get user ids who shared a grid with me";
+                LogHelper.logError(this, "getUserIdsWhoSharedAGridWithMe", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();
+    }
+
     // Private functions
 
     private ListGridsResponse buildListGridsResponse(List<Grid> grids, Long page, Long limit) {

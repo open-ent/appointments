@@ -60,10 +60,10 @@ public class CommunicationController extends BaseController {
                 if (!user.getStructures().contains(structureId)) {
                     String errorMessage = "Wrong structureId for user with id " + user.getUserId();
                     LogHelper.logError(this, "getGroupsCanCommunicateWithMe", errorMessage);
-                    badRequest(request);
+                    badRequest(request, errorMessage);
                     return Future.failedFuture("");
                 }
-                return communicationService.getGroupsCanCommunicateWithMe(user.getUserId(), structureId);
+                return communicationService.getGroupsICanCommunicateWith(user.getUserId(), structureId);
             })
             .onSuccess(groups -> renderJson(request, new JsonArray(formatGroupList(request, groups))))
             .onFailure(err -> {
@@ -97,12 +97,12 @@ public class CommunicationController extends BaseController {
                 if(user.isADML() && search.length()<3){
                     String errorMessage = "Search query must be at least 3 characters long for ADML users";
                     LogHelper.logError(this, "getUsersICanCommunicateWith", errorMessage);
-                    badRequest(request);
+                    badRequest(request, errorMessage);
                     return Future.failedFuture(errorMessage);
                 }
                 return Future.succeededFuture(user);
             })
-            .compose(user -> communicationService.getUsersICanCommunicateWith(user, search, page, limit))
+            .compose(user -> communicationService.getUsers(user, search, page, limit))
             .onSuccess(listUserAppointmentResponse -> renderJson(request, IModelHelper.toJsonArray(listUserAppointmentResponse)))
             .onFailure(err -> {
                 if(request.response().ended()) return;

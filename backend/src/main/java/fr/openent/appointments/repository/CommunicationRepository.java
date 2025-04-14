@@ -11,13 +11,13 @@ import java.util.Optional;
 
 public interface CommunicationRepository {
     /**
-     * Retrieves all groups that can communicate with the current user.
+     * Retrieves all groups the current user can communicate with.
      *
      * @param userId The ID of the user whose groups are to be retrieved.
      * @param structureId The ID of the structure the user selected.
      * @return A Future containing a JsonArray of groups.
      */
-    Future<List<NeoGroup>> getGroupsCanCommunicateWithMe(String userId, String structureId);
+    Future<List<NeoGroup>> getGroupsICanCommunicateWith(String userId, String structureId);
 
     /**
      * Retrieves all groups the current user can communicate with.
@@ -28,13 +28,21 @@ public interface CommunicationRepository {
     Future<List<NeoGroup>> getGroupsICanCommunicateWith(String userId);
 
     /**
-     * Retrieves all groups the current user can communicate with.
+     * Retrieves all users matching the given groups IDs.
      *
-     * @param groupsIds The IDs of the groups we want the users infos from.
-     * @param structureExternalIds The {@link List} of ID of structure externalID the user belongs to.
+     * @param groupsIds The list of group IDs to filter users.
      * @return A Future containing a {@link List} of {@link NeoUser}.
      */
-    Future<List<NeoUser>> getUsersFromGroupsIds(List<String> groupsIds, List<String> structureExternalIds);
+    Future<List<NeoUser>> getUsersFromGroupsIds(List<String> groupsIds);
+
+    /**
+     * Retrieves all users matching the given groups or users IDs.
+     *
+     * @param usersIds The list of user IDs to filter users.
+     * @param structuresIds The list of structure external IDs to filter users.
+     * @return A Future containing a {@link List} of {@link NeoUser}.
+     */
+    public Future<List<NeoUser>> getUsersFromUsersIdsWithGoodRight(List<String> usersIds, List<String> structuresIds);
 
     /**
      * Retrieves NeoUser from its ID.

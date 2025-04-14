@@ -30,15 +30,15 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
         this.neo4j = repositoryFactory.neo4j();
     }
 
-    public Future<List<NeoGroup>> getGroupsCanCommunicateWithMe(String userId, String structureId) {
+    public Future<List<NeoGroup>> getGroupsICanCommunicateWith(String userId, String structureId) {
         Promise<List<NeoGroup>> promise = Promise.promise();
 
-        String query = getCommunicationQuery(true, structureId);
+        String query = getCommunicationQuery(structureId);
         JsonObject params = new JsonObject()
                 .put(CAMEL_USER_ID, userId)
                 .put(CAMEL_STRUCTURE_ID, structureId);
 
-        String errorMessage = "[Appointments@DefaultCommunicationRepository::getGroupsCanCommunicateWithMe] Fail to retrieve visible groups : ";
+        String errorMessage = "[Appointments@DefaultCommunicationRepository::getGroupsICanCommunicateWith] Fail to retrieve visible groups : ";
         neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.resultToIModel(promise, NeoGroup.class, errorMessage)));
 
         return promise.future();
@@ -46,34 +46,64 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
 
     @Override
     public Future<List<NeoGroup>> getGroupsICanCommunicateWith(String userId) {
-        Promise<List<NeoGroup>> promise = Promise.promise();
+        return getGroupsICanCommunicateWith(userId, null);
+    }
 
-        String query = getCommunicationQuery(false, null);
-        JsonObject params = new JsonObject().put(CAMEL_USER_ID, userId);
+    @Override
+    public Future<List<NeoUser>> getUsersFromGroupsIds(List<String> groupsIds) {
+        Promise<List<NeoUser>> promise = Promise.promise();
 
-        String errorMessage = "[Appointments@DefaultCommunicationRepository::getGroupsICanCommunicateWith] Fail to retrieve groups : ";
-        neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.resultToIModel(promise, NeoGroup.class, errorMessage)));
+        String query =
+                "MATCH (g:Group)<-[:IN]-(u:User) " +
+                        "WHERE g.id IN {groupsIds} " +
+                        "RETURN DISTINCT u.id AS id;";
+
+        JsonObject params = new JsonObject().put(CAMEL_GROUPS_IDS, new JsonArray(groupsIds));
+
+        String errorMessage = String.format("[Appointments@DefaultCommunicationRepository::getUsersIdsFromGroupsIds] Fail to retrieve users ids from groups ids %s : ", groupsIds);
+
+        neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.resultToIModel(promise, NeoUser.class, errorMessage)));
 
         return promise.future();
     }
 
     @Override
-    public Future<List<NeoUser>> getUsersFromGroupsIds(List<String> groupsIds, List<String> structuresIds) {
+    public Future<List<NeoUser>> getUsersFromUsersIdsWithGoodRight(List<String> usersIds, List<String> structuresIds) {
         Promise<List<NeoUser>> promise = Promise.promise();
 
         String query =
-                "MATCH (s:Structure) " +
+            "MATCH (u:User) " +
+                "WHERE u.id IN {usersIds} " +
+
+            "WITH DISTINCT u " +
+
+            // Droits via WorkflowAction
+            "MATCH (u)-[:IN]->(g:Group)-[:AUTHORIZED]->(r:Role)-[:AUTHORIZE]->(wa:WorkflowAction) " +
+                "WHERE wa.name = \"fr.openent.appointments.controller.MainController|initManageRights\" " +
+                "WITH DISTINCT u " +
+
+            // UserBook (optionnel)
+            "OPTIONAL MATCH (u)-[:USERBOOK]->(ub:UserBook) " +
+            "WITH u, ub " +
+
+            // Structures -> récupération des externalIds
+            "MATCH (s:Structure) " +
                 "WHERE s.id IN {structuresIds} " +
-                "WITH collect(s.externalId) AS structuresExternalIds " +
+                "WITH collect(s.externalId) AS structuresExternalIds, u, ub " +
 
-                "MATCH (g:Group)<-[:IN]-(u:User) " +
-                "WHERE g.id IN {groupsIds} " +
-                "OPTIONAL MATCH (u)-[:USERBOOK]->(ub:UserBook) " +
-                "WITH u, ub, [func IN u.functions WHERE split(func, \"$\")[0] IN structuresExternalIds] AS filteredFunctions " +
-                "RETURN u.id AS id, u.displayName AS displayName, filteredFunctions AS functions, ub.picture AS picture, u.profiles as profiles;";
-        JsonObject params = new JsonObject().put(CAMEL_GROUPS_IDS, groupsIds).put(CAMEL_STRUCTURES_IDS, structuresIds);
+            // Retour des données
+            "RETURN " +
+                "u.id AS id, " +
+                "u.displayName AS displayName, " +
+                "[func IN u.functions WHERE split(func, \"$\")[0] IN structuresExternalIds] AS functions, " +
+                "ub.picture AS picture, " +
+                "u.profiles AS profiles;";
 
-        String errorMessage = String.format("[Appointments@DefaultCommunicationRepository::getUsersFromGroupsIds] Fail to retrieve users infos from groups ids %s : ", groupsIds);
+        JsonObject params = new JsonObject()
+                .put(CAMEL_STRUCTURES_IDS, structuresIds)
+                .put(CAMEL_USERS_IDS, usersIds);
+
+        String errorMessage = String.format("[Appointments@DefaultCommunicationRepository::getUsersFromUsersIdsWithGoodRight] Fail to retrieve users from usersIds %s : ", usersIds);
         neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.resultToIModel(promise, NeoUser.class, errorMessage)));
 
         return promise.future();
@@ -100,10 +130,10 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
         return promise.future();
     }
 
-    private String getCommunicationQuery(boolean isIncoming, String structureId) {
-        // first part of the query is to get groups that can communicate with me
-        // second part is to get groups that can communicate with groups I am in
-        return "MATCH (g:Group)"+ (isIncoming ? "-[:COMMUNIQUE]-> " : "<-[:COMMUNIQUE]- ")+ "(u:User { id: {userId}}) " +
+    private String getCommunicationQuery(String structureId) {
+        // first part of the query is to get groups i can (directly) communicate with
+        // second part is to get groups i can communicate with through a group i belong to
+        return "MATCH (g:Group)<-[:COMMUNIQUE]-(u:User { id: {userId}}) " +
                 "WHERE exists(g.id) " +
                 "OPTIONAL MATCH (sg:Structure)<-[:DEPENDS]-(g) " +
                 "OPTIONAL MATCH (sc:Structure)<-[:BELONGS]-(c:Class)<-[:DEPENDS]-(g) " +
@@ -117,7 +147,7 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
                 "UNION " +
 
                 "MATCH (u:User {id: {userId}})-[:IN]->(ug:Group) " +
-                "MATCH (g:Group)" + (isIncoming ? "-[:COMMUNIQUE]->(ug) " : "<-[:COMMUNIQUE]-(ug) ")+
+                "MATCH (g:Group)<-[:COMMUNIQUE]-(ug) "+
                 "WHERE exists(g.id) " +
                 "OPTIONAL MATCH (sg:Structure)<-[:DEPENDS]-(g) " +
                 "OPTIONAL MATCH (sc:Structure)<-[:BELONGS]-(c:Class)<-[:DEPENDS]-(g) " +

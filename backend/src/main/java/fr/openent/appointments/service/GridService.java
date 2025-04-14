@@ -143,4 +143,12 @@ public interface GridService {
      * @return A Future that will complete when the grids have been updated.
      */
     Future<JsonObject> closeAllPassedGrids();
+
+    /**
+     * Retrieves the IDs of users who have shared a grid with the specified user.
+     *
+     * @param user The {@link UserInfos} of the user connected user.
+     * @return A Future containing a List of user IDs who have shared a grid with the specified user.
+     */
+    Future<List<String>> getUserIdsWhoSharedAGridWithMe(UserInfos user);
 }

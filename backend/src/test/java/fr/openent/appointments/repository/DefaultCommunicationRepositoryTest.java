@@ -80,6 +80,6 @@ public class DefaultCommunicationRepositoryTest {
 
         } ).when(neo4jRest).execute(anyString(), any(JsonObject.class), any(Handler.class));
 
-        this.communicationRepository.getGroupsCanCommunicateWithMe(userId, structureId);
+        this.communicationRepository.getGroupsICanCommunicateWith(userId, structureId);
     }
 }
