@@ -47,6 +47,7 @@ export const initialErrorInputs: InputsErrors = {
   location: "",
   videoCallLink: "",
   validityPeriod: "",
+  public: "",
   weekSlots: "",
   slots: {
     ids: [],
@@ -123,6 +124,7 @@ export const newErrorInputs = (
 ): InputsErrors => ({
   name: blurGridModalInputs.newNameError,
   location: blurGridModalInputs.newLocationError,
+  public: blurGridModalInputs.newPublicError,
   videoCallLink: blurGridModalInputs.newVideoCallLinkError,
   validityPeriod: blurGridModalInputs.newValidityPeriodError,
   weekSlots: blurGridModalInputs.newWeekSlotsError,

@@ -82,6 +82,7 @@ export interface GridModalInputs {
 export interface InputsErrors {
   name: string;
   location: string;
+  public: string;
   videoCallLink: string;
   validityPeriod: string;
   weekSlots: string;

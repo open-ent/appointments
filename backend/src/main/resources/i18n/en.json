@@ -190,5 +190,8 @@
   "group.school.Relative": "School parents of {0}",
   "group.school.Student": "School students of {0}",
   "group.school.Teacher": "School teachers of {0}",
-  "group.school.Guest": "School guests of {0}"
+  "group.school.Guest": "School guests of {0}",
+
+  "appointments.select.all": "Select all",
+  "appointments.deselect.all": "Deselect all"
 }

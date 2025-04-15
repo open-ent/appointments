@@ -190,5 +190,8 @@
   "group.school.Relative": "Genitori della {0}",
   "group.school.Student": "Studenti della {0}",
   "group.school.Teacher": "Insegnanti della {0}",
-  "group.school.Guest": "Ospiti della {0}"
+  "group.school.Guest": "Ospiti della {0}",
+
+  "appointments.select.all": "Tutto selezionato",
+  "appointments.deselect.all": "Deseleziona tutto"
 }

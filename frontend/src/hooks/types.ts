@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  MouseEvent,
-  SetStateAction,
-  SyntheticEvent,
-} from "react";
+import { ChangeEvent, Dispatch, MouseEvent, SetStateAction } from "react";
 
 import { SelectChangeEvent } from "@cgi-learning-hub/ui";
 import { Dayjs } from "dayjs";
@@ -23,7 +17,7 @@ export interface useUpdateGridInputsReturnType {
   handleColorChange: (color: HexaColor) => void;
   handleStructureChange: (event: SelectChangeEvent<unknown>) => void;
   handleLocationChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handlePublicChange: (_: SyntheticEvent, value: Public[]) => void;
+  handlePublicChange: (value: Public[]) => void;
   handleIsVideoCallChange: () => void;
   handleVideoCallLinkChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handlePublicCommentChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -63,9 +57,11 @@ export interface useBlurGridInputsReturnType {
   newValidityPeriodError: string;
   newWeekSlotsError: string;
   newSlotsError: { ids: number[]; error: string };
+  newPublicError: string;
   handleNameBlur: () => void;
   handleLocationBlur: () => void;
   handleVideoCallLinkBlur: () => void;
+  handlePublicBlur: () => void;
 }
 
 export type useBlurGridInputsType = (

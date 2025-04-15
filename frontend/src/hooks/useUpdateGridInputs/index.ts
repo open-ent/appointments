@@ -3,7 +3,6 @@ import {
   Dispatch,
   MouseEvent,
   SetStateAction,
-  SyntheticEvent,
   useCallback,
 } from "react";
 
@@ -92,8 +91,9 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
     updateErrorInputs("location", "");
   };
 
-  const handlePublicChange = (_: SyntheticEvent, value: Public[]) => {
+  const handlePublicChange = (value: Public[]) => {
     updateInputField("public", value);
+    if (value.length) updateErrorInputs("public", "");
   };
 
   const handleIsVideoCallChange = () => {

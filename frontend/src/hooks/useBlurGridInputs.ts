@@ -60,6 +60,8 @@ export const useBlurGridInputs = (
     error: INVALID_SLOT_ERROR,
   };
 
+  const newPublicError = inputs.public.length ? "" : FIELD_REQUIRED_ERROR;
+
   const handleNameBlur = () => {
     updateErrorInputs("name", newNameError);
   };
@@ -72,6 +74,10 @@ export const useBlurGridInputs = (
     updateErrorInputs("videoCallLink", newVideoCallLinkError);
   };
 
+  const handlePublicBlur = () => {
+    updateErrorInputs("public", newPublicError);
+  };
+
   return {
     newNameError,
     newLocationError,
@@ -79,8 +85,10 @@ export const useBlurGridInputs = (
     newValidityPeriodError,
     newWeekSlotsError,
     newSlotsError,
+    newPublicError,
     handleNameBlur,
     handleLocationBlur,
     handleVideoCallLinkBlur,
+    handlePublicBlur,
   };
 };

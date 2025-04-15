@@ -199,6 +199,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
     const newErrors = {
       name: blurGridModalInputs.newNameError,
       location: blurGridModalInputs.newLocationError,
+      public: blurGridModalInputs.newPublicError,
       videoCallLink: blurGridModalInputs.newVideoCallLinkError,
       validityPeriod: "",
       weekSlots: "",
@@ -208,7 +209,13 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       },
     };
     setErrorInputs(newErrors);
-    if (newErrors.name || newErrors.videoCallLink || newErrors.location) return;
+    if (
+      newErrors.name ||
+      newErrors.videoCallLink ||
+      newErrors.location ||
+      newErrors.public
+    )
+      return;
     setPage(PAGE_TYPE.SECOND);
   }, [blurGridModalInputs]);
 
