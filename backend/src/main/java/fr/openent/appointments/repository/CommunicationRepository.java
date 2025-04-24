@@ -20,12 +20,12 @@ public interface CommunicationRepository {
     Future<List<NeoGroup>> getGroupsICanCommunicateWith(String userId, String structureId);
 
     /**
-     * Retrieves all groups the current user can communicate with.
+     * Retrieves all groups the current user can communicate with good rights.
      *
      * @param userId The ID of the user whose groups are to be retrieved.
      * @return A Future containing a {@link List} of {@link NeoGroup}.
      */
-    Future<List<NeoGroup>> getGroupsICanCommunicateWith(String userId);
+    Future<List<NeoGroup>> getGroupsICanCommunicateWithGoodRights(String userId);
 
     /**
      * Retrieves all users matching the given groups IDs.
@@ -42,7 +42,7 @@ public interface CommunicationRepository {
      * @param structuresIds The list of structure external IDs to filter users.
      * @return A Future containing a {@link List} of {@link NeoUser}.
      */
-    public Future<List<NeoUser>> getUsersFromUsersIdsWithGoodRight(List<String> usersIds, List<String> structuresIds);
+    public Future<List<NeoUser>> getUsersFromUsersIds(List<String> usersIds, List<String> structuresIds);
 
     /**
      * Retrieves NeoUser from its ID.

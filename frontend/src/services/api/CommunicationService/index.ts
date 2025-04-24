@@ -1,6 +1,6 @@
+import { emptySplitApi } from "../EmptySplitService";
 import { GetUsersPayload, Public, UserCardInfos } from "./types";
 import { transformResponseToPublic } from "./utils";
-import { emptySplitApi } from "../EmptySplitService";
 
 export const communicationApi = emptySplitApi.injectEndpoints({
   endpoints: (builder) => ({

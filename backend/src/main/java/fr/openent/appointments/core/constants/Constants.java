@@ -26,6 +26,7 @@ public class Constants {
     public static final String CAMEL_PUBLIC_COMMENT = "publicComment";
     public static final String CAMEL_PUSH_NOTIF = "pushNotif";
     public static final String CAMEL_RESOURCE_URI = "resourceUri";
+    public static final String CAMEL_RIGHT = "right";
     public static final String CAMEL_STRUCTURE_ID = "structureId";
     public static final String CAMEL_STRUCTURES_EXTERNAL_IDS = "structuresExternalIds";
     public static final String CAMEL_STRUCTURES_IDS = "structuresIds";

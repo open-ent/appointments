@@ -1,5 +1,6 @@
 package fr.openent.appointments.service.impl;
 
+import fr.openent.appointments.controller.MainController;
 import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.UserAppointment;
@@ -64,7 +65,7 @@ public class DefaultCommunicationService implements CommunicationService {
 
         List<String> allUsersIds = new ArrayList<>();
 
-        communicationRepository.getGroupsICanCommunicateWith(userInfos.getUserId())
+        communicationRepository.getGroupsICanCommunicateWithGoodRights(userInfos.getUserId())
             .compose(neoGroups -> {
                 List<String> groupsIdsICanCommunicateWith = neoGroups.stream()
                         .map(NeoGroup::getId)
@@ -79,7 +80,7 @@ public class DefaultCommunicationService implements CommunicationService {
             })
             .compose(usersIds -> {
                 allUsersIds.addAll(usersIds);
-                return communicationRepository.getUsersFromUsersIdsWithGoodRight(allUsersIds, userInfos.getStructures());
+                return communicationRepository.getUsersFromUsersIds(allUsersIds, userInfos.getStructures());
             })
             .compose(neoUsers -> {
                 List<NeoUser> filteredUsers = filterNeoUsersBySearchAndPagination(neoUsers, search, page, limit);
