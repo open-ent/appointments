@@ -23,9 +23,9 @@ public interface CommunicationRepository {
      * Retrieves all groups the current user can communicate with good rights.
      *
      * @param userId The ID of the user whose groups are to be retrieved.
-     * @return A Future containing a {@link List} of {@link NeoGroup}.
+     * @return A Future containing a {@link List} of {@link NeoUser}.
      */
-    Future<List<NeoGroup>> getGroupsICanCommunicateWithGoodRights(String userId);
+    Future<List<NeoUser>> getUsersICanCommunicateWithGoodRights(String userId);
 
     /**
      * Retrieves all users matching the given groups IDs.

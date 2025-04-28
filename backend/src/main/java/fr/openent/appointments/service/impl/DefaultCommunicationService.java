@@ -65,13 +65,7 @@ public class DefaultCommunicationService implements CommunicationService {
 
         List<String> allUsersIds = new ArrayList<>();
 
-        communicationRepository.getGroupsICanCommunicateWithGoodRights(userInfos.getUserId())
-            .compose(neoGroups -> {
-                List<String> groupsIdsICanCommunicateWith = neoGroups.stream()
-                        .map(NeoGroup::getId)
-                        .collect(Collectors.toList());
-                return communicationRepository.getUsersFromGroupsIds(groupsIdsICanCommunicateWith);
-            })
+        communicationRepository.getUsersICanCommunicateWithGoodRights(userInfos.getUserId())
             .compose(neoUsers -> {
                 allUsersIds.addAll(neoUsers.stream()
                         .map(NeoUser::getId)

@@ -45,17 +45,17 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
     }
 
     @Override
-    public Future<List<NeoGroup>> getGroupsICanCommunicateWithGoodRights(String userId) {
-        Promise<List<NeoGroup>> promise = Promise.promise();
+    public Future<List<NeoUser>> getUsersICanCommunicateWithGoodRights(String userId) {
+        Promise<List<NeoUser>> promise = Promise.promise();
 
-        String query = getQueryGroupsICanCommunicateWithFilterByRight();
+        String query = getQueryUsersICanCommunicateWithFilterByRight();
         JsonObject params = new JsonObject()
                 .put(CAMEL_USER_ID, userId)
                 .put(CAMEL_RIGHT, "fr.openent.appointments.controller.MainController|initManageRights");
 
 
         String errorMessage = "[Appointments@DefaultCommunicationRepository::getGroupsICanCommunicateWithGoodRights] Fail to retrieve visible groups : ";
-        neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.resultToIModel(promise, NeoGroup.class, errorMessage)));
+        neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.resultToIModel(promise, NeoUser.class, errorMessage)));
 
         return promise.future();
     }
@@ -165,16 +165,14 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
                 "   g.name as name;";
     }
 
-    private String getQueryGroupsICanCommunicateWithFilterByRight() {
-        return
-            "MATCH (g:Group)-[:AUTHORIZED]->(:Role)-[:AUTHORIZE]->(wa:WorkflowAction) " +
-            "WHERE wa.name = {right} " +
-            "AND EXISTS(g.id) " +
-            "MATCH (u:User {id: {userId}}) " +
-            "OPTIONAL MATCH (u)-[:COMMUNIQUE]->(g) " +
-            "OPTIONAL MATCH (u)-[:IN]->(:Group)-[:COMMUNIQUE]->(g) " +
-            "WHERE g IS NOT NULL " +
-            "RETURN DISTINCT g.id AS id, g.name AS name";
+    private String getQueryUsersICanCommunicateWithFilterByRight() {
+        return  "MATCH (me:User {id: {userId}}) " +
+                "MATCH (otherUser:User)-[:IN]->(:Group)-[:AUTHORIZED]->(:Role)-[:AUTHORIZE]->(:WorkflowAction {name: {right}}) " +
+                "WHERE " +
+                "(me)-[:IN]->(:Group)-[:COMMUNIQUE]->(:Group)<-[:IN]-(otherUser) " +
+                "OR " +
+                "(me)-[:COMMUNIQUE]->(:Group)<-[:IN]-(otherUser) " +
+                "RETURN DISTINCT otherUser.id AS id, otherUser.name AS name ";
     }
 
 
