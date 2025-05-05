@@ -92,6 +92,7 @@ export const CustomMultiAutocomplete: FC = () => {
                     ? handleSelectAll
                     : handleDeselectAll
                 }
+                key={option.groupId}
               >
                 {showSelectAll ? selectAllLabel : deselectAllLabel}
               </li>
@@ -100,7 +101,7 @@ export const CustomMultiAutocomplete: FC = () => {
           );
         }
         return (
-          <li {...optionProps}>
+          <li {...optionProps} key={option.groupId}>
             <Checkbox
               icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
               checkedIcon={<CheckBoxIcon fontSize="small" />}
