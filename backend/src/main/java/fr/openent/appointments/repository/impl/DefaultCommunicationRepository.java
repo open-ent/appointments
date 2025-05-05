@@ -148,6 +148,7 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
                 "OPTIONAL MATCH (g2:Group)-[:DEPENDS]->(g) " +
                 "WITH collect(g) + collect(g2) AS allGroups " +
                 "UNWIND allGroups AS group " +
+                "MATCH (group)<-[:IN]-(:User) " +
                 "RETURN DISTINCT " +
                 "   group.id as id, " +
                 "   group.name as name " +
@@ -164,6 +165,7 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
                 "OPTIONAL MATCH (g2:Group)-[:DEPENDS]->(g) " +
                 "WITH collect(g) + collect(g2) AS allGroups " +
                 "UNWIND allGroups AS group " +
+                "MATCH (group)<-[:IN]-(:User) " +
                 "RETURN DISTINCT " +
                 "   group.id as id, " +
                 "   group.name as name;";
