@@ -36,10 +36,12 @@ import {
 } from "./style";
 import { AppointmentCardProps } from "./types";
 import { AppointmentStateIcon } from "./utils";
+import { useTheme } from "~/hooks/useTheme";
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
   const { t } = useTranslation(APPOINTMENTS);
   const { appointmentIdFromNotify, setAppointmentIdFromNotify } = useGlobal();
+  const { isTheme1D } = useTheme();
 
   const {
     handleAcceptAppointment,
@@ -171,6 +173,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
             <Button
               variant="outlined"
               color="error"
+              sx={{ ...(isTheme1D && { padding: "2px 1px 0px !important" }), }}
               fullWidth
               onClick={handleCancelRequestClick}
             >

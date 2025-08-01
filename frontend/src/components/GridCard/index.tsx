@@ -157,13 +157,15 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
             </Button>
           </Box>
         ) : (
-          <Button
-            variant="outlined"
-            startIcon={<VisibilityRoundedIcon />}
-            onClick={handleOpenConsultModal}
-          >
-            {t("appointments.consult")}
-          </Button>
+          <Box sx={buttonsBoxStyle}>
+            <Button
+              variant="outlined"
+              startIcon={<VisibilityRoundedIcon />}
+              onClick={handleOpenConsultModal}
+            >
+              {t("appointments.consult")}
+            </Button>
+          </Box>
         )
       ) : (
         <Box sx={moreButtonBoxStyle}>

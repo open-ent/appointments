@@ -2,7 +2,6 @@ import { ThemeOptions } from "@cgi-learning-hub/ui";
 
 export const options: ThemeOptions = {
   typography: {
-    fontFamily: "Roboto",
     h1: {
       fontSize: "2.4rem",
     },
@@ -23,6 +22,9 @@ export const options: ThemeOptions = {
     },
     caption: {
       fontSize: "1.2rem",
+    },
+    button: {
+      fontSize: "1.4rem",
     },
   },
   components: {
@@ -64,28 +66,6 @@ export const options: ThemeOptions = {
           },
         },
       },
-    },
-    MuiButton: {
-      variants: [
-        {
-          props: { variant: "contained" },
-          style: {
-            fontSize: "1.4rem",
-          },
-        },
-        {
-          props: { variant: "outlined" },
-          style: {
-            fontSize: "1.4rem",
-          },
-        },
-        {
-          props: { variant: "text" },
-          style: {
-            fontSize: "1.4rem",
-          },
-        },
-      ],
     },
     MuiMobileStepper: {
       styleOverrides: {

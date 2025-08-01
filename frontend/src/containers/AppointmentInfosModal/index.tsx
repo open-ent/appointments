@@ -47,6 +47,7 @@ import {
 } from "./style";
 import { AppointmentInfosModalProps } from "./types";
 import { HOUR } from "~/core/dayjs.const";
+import { useTheme } from "~/hooks/useTheme";
 
 export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   appointment,
@@ -58,6 +59,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
     handleOpenDialogModal,
   } = useMyAppointments();
   const { t } = useTranslation(APPOINTMENTS);
+  const { isTheme1D } = useTheme();
 
   const canCancelRequest = useMemo(
     () =>
@@ -188,7 +190,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 <Button
                   variant="outlined"
                   color="error"
-                  sx={oneButtonStyle}
+                  sx={isTheme1D ? { width: "30rem" } : oneButtonStyle}
                   onClick={() =>
                     handleOpenDialogModal(
                       CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
@@ -233,8 +235,8 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 canCancelRequest
                   ? ""
                   : t("appointments.cannot.cancel.request.tooltip", {
-                      hours: minHoursBeforeCancellation,
-                    })
+                    hours: minHoursBeforeCancellation,
+                  })
               }
               placement="top"
               arrow
@@ -251,7 +253,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                   variant="outlined"
                   color="error"
                   disabled={!canCancelRequest}
-                  sx={oneButtonStyle}
+                  sx={isTheme1D ? { width: "30rem" } : oneButtonStyle}
                   onClick={() =>
                     handleOpenDialogModal(
                       CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT,

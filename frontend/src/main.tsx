@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   ThemeProvider as ThemeProviderCGI,
@@ -82,8 +82,14 @@ dayjs.locale("fr");
 
 const App = () => {
   const { t } = useTranslation(APPOINTMENTS);
-  const { isTheme1d } = useTheme();
-  const isTheme1D = void isTheme1d();
+  const { isTheme1D } = useTheme();
+  
+  useEffect(() => {
+      const main = document.querySelector("main");
+      if (!main || main.classList.contains("theme-1d") && isTheme1D) return;
+      isTheme1D ? main.classList.add("theme-1d") : main.classList.remove("theme-1d");
+  }, [isTheme1D]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
@@ -94,7 +100,7 @@ const App = () => {
         >
           <EdificeThemeProvider>
             <ThemeProviderCGI
-              themeId={isTheme1D ? "ent1D" : (themePlatform ?? "default")}
+              themeId={isTheme1D ? "ent1D" : themePlatform ?? "default"}
               options={options}
             >
               <LocalizationProvider

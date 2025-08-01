@@ -20,6 +20,7 @@ import {
   tabsStyle,
   titleStyle,
 } from "./style";
+import { useTheme } from "~/hooks/useTheme";
 
 export interface AppProps {
   _id: string;
@@ -42,6 +43,7 @@ export const Home: FC = () => {
     !hasManageRight && initialTabValue === 2 ? 0 : initialTabValue,
   );
   const { t } = useTranslation(APPOINTMENTS);
+  const { isTheme1D } = useTheme();
 
   const handleChange = useCallback(
     (_: SyntheticEvent, newValue: number) => {
@@ -73,8 +75,7 @@ export const Home: FC = () => {
         <Typography
           variant="h1"
           color="primary"
-          fontFamily="Comfortaa"
-          fontWeight="bold"
+          {...(!isTheme1D && { fontFamily: "Comfortaa", fontWeight: "bold" })}
         >
           {t("appointments.title")}
         </Typography>

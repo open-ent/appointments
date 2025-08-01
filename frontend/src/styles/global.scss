@@ -19,8 +19,10 @@ body {
 
 main {
   &.container-fluid {
+    &.theme-1d {
+      padding: 0 !important;
+    }
     max-width: none;
-    margin: 0;
     --edifice-container-width: 100%;
     padding: 3rem 5rem;
     background-color: #eef0f3 !important;
