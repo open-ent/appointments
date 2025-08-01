@@ -41,6 +41,7 @@ import { MyAppointmentsProvider } from "./providers/MyAppointmentsProvider";
 import { router } from "./routes";
 import { setupStore } from "./store";
 import { options } from "./styles/theme";
+import { useTheme } from "./hooks/useTheme";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement!);
@@ -49,7 +50,7 @@ const root = createRoot(rootElement!);
 
 const minHoursBeforeCancellation = parseInt(
   rootElement?.getAttribute("data-min-hours") ??
-    DEFAULT_MIN_HOURS_BEFORE_MODIFICATION.toString(),
+  DEFAULT_MIN_HOURS_BEFORE_MODIFICATION.toString(),
 );
 
 const themePlatform = (rootElement?.getAttribute("data-theme") ??
@@ -81,7 +82,8 @@ dayjs.locale("fr");
 
 const App = () => {
   const { t } = useTranslation(APPOINTMENTS);
-
+  const { isTheme1d } = useTheme();
+  const isTheme1D = void isTheme1d();
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
@@ -92,7 +94,7 @@ const App = () => {
         >
           <EdificeThemeProvider>
             <ThemeProviderCGI
-              themeId={themePlatform ?? "default"}
+              themeId={isTheme1D ? "ent1D" : (themePlatform ?? "default")}
               options={options}
             >
               <LocalizationProvider
