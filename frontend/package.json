@@ -1,6 +1,6 @@
 {
   "name": "Appointments",
-  "version": "1.0.3-%branch%.%generateVersion%",
+  "version": "1.1.0",
   "description": "Appointments",
   "homepage": "https://github.com/OPEN-ENT-NG/appointments#readme",
   "bugs": {
@@ -49,9 +49,9 @@
     "@cgi-learning-hub/icons": "1.8.0",
     "@cgi-learning-hub/theme": "1.8.0",
     "@cgi-learning-hub/ui": "1.8.0",
-    "@edifice.io/react": "develop",
-    "@edifice.io/bootstrap": "develop",
-    "@edifice.io/client": "develop",
+    "@edifice.io/react": "2.3.0",
+    "@edifice.io/bootstrap": "2.3.0",
+    "@edifice.io/client": "2.3.0",
     "@react-spring/web": "9.7.3",
     "@tanstack/react-query": "4.36.1",
     "@mui/material": "^6",
