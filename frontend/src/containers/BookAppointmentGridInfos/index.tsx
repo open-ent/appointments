@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef } from "react";
 
 import {
   Box,
@@ -46,18 +46,9 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   const { t } = useTranslation(APPOINTMENTS);
   const { grids, gridInfos, selectedGrid, handleGridChange } =
     useBookAppointmentModal();
-  const [minWidthSelect, setMinWidthSelect] = useState(0);
 
   const { duration, videoCallLink, place, publicComment, documents } =
     gridInfos || {};
-
-  useEffect(() => {
-    if (selectRef.current) {
-      const computedStyle = window.getComputedStyle(selectRef.current);
-      setMinWidthSelect(parseFloat(computedStyle.width));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectRef.current]);
 
   return (
     <Box sx={wrapperUserInfoStyle}>
@@ -90,12 +81,19 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
               value={selectedGrid?.id ?? ""}
               onChange={(e) => handleGridChange(e.target.value as number)}
               ref={selectRef}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    maxWidth: '100% !important',
+                    width: (selectRef.current?.offsetWidth || 'auto') + 'px !important',
+                  },
+                },
+              }}
             >
               {grids?.map((grid) => (
                 <MenuItem
                   key={grid.id}
                   value={grid.id}
-                  sx={{ maxWidth: minWidthSelect }}
                 >
                   <EllipsisWithTooltip>{grid.name}</EllipsisWithTooltip>
                 </MenuItem>
