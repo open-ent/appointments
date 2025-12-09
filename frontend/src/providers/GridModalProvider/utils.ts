@@ -36,7 +36,7 @@ export const initialGridModalInputs = (
     start: undefined,
     end: undefined,
   },
-  duration: DURATION.FIFTEEN_MINUTES,
+  duration: DURATION.FIVE_MINUTES,
   periodicity: PERIODICITY.WEEKLY,
   weekSlots: initialWeekSlots,
   documents: [],

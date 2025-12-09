@@ -32,6 +32,7 @@ import {
   DEFAULT_THEME,
   TOAST_CONFIG,
 } from "./core/constants";
+import { useTheme } from "./hooks/useTheme";
 import { AvailabilityProvider } from "./providers/AvailabilityProvider";
 import { BookAppointmentModalProvider } from "./providers/BookAppointmentModalProvider";
 import { FindAppointmentsProvider } from "./providers/FindAppointmentsProvider";
@@ -41,7 +42,6 @@ import { MyAppointmentsProvider } from "./providers/MyAppointmentsProvider";
 import { router } from "./routes";
 import { setupStore } from "./store";
 import { options } from "./styles/theme";
-import { useTheme } from "./hooks/useTheme";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement!);
@@ -50,7 +50,7 @@ const root = createRoot(rootElement!);
 
 const minHoursBeforeCancellation = parseInt(
   rootElement?.getAttribute("data-min-hours") ??
-  DEFAULT_MIN_HOURS_BEFORE_MODIFICATION.toString(),
+    DEFAULT_MIN_HOURS_BEFORE_MODIFICATION.toString(),
 );
 
 const themePlatform = (rootElement?.getAttribute("data-theme") ??
@@ -83,11 +83,12 @@ dayjs.locale("fr");
 const App = () => {
   const { t } = useTranslation(APPOINTMENTS);
   const { isTheme1D } = useTheme();
-  
+
   useEffect(() => {
-      const main = document.querySelector("main");
-      if (!main || main.classList.contains("theme-1d") && isTheme1D) return;
-      isTheme1D ? main.classList.add("theme-1d") : main.classList.remove("theme-1d");
+    const main = document.querySelector("main");
+    if (!main || (main.classList.contains("theme-1d") && isTheme1D)) return;
+    if (isTheme1D) main.classList.add("theme-1d");
+    else main.classList.remove("theme-1d");
   }, [isTheme1D]);
 
   return (

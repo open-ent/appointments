@@ -20,6 +20,7 @@ import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import { pageGridModalStyle } from "../GridModal/style";
 import {
+  buttonGroupStyle,
   itemStyle,
   periodicityItemStyle,
   slotDurationItemStyle,
@@ -61,6 +62,7 @@ export const SecondPageGridModal: FC = () => {
             }
             exclusive
             value={inputs.duration}
+            sx={buttonGroupStyle}
           >
             {durationOptions.map((option) => (
               <ToggleButton

@@ -173,7 +173,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
             <Button
               variant="outlined"
               color="error"
-              sx={{ ...(isTheme1D && { padding: "2px 1px 0px !important" }), }}
+              sx={{ ...(isTheme1D && { padding: "2px 1px 0px !important" }) }}
               fullWidth
               onClick={handleCancelRequestClick}
             >

@@ -235,8 +235,8 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 canCancelRequest
                   ? ""
                   : t("appointments.cannot.cancel.request.tooltip", {
-                    hours: minHoursBeforeCancellation,
-                  })
+                      hours: minHoursBeforeCancellation,
+                    })
               }
               placement="top"
               arrow

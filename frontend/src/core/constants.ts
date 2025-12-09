@@ -50,6 +50,14 @@ export const ALLOWED_DOCUMENT_EXTENSIONS = [
 ];
 
 export const DURATION_VALUES = {
+  [DURATION.FIVE_MINUTES]: {
+    displayValue: "5min",
+    numberOfMinutes: 5,
+  },
+  [DURATION.TEN_MINUTES]: {
+    displayValue: "10min",
+    numberOfMinutes: 10,
+  },
   [DURATION.FIFTEEN_MINUTES]: {
     displayValue: "15min",
     numberOfMinutes: 15,

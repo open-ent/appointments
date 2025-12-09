@@ -84,17 +84,16 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
               MenuProps={{
                 PaperProps: {
                   sx: {
-                    maxWidth: '100% !important',
-                    width: (selectRef.current?.offsetWidth || 'auto') + 'px !important',
+                    maxWidth: "100% !important",
+                    width:
+                      (selectRef.current?.offsetWidth || "auto") +
+                      "px !important",
                   },
                 },
               }}
             >
               {grids?.map((grid) => (
-                <MenuItem
-                  key={grid.id}
-                  value={grid.id}
-                >
+                <MenuItem key={grid.id} value={grid.id}>
                   <EllipsisWithTooltip>{grid.name}</EllipsisWithTooltip>
                 </MenuItem>
               ))}
@@ -115,8 +114,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
             <Typography variant="body2" color="text.primary">
               {t("appointments.slots") +
                 " : " +
-                DURATION_VALUES[duration ?? DURATION.FIFTEEN_MINUTES]
-                  .displayValue}
+                DURATION_VALUES[duration ?? DURATION.FIVE_MINUTES].displayValue}
             </Typography>
           </Box>
           {!!place && (

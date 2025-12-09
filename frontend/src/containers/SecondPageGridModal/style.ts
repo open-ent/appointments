@@ -17,3 +17,8 @@ export const slotDurationItemStyle = {
 export const periodicityItemStyle = {
   width: "14rem",
 };
+
+export const buttonGroupStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+};
