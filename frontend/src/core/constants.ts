@@ -80,26 +80,32 @@ export const DAY_VALUES = {
   [DAY.MONDAY]: {
     i18nKey: "appointments.monday",
     numberOfWeekDay: 0,
+    dayjsDayIndex: 1,
   },
   [DAY.TUESDAY]: {
     i18nKey: "appointments.tuesday",
     numberOfWeekDay: 1,
+    dayjsDayIndex: 2,
   },
   [DAY.WEDNESDAY]: {
     i18nKey: "appointments.wednesday",
     numberOfWeekDay: 2,
+    dayjsDayIndex: 3,
   },
   [DAY.THURSDAY]: {
     i18nKey: "appointments.thursday",
     numberOfWeekDay: 3,
+    dayjsDayIndex: 4,
   },
   [DAY.FRIDAY]: {
     i18nKey: "appointments.friday",
     numberOfWeekDay: 4,
+    dayjsDayIndex: 5,
   },
   [DAY.SATURDAY]: {
     i18nKey: "appointments.saturday",
     numberOfWeekDay: 5,
+    dayjsDayIndex: 6,
   },
 };
 

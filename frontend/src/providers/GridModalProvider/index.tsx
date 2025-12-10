@@ -10,8 +10,9 @@ import {
 
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { APPOINTMENTS, TOAST_VALUES } from "~/core/constants";
-import { CONFIRM_MODAL_TYPE } from "~/core/enums";
+import { APPOINTMENTS, DAY_VALUES, TOAST_VALUES } from "~/core/constants";
+import { CONFIRM_MODAL_TYPE, DAY } from "~/core/enums";
+import { WeekSlotsModel } from "~/core/types";
 import {
   useBlurGridInputsReturnType,
   useUpdateGridInputsReturnType,
@@ -110,6 +111,35 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
         structure: structures[0],
       }));
   }, [structures]);
+
+  useEffect(() => {
+    const start = inputs.validityPeriod.start;
+    const end = inputs.validityPeriod.end;
+
+    if (!start || !end) return;
+
+    const diffDays = end.diff(start, "day");
+
+    if (diffDays >= 6) return;
+
+    const startDay = start.isoWeekday();
+    const endDay = end.isoWeekday();
+
+    const updatedWeekSlots = Object.fromEntries(
+      Object.entries(inputs.weekSlots).map(([day, slots]) => {
+        const dayjsIndex = DAY_VALUES[day as DAY].dayjsDayIndex;
+
+        const isInsideInterval = dayjsIndex >= startDay && dayjsIndex <= endDay;
+
+        return [day, isInsideInterval ? slots : []];
+      }),
+    ) as WeekSlotsModel;
+
+    setInputs((prev) => ({
+      ...prev,
+      weekSlots: updatedWeekSlots,
+    }));
+  }, [inputs.validityPeriod.start, inputs.validityPeriod.end]);
 
   const { data: groups, refetch: refetchGroups } =
     useGetCommunicationGroupsQuery(inputs.structure.id, {

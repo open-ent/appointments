@@ -10,7 +10,6 @@ import { YEAR } from "~/core/dayjs.const";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import { boxStyle, datePickerStyle, removeIconStyle } from "./style";
-import { shouldDisableEndDate, shouldDisableStartDate } from "./utils";
 
 export const RangeDatePicker: FC = () => {
   const { t } = useTranslation(APPOINTMENTS);
@@ -46,7 +45,6 @@ export const RangeDatePicker: FC = () => {
           label={t("appointments.grid.validity.period.start")}
           value={startDate}
           onChange={handleStartDateChange}
-          shouldDisableDate={shouldDisableStartDate}
           disabled={disabled}
           slotProps={{
             day: { sx: { fontSize: "1.2rem" } },
@@ -68,7 +66,6 @@ export const RangeDatePicker: FC = () => {
           onChange={handleEndDateChange}
           minDate={startDate}
           maxDate={startDate?.add(1, YEAR)}
-          shouldDisableDate={shouldDisableEndDate}
           disabled={disabled || !startDate}
           slotProps={{
             day: { sx: { fontSize: "1.2rem" } },

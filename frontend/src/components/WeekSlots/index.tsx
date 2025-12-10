@@ -40,6 +40,22 @@ export const WeekSlots: FC = () => {
 
   const entries = Object.entries(inputs.weekSlots) as [DAY, Slot[]][];
 
+  const filteredEntries = useMemo(() => {
+    const { start, end } = inputs.validityPeriod;
+    if (!start || !end) return entries;
+
+    const startDay = start.isoWeekday();
+    const endDay = end.isoWeekday();
+    const diffDays = end.diff(start, "day");
+
+    if (diffDays >= 6) return entries;
+
+    return entries.filter(([day]) => {
+      const dayjsIndex = DAY_VALUES[day].dayjsDayIndex;
+      return dayjsIndex >= startDay && dayjsIndex <= endDay;
+    });
+  }, [entries, inputs.validityPeriod]);
+
   const dayErrors = useMemo(() => {
     const errors: Record<DAY, boolean> = {} as Record<DAY, boolean>;
     entries.map(([day, timeSlots]) => {
@@ -53,7 +69,7 @@ export const WeekSlots: FC = () => {
 
   return (
     <Box sx={weekBoxStyle}>
-      {entries.map(([day, timeSlots]) => {
+      {filteredEntries.map(([day, timeSlots]) => {
         return (
           <>
             <Box sx={dayBoxStyle} key={day}>
