@@ -6,6 +6,7 @@ import fr.openent.appointments.cron.ClosingCron;
 import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.service.ServiceFactory;
 import fr.wseduc.cron.CronTrigger;
+import io.vertx.core.Future;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.Promise;
 import org.entcore.common.events.EventStore;
@@ -15,12 +16,18 @@ import org.entcore.common.sql.Sql;
 import org.entcore.common.neo4j.Neo4j;
 import org.entcore.common.http.BaseServer;
 
+import java.text.ParseException;
+
 public class Appointments extends BaseServer {
 
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
-        super.start(startPromise);
+        final Promise<Void> promise = Promise.promise();
+        super.start(promise);
+        promise.future().compose(init -> initAppointments()).onComplete(startPromise);
+    }
 
+    public Future<Void> initAppointments() {
         EventBus eb = getEventBus(vertx);
         EventStore eventStore = EventStoreFactory.getFactory().getEventStore(Appointments.class.getSimpleName());
         AppConfig appConfig = new AppConfig(config);
@@ -43,9 +50,12 @@ public class Appointments extends BaseServer {
 
         // CRON
         ClosingCron closingCron = new ClosingCron(serviceFactory);
-        new CronTrigger(vertx, appConfig.closingCron()).schedule(closingCron);
+	    try {
+		    new CronTrigger(vertx, appConfig.closingCron()).schedule(closingCron);
+	    } catch (ParseException e) {
+		    return Future.failedFuture(e);
+	    }
 
-        startPromise.tryComplete();
-		startPromise.tryFail("[Appointments@Appointments::start] Fail to start Appointments");
+        return Future.succeededFuture();
     }
 }

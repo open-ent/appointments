@@ -5,11 +5,11 @@
     <parent>
         <groupId>io.edifice</groupId>
         <artifactId>app-parent</artifactId>
-        <version>1.0</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <groupId>fr.openent</groupId>
     <artifactId>appointments</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2-zookeeper-SNAPSHOT</version>
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/appointments.git</connection>
         <developerConnection>scm:git:https://github.com/OPEN-ENT-NG/appointments.git</developerConnection>
@@ -33,7 +33,7 @@
     </repositories>
 
     <properties>
-        <entCoreVersion>6.12-SNAPSHOT</entCoreVersion>
+        <entCoreVersion>6.10-zookeeper-SNAPSHOT</entCoreVersion>
         <vertxCronTimerVersion>3.0-SNAPSHOT</vertxCronTimerVersion>
         <junitVersion>5.1.0</junitVersion>
         <reflectionsVersion>0.10.2</reflectionsVersion>
