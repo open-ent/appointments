@@ -82,7 +82,8 @@ export const SecondPageGridModal: FC = () => {
         <Box sx={validityPeriodStyle}>
           <ToggleButtonGroup
             disabled={
-              isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION
+              isSubmitButtonLoading ||
+              modalType === GRID_MODAL_TYPE.CONSULTATION
             }
             exclusive
             value={inputs.periodicity}

@@ -101,16 +101,37 @@ export const gridInputsToCreateGridPayload = (
 
 export const gridInputsToEditGridPayload = (
   inputs: GridModalInputs,
+  publicOptions: Public[],
   gridId: number,
   files: MyCustomFile[],
 ): EditGridPayload => {
   const body: EditGridBody = {
     name: inputs.name.trimEnd(),
     color: inputs.color,
+    beginDate: inputs.validityPeriod.start?.format("YYYY-MM-DD") || "",
+    endDate: inputs.validityPeriod.end?.format("YYYY-MM-DD") || "",
     videoCallLink: inputs.isVideoCall ? inputs.videoCallLink : "",
+    periodicity: PERIODICITY_VALUES[inputs.periodicity].numberOfWeeks,
+    targetPublicListId: inputs.public.length
+      ? inputs.public.map((item) => item.groupId)
+      : publicOptions.map((item) => item.groupId),
     place: inputs.location,
     documentsIds: files.map((file) => file.workspaceId),
     publicComment: inputs.publicComment,
+    duration: inputs.duration,
+    dailySlots: Object.entries(inputs.weekSlots).reduce(
+      (acc, [day, slots]) => {
+        return [
+          ...acc,
+          ...slots.map((slot) => ({
+            day: day as DAY,
+            beginTime: slot.begin.parseToString(),
+            endTime: slot.end.parseToString(),
+          })),
+        ];
+      },
+      [] as { day: DAY; beginTime: string; endTime: string }[],
+    ),
   };
 
   return {

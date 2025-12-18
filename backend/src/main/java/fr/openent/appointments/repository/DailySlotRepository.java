@@ -24,4 +24,6 @@ public interface DailySlotRepository {
      *         return a {@link List} of the {@link DailySlot} found.
      */
     Future<List<DailySlot>> getByGridId(Long gridId);
+
+    Future<List<DailySlot>> removeByGridId(Long gridId);
 }

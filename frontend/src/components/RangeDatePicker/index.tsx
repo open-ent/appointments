@@ -28,7 +28,7 @@ export const RangeDatePicker: FC = () => {
   const isEndError = !!validityPeriodError && !endDate;
 
   const disabled = useMemo(
-    () => isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION,
+    () => isSubmitButtonLoading || modalType === GRID_MODAL_TYPE.CONSULTATION,
     [isSubmitButtonLoading, modalType],
   );
 

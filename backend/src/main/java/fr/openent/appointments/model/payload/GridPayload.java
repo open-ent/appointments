@@ -57,6 +57,7 @@ public class GridPayload implements IModel<GridPayload> {
                 .map(Object::toString)
                 .collect(Collectors.toList());
         this.publicComment = grid.getString(CAMEL_PUBLIC_COMMENT, null);
+        this.timeSlots = new ArrayList<>();
     }
 
     // Getters
@@ -247,6 +248,27 @@ public class GridPayload implements IModel<GridPayload> {
             currentMonday = currentMonday.plusWeeks(this.periodicity.getValue());
         }
     }
+
+    public boolean canGenerateTimeSlots() {
+        if (beginDate == null
+                || endDate == null
+                || !beginDate.isBefore(endDate)
+                || periodicity == null
+                || duration == null
+                || duration.isZero()
+                || dailySlots == null
+                || dailySlots.isEmpty()) {
+            return false;
+        }
+        return dailySlots.stream().allMatch(slot ->
+                slot != null
+                        && slot.getDay() != null
+                        && slot.getBeginTime() != null
+                        && slot.getEndTime() != null
+                        && slot.getBeginTime().isBefore(slot.getEndTime())
+        );
+    }
+
 
     public String toString() {
         return new JsonObject()

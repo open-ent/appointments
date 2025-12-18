@@ -129,10 +129,16 @@ export interface GetGridByIdResponse {
 export interface EditGridBody {
   name: string;
   color: string;
+  beginDate: string;
+  endDate: string;
   videoCallLink: string;
+  targetPublicListId: string[];
   place: string;
   documentsIds: string[];
   publicComment: string;
+  dailySlots: DailySlotPayload[];
+  periodicity: number;
+  duration: string;
 }
 
 export interface EditGridPayload {

@@ -1,6 +1,7 @@
 package fr.openent.appointments.repository.impl;
 
 import fr.openent.appointments.enums.AppointmentState;
+import fr.openent.appointments.enums.Periodicity;
 import fr.openent.appointments.helper.*;
 import fr.openent.appointments.model.TransactionElement;
 import fr.openent.appointments.model.database.Appointment;
@@ -18,6 +19,7 @@ import io.vertx.core.json.JsonObject;
 import org.entcore.common.sql.Sql;
 import org.entcore.common.sql.SqlResult;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.chrono.ChronoLocalDate;
@@ -145,12 +147,21 @@ public class DefaultGridRepository implements GridRepository {
         String query = "SELECT DISTINCT g.* FROM " + DB_GRID_TABLE + " g " +
                 "JOIN " + DB_TIME_SLOT_TABLE + " ts ON ts.grid_id = g.id " +
                 "LEFT JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
-                "WHERE g.id IN " + Sql.listPrepared(gridsIds) +
+                "WHERE g.id IN " + Sql.listPrepared(gridsIds) + " " +
                 "AND g.state = ? " +
                 "AND ts.begin_date > " + FRENCH_NOW + " " +
-                "AND (a.id IS NULL OR a.state NOT IN " +
-                Sql.listPrepared(availableAppointmentStates) +
-                ");";
+                "AND ts.deleted_at IS NULL " +
+                "AND (a.id IS NULL OR a.state NOT IN " + Sql.listPrepared(availableAppointmentStates) + ") " +
+                "AND NOT EXISTS ( " +
+                "    SELECT 1 FROM " + DB_TIME_SLOT_TABLE + " ts2 " +
+                "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
+                "    WHERE ts2.deleted_at IS NOT NULL " +
+                "      AND a2.id IS NOT NULL " +
+                "      AND ts2.grid_id = ts.grid_id " +
+                "      AND ts2.begin_date = ts.end_date " +
+                "      AND ts2.end_date = ts.begin_date " +
+                ")";
+
 
         JsonArray params = new JsonArray()
                 .addAll(new JsonArray(gridsIds))
@@ -249,6 +260,10 @@ public class DefaultGridRepository implements GridRepository {
         String place = grid.getPlace();
         List<String> documentsIds = grid.getDocumentsIds();
         String publicComment = grid.getPublicComment();
+        List<String> targetPublicIds = grid.getTargetPublicIds();
+        LocalDate beginDate = grid.getBeginDate();
+        LocalDate endDate = grid.getEndDate();
+        Periodicity periodicity = grid.getPeriodicity();
 
         boolean isNameUpdatable = name != null && !name.isEmpty();
         boolean isColorUpdatable = color != null;
@@ -256,6 +271,10 @@ public class DefaultGridRepository implements GridRepository {
         boolean isPlaceUpdatable = place != null;
         boolean isDocumentsIdsUpdatable = documentsIds != null;
         boolean isPublicCommentUpdatable = publicComment != null;
+        boolean isTargetPublicIdsUpdatable = targetPublicIds != null;
+        boolean isBeginDateUpdatable = beginDate != null;
+        boolean isEndDateUpdatable = endDate != null;
+        boolean isPeriodicityUpdatable = periodicity != null;
 
         String query = "UPDATE " + DB_GRID_TABLE + " SET " + UPDATING_DATE + " = ?, ";
         if (isNameUpdatable) query += NAME + " = ?, ";
@@ -264,6 +283,10 @@ public class DefaultGridRepository implements GridRepository {
         if (isPlaceUpdatable) query += PLACE + " = ?, ";
         if (isDocumentsIdsUpdatable) query += DOCUMENTS_IDS + " = ?, ";
         if (isPublicCommentUpdatable) query += PUBLIC_COMMENT + " = ?, ";
+        if (isTargetPublicIdsUpdatable) query += TARGET_PUBLIC_LIST_ID + " = ?, ";
+        if (isBeginDateUpdatable) query += BEGIN_DATE + " = ?, ";
+        if (isEndDateUpdatable) query += END_DATE + " = ?, ";
+        if (isPeriodicityUpdatable) query += PERIODICITY + " = ?, ";
         query = query.substring(0, query.length() - 2) + " WHERE " + ID + " = ? RETURNING *";
 
         String frenchNow = ZonedDateTime.now(ZoneId.of(FRENCH_TIME_ZONE))
@@ -276,6 +299,10 @@ public class DefaultGridRepository implements GridRepository {
         if (isPlaceUpdatable) params.add(place);
         if (isDocumentsIdsUpdatable) params.add(documentsIds.toString());
         if (isPublicCommentUpdatable) params.add(publicComment);
+        if (isTargetPublicIdsUpdatable) params.add(targetPublicIds.toString());
+        if (isBeginDateUpdatable) params.add(DateHelper.formatDate(beginDate));
+        if (isEndDateUpdatable) params.add(DateHelper.formatDate(endDate));
+        if (isPeriodicityUpdatable) params.add(periodicity.getValue());
         params.add(gridId);
 
         String errorMessage = "[Appointments@DefaultGridRepository::updateFields] Fail to update grid fields : ";
@@ -376,7 +403,7 @@ public class DefaultGridRepository implements GridRepository {
         return promise.future();
     }
 
-    public Future<Grid> createSlots(Grid grid, GridPayload gridPayload) {
+    private Future<Grid> createSlots(Grid grid, GridPayload gridPayload) {
         Promise<Grid> promise = Promise.promise();
 
         dailySlotRepository.create(grid.getId(), gridPayload.getDailySlots())

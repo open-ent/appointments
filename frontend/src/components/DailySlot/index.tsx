@@ -45,7 +45,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
     (!slot.begin.time || !slot.end.time);
 
   const isDisabled =
-    isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION;
+    isSubmitButtonLoading || modalType === GRID_MODAL_TYPE.CONSULTATION;
 
   return (
     <StyledDailySlotBox isSlotError={isSlotError}>
@@ -106,7 +106,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
           </FormControl>
         </Box>
       </Box>
-      {modalType === GRID_MODAL_TYPE.CREATION && (
+      {modalType !== GRID_MODAL_TYPE.CONSULTATION && (
         <IconButton
           onClick={() => handleDeleteSlot(day, slot.id)}
           sx={iconButtonStyle}

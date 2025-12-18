@@ -78,4 +78,19 @@ public class DefaultDailySlotRepository implements DailySlotRepository {
 
         return promise.future();
     }
+
+    @Override
+    public Future<List<DailySlot>> removeByGridId(Long gridId){
+        Promise<List<DailySlot>> promise = Promise.promise();
+
+        String query = "DELETE FROM " + DB_DAILY_SLOT_TABLE +
+                       " WHERE " + GRID_ID + " = ? RETURNING *";
+
+        JsonArray params = new JsonArray().add(gridId);
+
+        String errorMessage = String.format("[Appointments@DefaultDailySlotRepository::removeByGridId] Fail to delete daily slots by grid id %s : ", gridId);
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, DailySlot.class, errorMessage)));
+
+        return promise.future();
+    }
 }

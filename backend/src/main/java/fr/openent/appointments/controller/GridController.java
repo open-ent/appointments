@@ -217,6 +217,7 @@ public class GridController extends ControllerHelper {
         JsonObject composeInfos = new JsonObject();
         RequestUtils.bodyToJson(request, body -> {
             GridPayload gridPayload = new GridPayload(body);
+            if (gridPayload.canGenerateTimeSlots()) gridPayload.buildTimeSlots();
             gridService.getGridById(gridId)
                 .compose(grid -> {
                     composeInfos.put(OWNER_ID, grid.getOwnerId());

@@ -280,6 +280,7 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
 
       const payload: EditGridPayload = gridInputsToEditGridPayload(
         inputs,
+        groups ?? [],
         selectedGridId ?? 0,
         savingFiles,
       );

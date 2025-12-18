@@ -282,7 +282,22 @@ public class DefaultGridService implements GridService {
     public Future<Grid> updateGrid(Long gridId, GridPayload grid) {
         Promise<Grid> promise = Promise.promise();
 
-        gridRepository.updateFields(gridId, grid)
+        Future<Void> updateTimeSlotsFuture;
+
+        if (grid.getTimeSlots() != null && !grid.getTimeSlots().isEmpty()) {
+            // On supprime tous les anciens TimeSlots, puis on recrée les DailySlots, puis les TimeSlots
+            updateTimeSlotsFuture = timeSlotRepository.markAllGridTimeSlotsToDeleted(gridId)
+                    .compose(v -> dailySlotRepository.removeByGridId(gridId))
+                    .compose(v -> dailySlotRepository.create(gridId, grid.getDailySlots()))
+                    .compose(createdDailySlots -> timeSlotRepository.create(gridId, grid.getTimeSlots()))
+                    .mapEmpty(); // mapEmpty pour retourner Future<Void>
+        } else {
+            // Pas de TimeSlots à mettre à jour, on continue directement
+            updateTimeSlotsFuture = Future.succeededFuture();
+        }
+
+        updateTimeSlotsFuture
+            .compose(v -> gridRepository.updateFields(gridId, grid))
             .onSuccess(updatedGrid -> {
                 if (updatedGrid.isPresent()) promise.complete(updatedGrid.get());
                 else{

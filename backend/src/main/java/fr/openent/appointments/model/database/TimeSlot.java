@@ -15,6 +15,7 @@ public class TimeSlot implements IModel<TimeSlot> {
     private Long gridId;
     private LocalDateTime beginDate;
     private LocalDateTime endDate;
+    private LocalDateTime deletedAt;
 
     // Constructor
 
@@ -23,6 +24,7 @@ public class TimeSlot implements IModel<TimeSlot> {
         this.gridId = timeslot.getLong(GRID_ID, null);
         this.beginDate = DateHelper.parseDateTime(timeslot.getString(BEGIN_DATE, null));
         this.endDate = DateHelper.parseDateTime(timeslot.getString(END_DATE, null));
+        this.deletedAt = DateHelper.parseDateTime(timeslot.getString(DELETED_AT, null));
     }
 
     public TimeSlot(LocalDateTime begin, LocalDateTime end) {
@@ -48,6 +50,10 @@ public class TimeSlot implements IModel<TimeSlot> {
         return endDate;
     }
 
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
     // Setter
 
     public TimeSlot setId(Long id) {
@@ -70,6 +76,11 @@ public class TimeSlot implements IModel<TimeSlot> {
         return this;
     }
 
+    public TimeSlot setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+        return this;
+    }
+
     // Functions
 
     public String toString() {
@@ -78,6 +89,7 @@ public class TimeSlot implements IModel<TimeSlot> {
                 ", gridId=" + gridId +
                 ", beginDate=" + beginDate +
                 ", endDate=" + endDate +
+                ", deletedAt=" + deletedAt +
                 '}';
     }
 

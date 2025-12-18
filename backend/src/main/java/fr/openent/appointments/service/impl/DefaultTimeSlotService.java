@@ -80,6 +80,10 @@ public class DefaultTimeSlotService implements TimeSlotService {
                     String errorMessage = "TimeSlot with id " + timeSlotId + " not found";
                     return Future.failedFuture(errorMessage);
                 }
+                if (timeSlot.get().getDeletedAt() != null) {
+                    String errorMessage = "TimeSlot with id " + timeSlotId + " is deleted";
+                    return Future.failedFuture(errorMessage);
+                }
                 return gridRepository.get(timeSlot.get().getGridId());
             })
             .onSuccess(grid -> {

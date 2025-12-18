@@ -60,4 +60,6 @@ public interface TimeSlotRepository {
      *        return an {@link Optional<TimeSlot>} containing the timeslots found.
      */
     Future<Optional<TimeSlot>> getNextAvailableTimeslot(Long gridId, LocalDate date);
+
+    Future<List<TimeSlot>> markAllGridTimeSlotsToDeleted(Long gridId);
 }

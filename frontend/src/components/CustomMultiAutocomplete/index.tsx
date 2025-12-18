@@ -66,7 +66,7 @@ export const CustomMultiAutocomplete: FC = () => {
     <Autocomplete
       multiple
       options={options}
-      disabled={modalType !== GRID_MODAL_TYPE.CREATION}
+      disabled={modalType == GRID_MODAL_TYPE.CONSULTATION}
       disableCloseOnSelect
       getOptionLabel={getOptionLabel}
       isOptionEqualToValue={isOptionEqualToValue}

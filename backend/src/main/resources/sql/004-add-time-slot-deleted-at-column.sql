@@ -1,0 +1,1 @@
+ALTER TABLE appointments.time_slot ADD COLUMN deleted_at timestamp;

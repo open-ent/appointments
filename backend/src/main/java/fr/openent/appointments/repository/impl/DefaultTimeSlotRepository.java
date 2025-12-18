@@ -2,10 +2,7 @@ package fr.openent.appointments.repository.impl;
 
 import fr.openent.appointments.enums.AppointmentState;
 import fr.openent.appointments.enums.GridState;
-import fr.openent.appointments.helper.DateHelper;
-import fr.openent.appointments.helper.FutureHelper;
-import fr.openent.appointments.helper.IModelHelper;
-import fr.openent.appointments.helper.TransactionHelper;
+import fr.openent.appointments.helper.*;
 import fr.openent.appointments.model.TransactionElement;
 import fr.openent.appointments.model.database.TimeSlot;
 import fr.openent.appointments.model.payload.TimeSlotPayload;
@@ -19,12 +16,17 @@ import org.entcore.common.sql.SqlResult;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static fr.openent.appointments.core.constants.Constants.FRENCH_NOW;
+import static fr.openent.appointments.core.constants.Constants.FRENCH_TIME_ZONE;
+import static fr.openent.appointments.core.constants.DateFormat.DATE_TIME_FORMAT_2;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.core.constants.SqlTables.*;
 
@@ -133,8 +135,21 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                 "JOIN " + DB_GRID_TABLE + " g ON ts.grid_id = g.id " +
                 "WHERE ts.grid_id = ? " +
                 "AND ts.begin_date >= " + FRENCH_NOW + " " +
-                "AND NOT EXISTS (SELECT 1 FROM " + DB_APPOINTMENT_TABLE + " a WHERE a.time_slot_id = ts.id AND a.state IN " +
-                Sql.listPrepared(availableAppointmentStates) + ")";
+                "AND ts.deleted_at IS NULL " +
+                "AND NOT EXISTS (" +
+                "    SELECT 1 FROM " + DB_APPOINTMENT_TABLE + " a " +
+                "    WHERE a.time_slot_id = ts.id " +
+                "    AND a.state IN " + Sql.listPrepared(availableAppointmentStates) +
+                ")" +
+                "AND NOT EXISTS (" +
+                "    SELECT 1 FROM " + DB_TIME_SLOT_TABLE + " ts2 " +
+                "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
+                "    WHERE ts2.deleted_at IS NOT NULL " +
+                "      AND a2.id IS NOT NULL " +
+                "      AND ts2.grid_id = ts.grid_id " +
+                "      AND ts2.begin_date = ts.begin_date " +
+                "      AND ts2.end_date = ts.end_date" +
+                ")";
 
         JsonArray params = new JsonArray().add(gridId).addAll(new JsonArray(availableAppointmentStates));
 
@@ -163,9 +178,20 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
         String query = "SELECT ts.* FROM " + DB_TIME_SLOT_TABLE + " ts " +
                 "JOIN " + DB_GRID_TABLE + " g ON ts.grid_id = g.id " +
                 "LEFT JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
-                "WHERE (a.id IS NULL OR a.state NOT IN " +
-                Sql.listPrepared(availableAppointmentStates) +
-                ") AND ts.grid_id = ? AND ts.begin_date > ? " +
+                "WHERE " +
+                    "ts.deleted_at is NULL " +
+                    "AND (a.id IS NULL OR a.state NOT IN " + Sql.listPrepared(availableAppointmentStates) + ")" +
+                    "AND ts.grid_id = ? " +
+                    "AND ts.begin_date > ? " +
+                    "AND NOT EXISTS (" +
+                    "    SELECT 1 FROM " + DB_TIME_SLOT_TABLE + " ts2 " +
+                    "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
+                    "    WHERE ts2.deleted_at IS NOT NULL " +
+                    "      AND a2.id IS NOT NULL " +
+                    "      AND ts2.grid_id = ts.grid_id " +
+                    "      AND ts2.begin_date = ts.begin_date " +
+                    "      AND ts2.end_date = ts.end_date" +
+                    ") " +
                 "ORDER BY begin_date ASC, end_date ASC " +
                 "LIMIT 1;";
 
@@ -176,6 +202,26 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
 
         String errorMessage = "[Appointments@DefaultTimeSlotRepository::getNextAvailableTimeslot] Fail to get next available timeslots for gridId : " + gridId;
         sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, TimeSlot.class, errorMessage)));
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<List<TimeSlot>> markAllGridTimeSlotsToDeleted(Long gridId){
+        Promise<List<TimeSlot>> promise = Promise.promise();
+
+        String frenchNow = ZonedDateTime.now(ZoneId.of(FRENCH_TIME_ZONE))
+                .format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_2));
+
+        String query = "UPDATE " + DB_TIME_SLOT_TABLE + " SET deleted_at = ? WHERE grid_id = ?";
+
+        JsonArray params = new JsonArray()
+                .add(frenchNow)
+                .add(gridId);
+
+        String errorMessage = "[Appointments@DefaultGridRepository::markAllGridTimeSlotsToDeleted] Fail to mark timeslots deleted for gridId: " + gridId;
+
+        sql.prepared(query, params, SqlResult.validResultHandler(IModelHelper.resultToIModel(promise, TimeSlot.class, errorMessage)));
 
         return promise.future();
     }
