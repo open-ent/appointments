@@ -146,12 +146,16 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                 "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
                 "    WHERE ts2.deleted_at IS NOT NULL " +
                 "      AND a2.id IS NOT NULL " +
+                "      AND a2.state IN " + Sql.listPrepared(availableAppointmentStates) +
                 "      AND ts2.grid_id = ts.grid_id " +
                 "      AND ts2.begin_date = ts.begin_date " +
                 "      AND ts2.end_date = ts.end_date" +
                 ")";
 
-        JsonArray params = new JsonArray().add(gridId).addAll(new JsonArray(availableAppointmentStates));
+        JsonArray params = new JsonArray()
+                .add(gridId)
+                .addAll(new JsonArray(availableAppointmentStates))
+                .addAll(new JsonArray(availableAppointmentStates));
 
         if (beginDate != null) {
             query += "AND ts.begin_date >= ? ";
@@ -188,6 +192,7 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                     "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
                     "    WHERE ts2.deleted_at IS NOT NULL " +
                     "      AND a2.id IS NOT NULL " +
+                    "      AND a2.state IN " + Sql.listPrepared(availableAppointmentStates) +
                     "      AND ts2.grid_id = ts.grid_id " +
                     "      AND ts2.begin_date = ts.begin_date " +
                     "      AND ts2.end_date = ts.end_date" +
@@ -198,7 +203,8 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
         JsonArray params = new JsonArray()
                 .addAll(new JsonArray(availableAppointmentStates))
                 .add(gridId)
-                .add(DateHelper.formatDate(date != null ? date : LocalDate.now()));
+                .add(DateHelper.formatDate(date != null ? date : LocalDate.now()))
+                .addAll(new JsonArray(availableAppointmentStates));
 
         String errorMessage = "[Appointments@DefaultTimeSlotRepository::getNextAvailableTimeslot] Fail to get next available timeslots for gridId : " + gridId;
         sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, TimeSlot.class, errorMessage)));

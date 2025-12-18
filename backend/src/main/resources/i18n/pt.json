@@ -14,7 +14,7 @@
   "appointments.modify.grid.title": "Modificar sua grade de horários",
   "appointments.modify.grid.alert": "Os campos que afetam a marcação de compromissos não são modificáveis (público, validade, horários, ...).",
   "appointments.modify.grid.confirm.title": "Modificar sua grade?",
-  "appointments.modify.grid.confirm.message": "Se confirmar, as informações inseridas serão salvas e as modificações serão aplicadas a todos os compromissos afetados.",
+  "appointments.modify.grid.confirm.message": "Ao confirmar, as suas alterações serão guardadas.<1><0>As alterações compatíveis com os compromissos existentes (local, comentários, informações gerais, etc.) serão automaticamente aplicadas aos compromissos afetados.</0><0>As alterações de disponibilidade (público, período de validade, recorrência, intervalos de tempo) <strong>não resultarão no cancelamento de compromissos já agendados</strong>, mesmo que deixem de corresponder à nova grelha.</0></1>"
   "appointments.modify.grid.abandon.title": "Abandonar as modificações?",
   "appointments.modify.grid.abandon.message": "Se confirmar, perderá todas as modificações em andamento.",
 

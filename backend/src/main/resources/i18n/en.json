@@ -14,7 +14,7 @@
   "appointments.modify.grid.title": "Modify your schedule grid",
   "appointments.modify.grid.alert": "Fields impacting appointment booking cannot be modified (public, validity, time slots, ...).",
   "appointments.modify.grid.confirm.title": "Modify your schedule?",
-  "appointments.modify.grid.confirm.message": "If you confirm, the entered information will be saved, and changes will apply to all affected appointments.",
+  "appointments.modify.grid.confirm.message": "By confirming, your changes will be saved.<1><0>Changes that are compatible with existing appointments (location, comments, general information, etc.) will be automatically applied to the affected appointments.</0><0>Changes to availability (audience, validity period, recurrence, time slots) <strong>will not result in the cancellation of already scheduled appointments</strong>, even if they no longer match the new grid.</0></1>",
   "appointments.modify.grid.abandon.title": "Abandon modifications?",
   "appointments.modify.grid.abandon.message": "If you confirm, all ongoing modifications will be lost.",
 

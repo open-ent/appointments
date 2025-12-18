@@ -151,12 +151,17 @@ public class DefaultGridRepository implements GridRepository {
                 "AND g.state = ? " +
                 "AND ts.begin_date > " + FRENCH_NOW + " " +
                 "AND ts.deleted_at IS NULL " +
-                "AND (a.id IS NULL OR a.state NOT IN " + Sql.listPrepared(availableAppointmentStates) + ") " +
+                "AND NOT EXISTS ( " +
+                "    SELECT 1 FROM " + DB_APPOINTMENT_TABLE + " a " +
+                "    WHERE a.time_slot_id = ts.id " +
+                "      AND a.state IN " + Sql.listPrepared(availableAppointmentStates) +
+                ") " +
                 "AND NOT EXISTS ( " +
                 "    SELECT 1 FROM " + DB_TIME_SLOT_TABLE + " ts2 " +
                 "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
                 "    WHERE ts2.deleted_at IS NOT NULL " +
                 "      AND a2.id IS NOT NULL " +
+                "      AND a2.state IN " + Sql.listPrepared(availableAppointmentStates) +
                 "      AND ts2.grid_id = ts.grid_id " +
                 "      AND ts2.begin_date = ts.end_date " +
                 "      AND ts2.end_date = ts.begin_date " +
@@ -166,6 +171,7 @@ public class DefaultGridRepository implements GridRepository {
         JsonArray params = new JsonArray()
                 .addAll(new JsonArray(gridsIds))
                 .add(GridState.OPEN.getValue())
+                .addAll(new JsonArray(availableAppointmentStates))
                 .addAll(new JsonArray(availableAppointmentStates));
 
         String errorMessage = String.format("[Appointments@DefaultGridRepository::getGridsWithAvailableTimeSlots] Failed to get grids with available timeslots from grid ids %s : ", gridsIds);

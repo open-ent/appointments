@@ -29,7 +29,6 @@ export const DialogModal: FC<DialogModalProps> = ({
 }) => {
   const { t } = useTranslation(APPOINTMENTS);
   const title = t(CONFIRM_MODAL_VALUES[type].titleKey);
-  const description = t(CONFIRM_MODAL_VALUES[type].descriptionKey);
   const question = t(CONFIRM_MODAL_VALUES[type].questionKey);
   const options = CONFIRM_MODAL_VALUES[type].options.map((option) => t(option));
 
@@ -50,13 +49,21 @@ export const DialogModal: FC<DialogModalProps> = ({
       open={open}
       showCloseButton={!isSubmitButtonLoading}
       onClose={handleClose}
+      maxWidth="md"
     >
       <DialogTitle fontWeight="bold" fontSize="2rem">
         {title}
       </DialogTitle>
       <DialogContent>
         <Stack gap={1}>
-          <Typography variant="body1">{description}</Typography>
+          <Typography
+            variant="body1"
+            component="div"
+            dangerouslySetInnerHTML={{
+              __html: t(CONFIRM_MODAL_VALUES[type].descriptionKey),
+            }}
+          />
+
           {showOptions && question && options.length && (
             <>
               <Typography variant="body1">{question}</Typography>

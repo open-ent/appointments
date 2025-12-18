@@ -14,7 +14,7 @@
   "appointments.modify.grid.title": "Modifier votre grille horaire",
   "appointments.modify.grid.alert": "Les champs impactant la prise de rendez-vous ne sont pas modifiables (public, validité, créneaux, ...).",
   "appointments.modify.grid.confirm.title": "Modifier votre grille ?",
-  "appointments.modify.grid.confirm.message": "Si vous confirmez, les informations saisies seront enregistrées et les modifications seront prises en compte pour tous les rendez-vous concernés.",
+  "appointments.modify.grid.confirm.message": "En confirmant, vos modifications seront enregistrées.<ul><li>Les changements compatibles avec les rendez-vous existants (lieu, commentaire, informations générales…) seront automatiquement appliqués aux rendez-vous concernés.</li><li>Les modifications des disponibilités (public, période de validité, périodicité, plages horaires) <strong>n’entraîneront pas l’annulation des rendez-vous déjà planifiés</strong>, même s’ils ne correspondent plus à la nouvelle grille.</li></ul>",
   "appointments.modify.grid.abandon.title": "Abandonner les modifications ?",
   "appointments.modify.grid.abandon.message": "Si vous confirmez, vous perdrez toutes les modifications en cours.",
 
