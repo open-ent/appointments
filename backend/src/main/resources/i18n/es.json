@@ -14,7 +14,7 @@
   "appointments.modify.grid.title": "Modificar su horario",
   "appointments.modify.grid.alert": "Los campos que afectan la toma de citas no se pueden modificar (público, validez, franjas horarias, ...).",
   "appointments.modify.grid.confirm.title": "¿Modificar su cuadrícula?",
-  "appointments.modify.grid.confirm.message": "Al confirmar, sus modificaciones se guardarán.<1><0>Los cambios compatibles con las citas existentes (lugar, comentarios, información general, etc.) se aplicarán automáticamente a las citas afectadas.</0><0>Las modificaciones de disponibilidad (público, período de validez, periodicidad, franjas horarias) <strong>no darán lugar a la cancelación de las citas ya programadas</strong>, aunque ya no coincidan con la nueva cuadrícula.</0></1>",
+  "appointments.modify.grid.confirm.message": "Al confirmar, sus modificaciones se guardarán.<ul><li>Los cambios compatibles con las citas existentes (lugar, comentarios, información general, etc.) se aplicarán automáticamente a las citas afectadas.</li><li>Las modificaciones de disponibilidad (público, período de validez, periodicidad, franjas horarias) <strong>no darán lugar a la cancelación de las citas ya programadas</strong>, aunque ya no coincidan con la nueva cuadrícula.</li></ul>",
   "appointments.modify.grid.abandon.title": "¿Abandonar las modificaciones?",
   "appointments.modify.grid.abandon.message": "Si confirmas, perderás todas las modificaciones en curso.",
 

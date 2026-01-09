@@ -14,7 +14,7 @@
   "appointments.modify.grid.title": "Modifica la tua griglia oraria",
   "appointments.modify.grid.alert": "I campi che influenzano la prenotazione degli appuntamenti non sono modificabili (pubblico, validità, fasce orarie, ...).",
   "appointments.modify.grid.confirm.title": "Modificare la tua griglia?",
-  "appointments.modify.grid.confirm.message": "Confermando, le modifiche verranno salvate.<1><0>Le modifiche compatibili con gli appuntamenti esistenti (luogo, commenti, informazioni generali, ecc.) verranno applicate automaticamente agli appuntamenti interessati.</0><0>Le modifiche alla disponibilità (pubblico, periodo di validità, periodicità, fasce orarie) <strong>non comporteranno l’annullamento degli appuntamenti già pianificati</strong>, anche se non corrispondono più alla nuova griglia.</0></1>",
+  "appointments.modify.grid.confirm.message": "Confermando, le modifiche verranno salvate.<ul><li>Le modifiche compatibili con gli appuntamenti esistenti (luogo, commenti, informazioni generali, ecc.) verranno applicate automaticamente agli appuntamenti interessati.</li><li>Le modifiche alla disponibilità (pubblico, periodo di validità, periodicità, fasce orarie) <strong>non comporteranno l’annullamento degli appuntamenti già pianificati</strong>, anche se non corrispondono più alla nuova griglia.</li></ul>",
   "appointments.modify.grid.abandon.title": "Abbandonare le modifiche?",
   "appointments.modify.grid.abandon.message": "Se confermi, perderai tutte le modifiche in corso.",
 
