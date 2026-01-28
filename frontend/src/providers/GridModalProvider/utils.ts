@@ -156,6 +156,7 @@ export const isErrorsEmpty = (errors: InputsErrors) =>
   !(
     errors.name ||
     errors.location ||
+    errors.public ||
     errors.videoCallLink ||
     errors.validityPeriod ||
     errors.weekSlots ||

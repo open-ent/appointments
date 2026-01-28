@@ -153,6 +153,7 @@
   "appointments.toast.create.grid.error": "Se produjo un error al crear el horario. Por favor, inténtalo de nuevo.",
   "appointments.toast.edit.grid.success": "Tu horario de disponibilidad se ha modificado con éxito.",
   "appointments.toast.edit.grid.error": "Se produjo un error al modificar el horario. Por favor, inténtalo de nuevo.",
+  "appointments.toast.edit.errors": "No se puede guardar: algunos campos obligatorios no se han completado.",
   "appointments.toast.accept.appointment.success": "La solicitud ha sido aceptada con éxito.",
   "appointments.toast.accept.appointment.error": "Se produjo un error al aceptar la solicitud. Por favor, inténtalo de nuevo.",
   "appointments.toast.reject.appointment.success": "La solicitud ha sido rechazada con éxito.",

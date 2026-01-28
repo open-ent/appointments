@@ -14,7 +14,7 @@
   "appointments.modify.grid.title": "Modificar sua grade de horários",
   "appointments.modify.grid.alert": "Os campos que afetam a marcação de compromissos não são modificáveis (público, validade, horários, ...).",
   "appointments.modify.grid.confirm.title": "Modificar sua grade?",
-  "appointments.modify.grid.confirm.message": "Ao confirmar, as suas alterações serão guardadas.<ul><li>As alterações compatíveis com os compromissos existentes (local, comentários, informações gerais, etc.) serão automaticamente aplicadas aos compromissos afetados.</li><li>As alterações de disponibilidade (público, período de validade, recorrência, intervalos de tempo) <strong>não resultarão no cancelamento de compromissos já agendados</strong>, mesmo que deixem de corresponder à nova grelha.</li></ul>",
+  "appointments.modify.grid.confirm.message": "Ao confirmar, as suas alterações serão guardadas.<1><0>As alterações compatíveis com os compromissos existentes (local, comentários, informações gerais, etc.) serão automaticamente aplicadas aos compromissos afetados.</0><0>As alterações de disponibilidade (público, período de validade, recorrência, intervalos de tempo) <strong>não resultarão no cancelamento de compromissos já agendados</strong>, mesmo que deixem de corresponder à nova grelha.</0></1>",
   "appointments.modify.grid.abandon.title": "Abandonar as modificações?",
   "appointments.modify.grid.abandon.message": "Se confirmar, perderá todas as modificações em andamento.",
 
@@ -153,6 +153,7 @@
   "appointments.toast.create.grid.error": "Ocorreu um erro ao criar a grade. Tente novamente.",
   "appointments.toast.edit.grid.success": "Sua grade de disponibilidade foi modificada com sucesso.",
   "appointments.toast.edit.grid.error": "Ocorreu um erro ao modificar a grade. Tente novamente.",
+  "appointments.toast.edit.errors": "Não foi possível salvar: alguns campos obrigatórios não foram preenchidos.",
   "appointments.toast.accept.appointment.success": "A solicitação foi aceita com sucesso.",
   "appointments.toast.accept.appointment.error": "Ocorreu um erro ao aceitar a solicitação. Tente novamente.",
   "appointments.toast.reject.appointment.success": "A solicitação foi recusada com sucesso.",

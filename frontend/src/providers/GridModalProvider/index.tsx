@@ -180,7 +180,10 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
   const handleSubmit = useCallback(async () => {
     const newErrors = newErrorInputs(blurGridModalInputs);
     setErrorInputs(newErrors);
-    if (!isErrorsEmpty(newErrors)) return;
+    if (!isErrorsEmpty(newErrors)) {
+      toast.error(t("appointments.toast.edit.errors"));
+      return;
+    }
 
     if (modalType === GRID_MODAL_TYPE.EDIT) {
       setConfirmModalType(CONFIRM_MODAL_TYPE.CONFIRM_GRID_EDIT);

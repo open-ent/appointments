@@ -153,6 +153,7 @@
   "appointments.toast.create.grid.error": "Beim Erstellen des Rasters ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
   "appointments.toast.edit.grid.success": "Ihr Verfügbarkeitsraster wurde erfolgreich geändert.",
   "appointments.toast.edit.grid.error": "Beim Ändern des Rasters ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+  "appointments.toast.edit.errors": "Speichern fehlgeschlagen: Einige Pflichtfelder sind nicht ausgefüllt.",
   "appointments.toast.accept.appointment.success": "Die Anfrage wurde erfolgreich akzeptiert.",
   "appointments.toast.accept.appointment.error": "Beim Akzeptieren der Anfrage ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
   "appointments.toast.reject.appointment.success": "Die Anfrage wurde erfolgreich abgelehnt.",

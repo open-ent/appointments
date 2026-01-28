@@ -153,6 +153,7 @@
   "appointments.toast.create.grid.error": "An error occurred while creating the grid. Please try again.",
   "appointments.toast.edit.grid.success": "Your availability grid has been successfully modified.",
   "appointments.toast.edit.grid.error": "An error occurred while modifying the grid. Please try again.",
+  "appointments.toast.edit.errors": "Unable to save: some required fields are not filled in.",
   "appointments.toast.accept.appointment.success": "The request has been successfully accepted.",
   "appointments.toast.accept.appointment.error": "An error occurred while accepting the request. Please try again.",
   "appointments.toast.reject.appointment.success": "The request has been successfully declined.",

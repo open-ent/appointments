@@ -153,6 +153,7 @@
   "appointments.toast.create.grid.error": "Si è verificato un errore durante la creazione della griglia. Riprova.",
   "appointments.toast.edit.grid.success": "La tua griglia di disponibilità è stata modificata correttamente.",
   "appointments.toast.edit.grid.error": "Si è verificato un errore durante la modifica della griglia. Riprova.",
+  "appointments.toast.edit.errors": "Impossibile salvare: alcuni campi obbligatori non sono compilati.",
   "appointments.toast.accept.appointment.success": "La richiesta è stata accettata correttamente.",
   "appointments.toast.accept.appointment.error": "Si è verificato un errore durante l'accettazione della richiesta. Riprova.",
   "appointments.toast.reject.appointment.success": "La richiesta è stata rifiutata correttamente.",
