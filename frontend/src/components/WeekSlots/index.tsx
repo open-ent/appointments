@@ -48,6 +48,11 @@ export const WeekSlots: FC = () => {
 
     return entries.filter(([day]) => {
       const dayjsIndex = DAY_VALUES[day].dayjsDayIndex;
+
+      if (endDay < startDay) {
+        return dayjsIndex >= startDay || dayjsIndex <= endDay;
+      }
+
       return dayjsIndex >= startDay && dayjsIndex <= endDay;
     });
   }, [entries, inputs.validityPeriod]);
