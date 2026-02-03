@@ -129,7 +129,10 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       Object.entries(inputs.weekSlots).map(([day, slots]) => {
         const dayjsIndex = DAY_VALUES[day as DAY].dayjsDayIndex;
 
-        const isInsideInterval = dayjsIndex >= startDay && dayjsIndex <= endDay;
+        const isInsideInterval =
+          endDay < startDay
+            ? dayjsIndex >= startDay || dayjsIndex <= endDay
+            : dayjsIndex >= startDay && dayjsIndex <= endDay;
 
         return [day, isInsideInterval ? slots : []];
       }),
