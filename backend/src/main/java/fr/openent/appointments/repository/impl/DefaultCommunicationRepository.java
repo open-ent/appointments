@@ -83,27 +83,21 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
         Promise<List<NeoUser>> promise = Promise.promise();
 
         String query =
-            "UNWIND {usersIds} AS userId " +
-            "MATCH (u:User {id: userId}) " +
+                "MATCH (s:Structure) " +
+                        "WHERE s.id IN {structuresIds} " +
+                        "WITH collect(s.externalId) AS structuresExternalIds " +
 
-            "WITH DISTINCT u " +
+                        "UNWIND {usersIds} AS userId " +
+                        "MATCH (u:User {id: userId}) " +
 
-            // UserBook (optionnel)
-            "OPTIONAL MATCH (u)-[:USERBOOK]->(ub:UserBook) " +
-            "WITH u, ub " +
+                        "OPTIONAL MATCH (u)-[:USERBOOK]->(ub:UserBook) " +
 
-            // Structures -> récupération des externalIds
-            "MATCH (s:Structure) " +
-                "WHERE s.id IN {structuresIds} " +
-                "WITH collect(s.externalId) AS structuresExternalIds, u, ub " +
-
-            // Retour des données
-            "RETURN " +
-                "u.id AS id, " +
-                "u.displayName AS displayName, " +
-                "[func IN u.functions WHERE split(func, \"$\")[0] IN structuresExternalIds] AS functions, " +
-                "ub.picture AS picture, " +
-                "u.profiles AS profiles;";
+                        "RETURN " +
+                        "u.id AS id, " +
+                        "u.displayName AS displayName, " +
+                        "[func IN u.functions WHERE split(func, \"$\")[0] IN structuresExternalIds] AS functions, " +
+                        "ub.picture AS picture, " +
+                        "u.profiles AS profiles;";
 
         JsonObject params = new JsonObject()
                 .put(CAMEL_STRUCTURES_IDS, structuresIds)
@@ -174,11 +168,14 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
     private String getQueryUsersICanCommunicateWithFilterByRight() {
         return  "MATCH (me:User {id: {userId}}) " +
                 "MATCH (otherUser:User)-[:IN]->(:Group)-[:AUTHORIZED]->(:Role)-[:AUTHORIZE]->(:WorkflowAction {name: {right}}) " +
-                "WHERE " +
-                "(me)-[:IN]->(:Group)-[:COMMUNIQUE]->(:Group)<-[:IN]-(otherUser) " +
-                "OR " +
-                "(me)-[:COMMUNIQUE]->(:Group)<-[:IN]-(otherUser) " +
-                "RETURN DISTINCT otherUser.id AS id, otherUser.name AS name ";
+                "MATCH (me)-[:IN]->(gMe:Group) " +
+                "MATCH (gMe)-[:COMMUNIQUE]->(gShared:Group)<-[:IN]-(otherUser) " +
+                "RETURN DISTINCT otherUser.id AS id, otherUser.name AS name " +
+                "UNION " +
+                "MATCH (me:User {id: {userId}}) " +
+                "MATCH (otherUser:User)-[:IN]->(:Group)-[:AUTHORIZED]->(:Role)-[:AUTHORIZE]->(:WorkflowAction {name: {right}}) " +
+                "MATCH (me)-[:COMMUNIQUE]->(gShared:Group)<-[:IN]-(otherUser) " +
+                "RETURN DISTINCT otherUser.id AS id, otherUser.name AS name";
     }
 
     @Override

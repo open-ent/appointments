@@ -5,12 +5,16 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
 import debounce from "lodash/debounce";
 
-import { MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML } from "~/core/constants";
+import {
+  MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML,
+  MIN_USERS_NEEDED,
+} from "~/core/constants";
 import { useGetCommunicationUsersQuery } from "~/services/api/CommunicationService";
 import { UserCardInfos } from "~/services/api/CommunicationService/types";
 import { useGlobal } from "../GlobalProvider";
@@ -41,6 +45,8 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   const { isConnectedUserADML } = useGlobal();
   const [search, setSearch] = useState("");
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
+  const lastSearchRef = useRef("");
+
   const {
     data: newUsers,
     isFetching,
@@ -60,21 +66,29 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   );
 
   useEffect(() => {
-    setUsersFromNewUsers(newUsers);
-  }, [newUsers]);
-
-  const setUsersFromNewUsers = (newUsers: UserCardInfos[] | undefined) => {
-    if (newUsers) setUsers((prev) => [...prev, ...newUsers]);
-    if (newUsers && newUsers.length < NUMBER_MORE_USERS) {
-      setHasMoreUsers(false);
-    } else {
-      setHasMoreUsers(true);
+    if (newUsers && search === lastSearchRef.current) {
+      setUsers((prev) => [...prev, ...newUsers]);
+      setHasMoreUsers(newUsers.length >= NUMBER_MORE_USERS);
     }
-  };
+  }, [newUsers, search]);
+
+  useEffect(() => {
+    if (
+      !isFetching &&
+      hasMoreUsers &&
+      users.length < MIN_USERS_NEEDED &&
+      search &&
+      search === lastSearchRef.current
+    ) {
+      setPage((prev) => prev + 1);
+    }
+  }, [users.length, hasMoreUsers, isFetching, search]);
 
   const loadMoreUsers = useCallback(() => {
-    if (!isFetching) setPage((prev) => prev + 1);
-  }, [isFetching]);
+    if (!isFetching && hasMoreUsers) {
+      setPage((prev) => prev + 1);
+    }
+  }, [isFetching, hasMoreUsers]);
 
   const refreshSearch = useCallback(() => {
     setPage(1);
@@ -84,10 +98,13 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
 
   const handleSearch = useCallback(
     debounce((newSearch: string) => {
-      refreshSearch();
+      lastSearchRef.current = newSearch;
+      setPage(1);
+      setUsers([]);
+      setHasMoreUsers(true);
       setSearch(newSearch);
     }, 300),
-    [refreshSearch],
+    [],
   );
 
   const resetSearch = useCallback(() => {
@@ -95,11 +112,11 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   }, [handleSearch]);
 
   const refetchSearch = useCallback(async () => {
-    refreshSearch();
-    const oldNewUsers = newUsers;
-    const { data } = await refetch();
-    if (oldNewUsers === data) setUsersFromNewUsers(data);
-  }, [refreshSearch, newUsers, refetch]);
+    setPage(1);
+    setUsers([]);
+    setHasMoreUsers(true);
+    await refetch();
+  }, [refetch]);
 
   const value = useMemo<FindAppointmentsProviderContextProps>(
     () => ({
@@ -125,6 +142,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       refetchSearch,
     ],
   );
+
   return (
     <FindAppointmentsProviderContext.Provider value={value}>
       {children}
