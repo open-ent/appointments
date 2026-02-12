@@ -28,6 +28,7 @@ export const FindAppointments: FC = () => {
     hasMoreUsers,
     search,
     isFetching,
+    isNewSearch,
     loadMoreUsers,
     handleSearch,
   } = useFindAppointments();
@@ -90,13 +91,19 @@ export const FindAppointments: FC = () => {
             </Box>
           </Box>
         )}
-        <Box sx={listCardStyle}>
-          {users.map((user) => (
-            <UserCard key={user.userId} infos={user} />
-          ))}
-        </Box>
-        <Box ref={targetRef}></Box>
-        {isFetching && <Loader />}
+        {isNewSearch ? (
+          <Loader />
+        ) : (
+          <>
+            <Box sx={listCardStyle}>
+              {users.map((user) => (
+                <UserCard key={user.userId} infos={user} />
+              ))}
+            </Box>
+            <Box ref={targetRef}></Box>
+            {isFetching && <Loader />}
+          </>
+        )}
       </Box>
     </>
   );

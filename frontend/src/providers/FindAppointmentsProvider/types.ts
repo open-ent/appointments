@@ -7,6 +7,7 @@ export interface FindAppointmentsProviderContextProps {
   hasMoreUsers: boolean;
   search: string;
   isFetching: boolean;
+  isNewSearch: boolean;
   loadMoreUsers: () => void;
   handleSearch: (newSearch: string) => void;
   refreshSearch: () => void;

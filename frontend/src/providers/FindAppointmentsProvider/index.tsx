@@ -46,9 +46,10 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   const [search, setSearch] = useState("");
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
   const lastSearchRef = useRef("");
+  const [isNewSearch, setIsNewSearch] = useState(false);
 
   const {
-    data: newUsers,
+    currentData: newUsers,
     isFetching,
     refetch,
   } = useGetCommunicationUsersQuery(
@@ -67,22 +68,21 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
 
   useEffect(() => {
     if (newUsers && search === lastSearchRef.current) {
-      setUsers((prev) => [...prev, ...newUsers]);
-      setHasMoreUsers(newUsers.length >= NUMBER_MORE_USERS);
-    }
-  }, [newUsers, search]);
+      setIsNewSearch(false);
+      const hasMore = newUsers.length >= NUMBER_MORE_USERS;
+      setHasMoreUsers(hasMore);
 
-  useEffect(() => {
-    if (
-      !isFetching &&
-      hasMoreUsers &&
-      users.length < MIN_USERS_NEEDED &&
-      search &&
-      search === lastSearchRef.current
-    ) {
-      setPage((prev) => prev + 1);
+      setUsers((prev) => {
+        const updatedUsers = page === 1 ? newUsers : [...prev, ...newUsers];
+
+        if (hasMore && updatedUsers.length < MIN_USERS_NEEDED) {
+          setPage((p) => p + 1);
+        }
+
+        return updatedUsers;
+      });
     }
-  }, [users.length, hasMoreUsers, isFetching, search]);
+  }, [newUsers, search, page]);
 
   const loadMoreUsers = useCallback(() => {
     if (!isFetching && hasMoreUsers) {
@@ -102,6 +102,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       setPage(1);
       setUsers([]);
       setHasMoreUsers(true);
+      setIsNewSearch(true);
       setSearch(newSearch);
     }, 300),
     [],
@@ -124,6 +125,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       hasMoreUsers,
       search,
       isFetching,
+      isNewSearch,
       loadMoreUsers,
       handleSearch,
       refreshSearch,
@@ -135,6 +137,7 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       hasMoreUsers,
       search,
       isFetching,
+      isNewSearch,
       loadMoreUsers,
       handleSearch,
       refreshSearch,
