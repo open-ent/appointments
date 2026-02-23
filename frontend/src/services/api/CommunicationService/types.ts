@@ -21,6 +21,5 @@ export interface UserCardInfos {
 
 export interface GetUsersPayload {
   search: string;
-  page: number;
   limit: number;
 }

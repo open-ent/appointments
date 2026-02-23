@@ -3,20 +3,14 @@ import {
   FC,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
 import debounce from "lodash/debounce";
 
-import {
-  MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML,
-  MIN_USERS_NEEDED,
-} from "~/core/constants";
-import { useGetCommunicationUsersQuery } from "~/services/api/CommunicationService";
-import { UserCardInfos } from "~/services/api/CommunicationService/types";
+import { MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML } from "~/core/constants";
+import { useGetCommunicationUsersInfiniteQuery } from "~/services/api/CommunicationService";
 import { useGlobal } from "../GlobalProvider";
 import {
   FindAppointmentsProviderContextProps,
@@ -40,22 +34,19 @@ export const useFindAppointments = () => {
 export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   children,
 }) => {
-  const [users, setUsers] = useState<UserCardInfos[]>([]);
-  const [page, setPage] = useState(1);
   const { isConnectedUserADML } = useGlobal();
   const [search, setSearch] = useState("");
-  const [hasMoreUsers, setHasMoreUsers] = useState(true);
-  const lastSearchRef = useRef("");
-  const [isNewSearch, setIsNewSearch] = useState(false);
 
   const {
-    currentData: newUsers,
+    data,
     isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
     refetch,
-  } = useGetCommunicationUsersQuery(
+  } = useGetCommunicationUsersInfiniteQuery(
     {
       search,
-      page,
       limit: NUMBER_MORE_USERS,
     },
     {
@@ -66,81 +57,60 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
     },
   );
 
-  useEffect(() => {
-    if (newUsers && search === lastSearchRef.current) {
-      setIsNewSearch(false);
-      const hasMore = newUsers.length >= NUMBER_MORE_USERS;
-      setHasMoreUsers(hasMore);
+  const isFetchingFirstPage = isFetching && !isFetchingNextPage;
 
-      setUsers((prev) => {
-        const updatedUsers = page === 1 ? newUsers : [...prev, ...newUsers];
-
-        if (hasMore && updatedUsers.length < MIN_USERS_NEEDED) {
-          setPage((p) => p + 1);
-        }
-
-        return updatedUsers;
-      });
-    }
-  }, [newUsers, search, page]);
+  const users = useMemo(() => {
+    if (
+      !search ||
+      (isConnectedUserADML &&
+        search.length < MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML)
+    )
+      return [];
+    return data?.pages.flat() ?? [];
+  }, [data, isConnectedUserADML, search]);
 
   const loadMoreUsers = useCallback(() => {
-    if (!isFetching && hasMoreUsers) {
-      setPage((prev) => prev + 1);
+    if (hasNextPage) {
+      fetchNextPage();
     }
-  }, [isFetching, hasMoreUsers]);
+  }, [hasNextPage, fetchNextPage]);
 
-  const refreshSearch = useCallback(() => {
-    setPage(1);
-    setUsers([]);
-    setHasMoreUsers(true);
-  }, []);
-
-  const handleSearch = useCallback(
-    debounce((newSearch: string) => {
-      lastSearchRef.current = newSearch;
-      setPage(1);
-      setUsers([]);
-      setHasMoreUsers(true);
-      setIsNewSearch(true);
-      setSearch(newSearch);
-    }, 300),
+  const handleSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearch(value);
+      }, 300),
     [],
   );
 
   const resetSearch = useCallback(() => {
-    handleSearch("");
-  }, [handleSearch]);
+    setSearch("");
+  }, []);
 
   const refetchSearch = useCallback(async () => {
-    setPage(1);
-    setUsers([]);
-    setHasMoreUsers(true);
     await refetch();
   }, [refetch]);
 
   const value = useMemo<FindAppointmentsProviderContextProps>(
     () => ({
       users,
-      hasMoreUsers,
+      hasNextPage,
       search,
-      isFetching,
-      isNewSearch,
+      isFetchingFirstPage,
+      isFetchingNextPage,
       loadMoreUsers,
       handleSearch,
-      refreshSearch,
       resetSearch,
       refetchSearch,
     }),
     [
       users,
-      hasMoreUsers,
+      hasNextPage,
       search,
-      isFetching,
-      isNewSearch,
+      isFetchingFirstPage,
+      isFetchingNextPage,
       loadMoreUsers,
       handleSearch,
-      refreshSearch,
       resetSearch,
       refetchSearch,
     ],

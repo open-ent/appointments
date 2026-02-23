@@ -4,13 +4,12 @@ import { UserCardInfos } from "~/services/api/CommunicationService/types";
 
 export interface FindAppointmentsProviderContextProps {
   users: UserCardInfos[];
-  hasMoreUsers: boolean;
+  hasNextPage: boolean;
   search: string;
-  isFetching: boolean;
-  isNewSearch: boolean;
+  isFetchingFirstPage: boolean;
+  isFetchingNextPage: boolean;
   loadMoreUsers: () => void;
   handleSearch: (newSearch: string) => void;
-  refreshSearch: () => void;
   resetSearch: () => void;
   refetchSearch: () => void;
 }

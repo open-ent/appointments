@@ -25,10 +25,10 @@ import {
 export const FindAppointments: FC = () => {
   const {
     users,
-    hasMoreUsers,
+    hasNextPage,
     search,
-    isFetching,
-    isNewSearch,
+    isFetchingFirstPage,
+    isFetchingNextPage,
     loadMoreUsers,
     handleSearch,
   } = useFindAppointments();
@@ -40,11 +40,11 @@ export const FindAppointments: FC = () => {
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && hasMoreUsers) {
+      if (entries[0].isIntersecting && hasNextPage) {
         loadMoreUsers();
       }
     },
-    [hasMoreUsers, loadMoreUsers],
+    [hasNextPage, loadMoreUsers],
   );
 
   // Infinite scroll
@@ -77,7 +77,7 @@ export const FindAppointments: FC = () => {
           sx={searchInputStyle}
           onChange={(event) => handleSearch(event.target.value)}
         />
-        {!users.length && !isFetching && (
+        {!users.length && !isFetchingFirstPage && (
           <Box sx={emptyStateBoxStyle}>
             <Typography variant="body1" sx={emptyStateTextStyle}>
               {!search ||
@@ -91,7 +91,7 @@ export const FindAppointments: FC = () => {
             </Box>
           </Box>
         )}
-        {isNewSearch ? (
+        {isFetchingFirstPage ? (
           <Loader />
         ) : (
           <>
@@ -101,7 +101,7 @@ export const FindAppointments: FC = () => {
               ))}
             </Box>
             <Box ref={targetRef}></Box>
-            {isFetching && <Loader />}
+            {isFetchingNextPage && <Loader />}
           </>
         )}
       </Box>
