@@ -50,12 +50,16 @@ public class Appointments extends BaseServer {
 
         // CRON
         ClosingCron closingCron = new ClosingCron(serviceFactory);
-	    try {
-		    new CronTrigger(vertx, appConfig.closingCron()).schedule(closingCron);
-	    } catch (ParseException e) {
-		    return Future.failedFuture(e);
-	    }
-
+        // Enable closing passed grid task to be triggered via API
+        addController(new TaskController(closingCron));
+        // Schedule closing passed grid task from cron expression
+        if (appConfig.closingCron() != null && !appConfig.closingCron().isEmpty()) {
+            try {
+                new CronTrigger(vertx, appConfig.closingCron()).schedule(closingCron);
+            } catch (ParseException e) {
+                return Future.failedFuture(e);
+            }
+        }
         return Future.succeededFuture();
     }
 }
