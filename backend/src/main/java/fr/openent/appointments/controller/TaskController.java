@@ -2,6 +2,8 @@ package fr.openent.appointments.controller;
 
 import fr.openent.appointments.cron.ClosingCron;
 import fr.wseduc.rs.Post;
+import fr.wseduc.security.ActionType;
+import fr.wseduc.security.SecuredAction;
 import fr.wseduc.webutils.http.BaseController;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.logging.Logger;
@@ -17,6 +19,7 @@ public class TaskController extends BaseController {
 	}
 
 	@Post("api/internal/closing-passed-grid")
+	@SecuredAction(value = "", type = ActionType.RESOURCE)
 	public void closingPassedGrid(HttpServerRequest request) {
 		log.info("Triggered closing passed grid task");
 		closingCron.handle(0L);
