@@ -64,7 +64,7 @@ export const RangeDatePicker: FC = () => {
           label={t("appointments.grid.validity.period.end")}
           value={endDate}
           onChange={handleEndDateChange}
-          minDate={startDate}
+          minDate={startDate?.add(1, "day")}
           maxDate={startDate?.add(1, YEAR)}
           disabled={disabled || !startDate}
           slotProps={{
