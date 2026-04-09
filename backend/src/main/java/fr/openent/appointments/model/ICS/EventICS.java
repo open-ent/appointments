@@ -32,6 +32,7 @@ public class EventICS {
     private Integer sequence;                   // version de l'event (0, 1, 2...)
     private String rrule;                       // règle de récurrence (ex: FREQ=WEEKLY;COUNT=10)
     private String url;
+    private List<AttachmentICS> attachments;
 
     private static final DateTimeFormatter ICS_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
 
@@ -47,6 +48,7 @@ public class EventICS {
         this.end = appointment.getEndDate();
         this.stamp = LocalDateTime.now();
         this.sequence = Math.toIntExact(stamp.toEpochSecond(ZoneOffset.UTC));
+//        this.attachments = appointment.getDocumentsIds(); //TODO
     }
 
     // Sérialisation ICS
@@ -75,6 +77,8 @@ public class EventICS {
         appendDate(sb, "CREATED", created);
         appendDate(sb, "LAST-MODIFIED", modified);
 
+        if (attachments != null) attachments.forEach(attachment -> appendAttachment(sb, attachment));
+
         sb.append("END:VEVENT\r\n");
 
         return sb.toString();
@@ -88,6 +92,28 @@ public class EventICS {
     private void appendDate(StringBuilder sb, String key, LocalDateTime dt) {
         if (dt != null)
             sb.append(key).append(":").append(dt.format(ICS_FORMATTER)).append("\r\n");
+    }
+
+    private void appendAttachment(StringBuilder sb, AttachmentICS attachment) {
+        String base64Data = Base64.getEncoder().encodeToString(attachment.getData());
+
+        String fullValue = "ATTACH;FMTTYPE=" + attachment.getMimeType()
+                + ";ENCODING=BASE64;VALUE=BINARY"
+                + ";X-FILENAME=" + attachment.getFilename() + ":"
+                + base64Data;
+
+        sb.append(fullValue, 0, Math.min(75, fullValue.length()));
+        sb.append("\r\n");
+
+        // Line folding : max 75 octets par ligne, continuation avec espace
+        int pos = 75;
+        while (pos < fullValue.length()) {
+            int end = Math.min(pos + 74, fullValue.length()); // 74 + 1 espace = 75
+            sb.append(" ");
+            sb.append(fullValue, pos, end);
+            sb.append("\r\n");
+            pos = end;
+        }
     }
 
     // Getters
