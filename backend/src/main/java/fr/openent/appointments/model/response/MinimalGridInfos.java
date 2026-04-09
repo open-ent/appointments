@@ -1,6 +1,5 @@
 package fr.openent.appointments.model.response;
 
-import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.IModelHelper;
 import fr.openent.appointments.model.IModel;
 import fr.openent.appointments.model.database.Grid;
@@ -8,8 +7,6 @@ import io.vertx.core.json.JsonObject;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.stream.Collectors;
-import static fr.openent.appointments.core.constants.Fields.*;
 
 public class MinimalGridInfos extends BaseMinimalGrid implements IModel<MinimalGridInfos> {
     private Duration duration;

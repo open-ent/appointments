@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 
 import {
   Box,
@@ -19,6 +19,7 @@ import PlaceIcon from "@mui/icons-material/Place";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 import { AppointmentStateIcon } from "~/components/AppointmentCard/utils";
 import { UserPicture } from "~/components/UserPicture";
@@ -27,6 +28,7 @@ import {
   APPOINTMENTS,
   TEXT_DATE_FORMAT,
   TIME_FORMAT,
+  TOAST_VALUES,
 } from "~/core/constants";
 import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
 import { useGlobal } from "~/providers/GlobalProvider";
@@ -48,6 +50,8 @@ import {
 import { AppointmentInfosModalProps } from "./types";
 import { HOUR } from "~/core/dayjs.const";
 import { useTheme } from "~/hooks/useTheme";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import { useExportAppointmentsEventMutation } from "~/services/api/AppointmentService";
 
 export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   appointment,
@@ -60,6 +64,8 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
   } = useMyAppointments();
   const { t } = useTranslation(APPOINTMENTS);
   const { isTheme1D } = useTheme();
+  const [isExportingEvent, setIsExportingEvent] = useState(false);
+  const [exportEvent] = useExportAppointmentsEventMutation();
 
   const canCancelRequest = useMemo(
     () =>
@@ -67,6 +73,36 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
         .add(minHoursBeforeCancellation, HOUR)
         .isBefore(appointment.beginDate),
     [appointment.beginDate, minHoursBeforeCancellation],
+  );
+
+  const handleExportEvent = useCallback(
+    async (id: number) => {
+      try {
+        setIsExportingEvent(true);
+
+        const { text: icsString, filename } = await exportEvent({
+          appointmentsIds: [id],
+          states: [appointment.state],
+        }).unwrap();
+        const blob = new Blob([icsString], {
+          type: "text/calendar;charset=utf-8",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${filename}.ics`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        toast.success(t(TOAST_VALUES.EXPORT_EVENT.i18nKeySuccess));
+        setIsExportingEvent(false);
+      } catch (error) {
+        console.error(error);
+        toast.error(t(TOAST_VALUES.EXPORT_EVENT.i18nKeyError));
+        setIsExportingEvent(false);
+      }
+    },
+    [exportEvent, t],
   );
 
   return (
@@ -124,13 +160,29 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
             )}
             <Box sx={rowInfoStyle}>
               <EventIcon sx={greyIconStyle} />
-              <Typography variant="body1" color="text.primary">
-                {t("appointments.my.appointment.infos.modal.date", {
-                  date: appointment.beginDate.format(TEXT_DATE_FORMAT),
-                  beginTime: appointment.beginDate.format(TIME_FORMAT),
-                  endTime: appointment.endDate.format(TIME_FORMAT),
-                })}
-              </Typography>
+              <Box maxWidth="90%">
+                <Typography variant="body1" color="text.primary">
+                  {t("appointments.my.appointment.infos.modal.date", {
+                    date: appointment.beginDate.format(TEXT_DATE_FORMAT),
+                    beginTime: appointment.beginDate.format(TIME_FORMAT),
+                    endTime: appointment.endDate.format(TIME_FORMAT),
+                  })}
+                </Typography>
+                {(appointment.state === APPOINTMENT_STATE.ACCEPTED ||
+                  appointment.state === APPOINTMENT_STATE.CANCELED) && (
+                  <Button
+                    color={"primary"}
+                    variant={"contained"}
+                    startIcon={<DownloadRoundedIcon />}
+                    loading={isExportingEvent}
+                    onClick={() => {
+                      void handleExportEvent(appointment.id);
+                    }}
+                  >
+                    {t("appointments.event.export")}
+                  </Button>
+                )}
+              </Box>
             </Box>
             {appointment.place && (
               <Box sx={rowInfoStyle}>

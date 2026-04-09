@@ -10,7 +10,9 @@ import io.vertx.core.http.HttpServerRequest;
 import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface AppointmentService {
 
@@ -67,6 +69,15 @@ public interface AppointmentService {
     Future<AppointmentResponse> getAppointmentById(Long appointmentId, UserInfos userInfos);
 
     /**
+     * Get appointment by its id
+     * @param appointmentIds The appointment ids
+     * @param userId The user id
+     * @param states The states of the appointments
+     * @return The appointments with infos, corresponding to the ids
+     */
+    Future<List<AppointmentWithInfos>> getAppointmentsByIds(List<Long> appointmentIds, String userId, List<AppointmentState> states);
+
+    /**
      * Get all accepted appointments linked to a grid
      * @param gridId The grid id
      * @return The list of appointments
@@ -106,4 +117,13 @@ public interface AppointmentService {
      * @return The updated appointment
      */
     Future<Appointment> cancelAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
+
+    /**
+     * Build a ICS file from appointments
+     * @param appointments The appointments to export in ICS file
+     * @param mapUserIdToDisplayName The map linking users to their display name
+     * @param userId The user id
+     * @return The ICS file as a string
+     */
+    Future<String> buildICSFile(List<AppointmentWithInfos> appointments, Map<String, String> mapUserIdToDisplayName, String userId);
 }

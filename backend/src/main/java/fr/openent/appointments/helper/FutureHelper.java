@@ -7,8 +7,6 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-import java.util.List;
-
 public class FutureHelper {
 
     private static final Logger log = LoggerFactory.getLogger(FutureHelper.class);

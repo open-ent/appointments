@@ -3,10 +3,10 @@ package fr.openent.appointments.service;
 import fr.openent.appointments.model.UserAppointment;
 import fr.openent.appointments.model.database.NeoGroup;
 import io.vertx.core.Future;
-import io.vertx.core.json.JsonArray;
 import org.entcore.common.user.UserInfos;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CommunicationService {
     
@@ -31,4 +31,12 @@ public interface CommunicationService {
      * @return A Future containing a JsonArray of groups.
      */
     Future<List<UserAppointment>> getUsers(UserInfos userInfos, String search, Long page, Long limit);
+
+    /**
+     * Retrieves all user names from their ids.
+     *
+     * @param usersIds The list of user IDs.
+     * @return A Future containing a {@link Map}<{@link String}, {@link String}>.
+     */
+    Future<Map<String, String>> getUsernamesFromUserIds(List<String> userIds);
 }

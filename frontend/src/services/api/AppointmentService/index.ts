@@ -14,6 +14,7 @@ import {
   transformResponseToMyAppointments,
   transformResponseToNumber,
 } from "./utils";
+import { APPOINTMENT_STATE } from "~/core/enums";
 
 export const appointmentApi = emptySplitApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -91,6 +92,24 @@ export const appointmentApi = emptySplitApi.injectEndpoints({
       }),
       invalidatesTags: ["MyAppointments", "AppointmentsLinkedToGrid"],
     }),
+    exportAppointmentsEvent: builder.mutation<
+      { text: string; filename: string },
+      { appointmentsIds: number[]; states: APPOINTMENT_STATE[] }
+    >({
+      query: ({ appointmentsIds, states }) => ({
+        url: `/appointments/export/event`,
+        body: { appointmentsIds, states },
+        method: "POST",
+        responseHandler: async (response: any) => {
+          const filename =
+            response.headers
+              .get("Content-Disposition")
+              ?.split("filename=")[1] ?? "calendar.ics";
+          const text = await response.text();
+          return { text, filename };
+        },
+      }),
+    }),
   }),
 });
 
@@ -104,4 +123,5 @@ export const {
   useAcceptAppointmentMutation,
   useRejectAppointmentMutation,
   useCancelAppointmentMutation,
+  useExportAppointmentsEventMutation,
 } = appointmentApi;

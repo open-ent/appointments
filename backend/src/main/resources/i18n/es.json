@@ -32,6 +32,8 @@
   "appointments.confirm.modal.option.preserve.them": "Conservarlas",
   "appointments.confirm.modal.option.cancel.them": "Cancelarlas",
 
+  "appointments.event.export": "Descargar evento",
+
   "appointments.grid.required": "Los campos marcados con * son obligatorios",
   "appointments.grid.name": "Nombre del horario",
   "appointments.grid.color": "Color de visualización",
@@ -168,6 +170,8 @@
   "appointments.toast.suspend.grid.error": "Se produjo un error al suspender el horario. Por favor, inténtalo de nuevo.",
   "appointments.toast.restore.grid.success": "Tu horario está nuevamente disponible.",
   "appointments.toast.restore.grid.error": "Se produjo un error al reactivar el horario. Por favor, inténtalo de nuevo.",
+  "appointments.toast.event.export.success": "Tu evento ha sido descargado correctamente.",
+  "appointments.toast.event.export.error": "Se produjo un error al generar la exportación. Por favor, inténtalo de nuevo.",
 
   "group.HeadTeacher": "Profesores principales de {0}",
   "group.Direction": "Directores de {0}",

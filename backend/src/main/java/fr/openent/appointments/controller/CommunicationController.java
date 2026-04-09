@@ -23,7 +23,6 @@ import org.entcore.common.user.UserUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Optional;
 
 import static fr.openent.appointments.core.constants.Constants.*;
 

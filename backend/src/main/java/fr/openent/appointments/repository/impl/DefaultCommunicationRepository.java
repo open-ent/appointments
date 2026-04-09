@@ -1,21 +1,26 @@
 package fr.openent.appointments.repository.impl;
 
+import fr.openent.appointments.helper.FutureHelper;
 import fr.openent.appointments.helper.IModelHelper;
+import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.database.NeoGroup;
 import fr.openent.appointments.model.database.NeoStructure;
 import fr.openent.appointments.model.database.NeoUser;
 import fr.openent.appointments.repository.CommunicationRepository;
 import fr.openent.appointments.repository.RepositoryFactory;
-import fr.openent.appointments.helper.FutureHelper;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.neo4j.Neo4j;
 import org.entcore.common.neo4j.Neo4jResult;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Constants.*;
 
@@ -23,6 +28,8 @@ import static fr.openent.appointments.core.constants.Constants.*;
  * Default implementation of the CommunicationRepository interface.
  */
 public class DefaultCommunicationRepository implements CommunicationRepository {
+
+    private static final Logger log = LoggerFactory.getLogger(DefaultCommunicationRepository.class);
 
     private final Neo4j neo4j;
 
@@ -204,6 +211,36 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
 
         String errorMessage = String.format("[Appointments@DefaultCommunicationRepository::getGroup] Fail to retrieve groups with ids %s : ", groupIds);
         neo4j.execute(query, params, Neo4jResult.validResultHandler(IModelHelper.resultToIModel(promise, NeoGroup.class, errorMessage)));
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<Map<String, String>> getUsernameByUserIds(List<String> usersIds) {
+        Promise<Map<String, String>> promise = Promise.promise();
+
+        String query = "MATCH (u:User) " +
+                        "WHERE u.id IN {usersIds} " +
+                        "RETURN u.id AS id, u.displayName AS displayName;";
+
+        JsonObject params = new JsonObject().put(CAMEL_USERS_IDS, usersIds);
+
+        neo4j.execute(query, params, Neo4jResult.validResultHandler(result -> {
+            if (result.isLeft()) {
+                String errorMessage = String.format("Fail to retrieve usernames from usersIds %s", usersIds);
+                LogHelper.logError(this, "getUsernameByUserIds", errorMessage, result.left().getValue());
+                promise.fail(errorMessage);
+                return;
+            } 
+            
+            Map<String, String> idToUsername = result.right().getValue().stream()
+                    .map(JsonObject.class::cast)
+                    .collect(Collectors.toMap(
+                            row -> row.getString("id"),
+                            row -> row.getString("displayName")
+                    ));
+            promise.complete(idToUsername);
+        }));
 
         return promise.future();
     }

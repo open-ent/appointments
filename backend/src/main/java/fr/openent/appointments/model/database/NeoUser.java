@@ -6,7 +6,6 @@ import fr.openent.appointments.model.IModel;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 

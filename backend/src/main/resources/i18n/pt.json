@@ -107,6 +107,8 @@
   "appointments.cannot.cancel.request.tooltip": "Cancelamento indisponível menos de {{hours}} horas antes do compromisso",
   "appointments.cancel.appointment": "Cancelar o compromisso",
 
+  "appointments.event.export": "Baixar evento",
+
   "appointments.appointments": "Compromissos",
   "appointments.cancel": "Cancelar",
   "appointments.canceled": "Cancelado",
@@ -168,6 +170,8 @@
   "appointments.toast.suspend.grid.error": "Ocorreu um erro ao suspender a grade. Tente novamente.",
   "appointments.toast.restore.grid.success": "Sua grade foi reativada com sucesso.",
   "appointments.toast.restore.grid.error": "Ocorreu um erro ao reativar a grade. Tente novamente.",
+  "appointments.toast.event.export.success": "O seu evento foi transferido com sucesso.",
+  "appointments.toast.event.export.error": "Ocorreu um erro ao gerar a exportação. Por favor, tente novamente.",
 
   "group.HeadTeacher": "Professores principais de {0}",
   "group.Direction": "Diretores de {0}",

@@ -228,6 +228,9 @@ do
     cleanDependencies)
       cleanDependencies
       ;;
+    lintAndFormat)
+      lintFixDocker && prettierDocker
+      ;;
     *)
       echo "Invalid argument : $param"
   esac
