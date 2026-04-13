@@ -52,6 +52,7 @@ public class Constants {
     public static final String ALL = "all";
     public static final String APPOINTMENT = "appointment";
     public static final String APPOINTMENTS = "Appointments";
+    public static final String APPOINTMENTS_IDS = "appointmentsIds";
     public static final String APPOINTMENTS_ADDRESS = "fr.openent.appointments";
     public static final String BODY = "body";
     public static final String CODE = "code";

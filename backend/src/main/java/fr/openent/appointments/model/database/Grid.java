@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.Duration;
-import java.util.stream.Collectors;
 
 import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.enums.Periodicity;

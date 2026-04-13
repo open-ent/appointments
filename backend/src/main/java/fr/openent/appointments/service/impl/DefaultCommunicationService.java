@@ -1,7 +1,5 @@
 package fr.openent.appointments.service.impl;
 
-import fr.openent.appointments.controller.MainController;
-import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.model.UserAppointment;
 import fr.openent.appointments.model.database.Grid;
@@ -16,7 +14,6 @@ import fr.openent.appointments.service.ServiceFactory;
 import fr.openent.appointments.service.TimeSlotService;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.user.UserInfos;
 
@@ -25,7 +22,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Constants.CAMEL_AVAILABLE_GRIDS_IDS;
-import static fr.openent.appointments.core.constants.Constants.STRUCTURES;
 
 /**
  * Default implementation of the CommunicationService interface.
@@ -88,6 +84,10 @@ public class DefaultCommunicationService implements CommunicationService {
             });
 
         return promise.future();
+    }
+
+    public Future<List<NeoUser>> getUsernamesFromUserIds(List<String> usersIds) {
+        return communicationRepository.getSimplifiedUsersByUserIds(usersIds);
     }
 
     // Private functions

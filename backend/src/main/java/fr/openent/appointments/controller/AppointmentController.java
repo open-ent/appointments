@@ -5,10 +5,13 @@ import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.helper.ParamHelper;
 import fr.openent.appointments.model.database.Appointment;
+import fr.openent.appointments.model.database.AppointmentWithInfos;
+import fr.openent.appointments.model.database.NeoUser;
 import fr.openent.appointments.model.response.MinimalAppointment;
 import fr.openent.appointments.security.ManageRight;
 import fr.openent.appointments.security.ViewRight;
 import fr.openent.appointments.service.AppointmentService;
+import fr.openent.appointments.service.CommunicationService;
 import fr.openent.appointments.service.GridService;
 import fr.openent.appointments.service.NotifyService;
 import fr.openent.appointments.service.ServiceFactory;
@@ -18,6 +21,7 @@ import fr.wseduc.rs.Post;
 import fr.wseduc.rs.Put;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
+import fr.wseduc.webutils.request.RequestUtils;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
@@ -29,25 +33,32 @@ import org.entcore.common.http.filter.ResourceFilter;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static fr.openent.appointments.core.constants.Constants.*;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.enums.Events.CREATE;
+import static fr.openent.appointments.helper.ICSHelper.buildFilename;
+import static fr.openent.appointments.helper.ICSHelper.buildFinalFilename;
 
 public class AppointmentController extends ControllerHelper {
     private final EventStore eventStore;
     private final AppointmentService appointmentService;
     private final GridService gridService;
     private final NotifyService notifyService;
+    private final CommunicationService communicationService;
 
     public AppointmentController(ServiceFactory serviceFactory) {
         this.eventStore = serviceFactory.eventStore();
         this.appointmentService = serviceFactory.appointmentService();
         this.gridService = serviceFactory.gridService();
         this.notifyService = serviceFactory.notifyService();
+        this.communicationService = serviceFactory.communicationService();
     }
 
     @Post("/appointments/:timeSlotId")
@@ -316,5 +327,65 @@ public class AppointmentController extends ControllerHelper {
                 LogHelper.logError(this, "getAvailableAppointmentsForGrid", errorMessage, err.getMessage());
                 renderError(request);
             });
+    }
+
+    @Post("/appointments/export/event")
+    @ApiDoc("Export multiple appointments into a single ICS file")
+    @ResourceFilter(ViewRight.class)
+    @SecuredAction(value="", type= ActionType.RESOURCE)
+    public void exportAppointmentsEvents(final HttpServerRequest request) {
+        RequestUtils.bodyToJson(request, body -> {
+            List<AppointmentState> states = body.getJsonArray(STATES).stream()
+                    .map(state -> AppointmentState.getAppointmentState(state.toString()))
+                    .collect(Collectors.toList());
+            List<Long> appointmentIds = body.getJsonArray(APPOINTMENTS_IDS).stream()
+                .map(id -> ((Number) id).longValue())
+                .collect(Collectors.toList());
+            
+            final JsonObject composeInfo = new JsonObject();
+            UserUtils.getAuthenticatedUserInfos(eb, request)
+                .compose(user -> {
+                    composeInfo.put(CAMEL_USER_INFO, user);
+                     // Get appointments, check rights and filter by state, all in one
+                    return appointmentService.getAppointmentsByIds(appointmentIds, user.getUserId(), states);
+                })
+                .compose(appointments -> {
+                    int nbAppointments = appointments.size();
+                    if (nbAppointments == 0) {
+                        String errorMessage = "No appointments found for the provided ids with the required states";
+                        return Future.failedFuture(errorMessage);
+                    }
+
+                    String filename = buildFilename(appointments);
+                    composeInfo.put(APPOINTMENTS, appointments);
+                    composeInfo.put(FILENAME, filename);
+
+                    List<String> usersIds = appointments.stream()
+                            .flatMap(a -> Stream.of(a.getRequesterId(), a.getOwnerId()))
+                            .filter(Objects::nonNull)
+                            .distinct()
+                            .collect(Collectors.toList());
+                    return communicationService.getUsernamesFromUserIds(usersIds);
+                })
+                .compose(neoUsers -> {
+                    UserInfos user = (UserInfos) composeInfo.getValue(CAMEL_USER_INFO);
+                    List<AppointmentWithInfos> appointments = composeInfo.getJsonArray(APPOINTMENTS).getList();
+                    Map<String, String> mapUserIdToDisplayName = neoUsers.stream()
+                            .collect(Collectors.toMap(NeoUser::getId, NeoUser::getDisplayName));
+                    return appointmentService.buildICSFile(appointments, mapUserIdToDisplayName, user.getUserId());
+                })
+                .onSuccess(fileICS -> {
+                    String finalFilename = buildFinalFilename(composeInfo.getString(FILENAME), states);
+                    request.response()
+                        .putHeader("Content-Type", "text/calendar; charset=utf-8")
+                        .putHeader("Content-Disposition", "attachment; filename=" + finalFilename)
+                        .end(fileICS);
+                })
+                .onFailure(err -> {
+                    String errorMessage = "Failed to export event for appointments with ids : " + appointmentIds;
+                    LogHelper.logError(this, "exportAppointmentsEvents", errorMessage, err.getMessage());
+                    if(!request.response().ended()) renderError(request, new JsonObject().put(ERROR, errorMessage));
+                });
+        });
     }
 }

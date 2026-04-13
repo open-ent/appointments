@@ -1,7 +1,10 @@
 package fr.openent.appointments.service.impl;
 
 import fr.openent.appointments.enums.AppointmentState;
+import fr.openent.appointments.enums.ICS.EventMethod;
 import fr.openent.appointments.helper.LogHelper;
+import fr.openent.appointments.model.ICS.CalendarICS;
+import fr.openent.appointments.model.ICS.EventICS;
 import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.database.AppointmentWithInfos;
 import fr.openent.appointments.model.database.NeoUser;
@@ -21,9 +24,7 @@ import org.entcore.common.user.UserInfos;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static fr.openent.appointments.core.constants.Constants.CAMEL_NEO_USER;
@@ -206,12 +207,12 @@ public class DefaultAppointmentService implements AppointmentService {
                     }
                     else {
                         String errorMessage = "User is not in appointment";
-                        LogHelper.logError(this, "getAppointmentById", errorMessage, "");
+                        LogHelper.logError(this, "getAppointmentById", errorMessage);
                         return Future.failedFuture(errorMessage);
                     }
                 else {
                     String errorMessage = "Appointment not found";
-                    LogHelper.logError(this, "getAppointmentById", errorMessage, "");
+                    LogHelper.logError(this, "getAppointmentById", errorMessage);
                     return Future.failedFuture(errorMessage);
                 }
             })
@@ -219,6 +220,43 @@ public class DefaultAppointmentService implements AppointmentService {
             .onFailure(err -> {
                 String errorMessage = "Failed to get appointment by id";
                 LogHelper.logError(this, "getAppointmentById", errorMessage, err.getMessage());
+                promise.fail(err);
+            });
+
+        return promise.future();                
+    }
+
+    @Override
+    public Future<List<AppointmentWithInfos>> getAppointmentsByIds(List<Long> appointmentsIds, String userId, List<AppointmentState> states) {
+        Promise<List<AppointmentWithInfos>> promise = Promise.promise();
+
+        if (states.contains(AppointmentState.CANCELED)) states = Collections.singletonList(AppointmentState.CANCELED);
+
+        appointmentRepository.getAppointments(userId, states, true, appointmentsIds)
+            .onSuccess(appointmentWithInfosList -> {
+                if (appointmentWithInfosList.isEmpty()) {
+                    String errorMessage = "No appointments found";
+                    LogHelper.logError(this, "getAppointmentsByIds", errorMessage);
+                    promise.fail(errorMessage);
+                    return;
+                }
+
+                Set<Long> appointmentsIdsInBDD = appointmentWithInfosList.stream()
+                        .map(AppointmentWithInfos::getId)
+                        .collect(Collectors.toSet());
+
+                if (appointmentsIds.size() > appointmentsIdsInBDD.size()) {
+                    String errorMessage = "User is not in one of the requested appointments";
+                    LogHelper.logError(this, "getAppointmentsByIds", errorMessage);
+                    promise.fail(errorMessage);
+                    return;
+                }
+
+                promise.complete(appointmentWithInfosList);
+            })
+            .onFailure(err -> {
+                String errorMessage = "Failed to get appointments by ids";
+                LogHelper.logError(this, "getAppointmentsByIds", errorMessage, err.getMessage());
                 promise.fail(err);
             });
 
@@ -347,4 +385,31 @@ public class DefaultAppointmentService implements AppointmentService {
         return handleAppointmentStateChange(request, appointmentId, userInfos, AppointmentState.CANCELED, "cancelAppointment");
     }
 
+    @Override
+    public Future<String> buildICSFile(List<AppointmentWithInfos> appointments, Map<String, String> mapUserIdToDisplayName, String userId) {
+        try {
+            List<EventICS> events = appointments.stream()
+                .map((appointment) -> {
+                    String otherMemberId =
+                        userId.equals(appointment.getRequesterId())
+                        ? appointment.getOwnerId()
+                        : appointment.getRequesterId();
+                    String otherMemberDisplayName = mapUserIdToDisplayName.getOrDefault(otherMemberId, null);
+                    if (otherMemberDisplayName == null) {
+                        throw new IllegalStateException("Failed to get displayname from user id " + otherMemberId);
+                    }
+
+                    return new EventICS(appointment, otherMemberDisplayName);
+                })
+                .collect(Collectors.toList());
+
+            EventMethod eventMethod = appointments.get(0).getState() == AppointmentState.CANCELED ? EventMethod.CANCEL : EventMethod.PUBLISH;
+            CalendarICS calendarICS = new CalendarICS(events, eventMethod);
+            return Future.succeededFuture(calendarICS.toICS());
+        }
+        catch (IllegalStateException e) {
+            LogHelper.logError(this, "buildICSFile", e.getMessage());
+            return Future.failedFuture(e.getMessage());
+        }
+    }
 }

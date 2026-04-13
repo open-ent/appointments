@@ -107,6 +107,8 @@
   "appointments.cannot.cancel.request.tooltip": "Stornierung nicht möglich weniger als {{hours}} Stunden vor dem Termin",
   "appointments.cancel.appointment": "Termin absagen",
 
+  "appointments.event.export": "Ereignis herunterladen",
+
   "appointments.appointments": "Termine",
   "appointments.cancel": "Abbrechen",
   "appointments.canceled": "Abgesagt",
@@ -168,6 +170,8 @@
   "appointments.toast.suspend.grid.error": "Beim Aussetzen des Rasters ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
   "appointments.toast.restore.grid.success": "Ihr Raster ist wieder geöffnet.",
   "appointments.toast.restore.grid.error": "Beim Wiederherstellen des Rasters ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+  "appointments.toast.event.export.success": "Ihr Ereignis wurde erfolgreich heruntergeladen.",
+  "appointments.toast.event.export.error": "Beim Erstellen des Exports ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
 
   "group.HeadTeacher": "Klassenlehrer von {0}",
   "group.Direction": "Direktoren von {0}",

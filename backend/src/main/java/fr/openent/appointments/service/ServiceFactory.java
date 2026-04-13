@@ -1,7 +1,6 @@
 package fr.openent.appointments.service;
 
 import fr.openent.appointments.config.AppConfig;
-import fr.openent.appointments.repository.TimeSlotRepository;
 import fr.openent.appointments.service.impl.*;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;

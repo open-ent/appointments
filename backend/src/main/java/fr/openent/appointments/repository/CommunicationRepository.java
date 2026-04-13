@@ -7,6 +7,7 @@ import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface CommunicationRepository {
@@ -68,4 +69,12 @@ public interface CommunicationRepository {
      * @return A Future containing a {@link List} of {@link NeoGroup}.
      */
     Future<List<NeoGroup>> getGroups(List<String> groupIds);
+
+    /**
+     * Retrieves all users' infos from their ids.
+     *
+     * @param usersIds The list of user IDs to filter users.
+     * @return A Future containing a {@link Map}<{@link String}, {@link String}>.
+     */
+    Future<List<NeoUser>> getSimplifiedUsersByUserIds(List<String> usersIds);
 }

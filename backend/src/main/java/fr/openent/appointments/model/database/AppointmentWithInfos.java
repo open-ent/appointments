@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
 
@@ -26,6 +25,7 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
     private String place;
     private List<String> documentsIds;
     private String publicComment;
+    private String gridName;
 
     public AppointmentWithInfos(JsonObject appointmentWithInfos) {
         this.id = appointmentWithInfos.getLong(ID, null);
@@ -39,6 +39,7 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
         this.videoCallLink = appointmentWithInfos.getString(VIDEO_CALL_LINK, null);
         this.place = appointmentWithInfos.getString(PLACE, null);
         this.publicComment = appointmentWithInfos.getString(PUBLIC_COMMENT, null);
+        this.gridName = appointmentWithInfos.getString(GRID_NAME, null);
 
         String stringDocumentsIds = appointmentWithInfos.getString(DOCUMENTS_IDS, "");
 
@@ -100,6 +101,10 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
         return this.publicComment;
     }
 
+    public String getGridName() {
+        return this.gridName;
+    }
+
     // Setters
 
     public AppointmentWithInfos setId(Long id) {
@@ -159,6 +164,11 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
 
     public AppointmentWithInfos setPublicComment(String publicComment) {
         this.publicComment = publicComment;
+        return this;
+    }
+
+    public AppointmentWithInfos setGridName(String gridName) {
+        this.gridName = gridName;
         return this;
     }
 

@@ -107,6 +107,8 @@
   "appointments.cannot.cancel.request.tooltip": "Annullamento non disponibile meno di {{hours}} ore prima dell'appuntamento",
   "appointments.cancel.appointment": "Annullare l'appuntamento",
 
+  "appointments.event.export": "Scarica evento",
+
   "appointments.appointments": "Appuntamenti",
   "appointments.cancel": "Annulla",
   "appointments.canceled": "Annullato",
@@ -168,6 +170,8 @@
   "appointments.toast.suspend.grid.error": "Si è verificato un errore durante la sospensione della griglia. Riprova.",
   "appointments.toast.restore.grid.success": "La tua griglia è nuovamente aperta.",
   "appointments.toast.restore.grid.error": "Si è verificato un errore durante la riattivazione della griglia. Riprova.",
+  "appointments.toast.event.export.success": "Il tuo evento è stato scaricato con successo.",
+  "appointments.toast.event.export.error": "Si è verificato un errore durante la generazione dell'esportazione. Riprova.",
 
   "group.HeadTeacher": "Insegnanti principali di {0}",
   "group.Direction": "Direttori di {0}",

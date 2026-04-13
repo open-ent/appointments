@@ -107,6 +107,8 @@
   "appointments.cannot.cancel.request.tooltip": "Cancellation unavailable less than {{hours}}h before the appointment",
   "appointments.cancel.appointment": "Cancel appointment",
 
+  "appointments.event.export": "Download event",
+
   "appointments.appointments": "Appointments",
   "appointments.cancel": "Cancel",
   "appointments.canceled": "Canceled",
@@ -168,6 +170,8 @@
   "appointments.toast.suspend.grid.error": "An error occurred while suspending the grid. Please try again.",
   "appointments.toast.restore.grid.success": "Your grid is now active again.",
   "appointments.toast.restore.grid.error": "An error occurred while reactivating the grid. Please try again.",
+  "appointments.toast.event.export.success": "Your event has been successfully downloaded.",
+  "appointments.toast.event.export.error": "An error occurred while generating the export. Please try again.",
 
   "group.HeadTeacher": "Head teachers of {0}",
   "group.Direction": "Directors of {0}",
