@@ -1,6 +1,7 @@
 package fr.openent.appointments.service;
 
 import fr.openent.appointments.enums.AppointmentState;
+import fr.openent.appointments.enums.ICS.EventMethod;
 import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.database.AppointmentWithInfos;
 import fr.openent.appointments.model.response.AppointmentResponse;
@@ -123,7 +124,8 @@ public interface AppointmentService {
      * @param appointments The appointments to export in ICS file
      * @param mapUserIdToDisplayName The map linking users to their display name
      * @param userId The user id
+     * @param eventMethod The event method for ICS file
      * @return The ICS file as a string
      */
-    Future<String> buildICSFile(List<AppointmentWithInfos> appointments, Map<String, String> mapUserIdToDisplayName, String userId);
+    Future<String> buildICSFile(List<AppointmentWithInfos> appointments, Map<String, String> mapUserIdToDisplayName, String userId, EventMethod eventMethod);
 }

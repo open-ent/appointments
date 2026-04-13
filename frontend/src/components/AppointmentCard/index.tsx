@@ -125,10 +125,10 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
         <Box sx={pictureStyle}>
           <UserPicture picture={appointment.picture} />
         </Box>
-        <EllipsisWithTooltip typographyProps={nameTypoStyle}>
+        <EllipsisWithTooltip slotProps={{ text: { sx: nameTypoStyle } }}>
           {appointment.displayName}
         </EllipsisWithTooltip>
-        <EllipsisWithTooltip typographyProps={functionTypoStyle}>
+        <EllipsisWithTooltip slotProps={{ text: { sx: functionTypoStyle } }}>
           {appointment.functions.join(", ")}
         </EllipsisWithTooltip>
         <Box sx={bottomWrapperBoxStyle}>

@@ -1,4 +1,5 @@
-export enum MODAL_TYPE {
+export enum ModalType {
   GRID = "GRID",
   CONFIRMATION = "CONFIRMATION",
+  EXPORT = "showExportModal",
 }

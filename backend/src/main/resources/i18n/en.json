@@ -107,7 +107,14 @@
   "appointments.cannot.cancel.request.tooltip": "Cancellation unavailable less than {{hours}}h before the appointment",
   "appointments.cancel.appointment": "Cancel appointment",
 
-  "appointments.event.export": "Download event",
+  "appointments.event.export.one.button.title": "Download event",
+  "appointments.event.export.all.button.title": "Download appointments",
+  "appointments.event.export.all.modal.body1": "The download will generate <strong>two .ics files</strong> that you can manually import into the calendar of your choice.",
+  "appointments.event.export.all.modal.body2": "The first cancels all existing appointments, the second recreates the updated active appointments.",
+  "appointments.event.export.all.modal.warning.title": "Important",
+  "appointments.event.export.all.modal.warning.body": "Import the files in the order indicated so that your calendar is correctly updated.\n   • <i>1-export_global_cancellation.ics</i>\n   • <i>2-export_global_creation.ics</i>",
+  "appointments.event.export.all.modal.end": "Any subsequent modification will require a new export.",
+  "appointments.event.export.all.only.cancelled.body": "The download will generate <strong>one .ics file</strong> containing all your cancelled appointments that you can manually import into the calendar of your choice.",
 
   "appointments.appointments": "Appointments",
   "appointments.cancel": "Cancel",
@@ -129,7 +136,7 @@
   "appointments.accepted": "Accepted",
   "appointments.refused": "Refused",
   "appointments.refuse": "Refuse",
-  "appointments.cancelled": "Canceled",
+  "appointments.download": "Download",
   "appointments.videoconference": "Videoconference",
 
   "appointments.monday": "Monday",
@@ -171,6 +178,7 @@
   "appointments.toast.restore.grid.success": "Your grid is now active again.",
   "appointments.toast.restore.grid.error": "An error occurred while reactivating the grid. Please try again.",
   "appointments.toast.event.export.success": "Your event has been successfully downloaded.",
+  "appointments.toast.event.export.all.success": "Your events have been successfully downloaded.",
   "appointments.toast.event.export.error": "An error occurred while generating the export. Please try again.",
 
   "group.HeadTeacher": "Head teachers of {0}",

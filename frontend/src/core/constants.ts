@@ -275,6 +275,10 @@ export const TOAST_VALUES = {
     i18nKeySuccess: "appointments.toast.event.export.success",
     i18nKeyError: "appointments.toast.event.export.error",
   },
+  [TOAST_TYPE.EXPORT_EVENTS]: {
+    i18nKeySuccess: "appointments.toast.event.export.all.success",
+    i18nKeyError: "appointments.toast.event.export.error",
+  },
 };
 
 export const GRID_MODAL_VALUES = {

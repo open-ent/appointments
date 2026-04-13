@@ -230,8 +230,6 @@ public class DefaultAppointmentService implements AppointmentService {
     public Future<List<AppointmentWithInfos>> getAppointmentsByIds(List<Long> appointmentsIds, String userId, List<AppointmentState> states) {
         Promise<List<AppointmentWithInfos>> promise = Promise.promise();
 
-        if (states.contains(AppointmentState.CANCELED)) states = Collections.singletonList(AppointmentState.CANCELED);
-
         appointmentRepository.getAppointments(userId, states, true, appointmentsIds)
             .onSuccess(appointmentWithInfosList -> {
                 if (appointmentWithInfosList.isEmpty()) {
@@ -386,7 +384,7 @@ public class DefaultAppointmentService implements AppointmentService {
     }
 
     @Override
-    public Future<String> buildICSFile(List<AppointmentWithInfos> appointments, Map<String, String> mapUserIdToDisplayName, String userId) {
+    public Future<String> buildICSFile(List<AppointmentWithInfos> appointments, Map<String, String> mapUserIdToDisplayName, String userId, EventMethod eventMethod) {
         try {
             List<EventICS> events = appointments.stream()
                 .map((appointment) -> {
@@ -403,7 +401,6 @@ public class DefaultAppointmentService implements AppointmentService {
                 })
                 .collect(Collectors.toList());
 
-            EventMethod eventMethod = appointments.get(0).getState() == AppointmentState.CANCELED ? EventMethod.CANCEL : EventMethod.PUBLISH;
             CalendarICS calendarICS = new CalendarICS(events, eventMethod);
             return Future.succeededFuture(calendarICS.toICS());
         }

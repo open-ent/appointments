@@ -107,7 +107,15 @@
   "appointments.cannot.cancel.request.tooltip": "Annulation indisponible moins de {{hours}}h avant le rendez-vous",
   "appointments.cancel.appointment": "Annuler le rendez-vous",
 
-  "appointments.event.export": "Télécharger l'événement",
+  "appointments.event.export.one.button.title": "Télécharger l'événement",
+  "appointments.event.export.all.button.title": "Télécharger les rendez-vous",
+  "appointments.event.export.all.modal.title": "Télécharger vos rendez-vous",
+  "appointments.event.export.all.modal.body1": "Le téléchargement générera <strong>deux fichiers .ics</strong> que vous pourrez importer manuellement dans l'agenda de votre choix.",
+  "appointments.event.export.all.modal.body2": "Le premier annule tous les rendez-vous existants, le second recrée les rendez-vous actifs mis à jour.",
+  "appointments.event.export.all.modal.warning.title": "Important",
+  "appointments.event.export.all.modal.warning.body": "Importez les fichiers dans l'ordre indiqué pour que votre agenda soit correctement mis à jour.\n   • <i>1-export_global_annulation.ics</i>\n   • <i>2-export_global_création.ics</i>",
+  "appointments.event.export.all.modal.end": "Toute modification ultérieure nécessitera un nouvel export.",
+  "appointments.event.export.all.only.cancelled.body": "Le téléchargement générera <strong>un fichier .ics</strong> contenant tous vos rendez-vous annulés que vous pourrez importer manuellement dans l’agenda de votre choix.",
 
   "appointments.appointments": "Rendez-vous",
   "appointments.cancel": "Annuler",
@@ -129,7 +137,7 @@
   "appointments.accepted": "Accepté",
   "appointments.refused": "Refusé",
   "appointments.refuse": "Refuser",
-  "appointments.cancelled": "Annulé",
+  "appointments.download": "Télécharger",
   "appointments.videoconference": "Visioconférence",
 
   "appointments.monday": "Lundi",
@@ -171,6 +179,7 @@
   "appointments.toast.restore.grid.success": "Votre grille est à nouveau ouverte.",
   "appointments.toast.restore.grid.error": "Une erreur est survenue lors de la remise en service de la grille. Veuillez réessayer.",
   "appointments.toast.event.export.success": "Votre événement a bien été téléchargé.",
+  "appointments.toast.event.export.all.success": "Vos événements ont bien été téléchargés.",
   "appointments.toast.event.export.error": "Une erreur est survenue lors de la génération de l'export. Veuillez réessayer.",
 
   "group.HeadTeacher": "Professeurs principaux de {0}",

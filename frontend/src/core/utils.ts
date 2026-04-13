@@ -4,3 +4,6 @@ import { DAY } from "./dayjs.const";
 export const isToday = (day: Dayjs): boolean => {
   return dayjs().isSame(day, DAY);
 };
+
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));

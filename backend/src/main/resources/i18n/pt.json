@@ -107,7 +107,14 @@
   "appointments.cannot.cancel.request.tooltip": "Cancelamento indisponível menos de {{hours}} horas antes do compromisso",
   "appointments.cancel.appointment": "Cancelar o compromisso",
 
-  "appointments.event.export": "Baixar evento",
+  "appointments.event.export.one.button.title": "Baixar evento",
+  "appointments.event.export.all.button.title": "Baixar consultas",
+  "appointments.event.export.all.modal.body1": "O download irá gerar <strong>dois ficheiros .ics</strong> que poderá importar manualmente para o calendário da sua escolha.",
+  "appointments.event.export.all.modal.body2": "O primeiro cancela todos os compromissos existentes, o segundo recria os compromissos ativos atualizados.",
+  "appointments.event.export.all.modal.warning.title": "Importante",
+  "appointments.event.export.all.modal.warning.body": "Importe os ficheiros na ordem indicada para que o seu calendário seja atualizado corretamente.\n   • <i>1-export_global_cancelamento.ics</i>\n   • <i>2-export_global_criação.ics</i>",
+  "appointments.event.export.all.modal.end": "Qualquer modificação posterior exigirá uma nova exportação.",
+  "appointments.event.export.all.only.cancelled.body": "O download irá gerar <strong>um ficheiro .ics</strong> contendo todos os seus compromissos cancelados que poderá importar manualmente para o calendário da sua escolha.",
 
   "appointments.appointments": "Compromissos",
   "appointments.cancel": "Cancelar",
@@ -129,7 +136,7 @@
   "appointments.accepted": "Aceito",
   "appointments.refused": "Recusado",
   "appointments.refuse": "Recusar",
-  "appointments.cancelled": "Cancelado",
+  "appointments.download": "Baixar",
   "appointments.videoconference": "Videoconferência",
 
   "appointments.monday": "Segunda-feira",
@@ -170,7 +177,7 @@
   "appointments.toast.suspend.grid.error": "Ocorreu um erro ao suspender a grade. Tente novamente.",
   "appointments.toast.restore.grid.success": "Sua grade foi reativada com sucesso.",
   "appointments.toast.restore.grid.error": "Ocorreu um erro ao reativar a grade. Tente novamente.",
-  "appointments.toast.event.export.success": "O seu evento foi transferido com sucesso.",
+  "appointments.toast.event.export.all.success": "Os seus eventos foram transferidos com sucesso.",
   "appointments.toast.event.export.error": "Ocorreu um erro ao gerar a exportação. Por favor, tente novamente.",
 
   "group.HeadTeacher": "Professores principais de {0}",

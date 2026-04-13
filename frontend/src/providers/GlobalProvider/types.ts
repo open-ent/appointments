@@ -1,7 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
 import { Structure } from "~/hooks/types";
-import { MODAL_TYPE } from "./enum";
+import { ModalType } from "./enum";
 
 export interface GlobalProviderContextProps {
   isMultiStructure: boolean;
@@ -13,7 +13,7 @@ export interface GlobalProviderContextProps {
   getStructureNameById: (id: string) => string;
   displayModals: DisplayModalsState;
   setDisplayModals: Dispatch<SetStateAction<DisplayModalsState>>;
-  handleDisplayModal: (modalType: MODAL_TYPE) => void;
+  toggleModal: (modalType: ModalType) => void;
   minHoursBeforeCancellation: number;
   isConnectedUserADML: boolean;
 }
@@ -24,6 +24,7 @@ export interface GlobalProviderProps {
 }
 
 export interface DisplayModalsState {
-  [MODAL_TYPE.GRID]: boolean;
-  [MODAL_TYPE.CONFIRMATION]: boolean;
+  [ModalType.GRID]: boolean;
+  [ModalType.CONFIRMATION]: boolean;
+  [ModalType.EXPORT]: boolean;
 }

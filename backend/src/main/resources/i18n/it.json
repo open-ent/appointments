@@ -107,7 +107,14 @@
   "appointments.cannot.cancel.request.tooltip": "Annullamento non disponibile meno di {{hours}} ore prima dell'appuntamento",
   "appointments.cancel.appointment": "Annullare l'appuntamento",
 
-  "appointments.event.export": "Scarica evento",
+  "appointments.event.export.one.button.title": "Scarica evento",
+  "appointments.event.export.all.button.title": "Scarica gli appuntamenti",
+  "appointments.event.export.all.modal.body1": "Il download genererà <strong>due file .ics</strong> che potrete importare manualmente nel calendario di vostra scelta.",
+  "appointments.event.export.all.modal.body2": "Il primo annulla tutti gli appuntamenti esistenti, il secondo ricrea gli appuntamenti attivi aggiornati.",
+  "appointments.event.export.all.modal.warning.title": "Importante",
+  "appointments.event.export.all.modal.warning.body": "Importate i file nell'ordine indicato affinché il vostro calendario venga aggiornato correttamente.\n   • <i>1-export_global_annullamento.ics</i>\n   • <i>2-export_global_creazione.ics</i>",
+  "appointments.event.export.all.modal.end": "Qualsiasi modifica successiva richiederà una nuova esportazione.",
+  "appointments.event.export.all.only.cancelled.body": "Il download genererà <strong>un file .ics</strong> contenente tutti i vostri appuntamenti annullati che potrete importare manualmente nel calendario di vostra scelta.",
 
   "appointments.appointments": "Appuntamenti",
   "appointments.cancel": "Annulla",
@@ -129,7 +136,7 @@
   "appointments.accepted": "Accettato",
   "appointments.refused": "Rifiutato",
   "appointments.refuse": "Rifiuta",
-  "appointments.cancelled": "Annullato",
+  "appointments.download": "Scarica",
   "appointments.videoconference": "Videoconferenza",
 
   "appointments.monday": "Lunedì",
@@ -170,7 +177,7 @@
   "appointments.toast.suspend.grid.error": "Si è verificato un errore durante la sospensione della griglia. Riprova.",
   "appointments.toast.restore.grid.success": "La tua griglia è nuovamente aperta.",
   "appointments.toast.restore.grid.error": "Si è verificato un errore durante la riattivazione della griglia. Riprova.",
-  "appointments.toast.event.export.success": "Il tuo evento è stato scaricato con successo.",
+  "appointments.toast.event.export.all.success": "I tuoi eventi sono stati scaricati con successo.",
   "appointments.toast.event.export.error": "Si è verificato un errore durante la generazione dell'esportazione. Riprova.",
 
   "group.HeadTeacher": "Insegnanti principali di {0}",

@@ -82,9 +82,13 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
         <Box sx={leftTextWrapperStyle}>
           <Box sx={firstLineBoxStyle}>
             <EllipsisWithTooltip
-              typographyProps={{
-                variant: "body1",
-                color: "text.primary",
+              slotProps={{
+                text: {
+                  sx: {
+                    variant: "body1",
+                    color: "text.primary",
+                  },
+                },
               }}
             >
               {grid.name}

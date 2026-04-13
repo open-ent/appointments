@@ -1,6 +1,7 @@
 package fr.openent.appointments.controller;
 
 import fr.openent.appointments.enums.AppointmentState;
+import fr.openent.appointments.enums.ICS.EventMethod;
 import fr.openent.appointments.helper.DateHelper;
 import fr.openent.appointments.helper.LogHelper;
 import fr.openent.appointments.helper.ParamHelper;
@@ -43,8 +44,7 @@ import java.util.stream.Stream;
 import static fr.openent.appointments.core.constants.Constants.*;
 import static fr.openent.appointments.core.constants.Fields.*;
 import static fr.openent.appointments.enums.Events.CREATE;
-import static fr.openent.appointments.helper.ICSHelper.buildFilename;
-import static fr.openent.appointments.helper.ICSHelper.buildFinalFilename;
+import static fr.openent.appointments.helper.ICSHelper.*;
 
 public class AppointmentController extends ControllerHelper {
     private final EventStore eventStore;
@@ -337,6 +337,7 @@ public class AppointmentController extends ControllerHelper {
         RequestUtils.bodyToJson(request, body -> {
             List<AppointmentState> states = body.getJsonArray(STATES).stream()
                     .map(state -> AppointmentState.getAppointmentState(state.toString()))
+                    .filter(state -> authorizedStates.contains(state))
                     .collect(Collectors.toList());
             List<Long> appointmentIds = body.getJsonArray(APPOINTMENTS_IDS).stream()
                 .map(id -> ((Number) id).longValue())
@@ -356,7 +357,7 @@ public class AppointmentController extends ControllerHelper {
                         return Future.failedFuture(errorMessage);
                     }
 
-                    String filename = buildFilename(appointments);
+                    String filename = buildFilename(appointments, states);
                     composeInfo.put(APPOINTMENTS, appointments);
                     composeInfo.put(FILENAME, filename);
 
@@ -368,17 +369,17 @@ public class AppointmentController extends ControllerHelper {
                     return communicationService.getUsernamesFromUserIds(usersIds);
                 })
                 .compose(neoUsers -> {
-                    UserInfos user = (UserInfos) composeInfo.getValue(CAMEL_USER_INFO);
                     List<AppointmentWithInfos> appointments = composeInfo.getJsonArray(APPOINTMENTS).getList();
                     Map<String, String> mapUserIdToDisplayName = neoUsers.stream()
                             .collect(Collectors.toMap(NeoUser::getId, NeoUser::getDisplayName));
-                    return appointmentService.buildICSFile(appointments, mapUserIdToDisplayName, user.getUserId());
+                    UserInfos user = (UserInfos) composeInfo.getValue(CAMEL_USER_INFO);
+                    EventMethod eventMethod = states.contains(AppointmentState.CANCELED) ? EventMethod.CANCEL : EventMethod.PUBLISH;
+                    return appointmentService.buildICSFile(appointments, mapUserIdToDisplayName, user.getUserId(), eventMethod);
                 })
                 .onSuccess(fileICS -> {
-                    String finalFilename = buildFinalFilename(composeInfo.getString(FILENAME), states);
                     request.response()
                         .putHeader("Content-Type", "text/calendar; charset=utf-8")
-                        .putHeader("Content-Disposition", "attachment; filename=" + finalFilename)
+                        .putHeader("Content-Disposition", "attachment; filename=" + composeInfo.getString(FILENAME))
                         .end(fileICS);
                 })
                 .onFailure(err -> {

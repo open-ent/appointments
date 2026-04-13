@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { APPOINTMENTS } from "~/core/constants";
 import { useStructure } from "~/hooks/useStructure";
 import { useActions } from "~/services/queries";
-import { MODAL_TYPE } from "./enum";
+import { ModalType } from "./enum";
 import {
   DisplayModalsState,
   GlobalProviderContextProps,
@@ -54,7 +54,7 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({
   const { user } = useUser();
   const isConnectedUserADML = !!user?.functions?.ADMIN_LOCAL;
 
-  const handleDisplayModal = (modalType: MODAL_TYPE) => {
+  const toggleModal = (modalType: ModalType) => {
     setDisplayModals((prevState) => ({
       ...prevState,
       [modalType]: !prevState[modalType],
@@ -82,7 +82,7 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({
       getStructureNameById,
       displayModals,
       setDisplayModals,
-      handleDisplayModal,
+      toggleModal,
       minHoursBeforeCancellation,
       isConnectedUserADML,
     }),

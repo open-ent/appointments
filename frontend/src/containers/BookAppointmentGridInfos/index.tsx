@@ -121,7 +121,14 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
             <Box sx={itemStyle}>
               <PlaceIcon />
               <EllipsisWithTooltip
-                typographyProps={{ variant: "body2", color: "text.primary" }}
+                slotProps={{
+                  text: {
+                    sx: {
+                      variant: "body2",
+                      color: "text.primary",
+                    },
+                  },
+                }}
               >
                 {place}
               </EllipsisWithTooltip>
@@ -138,7 +145,9 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
                     underline="hover"
                     target="_blank"
                   >
-                    <EllipsisWithTooltip typographyProps={{ variant: "body2" }}>
+                    <EllipsisWithTooltip
+                      slotProps={{ text: { sx: { variant: "body2" } } }}
+                    >
                       {doc.name}
                     </EllipsisWithTooltip>
                   </Link>
@@ -151,11 +160,15 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
               <ChatIcon />
               <Stack maxWidth="90%">
                 <EllipsisWithTooltip
-                  typographyProps={{
-                    variant: "body2",
-                    color: "text.primary",
-                    fontStyle: "italic",
-                    whiteSpace: "pre-line",
+                  slotProps={{
+                    text: {
+                      sx: {
+                        variant: "body2",
+                        color: "text.primary",
+                        fontStyle: "italic",
+                        whiteSpace: "pre-line",
+                      },
+                    },
                   }}
                 >
                   {publicComment}

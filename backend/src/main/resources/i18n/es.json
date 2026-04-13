@@ -32,8 +32,6 @@
   "appointments.confirm.modal.option.preserve.them": "Conservarlas",
   "appointments.confirm.modal.option.cancel.them": "Cancelarlas",
 
-  "appointments.event.export": "Descargar evento",
-
   "appointments.grid.required": "Los campos marcados con * son obligatorios",
   "appointments.grid.name": "Nombre del horario",
   "appointments.grid.color": "Color de visualización",
@@ -109,6 +107,15 @@
   "appointments.cannot.cancel.request.tooltip": "Cancelación no disponible menos de {{hours}}h antes de la cita",
   "appointments.cancel.appointment": "Cancelar la cita",
 
+  "appointments.event.export.one.button.title": "Descargar evento",
+  "appointments.event.export.all.button.title": "Descargar citas",
+  "appointments.event.export.all.modal.body1": "La descarga generará <strong>dos archivos .ics</strong> que podrá importar manualmente en el calendario de su elección.",
+  "appointments.event.export.all.modal.body2": "El primero cancela todas las citas existentes, el segundo recrea las citas activas actualizadas.",
+  "appointments.event.export.all.modal.warning.title": "Importante",
+  "appointments.event.export.all.modal.warning.body": "Importe los archivos en el orden indicado para que su calendario se actualice correctamente.\n   • <i>1-export_global_cancelación.ics</i>\n   • <i>2-export_global_creación.ics</i>",
+  "appointments.event.export.all.modal.end": "Cualquier modificación posterior requerirá una nueva exportación.",
+  "appointments.event.export.all.only.cancelled.body": "La descarga generará <strong>un archivo .ics</strong> con todas sus citas canceladas que podrá importar manualmente en el calendario de su elección.",
+  
   "appointments.appointments": "Citas",
   "appointments.cancel": "Cancelar",
   "appointments.canceled": "Cancelado",
@@ -129,7 +136,7 @@
   "appointments.accepted": "Aceptado",
   "appointments.refused": "Rechazado",
   "appointments.refuse": "Rechazar",
-  "appointments.cancelled": "Cancelado",
+  "appointments.download": "Descargar",
   "appointments.videoconference": "Videoconferencia",
 
   "appointments.monday": "Lunes",
@@ -171,6 +178,7 @@
   "appointments.toast.restore.grid.success": "Tu horario está nuevamente disponible.",
   "appointments.toast.restore.grid.error": "Se produjo un error al reactivar el horario. Por favor, inténtalo de nuevo.",
   "appointments.toast.event.export.success": "Tu evento ha sido descargado correctamente.",
+  "appointments.toast.event.export.all.success": "Tus eventos han sido descargados correctamente.",
   "appointments.toast.event.export.error": "Se produjo un error al generar la exportación. Por favor, inténtalo de nuevo.",
 
   "group.HeadTeacher": "Profesores principales de {0}",
