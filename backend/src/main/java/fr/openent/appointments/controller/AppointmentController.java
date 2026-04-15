@@ -182,12 +182,13 @@ public class AppointmentController extends ControllerHelper {
 
     private void handleAppointmentAction(final HttpServerRequest request,
                                          String action,
+                                         String comment,
                                          AppointmentActionHandler actionHandler) {
         Long appointmentId = ParamHelper.getParam(CAMEL_APPOINTMENT_ID, request, Long.class, true, action + "Appointment");
         if(request.response().ended()) return;
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
-            .compose(user -> actionHandler.handle(request, appointmentId, user))
+            .compose(user -> actionHandler.handle(request, appointmentId, user, comment))
             .onSuccess(appointment -> renderJson(request, appointment.toJson()))
             .onFailure(err -> {
                 String errorMessage = "Failed to " + action + " appointment";
@@ -197,7 +198,7 @@ public class AppointmentController extends ControllerHelper {
     }
 
     interface AppointmentActionHandler {
-        Future<Appointment> handle(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
+        Future<Appointment> handle(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, String comment);
     }
 
     @Put("appointments/:appointmentId/accept")
@@ -206,7 +207,7 @@ public class AppointmentController extends ControllerHelper {
     @SecuredAction(value="", type= ActionType.RESOURCE)
     @IgnoreCsrf
     public void acceptAppointment(final HttpServerRequest request) {
-        handleAppointmentAction(request, "accept", appointmentService::acceptAppointment);
+        handleAppointmentAction(request, "accept", null, appointmentService::acceptAppointment);
     }
 
     @Put("appointments/:appointmentId/reject")
@@ -215,7 +216,10 @@ public class AppointmentController extends ControllerHelper {
     @SecuredAction(value="", type= ActionType.RESOURCE)
     @IgnoreCsrf
     public void rejectAppointment(final HttpServerRequest request) {
-        handleAppointmentAction(request, "reject", appointmentService::rejectAppointment);
+        RequestUtils.bodyToJson(request, body -> {
+            String comment = body.getString(COMMENT, null);
+            handleAppointmentAction(request, "reject", comment, appointmentService::rejectAppointment);
+        });
     }
 
     @Put("appointments/:appointmentId/cancel")
@@ -224,7 +228,10 @@ public class AppointmentController extends ControllerHelper {
     @SecuredAction(value="", type= ActionType.RESOURCE)
     @IgnoreCsrf
     public void cancelAppointment(final HttpServerRequest request) {
-        handleAppointmentAction(request, "cancel", appointmentService::cancelAppointment);
+        RequestUtils.bodyToJson(request, body -> {
+            String comment = body.getString(COMMENT, null);
+            handleAppointmentAction(request, "cancel", comment, appointmentService::cancelAppointment);
+        });
     }
 
     @Get("appointments/dates")

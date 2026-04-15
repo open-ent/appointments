@@ -86,15 +86,20 @@
   "appointments.my.appointments.accepted.empty.state": "Vous n’avez aucun rendez-vous planifié. Utilisez l’onglet Trouver un rendez-vous pour en programmer un.",
   "appointments.my.appointments.rejected.or.canceled": "Rendez-vous annulés/refusés",
   "appointments.my.appointment.infos.modal.title": "Rendez-vous avec...",
+  "appointments.my.appointment.infos.modal.comment.title.canceled": "Motif de l'annulation",
+  "appointments.my.appointment.infos.modal.comment.title.reject": "Motif du refus",
   "appointments.my.appointment.infos.modal.video.call": "Rendez-vous en visioconférence :",
   "appointments.my.appointment.infos.modal.date": "Le {{date}}, de {{beginTime}} à {{endTime}}",
 
   "appointments.confirm.modal.reject.request.title": "Refuser la demande",
   "appointments.confirm.modal.reject.request.description": "Si vous confirmez, la demande de rendez-vous sera refusée et vous redeviendrez disponible sur le créneau concerné.",
+  "appointments.confirm.modal.reject.request.comment.description": "Vous pouvez, si vous le souhaitez, indiquer la raison du refus afin d'informer le demandeur.",
   "appointments.confirm.modal.cancel.request.title": "Annuler la demande",
   "appointments.confirm.modal.cancel.request.description": "Si vous confirmez, la demande de rendez-vous sera annulée et le créneau redeviendra disponible.",
+  "appointments.confirm.modal.cancel.request.comment.description": "Vous pouvez, si vous le souhaitez, indiquer la raison de l'annulation afin d'informer l'autre participant.",
   "appointments.confirm.modal.cancel.appointment.title": "Annuler le rendez-vous",
   "appointments.confirm.modal.cancel.appointment.description": "Si vous confirmez, le rendez-vous sera annulé et vous redeviendrez disponible sur le créneau concerné.",
+  "appointments.confirm.modal.cancel.appointment.comment.description": "Vous pouvez, si vous le souhaitez, indiquer la raison de l'annulation afin d'informer le propriétaire de la grille.",
 
   "appointments.last.appointment": "Dernier rdv : {{date}}",
   "appointments.max.number.files": "{{maxNumber}} fichiers max.",
@@ -139,6 +144,7 @@
   "appointments.refuse": "Refuser",
   "appointments.download": "Télécharger",
   "appointments.videoconference": "Visioconférence",
+  "appointments.comment.optionnal": "Commentaire (facultatif)",
 
   "appointments.monday": "Lundi",
   "appointments.tuesday": "Mardi",

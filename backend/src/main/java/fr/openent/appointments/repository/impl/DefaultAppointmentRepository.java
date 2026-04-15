@@ -149,7 +149,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
     }
 
     @Override
-    public Future<Optional<Appointment>> updateState(Long appointmentId, AppointmentState state){
+    public Future<Optional<Appointment>> updateState(Long appointmentId, AppointmentState state, String comment, String userId){
         Promise<Optional<Appointment>> promise = Promise.promise();
 
         if (appointmentId == null || state == null) {
@@ -157,9 +157,16 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
             return promise.future();
         }
 
-        String query = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ? WHERE id = ? RETURNING *";
+        String query = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ? ";
+        JsonArray params = new JsonArray().add(state.getValue());
 
-        JsonArray params = new JsonArray().add(state.getValue()).add(appointmentId);
+        if (comment != null && !comment.isEmpty()) {
+            query += ", " + COMMENT + " = ?, " + COMMENTATOR_ID + " = ? ";
+            params.add(comment).add(userId);
+        }
+
+        query += "WHERE id = ? RETURNING *;";
+        params.add(appointmentId);
 
         String errorMessage = String.format("[Appointemnts@DefaultAppointmentRepository::updateState] Failed to update state of appointment %d : ", appointmentId);
         sql.prepared(query, params, SqlResult.validUniqueResultHandler(IModelHelper.uniqueResultToIModel(promise, Appointment.class, errorMessage)));

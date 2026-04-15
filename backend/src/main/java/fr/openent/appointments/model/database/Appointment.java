@@ -14,6 +14,8 @@ public class Appointment implements IModel<Appointment> {
     private String requesterId;
     private AppointmentState state;
     private Boolean isVideoCall;
+    private String comment;
+    private String commentatorId;
 
     // Constructor
 
@@ -23,6 +25,8 @@ public class Appointment implements IModel<Appointment> {
         this.requesterId = appointment.getString(REQUESTER_ID, null);
         this.state = AppointmentState.getAppointmentState(appointment.getString(STATE, null));
         this.isVideoCall = appointment.getBoolean(IS_VIDEO_CALL, false);
+        this.comment = appointment.getString(COMMENT, null);
+        this.commentatorId = appointment.getString(COMMENTATOR_ID, null);
     }
 
     // Getter
@@ -45,6 +49,14 @@ public class Appointment implements IModel<Appointment> {
 
     public Boolean getIsVideoCall() {
         return isVideoCall;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getCommentatorId() {
+        return commentatorId;
     }
 
     // Setter
@@ -71,6 +83,16 @@ public class Appointment implements IModel<Appointment> {
 
     public Appointment setIsVideoCall(Boolean isVideoCall) {
         this.isVideoCall = isVideoCall;
+        return this;
+    }
+
+    public Appointment setComment(String comment) {
+        this.comment = comment;
+        return this;
+    }
+
+    public Appointment setCommentatorId(String commentatorId) {
+        this.commentatorId = commentatorId;
         return this;
     }
 

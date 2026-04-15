@@ -86,15 +86,20 @@
   "appointments.my.appointments.accepted.empty.state": "Sie haben keine geplanten Termine. Verwenden Sie den Tab 'Termin finden', um einen zu planen.",
   "appointments.my.appointments.rejected.or.canceled": "Abgesagte/abgelehnte Termine",
   "appointments.my.appointment.infos.modal.title": "Termin mit...",
+  "appointments.my.appointment.infos.modal.comment.title.canceled": "Grund der Stornierung",
+  "appointments.my.appointment.infos.modal.comment.title.reject": "Grund der Ablehnung",
   "appointments.my.appointment.infos.modal.video.call": "Videokonferenz-Termin:",
   "appointments.my.appointment.infos.modal.date": "Am {{date}}, von {{beginTime}} bis {{endTime}}",
 
   "appointments.confirm.modal.reject.request.title": "Anfrage ablehnen",
   "appointments.confirm.modal.reject.request.description": "Wenn Sie bestätigen, wird die Terminanfrage abgelehnt und Sie sind in dem betroffenen Zeitfenster wieder verfügbar.",
+  "appointments.confirm.modal.reject.request.comment.description": "Sie können, wenn Sie möchten, den Grund der Ablehnung angeben, um den Antragsteller zu informieren.",
   "appointments.confirm.modal.cancel.request.title": "Anfrage abbrechen",
   "appointments.confirm.modal.cancel.request.description": "Wenn Sie bestätigen, wird die Terminanfrage abgebrochen und das Zeitfenster wird wieder verfügbar.",
+  "appointments.confirm.modal.cancel.request.comment.description": "Sie können, wenn Sie möchten, den Grund der Stornierung angeben, um den anderen Teilnehmer zu informieren.",
   "appointments.confirm.modal.cancel.appointment.title": "Termin absagen",
   "appointments.confirm.modal.cancel.appointment.description": "Wenn Sie bestätigen, wird der Termin abgesagt und Sie sind in dem betroffenen Zeitfenster wieder verfügbar.",
+  "appointments.confirm.modal.cancel.appointment.comment.description": "Sie können, wenn Sie möchten, den Grund der Stornierung angeben, um den Inhaber des Zeitplans zu informieren.",
 
   "appointments.last.appointment": "Letzter Termin: {{date}}",
   "appointments.max.number.files": "Maximal {{maxNumber}} Dateien.",
@@ -138,6 +143,7 @@
   "appointments.refuse": "Ablehnen",
   "appointments.download": "Herunterladen",
   "appointments.videoconference": "Videokonferenz",
+  "appointments.comment.optionnal": "Kommentar (optional)",
 
   "appointments.monday": "Montag",
   "appointments.tuesday": "Dienstag",

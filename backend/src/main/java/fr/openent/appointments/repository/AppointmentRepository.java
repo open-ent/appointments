@@ -19,7 +19,7 @@ public interface AppointmentRepository {
 
     Future<Optional<AppointmentWithInfos>> get(Long appointmentId);
 
-    Future<Optional<Appointment>> updateState(Long appointmentId, AppointmentState state);
+    Future<Optional<Appointment>> updateState(Long appointmentId, AppointmentState state, String comment, String userId);
 
     Future<List<Appointment>> getAppointmentsByGridId(Long gridId, List<AppointmentState> states, Boolean ignorePast);
 }

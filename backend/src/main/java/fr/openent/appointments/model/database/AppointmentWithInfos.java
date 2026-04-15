@@ -18,6 +18,8 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
     private String requesterId;
     private AppointmentState state;
     private Boolean isVideoCall;
+    private String comment;
+    private String commentatorId;
     private LocalDateTime beginDate;
     private LocalDateTime endDate;
     private String ownerId;
@@ -40,6 +42,8 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
         this.place = appointmentWithInfos.getString(PLACE, null);
         this.publicComment = appointmentWithInfos.getString(PUBLIC_COMMENT, null);
         this.gridName = appointmentWithInfos.getString(GRID_NAME, null);
+        this.comment = appointmentWithInfos.getString(COMMENT, null);
+        this.commentatorId = appointmentWithInfos.getString(COMMENTATOR_ID, null);
 
         String stringDocumentsIds = appointmentWithInfos.getString(DOCUMENTS_IDS, "");
 
@@ -71,6 +75,14 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
 
     public Boolean getIsVideoCall() {
         return this.isVideoCall;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getCommentatorId() {
+        return commentatorId;
     }
 
     public LocalDateTime getBeginDate() {
@@ -129,6 +141,16 @@ public class AppointmentWithInfos implements IModel<AppointmentWithInfos> {
 
     public AppointmentWithInfos setIsVideoCall(Boolean isVideoCall) {
         this.isVideoCall = isVideoCall;
+        return this;
+    }
+
+    public AppointmentWithInfos setComment(String comment) {
+        this.comment = comment;
+        return this;
+    }
+
+    public AppointmentWithInfos setCommentatorId(String commentatorId) {
+        this.commentatorId = commentatorId;
         return this;
     }
 

@@ -86,15 +86,20 @@
   "appointments.my.appointments.accepted.empty.state": "Você não tem compromissos agendados. Use a aba Encontrar um compromisso para agendar um.",
   "appointments.my.appointments.rejected.or.canceled": "Compromissos cancelados/recusados",
   "appointments.my.appointment.infos.modal.title": "Compromisso com...",
+  "appointments.my.appointment.infos.modal.comment.title.canceled": "Motivo do cancelamento",
+  "appointments.my.appointment.infos.modal.comment.title.reject": "Motivo da rejeição",
   "appointments.my.appointment.infos.modal.video.call": "Compromisso por videoconferência:",
   "appointments.my.appointment.infos.modal.date": "Em {{date}}, das {{beginTime}} às {{endTime}}",
 
   "appointments.confirm.modal.reject.request.title": "Recusar a solicitação",
   "appointments.confirm.modal.reject.request.description": "Se confirmar, a solicitação de compromisso será recusada e você ficará disponível no horário afetado.",
+  "appointments.confirm.modal.reject.request.comment.description": "Pode, se desejar, indicar o motivo da rejeição para informar o solicitante.",
   "appointments.confirm.modal.cancel.request.title": "Cancelar a solicitação",
   "appointments.confirm.modal.cancel.request.description": "Se confirmar, a solicitação de compromisso será cancelada e o horário ficará disponível novamente.",
+  "appointments.confirm.modal.cancel.request.comment.description": "Pode, se desejar, indicar o motivo do cancelamento para informar o outro participante.",
   "appointments.confirm.modal.cancel.appointment.title": "Cancelar o compromisso",
   "appointments.confirm.modal.cancel.appointment.description": "Se confirmar, o compromisso será cancelado e você ficará disponível no horário afetado.",
+  "appointments.confirm.modal.cancel.appointment.comment.description": "Pode, se desejar, indicar o motivo do cancelamento para informar o proprietário da agenda.",
 
   "appointments.last.appointment": "Último compromisso: {{date}}",
   "appointments.max.number.files": "Máximo {{maxNumber}} arquivos.",
@@ -138,6 +143,7 @@
   "appointments.refuse": "Recusar",
   "appointments.download": "Baixar",
   "appointments.videoconference": "Videoconferência",
+  "appointments.comment.optionnal": "Comentário (opcional)",
 
   "appointments.monday": "Segunda-feira",
   "appointments.tuesday": "Terça-feira",

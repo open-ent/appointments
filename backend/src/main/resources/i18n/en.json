@@ -86,15 +86,20 @@
   "appointments.my.appointments.accepted.empty.state": "You have no scheduled appointments. Use the 'Find an appointment' tab to book one.",
   "appointments.my.appointments.rejected.or.canceled": "Canceled/Rejected appointments",
   "appointments.my.appointment.infos.modal.title": "Appointment with...",
+  "appointments.my.appointment.infos.modal.comment.title.canceled": "Reason for cancellation",
+  "appointments.my.appointment.infos.modal.comment.title.reject": "Reason for rejection",
   "appointments.my.appointment.infos.modal.video.call": "Videoconference appointment:",
   "appointments.my.appointment.infos.modal.date": "On {{date}}, from {{beginTime}} to {{endTime}}",
 
   "appointments.confirm.modal.reject.request.title": "Reject request",
   "appointments.confirm.modal.reject.request.description": "If you confirm, the appointment request will be rejected, and you will be available for the slot again.",
+  "appointments.confirm.modal.reject.request.comment.description": "You may, if you wish, indicate the reason for the rejection in order to inform the requester.",
   "appointments.confirm.modal.cancel.request.title": "Cancel request",
   "appointments.confirm.modal.cancel.request.description": "If you confirm, the appointment request will be canceled, and the slot will be available again.",
+  "appointments.confirm.modal.cancel.request.comment.description": "You may, if you wish, indicate the reason for the cancellation in order to inform the other participant.",
   "appointments.confirm.modal.cancel.appointment.title": "Cancel appointment",
   "appointments.confirm.modal.cancel.appointment.description": "If you confirm, the appointment will be canceled, and you will be available for the slot again.",
+  "appointments.confirm.modal.cancel.appointment.comment.description": "You may, if you wish, indicate the reason for the cancellation in order to inform the schedule owner.",
 
   "appointments.last.appointment": "Last appointment: {{date}}",
   "appointments.max.number.files": "{{maxNumber}} files max.",
@@ -138,6 +143,7 @@
   "appointments.refuse": "Refuse",
   "appointments.download": "Download",
   "appointments.videoconference": "Videoconference",
+  "appointments.comment.optionnal": "Comment (optional)",
 
   "appointments.monday": "Monday",
   "appointments.tuesday": "Tuesday",

@@ -7,6 +7,7 @@ public class Constants {
     public static final String CAMEL_AVAILABLE_GRIDS_IDS = "availableGridsIds";
     public static final String CAMEL_BEGIN_DATE = "beginDate";
     public static final String CAMEL_BEGIN_TIME = "beginTime";
+    public static final String CAMEL_COMMENTATOR_USER = "commentatorUser";
     public static final String CAMEL_DAILY_SLOTS = "dailySlots";
     public static final String CAMEL_DELETE_APPOINTMENTS = "deleteAppointments";
     public static final String CAMEL_DISPLAY_NAME = "displayName";

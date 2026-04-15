@@ -91,3 +91,29 @@ export const userInfosBoxStyle: SxProps = {
 export const greyIconStyle: SxProps<Theme> = (theme: Theme) => ({
   color: theme.palette.grey[700],
 });
+
+export const commentStyle: SxProps<Theme> = (theme: Theme) => ({
+  border: "1px solid",
+  borderColor: theme.palette.divider,
+  borderRadius: "0.5rem",
+  padding: "1.2rem",
+});
+
+export const chipStyle: SxProps = {
+  width: "auto",
+  fontSize: "1.3rem",
+  fontWeight: "400",
+  lineHeight: "1.8rem",
+  letterSpacing: "0.016rem",
+};
+
+export const avatarChipStyle: SxProps = {
+  minWidth: "2.4rem",
+  maxWidth: "2.4rem",
+  minHeight: "2.4rem",
+  maxHeight: "2.4rem",
+  borderRadius: "50%",
+  overflow: "hidden",
+  display: "flex",
+  objectFit: "cover",
+};

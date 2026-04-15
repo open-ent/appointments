@@ -97,27 +97,30 @@ public interface AppointmentService {
      * @param request The http request
      * @param appointmentId The appointment id
      * @param userInfos The user infos
+     * @param comment The comment of the user
      * @return The updated appointment
      */
-    Future<Appointment> acceptAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
+    Future<Appointment> acceptAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, String comment);
 
     /**
      * reject an appointment
      * @param request The http request
      * @param appointmentId The appointment id
      * @param userInfos The user infos
+     * @param comment The comment of the user
      * @return The updated appointment
      */
-    Future<Appointment> rejectAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
+    Future<Appointment> rejectAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, String comment);
 
     /**
      * Cancel an appointment
      * @param request The http request
      * @param appointmentId The appointment id
      * @param userInfos The user infos
+     * @param comment The comment of the user
      * @return The updated appointment
      */
-    Future<Appointment> cancelAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos);
+    Future<Appointment> cancelAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, String comment);
 
     /**
      * Build a ICS file from appointments

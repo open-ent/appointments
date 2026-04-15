@@ -3,12 +3,14 @@ import { FC, useMemo } from "react";
 import {
   Box,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   EllipsisWithTooltip,
   Link,
+  Stack,
   Tooltip,
   Typography,
 } from "@cgi-learning-hub/ui";
@@ -32,7 +34,10 @@ import { APPOINTMENT_STATE, CONFIRM_MODAL_TYPE } from "~/core/enums";
 import { useGlobal } from "~/providers/GlobalProvider";
 import { useMyAppointments } from "~/providers/MyAppointmentsProvider";
 import {
+  avatarChipStyle,
   bottomContainerStyle,
+  chipStyle,
+  commentStyle,
   dialogContentStyle,
   greyIconStyle,
   modalStyle,
@@ -102,9 +107,40 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 state={appointment.state}
                 isRequester={appointment.isRequester}
               />
-              <Typography variant="body1" color="text.primary">
-                {t(APPOINTMENT_STATE_VALUES[appointment.state].i18nKey)}
-              </Typography>
+              <Stack width="90%">
+                <Typography variant="body1" color="text.primary">
+                  {t(APPOINTMENT_STATE_VALUES[appointment.state].i18nKey)}
+                </Typography>
+                {appointment.comment && (
+                  <Stack sx={commentStyle}>
+                    <Typography
+                      fontSize="1.6rem"
+                      fontWeight="bold"
+                      color="text.primary"
+                    >
+                      {t(
+                        "appointments.my.appointment.infos.modal.comment.title.canceled",
+                      )}
+                    </Typography>
+                    <Typography fontSize="1.6rem" color="text.primary">
+                      {appointment.comment}
+                    </Typography>
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                      <Chip
+                        avatar={
+                          <Box sx={avatarChipStyle}>
+                            <UserPicture
+                              picture={appointment.commentatorPicture}
+                            />
+                          </Box>
+                        }
+                        label={appointment.commentatorDisplayName}
+                        sx={chipStyle}
+                      />
+                    </Box>
+                  </Stack>
+                )}
+              </Stack>
             </Box>
             {appointment.isVideoCall && (
               <Box sx={rowInfoStyle}>
@@ -224,6 +260,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                     handleOpenDialogModal(
                       CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
                       appointment.id,
+                      true,
                     )
                   }
                 >
@@ -251,6 +288,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                     handleOpenDialogModal(
                       CONFIRM_MODAL_TYPE.REJECT_REQUEST,
                       appointment.id,
+                      true,
                     )
                   }
                 >
@@ -287,6 +325,7 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                     handleOpenDialogModal(
                       CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT,
                       appointment.id,
+                      true,
                     )
                   }
                 >

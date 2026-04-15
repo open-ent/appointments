@@ -5,6 +5,7 @@ export interface DialogModalProps {
   type: CONFIRM_MODAL_TYPE;
   isSubmitButtonLoading?: boolean;
   showOptions?: boolean;
+  askForComment?: boolean;
   handleCancel: () => void;
-  handleConfirm: (option?: string) => void;
+  handleConfirm: (option?: string, comment?: string) => void;
 }

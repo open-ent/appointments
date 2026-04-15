@@ -86,15 +86,20 @@
   "appointments.my.appointments.accepted.empty.state": "No tienes ninguna cita programada. Usa la pestaña 'Buscar una cita' para programar una.",
   "appointments.my.appointments.rejected.or.canceled": "Citas canceladas/rechazadas",
   "appointments.my.appointment.infos.modal.title": "Cita con...",
+  "appointments.my.appointment.infos.modal.comment.title.canceled": "Motivo de la cancelación",
+  "appointments.my.appointment.infos.modal.comment.title.reject": "Motivo del rechazo",
   "appointments.my.appointment.infos.modal.video.call": "Cita por videoconferencia:",
   "appointments.my.appointment.infos.modal.date": "El {{date}}, de {{beginTime}} a {{endTime}}",
 
   "appointments.confirm.modal.reject.request.title": "Rechazar la solicitud",
   "appointments.confirm.modal.reject.request.description": "Si confirmas, la solicitud de cita será rechazada y volverás a estar disponible en la franja horaria correspondiente.",
+  "appointments.confirm.modal.reject.request.comment.description": "Puede, si lo desea, indicar el motivo del rechazo para informar al solicitante.",
   "appointments.confirm.modal.cancel.request.title": "Cancelar la solicitud",
   "appointments.confirm.modal.cancel.request.description": "Si confirmas, la solicitud de cita será cancelada y la franja horaria volverá a estar disponible.",
+  "appointments.confirm.modal.cancel.request.comment.description": "Puede, si lo desea, indicar el motivo de la cancelación para informar al otro participante.",
   "appointments.confirm.modal.cancel.appointment.title": "Cancelar la cita",
   "appointments.confirm.modal.cancel.appointment.description": "Si confirmas, la cita será cancelada y volverás a estar disponible en la franja horaria correspondiente.",
+  "appointments.confirm.modal.cancel.appointment.comment.description": "Puede, si lo desea, indicar el motivo de la cancelación para informar al propietario de la agenda.",
 
   "appointments.last.appointment": "Última cita: {{date}}",
   "appointments.max.number.files": "{{maxNumber}} archivos máx.",
@@ -138,6 +143,7 @@
   "appointments.refuse": "Rechazar",
   "appointments.download": "Descargar",
   "appointments.videoconference": "Videoconferencia",
+  "appointments.comment.optionnal": "Comentario (opcional)",
 
   "appointments.monday": "Lunes",
   "appointments.tuesday": "Martes",

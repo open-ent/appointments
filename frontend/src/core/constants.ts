@@ -175,42 +175,52 @@ export const CONFIRM_MODAL_VALUES = {
   [CONFIRM_MODAL_TYPE.CANCEL_GRID_CREATION]: {
     titleKey: "appointments.create.grid.abandon.title",
     descriptionKey: "appointments.create.grid.abandon.message",
+    askCommentKey: "",
     questionKey: "",
     options: [],
   },
   [CONFIRM_MODAL_TYPE.CANCEL_GRID_EDIT]: {
     titleKey: "appointments.modify.grid.abandon.title",
     descriptionKey: "appointments.modify.grid.abandon.message",
+    askCommentKey: "",
     questionKey: "",
     options: [],
   },
   [CONFIRM_MODAL_TYPE.CONFIRM_GRID_EDIT]: {
     titleKey: "appointments.modify.grid.confirm.title",
     descriptionKey: "appointments.modify.grid.confirm.message",
+    askCommentKey: "",
     questionKey: "",
     options: [],
   },
   [CONFIRM_MODAL_TYPE.REJECT_REQUEST]: {
     titleKey: "appointments.confirm.modal.reject.request.title",
     descriptionKey: "appointments.confirm.modal.reject.request.description",
+    askCommentKey:
+      "appointments.confirm.modal.reject.request.comment.description",
     questionKey: "",
     options: [],
   },
   [CONFIRM_MODAL_TYPE.CANCEL_REQUEST]: {
     titleKey: "appointments.confirm.modal.cancel.request.title",
     descriptionKey: "appointments.confirm.modal.cancel.request.description",
+    askCommentKey:
+      "appointments.confirm.modal.cancel.request.comment.description",
     questionKey: "",
     options: [],
   },
   [CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT]: {
     titleKey: "appointments.confirm.modal.cancel.appointment.title",
     descriptionKey: "appointments.confirm.modal.cancel.appointment.description",
+    askCommentKey:
+      "appointments.confirm.modal.cancel.appointment.comment.description",
     questionKey: "",
     options: [],
   },
   [CONFIRM_MODAL_TYPE.DELETE_GRID]: {
     titleKey: "appointments.delete.grid.confirm.title",
     descriptionKey: "appointments.delete.grid.confirm.description",
+    askCommentKey: "",
     questionKey: "appointments.delete.grid.confirm.question",
     options: [
       "appointments.confirm.modal.option.preserve.them",
@@ -220,6 +230,7 @@ export const CONFIRM_MODAL_VALUES = {
   [CONFIRM_MODAL_TYPE.SUSPEND_GRID]: {
     titleKey: "appointments.suspend.grid.confirm.title",
     descriptionKey: "appointments.suspend.grid.confirm.description",
+    askCommentKey: "",
     questionKey: "appointments.suspend.grid.confirm.question",
     options: [
       "appointments.confirm.modal.option.preserve.them",
@@ -229,6 +240,7 @@ export const CONFIRM_MODAL_VALUES = {
   [CONFIRM_MODAL_TYPE.RESTORE_GRID]: {
     titleKey: "appointments.restore.grid.confirm.title",
     descriptionKey: "appointments.restore.grid.confirm.description",
+    askCommentKey: "",
     questionKey: "",
     options: [],
   },

@@ -40,6 +40,9 @@ export interface MyMinimalAppointmentResponse {
   endDate: string;
   isVideoCall: boolean;
   videoCallLink: string;
+  comment: string;
+  commentatorDisplayName: string;
+  commentatorPicture: string;
   state: APPOINTMENT_STATE;
   isRequester: boolean;
 }
@@ -53,6 +56,9 @@ export interface MyMinimalAppointment {
   endDate: Dayjs;
   isVideoCall: boolean;
   videoCallLink: string;
+  comment: string;
+  commentatorDisplayName: string;
+  commentatorPicture: string;
   state: APPOINTMENT_STATE;
   isRequester: boolean;
 }

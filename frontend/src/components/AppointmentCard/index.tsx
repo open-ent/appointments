@@ -102,7 +102,11 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
 
   const handleCancelRequestClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    handleOpenDialogModal(CONFIRM_MODAL_TYPE.CANCEL_REQUEST, appointment.id);
+    handleOpenDialogModal(
+      CONFIRM_MODAL_TYPE.CANCEL_REQUEST,
+      appointment.id,
+      true,
+    );
   };
 
   const handleAcceptClick = (event: React.MouseEvent) => {
@@ -112,7 +116,11 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({ appointment }) => {
 
   const handleRejectClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    handleOpenDialogModal(CONFIRM_MODAL_TYPE.REJECT_REQUEST, appointment.id);
+    handleOpenDialogModal(
+      CONFIRM_MODAL_TYPE.REJECT_REQUEST,
+      appointment.id,
+      true,
+    );
   };
 
   return (

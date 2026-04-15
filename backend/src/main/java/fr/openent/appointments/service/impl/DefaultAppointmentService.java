@@ -9,6 +9,7 @@ import fr.openent.appointments.model.database.Appointment;
 import fr.openent.appointments.model.database.AppointmentWithInfos;
 import fr.openent.appointments.model.database.NeoUser;
 import fr.openent.appointments.model.response.AppointmentResponse;
+import fr.openent.appointments.model.response.DocumentResponse;
 import fr.openent.appointments.model.response.ListAppointmentsResponse;
 import fr.openent.appointments.model.response.MinimalAppointment;
 import fr.openent.appointments.repository.AppointmentRepository;
@@ -27,8 +28,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fr.openent.appointments.core.constants.Constants.CAMEL_COMMENTATOR_USER;
 import static fr.openent.appointments.core.constants.Constants.CAMEL_NEO_USER;
-import static fr.openent.appointments.core.constants.Fields.STATE;
+import static fr.openent.appointments.core.constants.Fields.*;
 
 public class DefaultAppointmentService implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
@@ -168,23 +170,27 @@ public class DefaultAppointmentService implements AppointmentService {
         Boolean isRequester = appointment.getRequesterId().equals(userInfos.getUserId());
         String otherUserId = isRequester ? appointment.getOwnerId() : appointment.getRequesterId();
 
+        List<String> attendeesUserIds = Arrays.asList(otherUserId, appointment.getCommentatorId());
+
         JsonObject composeInfos = new JsonObject();
-        communicationRepository.getUserFromId(otherUserId, userInfos.getStructures())
-            .compose(user -> {
-                if (user.isPresent()) {
-                    NeoUser otherUser = user.get();
-                    composeInfos.put(CAMEL_NEO_USER, otherUser);
-                    return eventBusService.getDocumentResponseFromGrid(appointment.getOwnerId(), appointment.getDocumentsIds());
-                }
-                else {
-                    String errorMessage = "User not found";
+        communicationRepository.getUsersFromUsersIds(attendeesUserIds, userInfos.getStructures())
+            .compose(users -> {
+                if (users.isEmpty()) {
+                    String errorMessage = "Users not found";
                     LogHelper.logError(this, "buildAppointmentResponse", errorMessage, "");
                     return Future.failedFuture(errorMessage);
                 }
+
+                NeoUser otherUser = users.stream().filter(user -> user.getId().equals(otherUserId)).findFirst().orElse(null);
+                composeInfos.put(CAMEL_NEO_USER, otherUser);
+                NeoUser commentatorUser = users.stream().filter(user -> user.getId().equals(appointment.getCommentatorId())).findFirst().orElse(null);
+                composeInfos.put(CAMEL_COMMENTATOR_USER, commentatorUser);
+                return eventBusService.getDocumentResponseFromGrid(appointment.getOwnerId(), appointment.getDocumentsIds());
             })
             .onSuccess(documents -> {
                 NeoUser otherUser = (NeoUser) composeInfos.getValue(CAMEL_NEO_USER);
-                promise.complete(new AppointmentResponse(appointment, isRequester, otherUser, documents));
+                NeoUser commentatorUser = (NeoUser) composeInfos.getValue(CAMEL_COMMENTATOR_USER);
+                promise.complete(new AppointmentResponse(appointment, isRequester, otherUser, commentatorUser, documents));
             })
             .onFailure(err -> {
                 String errorMessage = "Failed to build appointment response";
@@ -301,7 +307,12 @@ public class DefaultAppointmentService implements AppointmentService {
         return LocalDateTime.now().plusHours(limitHoursBeforeCancelAppointment).isBefore(beginDate);
     }
 
-    private Future<Appointment> handleAppointmentStateChange(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, AppointmentState targetState, String functionName) {
+    private Future<Appointment> handleAppointmentStateChange(final HttpServerRequest request,
+                                                             Long appointmentId,
+                                                             UserInfos userInfos,
+                                                             String comment,
+                                                             AppointmentState targetState,
+                                                             String functionName) {
         Promise<Appointment> promise = Promise.promise();
 
         JsonObject composeInfos = new JsonObject();
@@ -337,7 +348,7 @@ public class DefaultAppointmentService implements AppointmentService {
                     LogHelper.logError(this, functionName, errorMessage, "");
                     return Future.failedFuture(errorMessage);
                 }
-                return appointmentRepository.updateState(appointmentId, targetState);
+                return appointmentRepository.updateState(appointmentId, targetState, comment, userInfos.getUserId());
             })
             .onSuccess(updatedAppointment -> {
                 if (updatedAppointment.isPresent()) {
@@ -369,18 +380,18 @@ public class DefaultAppointmentService implements AppointmentService {
     }
 
     @Override
-    public Future<Appointment> acceptAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos) {
-        return handleAppointmentStateChange(request, appointmentId, userInfos, AppointmentState.ACCEPTED, "acceptAppointment");
+    public Future<Appointment> acceptAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, String comment) {
+        return handleAppointmentStateChange(request, appointmentId, userInfos, comment, AppointmentState.ACCEPTED, "acceptAppointment");
     }
 
     @Override
-    public Future<Appointment> rejectAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos) {
-        return handleAppointmentStateChange(request, appointmentId, userInfos, AppointmentState.REFUSED, "rejectAppointment");
+    public Future<Appointment> rejectAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, String comment) {
+        return handleAppointmentStateChange(request, appointmentId, userInfos, comment, AppointmentState.REFUSED, "rejectAppointment");
     }
 
     @Override
-    public Future<Appointment> cancelAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos) {
-        return handleAppointmentStateChange(request, appointmentId, userInfos, AppointmentState.CANCELED, "cancelAppointment");
+    public Future<Appointment> cancelAppointment(final HttpServerRequest request, Long appointmentId, UserInfos userInfos, String comment) {
+        return handleAppointmentStateChange(request, appointmentId, userInfos, comment, AppointmentState.CANCELED, "cancelAppointment");
     }
 
     @Override

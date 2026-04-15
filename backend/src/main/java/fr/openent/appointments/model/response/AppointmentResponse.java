@@ -10,6 +10,9 @@ import io.vertx.core.json.JsonObject;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static fr.openent.appointments.core.constants.Fields.COMMENT;
+import static fr.openent.appointments.core.constants.Fields.COMMENTATOR_ID;
+
 public class AppointmentResponse implements IModel<AppointmentResponse> {
     private Long id;
     private String displayName;
@@ -24,8 +27,12 @@ public class AppointmentResponse implements IModel<AppointmentResponse> {
     private String place;
     private List<DocumentResponse> documents;
     private String publicComment;
+    private String comment;
+    private String commentatorDisplayName;
+    private String commentatorPicture;
 
-    public AppointmentResponse(AppointmentWithInfos appointment, Boolean isRequester, NeoUser neoUser, List<DocumentResponse> documents) {
+    public AppointmentResponse(AppointmentWithInfos appointment, Boolean isRequester, NeoUser neoUser,
+                               NeoUser commentatorUser, List<DocumentResponse> documents) {
         this.id = appointment.getId();
         this.displayName = neoUser.getDisplayName();
         this.functions = neoUser.getFunctions();
@@ -39,6 +46,9 @@ public class AppointmentResponse implements IModel<AppointmentResponse> {
         this.place = appointment.getPlace();
         this.documents = documents;
         this.publicComment = appointment.getPublicComment();
+        this.comment = appointment.getComment();
+        this.commentatorDisplayName = commentatorUser != null ? commentatorUser.getDisplayName() : null;
+        this.commentatorPicture = commentatorUser != null ? commentatorUser.getPicture() : null;
     }
 
     // Getters
@@ -93,6 +103,18 @@ public class AppointmentResponse implements IModel<AppointmentResponse> {
 
     public String getPublicComment() {
         return publicComment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getCommentatorDisplayName() {
+        return commentatorDisplayName;
+    }
+
+    public String getCommentatorPicture() {
+        return commentatorPicture;
     }
 
     // Setters
@@ -159,6 +181,21 @@ public class AppointmentResponse implements IModel<AppointmentResponse> {
 
     public AppointmentResponse setPublicComment(String publicComment) {
         this.publicComment = publicComment;
+        return this;
+    }
+
+    public AppointmentResponse setComment(String comment) {
+        this.comment = comment;
+        return this;
+    }
+
+    public AppointmentResponse setCommentatorDisplayName(String commentatorDisplayName) {
+        this.commentatorDisplayName = commentatorDisplayName;
+        return this;
+    }
+
+    public AppointmentResponse setCommentatorPicture(String commentatorPicture) {
+        this.commentatorPicture = commentatorPicture;
         return this;
     }
 

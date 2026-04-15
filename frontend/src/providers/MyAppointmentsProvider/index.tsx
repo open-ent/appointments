@@ -157,9 +157,9 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   );
 
   const handleRejectAppointment = useCallback(
-    async (id: number) => {
+    async (id: number, comment?: string) => {
       try {
-        await rejectAppointment(id).unwrap();
+        await rejectAppointment({ id, comment }).unwrap();
         toast.success(t(TOAST_VALUES.REJECT_APPOINTMENT.i18nKeySuccess));
       } catch (error) {
         console.error(error);
@@ -170,9 +170,9 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   );
 
   const handleCancelAppointment = useCallback(
-    async (id: number, toastType: TOAST_TYPE) => {
+    async (id: number, toastType: TOAST_TYPE, comment?: string) => {
       try {
-        await cancelAppointment(id).unwrap();
+        await cancelAppointment({ id, comment }).unwrap();
         toast.success(t(TOAST_VALUES[toastType].i18nKeySuccess));
       } catch (error) {
         console.error(error);
@@ -196,16 +196,16 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   }, []);
 
   const handleConfirm = useCallback(
-    (confirmType: CONFIRM_MODAL_TYPE, id: number) => {
+    (confirmType: CONFIRM_MODAL_TYPE, id: number, comment?: string) => {
       switch (confirmType) {
         case CONFIRM_MODAL_TYPE.REJECT_REQUEST:
-          handleRejectAppointment(id);
+          handleRejectAppointment(id, comment);
           break;
         case CONFIRM_MODAL_TYPE.CANCEL_REQUEST:
-          handleCancelAppointment(id, TOAST_TYPE.CANCEL_REQUEST);
+          handleCancelAppointment(id, TOAST_TYPE.CANCEL_REQUEST, comment);
           break;
         case CONFIRM_MODAL_TYPE.CANCEL_APPOINTMENT:
-          handleCancelAppointment(id, TOAST_TYPE.CANCEL_APPOINTMENT);
+          handleCancelAppointment(id, TOAST_TYPE.CANCEL_APPOINTMENT, comment);
           break;
       }
       handleCloseDialogModal();
@@ -220,12 +220,14 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   );
 
   const handleOpenDialogModal = useCallback(
-    (confirmType: CONFIRM_MODAL_TYPE, id: number) => {
+    (confirmType: CONFIRM_MODAL_TYPE, id: number, askForComment = false) => {
       const dialogModalProps: DialogModalProps = {
         open: true,
         type: confirmType,
+        askForComment: askForComment,
         handleCancel: handleCloseDialogModal,
-        handleConfirm: () => handleConfirm(confirmType, id),
+        handleConfirm: (_option?: string, comment?: string) =>
+          handleConfirm(confirmType, id, comment),
       };
 
       setDialogModalProps(dialogModalProps);

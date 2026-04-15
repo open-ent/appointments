@@ -25,7 +25,11 @@ export interface MyAppointmentsProviderContextProps {
   handleAcceptAppointment: (id: number) => void;
   handleClickAppointment: (id: number) => void;
   handleCloseAppointmentModal: () => void;
-  handleOpenDialogModal: (confirmType: CONFIRM_MODAL_TYPE, id: number) => void;
+  handleOpenDialogModal: (
+    confirmType: CONFIRM_MODAL_TYPE,
+    id: number,
+    askForComment?: boolean,
+  ) => void;
   handleCloseDialogModal: () => void;
   handleExportSingleAppointment: (appointment: Appointment) => void;
   handleExportMultipleAppointments: (

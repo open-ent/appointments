@@ -78,20 +78,26 @@ export const appointmentApi = emptySplitApi.injectEndpoints({
       }),
       invalidatesTags: ["MyAppointments"],
     }),
-    rejectAppointment: builder.mutation<void, number>({
-      query: (appointmentId) => ({
-        url: `/appointments/${appointmentId}/reject`,
-        method: "PUT",
-      }),
-      invalidatesTags: ["MyAppointments", "AppointmentsLinkedToGrid"],
-    }),
-    cancelAppointment: builder.mutation<void, number>({
-      query: (appointmentId) => ({
-        url: `/appointments/${appointmentId}/cancel`,
-        method: "PUT",
-      }),
-      invalidatesTags: ["MyAppointments", "AppointmentsLinkedToGrid"],
-    }),
+    rejectAppointment: builder.mutation<void, { id: number; comment?: string }>(
+      {
+        query: ({ id: appointmentId, comment }) => ({
+          url: `/appointments/${appointmentId}/reject`,
+          body: { comment },
+          method: "PUT",
+        }),
+        invalidatesTags: ["MyAppointments", "AppointmentsLinkedToGrid"],
+      },
+    ),
+    cancelAppointment: builder.mutation<void, { id: number; comment?: string }>(
+      {
+        query: ({ id: appointmentId, comment }) => ({
+          url: `/appointments/${appointmentId}/cancel`,
+          body: { comment },
+          method: "PUT",
+        }),
+        invalidatesTags: ["MyAppointments", "AppointmentsLinkedToGrid"],
+      },
+    ),
     exportAppointmentsEvent: builder.mutation<
       { text: string; filename: string },
       { appointmentsIds: number[]; states: APPOINTMENT_STATE[] }

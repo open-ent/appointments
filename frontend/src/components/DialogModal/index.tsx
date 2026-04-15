@@ -10,6 +10,7 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  TextField,
   Typography,
 } from "@cgi-learning-hub/ui";
 
@@ -24,17 +25,21 @@ export const DialogModal: FC<DialogModalProps> = ({
   type,
   isSubmitButtonLoading = false,
   showOptions = true,
+  askForComment = false,
   handleCancel,
   handleConfirm,
 }) => {
   const { t } = useTranslation(APPOINTMENTS);
   const title = t(CONFIRM_MODAL_VALUES[type].titleKey);
+  const commentDescription = t(CONFIRM_MODAL_VALUES[type].askCommentKey);
   const question = t(CONFIRM_MODAL_VALUES[type].questionKey);
   const options = CONFIRM_MODAL_VALUES[type].options.map((option) => t(option));
 
   const [selectedOption, setSelectedOption] = useState<string | null>(
     options[0],
   );
+  const [comment, setComment] = useState<string>("");
+
   const handleOptionChange = (option: string) => {
     setSelectedOption(option);
   };
@@ -84,6 +89,22 @@ export const DialogModal: FC<DialogModalProps> = ({
               </FormControl>
             </>
           )}
+
+          {askForComment && (
+            <Stack gap={1} mt={1}>
+              <Typography>{commentDescription}</Typography>
+              <TextField
+                fullWidth
+                multiline
+                rows={4}
+                placeholder={t("appointments.comment.optionnal")}
+                value={comment}
+                onChange={(e) => {
+                  setComment(e.target.value);
+                }}
+              />
+            </Stack>
+          )}
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -95,7 +116,7 @@ export const DialogModal: FC<DialogModalProps> = ({
           {t("appointments.cancel")}
         </Button>
         <Button
-          onClick={() => handleConfirm(selectedOption || undefined)}
+          onClick={() => handleConfirm(selectedOption || undefined, comment)}
           variant="contained"
           loading={isSubmitButtonLoading}
         >
