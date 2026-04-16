@@ -144,6 +144,8 @@
   "appointments.download": "Herunterladen",
   "appointments.videoconference": "Videokonferenz",
   "appointments.comment.optionnal": "Kommentar (optional)",
+  "appointments.hours": "Stunden",
+  "appointments.minutes": "Minuten",
 
   "appointments.monday": "Montag",
   "appointments.tuesday": "Dienstag",
@@ -163,6 +165,8 @@
   "appointments.error.field.required": "Dieses Feld ist erforderlich.",
   "appointments.error.one.slot.required": "Bitte fügen Sie mindestens ein Zeitfenster hinzu.",
   "appointments.error.invalid.slot": "Bitte geben Sie die Zeiten an.",
+  "appointments.error.slot.duration.outrange": "Bitte wählen Sie eine Zeitfensterdauer zwischen 5 Minuten und 4 Stunden",
+  "appointments.error.slot.duration.value": "Bitte verwenden Sie ein Vielfaches von 5 für die Anzahl der Minuten des Zeitfensters (0, 5, 10, 15, ...)",
 
   "appointments.toast.create.grid.success": "Ihr Verfügbarkeitsraster wurde erfolgreich erstellt.",
   "appointments.toast.create.grid.error": "Beim Erstellen des Rasters ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",

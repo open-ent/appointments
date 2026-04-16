@@ -1,5 +1,6 @@
 import { isTimeInRange } from "~/components/DailySlot/utils";
 import { MAX_STRING_LENGTH } from "~/core/constants";
+import { SLOT_DURATION_OUTRANGE_ERROR, SLOT_DURATION_VALUE_ERROR } from "~/core/i18nKeys";
 import { Slot } from "~/core/types";
 
 export const handleConflictingSlot = (
@@ -37,3 +38,9 @@ export const formatString = (value: string) => {
     .trimStart() // Remove spaces at the beginning and end
     .slice(0, MAX_STRING_LENGTH); // Limit to 250 characters
 };
+
+export const getMinuteDurationErrorValue = (value: number, durations: { hours: number, minutes: number }): string => {
+ if (value == 0 && durations.hours == 0 || durations.hours == 4 && value > 0) return SLOT_DURATION_OUTRANGE_ERROR;
+ if (value%5 != 0) return SLOT_DURATION_VALUE_ERROR;
+ return "";
+}

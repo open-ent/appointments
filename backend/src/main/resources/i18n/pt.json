@@ -144,6 +144,8 @@
   "appointments.download": "Baixar",
   "appointments.videoconference": "Videoconferência",
   "appointments.comment.optionnal": "Comentário (opcional)",
+  "appointments.hours": "horas",
+  "appointments.minutes": "minutos",
 
   "appointments.monday": "Segunda-feira",
   "appointments.tuesday": "Terça-feira",
@@ -163,6 +165,8 @@
   "appointments.error.field.required": "Este campo é obrigatório.",
   "appointments.error.one.slot.required": "Adicione pelo menos uma faixa de horário.",
   "appointments.error.invalid.slot": "Informe os horários.",
+  "appointments.error.slot.duration.outrange": "Por favor, selecione uma duração de intervalo entre 5 minutos e 4 horas",
+  "appointments.error.slot.duration.value": "Por favor, utilize um múltiplo de 5 para o número de minutos do intervalo (0, 5, 10, 15, ...)",
 
   "appointments.toast.create.grid.success": "Sua grade de disponibilidade foi criada com sucesso.",
   "appointments.toast.create.grid.error": "Ocorreu um erro ao criar a grade. Tente novamente.",

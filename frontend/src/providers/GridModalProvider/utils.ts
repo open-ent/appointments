@@ -1,5 +1,5 @@
 import { PERIODICITY_VALUES } from "~/core/constants";
-import { DAY, DURATION, PERIODICITY } from "~/core/enums";
+import { DAY, PERIODICITY } from "~/core/enums";
 import { INVALID_SLOT_ERROR } from "~/core/i18nKeys";
 import { WeekSlotsModel } from "~/core/types";
 import { Structure, useBlurGridInputsReturnType } from "~/hooks/types";
@@ -36,7 +36,10 @@ export const initialGridModalInputs = (
     start: undefined,
     end: undefined,
   },
-  duration: DURATION.FIVE_MINUTES,
+  duration: {
+    hours: 0,
+    minutes: 5,
+  },
   periodicity: PERIODICITY.WEEKLY,
   weekSlots: initialWeekSlots,
   documents: [],
@@ -48,16 +51,16 @@ export const initialErrorInputs: InputsErrors = {
   videoCallLink: "",
   validityPeriod: "",
   public: "",
+  duration: {
+    hours: "",
+    minutes: "",
+  },
   weekSlots: "",
   slots: {
     ids: [],
     error: INVALID_SLOT_ERROR,
   },
 };
-
-export const durationOptions: DURATION[] = Object.values(
-  DURATION,
-) as DURATION[];
 
 export const periodicityOptions: PERIODICITY[] = Object.values(
   PERIODICITY,
@@ -74,7 +77,7 @@ export const gridInputsToCreateGridPayload = (
     beginDate: inputs.validityPeriod.start?.format("YYYY-MM-DD") || "",
     endDate: inputs.validityPeriod.end?.format("YYYY-MM-DD") || "",
     structureId: inputs.structure.id,
-    duration: inputs.duration,
+    duration: inputs.duration.hours + ":" + inputs.duration.minutes,
     periodicity: PERIODICITY_VALUES[inputs.periodicity].numberOfWeeks,
     targetPublicListId: inputs.public.length
       ? inputs.public.map((item) => item.groupId)
@@ -118,7 +121,7 @@ export const gridInputsToEditGridPayload = (
     place: inputs.location,
     documentsIds: files.map((file) => file.workspaceId),
     publicComment: inputs.publicComment,
-    duration: inputs.duration,
+    duration: inputs.duration.hours + ":" + inputs.duration.minutes,
     dailySlots: Object.entries(inputs.weekSlots).reduce(
       (acc, [day, slots]) => {
         return [
@@ -148,6 +151,7 @@ export const newErrorInputs = (
   public: blurGridModalInputs.newPublicError,
   videoCallLink: blurGridModalInputs.newVideoCallLinkError,
   validityPeriod: blurGridModalInputs.newValidityPeriodError,
+  duration: blurGridModalInputs.newDurationError,
   weekSlots: blurGridModalInputs.newWeekSlotsError,
   slots: blurGridModalInputs.newSlotsError,
 });

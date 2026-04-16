@@ -39,7 +39,6 @@ import {
 } from "./types";
 import { useFiles } from "./useFiles";
 import {
-  durationOptions,
   gridInputsToCreateGridPayload,
   gridInputsToEditGridPayload,
   initialErrorInputs,
@@ -238,6 +237,10 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       public: blurGridModalInputs.newPublicError,
       videoCallLink: blurGridModalInputs.newVideoCallLinkError,
       validityPeriod: "",
+      duration: {
+        hours: "",
+        minutes: "",
+      },
       weekSlots: "",
       slots: {
         ids: [],
@@ -356,7 +359,6 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       setErrorInputs,
       structureOptions: structures,
       publicOptions: groups ?? [],
-      durationOptions,
       periodicityOptions,
       updateGridModalInputs,
       blurGridModalInputs,

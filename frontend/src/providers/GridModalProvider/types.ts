@@ -4,7 +4,7 @@ import { Dayjs } from "dayjs";
 
 import { CustomFile } from "@cgi-learning-hub/ui";
 import { HexaColor } from "~/components/ColorPicker/types";
-import { CONFIRM_MODAL_TYPE, DURATION, PERIODICITY } from "~/core/enums";
+import { CONFIRM_MODAL_TYPE, PERIODICITY } from "~/core/enums";
 import { WeekSlotsModel } from "~/core/types";
 import {
   Structure,
@@ -23,7 +23,6 @@ export interface GridModalProviderContextProps {
   setErrorInputs: Dispatch<SetStateAction<InputsErrors>>;
   structureOptions: Structure[];
   publicOptions: Public[];
-  durationOptions: DURATION[];
   periodicityOptions: PERIODICITY[];
   updateGridModalInputs: useUpdateGridInputsReturnType;
   blurGridModalInputs: useBlurGridInputsReturnType;
@@ -73,7 +72,10 @@ export interface GridModalInputs {
     start: Dayjs | undefined;
     end: Dayjs | undefined;
   };
-  duration: DURATION;
+  duration: {
+    hours: number;
+    minutes: number;
+  }
   periodicity: PERIODICITY;
   weekSlots: WeekSlotsModel;
   documents: Document[];
@@ -85,6 +87,10 @@ export interface InputsErrors {
   public: string;
   videoCallLink: string;
   validityPeriod: string;
+  duration: {
+    hours: string;
+    minutes: string;
+  }
   weekSlots: string;
   slots: {
     ids: number[];

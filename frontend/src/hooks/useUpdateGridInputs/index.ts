@@ -12,11 +12,12 @@ import { v4 as uuidv4 } from "uuid";
 
 import { HexaColor } from "~/components/ColorPicker/types";
 import { MAX_STRING_LENGTH } from "~/core/constants";
-import { DAY, DURATION, PERIODICITY } from "~/core/enums";
+import { DAY, PERIODICITY } from "~/core/enums";
 import {
   FIELD_REQUIRED_ERROR,
   INVALID_SLOT_ERROR,
   SAME_GRID_ALREADY_EXISTS_ERROR,
+  SLOT_DURATION_VALUE_ERROR,
 } from "~/core/i18nKeys";
 import { Time } from "~/core/models/Time";
 import { Slot } from "~/core/types";
@@ -30,7 +31,7 @@ import {
 } from "~/providers/GridModalProvider/utils";
 import { Public } from "~/services/api/CommunicationService/types";
 import { Structure, useUpdateGridInputsType } from "../types";
-import { formatString, handleConflictingSlot } from "./utils";
+import { formatString, getMinuteDurationErrorValue, handleConflictingSlot } from "./utils";
 
 export const useUpdateGridInputs: useUpdateGridInputsType = (
   inputs: GridModalInputs,
@@ -135,12 +136,30 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
     if (startDate && endDate) updateErrorInputs("validityPeriod", "");
   };
 
-  const handleSlotDurationChange = (
-    _: MouseEvent<HTMLElement>,
-    value: DURATION,
-  ) => {
-    updateInputField("duration", value);
+  const handleSlotHoursDurationChange = (value: number | null) => {
+    if (value == null) return;
+    updateInputField("duration", { hours: value, minutes: inputs.duration.minutes });
     updateInputField("weekSlots", initialWeekSlots);
+    setErrorInputs((prevInputs) => ({
+      ...prevInputs,
+      duration: {
+        hours: value == 0 && inputs.duration.minutes == 0 ? SLOT_DURATION_VALUE_ERROR : "",
+        minutes: prevInputs.duration.minutes,
+      },
+    }));
+  };
+
+  const handleSlotMinutesDurationChange = (value: number | null) => {
+    if (value == null) return;
+    updateInputField("duration", { hours: inputs.duration.hours, minutes: value });
+    updateInputField("weekSlots", initialWeekSlots);
+    setErrorInputs((prevInputs) => ({
+      ...prevInputs,
+      duration: {
+        hours: prevInputs.duration.hours,
+        minutes: getMinuteDurationErrorValue(value, inputs.duration),
+      },
+    }));
   };
 
   const handlePeriodicityChange = (
@@ -234,7 +253,8 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
     handlePublicCommentChange,
     handleStartDateChange,
     handleEndDateChange,
-    handleSlotDurationChange,
+    handleSlotHoursDurationChange,
+    handleSlotMinutesDurationChange,
     handlePeriodicityChange,
     handleAddSlot,
     handleDeleteSlot,

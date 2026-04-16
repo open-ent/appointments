@@ -144,6 +144,8 @@
   "appointments.download": "Descargar",
   "appointments.videoconference": "Videoconferencia",
   "appointments.comment.optionnal": "Comentario (opcional)",
+  "appointments.hours": "horas",
+  "appointments.minutes": "minutos",
 
   "appointments.monday": "Lunes",
   "appointments.tuesday": "Martes",
@@ -163,6 +165,8 @@
   "appointments.error.field.required": "Este campo es obligatorio.",
   "appointments.error.one.slot.required": "Por favor, añade al menos un horario.",
   "appointments.error.invalid.slot": "Por favor, introduce los horarios.",
+  "appointments.error.slot.duration.outrange": "Por favor, seleccione una duración de franja horaria entre 5 minutos y 4 horas",
+  "appointments.error.slot.duration.value": "Por favor, utilice un múltiplo de 5 para el número de minutos de la franja horaria (0, 5, 10, 15, ...)",
 
   "appointments.toast.create.grid.success": "Tu horario de disponibilidad se ha creado con éxito.",
   "appointments.toast.create.grid.error": "Se produjo un error al crear el horario. Por favor, inténtalo de nuevo.",

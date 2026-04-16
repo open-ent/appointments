@@ -39,7 +39,10 @@ export const transformResponseToCompleteGridResponse = (
       start: dayjs(response.beginDate),
       end: dayjs(response.endDate),
     },
-    duration: response.duration,
+    duration: {
+      hours: parseInt(response.duration.substring(0, response.duration.indexOf(":"))),
+      minutes: parseInt(response.duration.substring(response.duration.indexOf(":") + 1)),
+    },
     periodicity: response.periodicity,
     weekSlots: response.dailySlots.reduce(
       (acc, dailySlot) => {

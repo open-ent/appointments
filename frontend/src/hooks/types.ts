@@ -4,7 +4,7 @@ import { SelectChangeEvent } from "@cgi-learning-hub/ui";
 import { Dayjs } from "dayjs";
 
 import { HexaColor } from "~/components/ColorPicker/types";
-import { DAY, DURATION, PERIODICITY } from "~/core/enums";
+import { DAY, PERIODICITY } from "~/core/enums";
 import { Slot } from "~/core/types";
 import {
   GridModalInputs,
@@ -23,10 +23,8 @@ export interface useUpdateGridInputsReturnType {
   handlePublicCommentChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleStartDateChange: (date: Dayjs | null) => void;
   handleEndDateChange: (date: Dayjs | null) => void;
-  handleSlotDurationChange: (
-    _: MouseEvent<HTMLElement>,
-    value: DURATION,
-  ) => void;
+  handleSlotHoursDurationChange: (value: number | null) => void,
+  handleSlotMinutesDurationChange: (value: number | null) => void,
   handlePeriodicityChange: (
     _: MouseEvent<HTMLElement>,
     value: PERIODICITY,
@@ -55,6 +53,7 @@ export interface useBlurGridInputsReturnType {
   newLocationError: string;
   newVideoCallLinkError: string;
   newValidityPeriodError: string;
+  newDurationError: { hours: string; minutes: string };
   newWeekSlotsError: string;
   newSlotsError: { ids: number[]; error: string };
   newPublicError: string;

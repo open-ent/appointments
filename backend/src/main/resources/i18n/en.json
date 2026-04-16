@@ -144,6 +144,8 @@
   "appointments.download": "Download",
   "appointments.videoconference": "Videoconference",
   "appointments.comment.optionnal": "Comment (optional)",
+  "appointments.hours": "hours",
+  "appointments.minutes": "minutes",
 
   "appointments.monday": "Monday",
   "appointments.tuesday": "Tuesday",
@@ -163,6 +165,8 @@
   "appointments.error.field.required": "This field is required.",
   "appointments.error.one.slot.required": "Please add at least one time slot.",
   "appointments.error.invalid.slot": "Please enter the time slots.",
+  "appointments.error.slot.duration.outrange": "Please select a slot duration between 5 minutes and 4 hours",
+  "appointments.error.slot.duration.value": "Please use a multiple of 5 for the number of minutes of the slot (0, 5, 10, 15, ...)",
 
   "appointments.toast.create.grid.success": "Your availability grid has been successfully created.",
   "appointments.toast.create.grid.error": "An error occurred while creating the grid. Please try again.",

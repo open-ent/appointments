@@ -144,6 +144,8 @@
   "appointments.download": "Scarica",
   "appointments.videoconference": "Videoconferenza",
   "appointments.comment.optionnal": "Commento (facoltativo)",
+  "appointments.hours": "ore",
+  "appointments.minutes": "minuti",
 
   "appointments.monday": "Lunedì",
   "appointments.tuesday": "Martedì",
@@ -163,6 +165,8 @@
   "appointments.error.field.required": "Questo campo è obbligatorio.",
   "appointments.error.one.slot.required": "Aggiungi almeno una fascia oraria.",
   "appointments.error.invalid.slot": "Inserisci gli orari.",
+  "appointments.error.slot.duration.outrange": "Selezionare una durata dello slot compresa tra 5 minuti e 4 ore",
+  "appointments.error.slot.duration.value": "Utilizzare un multiplo di 5 per il numero di minuti dello slot (0, 5, 10, 15, ...)",
 
   "appointments.toast.create.grid.success": "La tua griglia di disponibilità è stata creata correttamente.",
   "appointments.toast.create.grid.error": "Si è verificato un errore durante la creazione della griglia. Riprova.",

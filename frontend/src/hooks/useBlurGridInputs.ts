@@ -5,11 +5,13 @@ import {
   INVALID_SLOT_ERROR,
   ONE_SLOT_REQUIRED_ERROR,
   SAME_GRID_ALREADY_EXISTS_ERROR,
+  SLOT_DURATION_VALUE_ERROR,
 } from "~/core/i18nKeys";
 import {
   GridModalInputs,
   InputsErrors,
 } from "~/providers/GridModalProvider/types";
+import { getMinuteDurationErrorValue } from "./useUpdateGridInputs/utils";
 
 export const useBlurGridInputs = (
   inputs: GridModalInputs,
@@ -42,6 +44,11 @@ export const useBlurGridInputs = (
     inputs.validityPeriod.start && inputs.validityPeriod.end
       ? ""
       : FIELD_REQUIRED_ERROR;
+
+  const newDurationError = {
+    hours: inputs.duration.hours == 0 && inputs.duration.minutes == 0 ? SLOT_DURATION_VALUE_ERROR : "",
+    minutes: getMinuteDurationErrorValue(inputs.duration.minutes, inputs.duration),
+  }
 
   const newWeekSlotsError = Object.values(inputs.weekSlots).every(
     (slots) => slots.length === 0,
@@ -83,6 +90,7 @@ export const useBlurGridInputs = (
     newLocationError,
     newVideoCallLinkError,
     newValidityPeriodError,
+    newDurationError,
     newWeekSlotsError,
     newSlotsError,
     newPublicError,

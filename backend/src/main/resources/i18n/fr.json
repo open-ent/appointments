@@ -145,6 +145,8 @@
   "appointments.download": "Télécharger",
   "appointments.videoconference": "Visioconférence",
   "appointments.comment.optionnal": "Commentaire (facultatif)",
+  "appointments.hours": "heures",
+  "appointments.minutes": "minutes",
 
   "appointments.monday": "Lundi",
   "appointments.tuesday": "Mardi",
@@ -164,6 +166,8 @@
   "appointments.error.field.required": "Ce champ est obligatoire.",
   "appointments.error.one.slot.required": "Veuillez ajouter au moins une plage horaire.",
   "appointments.error.invalid.slot": "Veuillez renseigner les horaires.",
+  "appointments.error.slot.duration.outrange": "Veuillez sélectionner une durée de créneau comprise entre 5 minutes et 4 heures",
+  "appointments.error.slot.duration.value": "Veuillez utiliser un multiple de 5 pour le nombre de minutes du créneau (0, 5, 10, 15, ...)",
 
   "appointments.toast.create.grid.success": "Votre grille de disponibilités a bien été créée.",
   "appointments.toast.create.grid.error": "Une erreur est survenue lors de la création de la grille. Veuillez réessayer.",
