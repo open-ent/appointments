@@ -23,8 +23,8 @@ export interface useUpdateGridInputsReturnType {
   handlePublicCommentChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleStartDateChange: (date: Dayjs | null) => void;
   handleEndDateChange: (date: Dayjs | null) => void;
-  handleSlotHoursDurationChange: (value: number | null) => void,
-  handleSlotMinutesDurationChange: (value: number | null) => void,
+  handleSlotHoursDurationChange: (value: number | null) => void;
+  handleSlotMinutesDurationChange: (value: number | null) => void;
   handlePeriodicityChange: (
     _: MouseEvent<HTMLElement>,
     value: PERIODICITY,
@@ -34,7 +34,7 @@ export interface useUpdateGridInputsReturnType {
   handleSlotChange: (
     day: DAY,
     slot: Slot,
-    value: string,
+    value: Dayjs,
     type: "begin" | "end",
   ) => void;
 }

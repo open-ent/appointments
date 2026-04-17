@@ -77,7 +77,10 @@ export const gridInputsToCreateGridPayload = (
     beginDate: inputs.validityPeriod.start?.format("YYYY-MM-DD") || "",
     endDate: inputs.validityPeriod.end?.format("YYYY-MM-DD") || "",
     structureId: inputs.structure.id,
-    duration: inputs.duration.hours + ":" + inputs.duration.minutes,
+    duration:
+      inputs.duration.hours.toString().padStart(2, "0") +
+      ":" +
+      inputs.duration.minutes.toString().padStart(2, "0"),
     periodicity: PERIODICITY_VALUES[inputs.periodicity].numberOfWeeks,
     targetPublicListId: inputs.public.length
       ? inputs.public.map((item) => item.groupId)
@@ -121,7 +124,10 @@ export const gridInputsToEditGridPayload = (
     place: inputs.location,
     documentsIds: files.map((file) => file.workspaceId),
     publicComment: inputs.publicComment,
-    duration: inputs.duration.hours + ":" + inputs.duration.minutes,
+    duration:
+      inputs.duration.hours.toString().padStart(2, "0") +
+      ":" +
+      inputs.duration.minutes.toString().padStart(2, "0"),
     dailySlots: Object.entries(inputs.weekSlots).reduce(
       (acc, [day, slots]) => {
         return [

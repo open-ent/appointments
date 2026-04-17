@@ -31,7 +31,11 @@ import {
 } from "~/providers/GridModalProvider/utils";
 import { Public } from "~/services/api/CommunicationService/types";
 import { Structure, useUpdateGridInputsType } from "../types";
-import { formatString, getMinuteDurationErrorValue, handleConflictingSlot } from "./utils";
+import {
+  formatString,
+  getMinuteDurationErrorValue,
+  handleConflictingSlot,
+} from "./utils";
 
 export const useUpdateGridInputs: useUpdateGridInputsType = (
   inputs: GridModalInputs,
@@ -138,12 +142,18 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
 
   const handleSlotHoursDurationChange = (value: number | null) => {
     if (value == null) return;
-    updateInputField("duration", { hours: value, minutes: inputs.duration.minutes });
+    updateInputField("duration", {
+      hours: value,
+      minutes: inputs.duration.minutes,
+    });
     updateInputField("weekSlots", initialWeekSlots);
     setErrorInputs((prevInputs) => ({
       ...prevInputs,
       duration: {
-        hours: value == 0 && inputs.duration.minutes == 0 ? SLOT_DURATION_VALUE_ERROR : "",
+        hours:
+          value == 0 && inputs.duration.minutes == 0
+            ? SLOT_DURATION_VALUE_ERROR
+            : "",
         minutes: prevInputs.duration.minutes,
       },
     }));
@@ -151,7 +161,10 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
 
   const handleSlotMinutesDurationChange = (value: number | null) => {
     if (value == null) return;
-    updateInputField("duration", { hours: inputs.duration.hours, minutes: value });
+    updateInputField("duration", {
+      hours: inputs.duration.hours,
+      minutes: value,
+    });
     updateInputField("weekSlots", initialWeekSlots);
     setErrorInputs((prevInputs) => ({
       ...prevInputs,
@@ -217,13 +230,12 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
   const handleSlotChange = (
     day: DAY,
     slot: Slot,
-    value: string,
+    value: Dayjs,
     type: "begin" | "end",
   ) => {
-    const [hour, minute] = value.split(":");
     const updatedSlot = {
       ...slot,
-      [type]: new Time({ hour: parseInt(hour), minute: parseInt(minute) }),
+      [type]: new Time({ hour: value.hour(), minute: value.minute() }),
     };
     updateInputField("weekSlots", {
       ...inputs.weekSlots,

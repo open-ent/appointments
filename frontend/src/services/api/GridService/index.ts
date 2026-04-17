@@ -13,6 +13,7 @@ import {
 } from "./types";
 import {
   transformResponseToCompleteGridResponse,
+  transformResponseToGridInfosResponse,
   transformResponseToMyGridsResponse,
 } from "./utils";
 
@@ -55,6 +56,7 @@ export const gridApi = emptySplitApi.injectEndpoints({
     }),
     getMinimalGridInfosById: builder.query<GridInfos, number>({
       query: (gridId) => `/grids/${gridId}/minimal/infos`,
+      transformResponse: transformResponseToGridInfosResponse,
       providesTags: ["Availability"],
     }),
     getTimeSlotsByGridIdAndDate: builder.query<TimeSlots, GetTimeSlotsPayload>({

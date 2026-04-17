@@ -46,9 +46,15 @@ export const useBlurGridInputs = (
       : FIELD_REQUIRED_ERROR;
 
   const newDurationError = {
-    hours: inputs.duration.hours == 0 && inputs.duration.minutes == 0 ? SLOT_DURATION_VALUE_ERROR : "",
-    minutes: getMinuteDurationErrorValue(inputs.duration.minutes, inputs.duration),
-  }
+    hours:
+      inputs.duration.hours == 0 && inputs.duration.minutes == 0
+        ? SLOT_DURATION_VALUE_ERROR
+        : "",
+    minutes: getMinuteDurationErrorValue(
+      inputs.duration.minutes,
+      inputs.duration,
+    ),
+  };
 
   const newWeekSlotsError = Object.values(inputs.weekSlots).every(
     (slots) => slots.length === 0,

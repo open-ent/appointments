@@ -1,14 +1,14 @@
-import { NumberField as BaseNumberField } from '@base-ui/react/number-field';
-import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from '@mui/material/InputAdornment';
-import InputLabel from '@mui/material/InputLabel';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { FC, useId } from 'react';
-import { INumberFieldProps } from './types';
+import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
+import IconButton from "@mui/material/IconButton";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { FC, useId } from "react";
+import { INumberFieldProps } from "./types";
 
 /**
  * This component is a placeholder for FormControl to correctly set the shrink label state on SSR.
@@ -17,14 +17,14 @@ import { INumberFieldProps } from './types';
 function SSRInitialFilled(_: BaseNumberField.Root.Props) {
   return null;
 }
-SSRInitialFilled.muiName = 'Input';
+SSRInitialFilled.muiName = "Input";
 
 export const NumberField: FC<INumberFieldProps> = ({
   id: idProp,
   label,
-  help = '',
+  help = "",
   error,
-  size = 'small',
+  size = "small",
   slotProps = {},
   ...other
 }) => {
@@ -64,19 +64,19 @@ export const NumberField: FC<INumberFieldProps> = ({
             onFocus={props.onFocus}
             slotProps={{
               input: props,
-              ...slotProps.input?.root
+              ...slotProps.input?.root,
             }}
             endAdornment={
               <InputAdornment
                 position="end"
                 sx={{
-                  flexDirection: 'column',
-                  maxHeight: 'unset',
-                  alignSelf: 'stretch',
-                  borderLeft: '1px solid',
-                  borderColor: 'divider',
+                  flexDirection: "column",
+                  maxHeight: "unset",
+                  alignSelf: "stretch",
+                  borderLeft: "1px solid",
+                  borderColor: "divider",
                   ml: 0,
-                  '& button': {
+                  "& button": {
                     py: 0,
                     flex: 1,
                     borderRadius: 0.5,
@@ -89,7 +89,7 @@ export const NumberField: FC<INumberFieldProps> = ({
                 >
                   <KeyboardArrowUpIcon
                     fontSize={size}
-                    sx={{ transform: 'translateY(2px)' }}
+                    sx={{ transform: "translateY(2px)" }}
                   />
                 </BaseNumberField.Increment>
 
@@ -98,7 +98,7 @@ export const NumberField: FC<INumberFieldProps> = ({
                 >
                   <KeyboardArrowDownIcon
                     fontSize={size}
-                    sx={{ transform: 'translateY(-2px)' }}
+                    sx={{ transform: "translateY(-2px)" }}
                   />
                 </BaseNumberField.Decrement>
               </InputAdornment>
@@ -107,7 +107,14 @@ export const NumberField: FC<INumberFieldProps> = ({
           />
         )}
       />
-      {help && <FormHelperText sx={{ ml: 0, '&:empty': { mt: 0 } }} {...slotProps.help}>{help}</FormHelperText>}
+      {help && (
+        <FormHelperText
+          sx={{ ml: 0, "&:empty": { mt: 0 } }}
+          {...slotProps.help}
+        >
+          {help}
+        </FormHelperText>
+      )}
     </BaseNumberField.Root>
   );
-}
+};

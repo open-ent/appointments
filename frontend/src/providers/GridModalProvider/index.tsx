@@ -187,6 +187,11 @@ export const GridModalProvider: FC<GridModalProviderProps> = ({ children }) => {
       return;
     }
 
+    if (newErrors.duration.hours || newErrors.duration.minutes) {
+      toast.error(t("appointments.toast.edit.duration.error"));
+      return;
+    }
+
     if (modalType === GRID_MODAL_TYPE.EDIT) {
       setConfirmModalType(CONFIRM_MODAL_TYPE.CONFIRM_GRID_EDIT);
       setIsDialogOpen(true);

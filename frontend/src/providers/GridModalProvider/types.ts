@@ -59,6 +59,11 @@ export interface GridModalProviderProps {
   children: ReactNode;
 }
 
+export interface IDurationProps {
+  hours: number;
+  minutes: number;
+}
+
 export interface GridModalInputs {
   name: string;
   color: HexaColor;
@@ -72,10 +77,7 @@ export interface GridModalInputs {
     start: Dayjs | undefined;
     end: Dayjs | undefined;
   };
-  duration: {
-    hours: number;
-    minutes: number;
-  }
+  duration: IDurationProps;
   periodicity: PERIODICITY;
   weekSlots: WeekSlotsModel;
   documents: Document[];
@@ -90,7 +92,7 @@ export interface InputsErrors {
   duration: {
     hours: string;
     minutes: string;
-  }
+  };
   weekSlots: string;
   slots: {
     ids: number[];

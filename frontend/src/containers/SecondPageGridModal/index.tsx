@@ -12,20 +12,16 @@ import { useTranslation } from "react-i18next";
 
 import { RangeDatePicker } from "~/components/RangeDatePicker";
 import { WeekSlots } from "~/components/WeekSlots";
-import {
-  APPOINTMENTS,
-  PERIODICITY_VALUES,
-} from "~/core/constants";
+import { APPOINTMENTS, PERIODICITY_VALUES } from "~/core/constants";
 import { useGridModal } from "~/providers/GridModalProvider";
 import { GRID_MODAL_TYPE } from "~/providers/GridModalProvider/enum";
 import { pageGridModalStyle } from "../GridModal/style";
-import {
-  itemStyle,
-  periodicityItemStyle,
-  validityPeriodStyle,
-} from "./style";
+import { itemStyle, periodicityItemStyle, validityPeriodStyle } from "./style";
 import { NumberField } from "~/components/NumberField";
-import { SLOT_DURATION_OUTRANGE_ERROR, SLOT_DURATION_VALUE_ERROR } from "~/core/i18nKeys";
+import {
+  SLOT_DURATION_OUTRANGE_ERROR,
+  SLOT_DURATION_VALUE_ERROR,
+} from "~/core/i18nKeys";
 
 export const SecondPageGridModal: FC = () => {
   const { t } = useTranslation(APPOINTMENTS);
@@ -62,10 +58,14 @@ export const SecondPageGridModal: FC = () => {
             format={{ maximumFractionDigits: 0 }}
             allowWheelScrub
             value={inputs.duration.hours}
-            onValueChange={(value) => {handleSlotHoursDurationChange(value)}}
+            onValueChange={(value) => {
+              handleSlotHoursDurationChange(value);
+            }}
             error={!!durationErrors.hours}
-            slotProps={{ root: { sx: { width: "100px" } }}}
-            disabled={isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION}
+            disabled={
+              isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION
+            }
+            slotProps={{ root: { sx: { width: "100px" } } }}
           />
           <Typography>{t("appointments.hours")}</Typography>
           <NumberField
@@ -78,16 +78,23 @@ export const SecondPageGridModal: FC = () => {
             value={inputs.duration.minutes}
             onValueChange={(value) => handleSlotMinutesDurationChange(value)}
             error={!!durationErrors.minutes}
-            slotProps={{ root: { sx: { width: "100px" } }}}
-            disabled={isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION}
+            disabled={
+              isSubmitButtonLoading || modalType !== GRID_MODAL_TYPE.CREATION
+            }
+            slotProps={{ root: { sx: { width: "100px" } } }}
           />
           <Typography>{t("appointments.minutes")}</Typography>
         </Stack>
-        {!!durationErrors.hours || !!durationErrors.minutes && (
-          <FormHelperText error>
-            {t(durationErrors.minutes === SLOT_DURATION_VALUE_ERROR ? SLOT_DURATION_VALUE_ERROR : SLOT_DURATION_OUTRANGE_ERROR)}
-          </FormHelperText>
-        )}
+        {!!durationErrors.hours ||
+          (!!durationErrors.minutes && (
+            <FormHelperText error>
+              {t(
+                durationErrors.minutes === SLOT_DURATION_VALUE_ERROR
+                  ? SLOT_DURATION_VALUE_ERROR
+                  : SLOT_DURATION_OUTRANGE_ERROR,
+              )}
+            </FormHelperText>
+          ))}
       </Box>
       <Box sx={itemStyle}>
         <Typography>{t("appointments.grid.periodicity") + " *"}</Typography>

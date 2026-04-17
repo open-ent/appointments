@@ -7,7 +7,6 @@ import {
   APPOINTMENT_STATE,
   CONFIRM_MODAL_TYPE,
   DAY,
-  DURATION,
   PERIODICITY,
   TOAST_TYPE,
 } from "./enums";
@@ -48,33 +47,6 @@ export const ALLOWED_DOCUMENT_EXTENSIONS = [
   ".ppt",
   ".pptx",
 ];
-
-export const DURATION_VALUES = {
-  [DURATION.FIVE_MINUTES]: {
-    displayValue: "5min",
-    numberOfMinutes: 5,
-  },
-  [DURATION.TEN_MINUTES]: {
-    displayValue: "10min",
-    numberOfMinutes: 10,
-  },
-  [DURATION.FIFTEEN_MINUTES]: {
-    displayValue: "15min",
-    numberOfMinutes: 15,
-  },
-  [DURATION.THIRTY_MINUTES]: {
-    displayValue: "30min",
-    numberOfMinutes: 30,
-  },
-  [DURATION.FOURTYFIVE_MINUTES]: {
-    displayValue: "45min",
-    numberOfMinutes: 45,
-  },
-  [DURATION.ONE_HOUR]: {
-    displayValue: "1h",
-    numberOfMinutes: 60,
-  },
-};
 
 export const DAY_VALUES = {
   [DAY.MONDAY]: {

@@ -20,8 +20,7 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import { useTranslation } from "react-i18next";
 
 import { UserPicture } from "~/components/UserPicture";
-import { APPOINTMENTS, DURATION_VALUES } from "~/core/constants";
-import { DURATION } from "~/core/enums";
+import { APPOINTMENTS } from "~/core/constants";
 import { useBookAppointmentModal } from "~/providers/BookAppointmentModalProvider";
 import {
   bottomUserInfoStyle,
@@ -36,6 +35,7 @@ import {
 import { BookAppointmentGridInfosProps } from "./types";
 
 import { Link } from "@cgi-learning-hub/ui";
+import { getDisplayDurationValue } from "./utils";
 
 // this container is the first part of BookAppointmentModal
 export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
@@ -114,7 +114,7 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
             <Typography variant="body2" color="text.primary">
               {t("appointments.slots") +
                 " : " +
-                DURATION_VALUES[duration ?? DURATION.FIVE_MINUTES].displayValue}
+                getDisplayDurationValue(duration)}
             </Typography>
           </Box>
           {!!place && (

@@ -3,8 +3,17 @@ import dayjs from "dayjs";
 import { DAY } from "~/core/enums";
 import { Time } from "~/core/models/Time";
 import { WeekSlotsModel } from "~/core/types";
-import { GridModalInputs } from "~/providers/GridModalProvider/types";
-import { GetGridByIdResponse, MyGrids, MyGridsResponse } from "./types";
+import {
+  GridModalInputs,
+  IDurationProps,
+} from "~/providers/GridModalProvider/types";
+import {
+  GetGridByIdResponse,
+  GridInfos,
+  GridInfosResponse,
+  MyGrids,
+  MyGridsResponse,
+} from "./types";
 
 export const transformResponseToMyGridsResponse = (
   response: MyGridsResponse,
@@ -39,10 +48,7 @@ export const transformResponseToCompleteGridResponse = (
       start: dayjs(response.beginDate),
       end: dayjs(response.endDate),
     },
-    duration: {
-      hours: parseInt(response.duration.substring(0, response.duration.indexOf(":"))),
-      minutes: parseInt(response.duration.substring(response.duration.indexOf(":") + 1)),
-    },
+    duration: extractDurationObjectFromString(response.duration),
     periodicity: response.periodicity,
     weekSlots: response.dailySlots.reduce(
       (acc, dailySlot) => {
@@ -72,5 +78,25 @@ export const transformResponseToCompleteGridResponse = (
       } as WeekSlotsModel,
     ),
     documents: response.documents,
+  };
+};
+
+export const transformResponseToGridInfosResponse = (
+  response: GridInfosResponse,
+): GridInfos => {
+  return {
+    ...response,
+    duration: extractDurationObjectFromString(response.duration),
+  };
+};
+
+export const extractDurationObjectFromString = (
+  durationString: string,
+): IDurationProps => {
+  return {
+    hours: parseInt(durationString.substring(0, durationString.indexOf(":"))),
+    minutes: parseInt(
+      durationString.substring(durationString.indexOf(":") + 1),
+    ),
   };
 };
