@@ -17,9 +17,9 @@ export const GRID_PER_PAGE = 5;
 
 export const MAX_STRING_LENGTH = 250;
 
-export const APPOINTMENT_CARDS_GAP = 40;
+export const APPOINTMENT_CARDS_GAP = 22;
 
-export const APPOINTMENT_CARD_WIDTH = 270; // 230 width + 40 gap
+export const APPOINTMENT_CARD_WIDTH = 230 + APPOINTMENT_CARDS_GAP;
 
 export const MAX_FILE_PER_GRID = 5;
 

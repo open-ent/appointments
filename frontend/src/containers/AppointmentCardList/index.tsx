@@ -78,12 +78,7 @@ export const AppointmentCardList: FC<AppointmentCardListProps> = ({
           ))}
         </Box>
       )}
-      <Box
-        sx={{
-          ...paginationBoxStyle,
-          width: paginationWidth,
-        }}
-      >
+      <Box sx={{ ...paginationBoxStyle, width: paginationWidth }}>
         {myAppointments.total > limits[appointmentsType] && (
           <Pagination
             count={maxPages[appointmentsType]}

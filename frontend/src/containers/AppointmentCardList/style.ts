@@ -1,4 +1,5 @@
 import { SxProps } from "@cgi-learning-hub/ui";
+import { APPOINTMENT_CARDS_GAP } from "~/core/constants";
 
 export const containerStyle: SxProps = {
   display: "flex",
@@ -11,7 +12,7 @@ export const containerStyle: SxProps = {
 
 export const wrapperListBox: SxProps = {
   display: "flex",
-  gap: "4rem",
+  gap: `${APPOINTMENT_CARDS_GAP / 10}rem`,
 };
 
 export const paginationBoxStyle: SxProps = {
