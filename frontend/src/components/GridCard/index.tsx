@@ -13,13 +13,18 @@ import {
 import BusinessIcon from "@mui/icons-material/Business";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EditIcon from "@mui/icons-material/Edit";
+import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { useTranslation } from "react-i18next";
 
-import { APPOINTMENTS, DISPLAY_DATE_FORMAT } from "~/core/constants";
+import {
+  APPOINTMENTS,
+  DISPLAY_DATE_FORMAT,
+  TOAST_VALUES,
+} from "~/core/constants";
 import { CONFIRM_MODAL_TYPE, GRID_STATE } from "~/core/enums";
 import { useAvailability } from "~/providers/AvailabilityProvider";
 import { GRID_CARD_SIZE } from "~/providers/AvailabilityProvider/enum";
@@ -41,6 +46,7 @@ import {
   structureIconStyle,
 } from "./style";
 import { GridCardProps } from "./types";
+import { toast } from "react-toastify";
 
 export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
   const { t } = useTranslation(APPOINTMENTS);
@@ -69,6 +75,17 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
   const handleOpenConsultModal = () => {
     handleOpenGridModal(GRID_MODAL_TYPE.CONSULTATION, grid.id);
     handleCloseMenu();
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      const link = "lien vers prise de RDV pour la grille sélectionnée"; //TODO update after #RDV-111
+      await navigator.clipboard.writeText(link);
+      toast.success(t(TOAST_VALUES.COPY_LINK.i18nKeySuccess));
+    } catch (error) {
+      console.error(error);
+      toast.success(t(TOAST_VALUES.COPY_LINK.i18nKeyError));
+    }
   };
 
   useEffect(() => {
@@ -128,6 +145,15 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
               onClick={() => handleOpenGridModal(GRID_MODAL_TYPE.EDIT, grid.id)}
             >
               {t("appointments.edit")}
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<InsertLinkRoundedIcon />}
+              onClick={() => {
+                void handleCopyLink();
+              }}
+            >
+              {t("appointments.copy.link")}
             </Button>
             {grid.state === GRID_STATE.OPEN ? (
               <Button
@@ -194,6 +220,14 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
                 <MenuItem onClick={handleOpenEditModal}>
                   <EditIcon />
                   {t("appointments.edit")}
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    void handleCopyLink();
+                  }}
+                >
+                  <InsertLinkRoundedIcon />
+                  {t("appointments.copy.link")}
                 </MenuItem>
                 {grid.state === GRID_STATE.OPEN ? (
                   <MenuItem
