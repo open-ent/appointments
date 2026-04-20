@@ -10,6 +10,8 @@ export interface GlobalProviderContextProps {
   hasManageRight: boolean;
   appointmentIdFromNotify: number | null;
   setAppointmentIdFromNotify: Dispatch<SetStateAction<number | null>>;
+  gridIdFromLink: number | null;
+  setGridIdFromLink: Dispatch<SetStateAction<number | null>>;
   getStructureNameById: (id: string) => string;
   displayModals: DisplayModalsState;
   setDisplayModals: Dispatch<SetStateAction<DisplayModalsState>>;

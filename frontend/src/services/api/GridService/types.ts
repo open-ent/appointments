@@ -89,6 +89,11 @@ export interface GridInfos {
   documents: Document[];
 }
 
+export interface IGridOwnerInfosProps {
+  ownerId: string;
+  ownerName: string;
+}
+
 export interface TimeSlot {
   id: number;
   beginDate: string; // format YYYY-MM-DD HH:mm

@@ -33,6 +33,7 @@ import {
   transformStringToDayjs,
   transformTimeSlotsToDaySlots,
 } from "./utils";
+import { useGlobal } from "../GlobalProvider";
 
 const BookAppointmentModalProviderContext =
   createContext<BookAppointmentModalProviderContextProps | null>(null);
@@ -50,6 +51,7 @@ export const useBookAppointmentModal = () => {
 export const BookAppointmentModalProvider: FC<
   BookAppointmentModalProviderProps
 > = ({ children }) => {
+  const { setGridIdFromLink } = useGlobal();
   const [selectedUser, setSelectedUser] = useState<UserCardInfos | null>(null);
   const [selectedGrid, setSelectedGrid] = useState<GridNameWithId | null>(null);
   const [selectedSlotId, setSelectedSlotId] = useState<number | null>(null);
@@ -137,7 +139,8 @@ export const BookAppointmentModalProvider: FC<
     setCurrentDay(dayjs());
     setIsVideoCallOptionChecked(false);
     setIsModalOpen(false);
-  }, []);
+    setGridIdFromLink(null);
+  }, [setGridIdFromLink]);
 
   const handleSubmitAppointment = useCallback(async () => {
     if (!selectedSlotId) {

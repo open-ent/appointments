@@ -176,6 +176,23 @@ public class GridController extends ControllerHelper {
             });
     }
 
+    @Get("/grids/:gridId/owner")
+    @ApiDoc("Get grid owner infos")
+    @ResourceFilter(ViewRight.class)
+    @SecuredAction(value = "", type = ActionType.RESOURCE)
+    public void getGridOwnerInfos(final HttpServerRequest request) {
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "getGridOwnerInfos");
+        if (request.response().ended()) return;
+
+        gridService.getGridOwnerInfos(gridId)
+            .onSuccess(ownerInfos -> render(request, ownerInfos))
+            .onFailure(error -> {
+                String errorMessage = "Failed to get owner infos for grid with id " + gridId;
+                LogHelper.logError(this, "getGridOwnerInfos", errorMessage, error.getMessage());
+                if (!request.response().ended()) renderError(request);
+            });
+    }
+
     @Post("/grids")
     @ApiDoc("Create grid")
     @ResourceFilter(ManageRight.class)

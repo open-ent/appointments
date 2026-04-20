@@ -27,16 +27,17 @@ export const FindAppointments: FC = () => {
     users,
     hasNextPage,
     search,
+    inputValue,
     isFetchingFirstPage,
     isFetchingNextPage,
     loadMoreUsers,
-    handleSearch,
+    handleSearchChange,
   } = useFindAppointments();
-  const { selectedUser } = useBookAppointmentModal();
+  const { selectedUser, handleOnClickCard } = useBookAppointmentModal();
   const { t } = useTranslation(APPOINTMENTS);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const { isConnectedUserADML } = useGlobal();
+  const { isConnectedUserADML, gridIdFromLink } = useGlobal();
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -69,13 +70,19 @@ export const FindAppointments: FC = () => {
     };
   }, [users, handleObserver]);
 
+  useEffect(() => {
+    if (!gridIdFromLink || !users) return;
+    handleOnClickCard(users[0]); // We only have cards of same user so first one is ok
+  }, [users, gridIdFromLink, handleOnClickCard])
+
   return (
     <>
       {selectedUser && <BookAppointmentModal userInfos={selectedUser} />}
       <Box sx={containerStyle}>
         <SearchInput
           sx={searchInputStyle}
-          onChange={(event) => handleSearch(event.target.value)}
+          onChange={(event) => handleSearchChange(event.target.value)}
+          value={inputValue}
         />
         {!users.length && !isFetchingFirstPage && (
           <Box sx={emptyStateBoxStyle}>

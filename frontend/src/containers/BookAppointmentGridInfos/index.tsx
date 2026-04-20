@@ -36,11 +36,13 @@ import { BookAppointmentGridInfosProps } from "./types";
 
 import { Link } from "@cgi-learning-hub/ui";
 import { getDisplayDurationValue } from "./utils";
+import { useGlobal } from "~/providers/GlobalProvider";
 
 // this container is the first part of BookAppointmentModal
 export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   userInfos,
 }) => {
+  const { gridIdFromLink } = useGlobal();
   const selectRef = useRef<HTMLSelectElement>(null);
   const { picture, displayName, functions, isAvailable } = userInfos;
   const { t } = useTranslation(APPOINTMENTS);
@@ -49,6 +51,8 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
 
   const { duration, videoCallLink, place, publicComment, documents } =
     gridInfos || {};
+
+  if (gridIdFromLink && grids?.find((grid) => grid.id === gridIdFromLink)) handleGridChange(gridIdFromLink);
 
   return (
     <Box sx={wrapperUserInfoStyle}>

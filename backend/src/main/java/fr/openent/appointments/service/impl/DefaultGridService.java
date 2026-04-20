@@ -363,6 +363,29 @@ public class DefaultGridService implements GridService {
         return promise.future();
     }
 
+    public Future<GridOwnerInfos> getGridOwnerInfos(Long gridId) {
+        Promise<GridOwnerInfos> promise = Promise.promise();
+
+        getGridById(gridId)
+            .compose(grid -> communicationRepository.getUserFromId(grid.getOwnerId(), null))
+            .onSuccess(optionalNeoUser -> {
+                if (!optionalNeoUser.isPresent()) {
+                    promise.fail("Failed to get owner infos from owner id");
+                    return;
+                }
+
+                promise.complete(new GridOwnerInfos(optionalNeoUser.get()));
+            })
+            .onFailure(error -> {
+                String errorMessage = "Failed to get owner infos for grid with id " + gridId;
+                LogHelper.logError(this, "getGridOwnerInfos", errorMessage, error.getMessage());
+                promise.fail(errorMessage);
+            });
+
+
+        return promise.future();
+    }
+
     // Private functions
 
     private ListGridsResponse buildListGridsResponse(List<Grid> grids, Long page, Long limit) {

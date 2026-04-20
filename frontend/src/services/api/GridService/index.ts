@@ -6,6 +6,7 @@ import {
   GetMyGridsPayload,
   GetTimeSlotsPayload,
   GridInfos,
+  IGridOwnerInfosProps,
   MyGrids,
   NameWithId,
   TimeSlots,
@@ -69,6 +70,9 @@ export const gridApi = emptySplitApi.injectEndpoints({
       }),
       providesTags: ["Availability"],
     }),
+    getGridOwnerInfos: builder.query<IGridOwnerInfosProps, number>({
+      query: (gridId) => `/grids/${gridId}/owner`,
+    }),
     deleteGrid: builder.mutation<void, UpdateGridStatePayload>({
       query: ({ gridId, deleteAppointments }) => ({
         url: `/grids/${gridId}/delete`,
@@ -111,6 +115,7 @@ export const {
   useGetAvailableUserMinimalGridsQuery,
   useGetMinimalGridInfosByIdQuery,
   useGetTimeSlotsByGridIdAndDateQuery,
+  useGetGridOwnerInfosQuery,
   useDeleteGridMutation,
   useSuspendGridMutation,
   useRestoreGridMutation,

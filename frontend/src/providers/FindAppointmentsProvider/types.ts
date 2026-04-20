@@ -6,10 +6,11 @@ export interface FindAppointmentsProviderContextProps {
   users: UserCardInfos[];
   hasNextPage: boolean;
   search: string;
+  inputValue: string;
   isFetchingFirstPage: boolean;
   isFetchingNextPage: boolean;
   loadMoreUsers: () => void;
-  handleSearch: (newSearch: string) => void;
+  handleSearchChange: (newSearch: string) => void;
   resetSearch: () => void;
   refetchSearch: () => void;
 }
