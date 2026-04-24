@@ -55,6 +55,7 @@ export const Home: FC = () => {
   const {
     hasManageRight,
     setAppointmentIdFromNotify,
+    setGridIdFromLink,
     toggleModal,
     displayModals: { showExportModal },
   } = useGlobal();
@@ -100,8 +101,23 @@ export const Home: FC = () => {
       handleChange({} as SyntheticEvent, 1);
       searchParams.delete("appointmentId");
       setSearchParams(searchParams);
+      return;
     }
-  }, [searchParams, setAppointmentIdFromNotify, handleChange, setSearchParams]);
+
+    const gridId = searchParams.get("gridId");
+    if (gridId) {
+      setGridIdFromLink(parseInt(gridId));
+      handleChange({} as SyntheticEvent, 0);
+      searchParams.delete("gridId");
+      setSearchParams(searchParams);
+    }
+  }, [
+    searchParams,
+    setAppointmentIdFromNotify,
+    setGridIdFromLink,
+    handleChange,
+    setSearchParams,
+  ]);
 
   return (
     <Box sx={homeStyle}>

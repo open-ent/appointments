@@ -46,6 +46,7 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({
   const [appointmentIdFromNotify, setAppointmentIdFromNotify] = useState<
     number | null
   >(null);
+  const [gridIdFromLink, setGridIdFromLink] = useState<number | null>(null);
 
   const [displayModals, setDisplayModals] = useState<DisplayModalsState>(
     initialDisplayModalsState,
@@ -79,6 +80,8 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({
       hasManageRight,
       appointmentIdFromNotify,
       setAppointmentIdFromNotify,
+      gridIdFromLink,
+      setGridIdFromLink,
       getStructureNameById,
       displayModals,
       setDisplayModals,
@@ -92,6 +95,7 @@ export const GlobalProvider: FC<GlobalProviderProps> = ({
       hasAccessRight,
       hasManageRight,
       appointmentIdFromNotify,
+      gridIdFromLink,
       getStructureNameById,
       displayModals,
       minHoursBeforeCancellation,

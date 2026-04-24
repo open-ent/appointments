@@ -195,6 +195,8 @@
   "appointments.toast.event.export.success": "Your event has been successfully downloaded.",
   "appointments.toast.event.export.all.success": "Your events have been successfully downloaded.",
   "appointments.toast.event.export.error": "An error occurred while generating the export. Please try again.",
+  "appointments.toast.grid.link.404.error": "Schedule not found: it may have been deleted, suspended or no longer has any available slots",
+  "appointments.toast.grid.link.403.error": "You do not have permission to access this schedule.",
 
   "group.HeadTeacher": "Head teachers of {0}",
   "group.Direction": "Directors of {0}",

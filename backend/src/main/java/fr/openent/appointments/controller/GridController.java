@@ -35,6 +35,8 @@ import fr.openent.appointments.security.ViewRight;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,6 +96,26 @@ public class GridController extends ControllerHelper {
                 String errorMessage = String.format("[Appointments@%s::getMyGridsName] Failed to get my grids name : %s", this.getClass().getSimpleName(), error.getMessage());
                 log.error(errorMessage);
                 badRequest(request);
+            });
+    }
+
+    @Get("/grids/linker")
+    @ApiDoc("Get my grids for linker")
+    @SecuredAction(value = "", type = ActionType.RESOURCE)
+    @ResourceFilter(ManageRight.class)
+    public void getMyGridsForLinker(final HttpServerRequest request) {
+        List<GridState> states = Collections.singletonList(GridState.OPEN);
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user -> {
+                String ownerName = String.join(" ", user.getLastName(), user.getFirstName());
+                return gridService.getMyGridsForLinker(user.getUserId(), ownerName, states);
+            })
+            .onSuccess(grids -> renderJson(request, new JsonArray(grids)))
+            .onFailure(error -> {
+                String errorMessage = "Failed to get my grids for linker";
+                LogHelper.logError(this, "getMyGridsForLinker", errorMessage, error.getMessage());
+                renderError(request);
             });
     }
 
@@ -173,6 +195,24 @@ public class GridController extends ControllerHelper {
                 String errorMessage = "Failed to get available grids for user with id " + userId;
                 LogHelper.logError(this, "getAvailableUserMinimalGrids", errorMessage, err.getMessage());
                 badRequest(request);
+            });
+    }
+
+    @Get("/grids/:gridId/owner")
+    @ApiDoc("Get grid owner infos")
+    @ResourceFilter(ViewRight.class)
+    @SecuredAction(value = "", type = ActionType.RESOURCE)
+    public void getGridOwnerInfos(final HttpServerRequest request) {
+        Long gridId = ParamHelper.getParam(CAMEL_GRID_ID, request, Long.class, true, "getGridOwnerInfos");
+        if (request.response().ended()) return;
+
+        UserUtils.getAuthenticatedUserInfos(eb, request)
+            .compose(user -> gridService.getGridOwnerInfos(gridId, user.getGroupsIds()))
+            .onSuccess(ownerInfos -> render(request, ownerInfos))
+            .onFailure(error -> {
+                String errorMessage = "Failed to get owner infos for grid with id " + gridId;
+                LogHelper.logError(this, "getGridOwnerInfos", errorMessage, error.getMessage());
+                if (!request.response().ended()) renderError(request);
             });
     }
 

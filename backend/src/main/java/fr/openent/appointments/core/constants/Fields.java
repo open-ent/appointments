@@ -37,6 +37,7 @@ public class Fields {
     public static final String OK = "ok";
     public static final String OWNER = "owner";
     public static final String OWNER_ID = "owner_id";
+    public static final String OWNER_NAME = "owner_name";
     public static final String PERIODICITY = "periodicity";
     public static final String PLACE = "place";
     public static final String PROTECTED = "protected";

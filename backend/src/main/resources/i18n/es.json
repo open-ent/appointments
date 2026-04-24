@@ -195,6 +195,8 @@
   "appointments.toast.event.export.success": "Tu evento ha sido descargado correctamente.",
   "appointments.toast.event.export.all.success": "Tus eventos han sido descargados correctamente.",
   "appointments.toast.event.export.error": "Se produjo un error al generar la exportación. Por favor, inténtalo de nuevo.",
+  "appointments.toast.grid.link.404.error": "Agenda no encontrada: puede que haya sido eliminada, suspendida o que ya no tenga franjas horarias disponibles",
+  "appointments.toast.grid.link.403.error": "No tiene permiso para acceder a esta agenda.",
 
   "group.HeadTeacher": "Profesores principales de {0}",
   "group.Direction": "Directores de {0}",

@@ -3,6 +3,7 @@ import {
   FC,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -17,6 +18,7 @@ import {
   FindAppointmentsProviderProps,
 } from "./types";
 import { NUMBER_MORE_USERS } from "./utils";
+import { useGetGridOwnerInfosQuery } from "~/services/api/GridService";
 
 const FindAppointmentsProviderContext =
   createContext<FindAppointmentsProviderContextProps | null>(null);
@@ -34,8 +36,14 @@ export const useFindAppointments = () => {
 export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
   children,
 }) => {
-  const { isConnectedUserADML } = useGlobal();
+  const { isConnectedUserADML, gridIdFromLink } = useGlobal();
   const [search, setSearch] = useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  const { data: dataGridOwner } = useGetGridOwnerInfosQuery(
+    gridIdFromLink ?? 0,
+    { skip: !gridIdFromLink },
+  );
 
   const {
     data,
@@ -65,8 +73,8 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       (isConnectedUserADML &&
         search.length < MIN_NB_CHAR_BEFORE_SEARCH_FOR_ADML)
     )
-      return [];
-    return data?.pages.flat() ?? [];
+      return null;
+    return data?.pages.flat() ?? null;
   }, [data, isConnectedUserADML, search]);
 
   const loadMoreUsers = useCallback(() => {
@@ -83,6 +91,14 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
     [],
   );
 
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setInputValue(value);
+      handleSearch(value);
+    },
+    [handleSearch],
+  );
+
   const resetSearch = useCallback(() => {
     setSearch("");
   }, []);
@@ -91,15 +107,24 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
     await refetch();
   }, [refetch]);
 
+  useEffect(() => {
+    if (dataGridOwner) {
+      const ownerName = dataGridOwner.ownerName;
+      setInputValue(ownerName);
+      handleSearch(ownerName);
+    }
+  }, [dataGridOwner, handleSearch]);
+
   const value = useMemo<FindAppointmentsProviderContextProps>(
     () => ({
       users,
       hasNextPage,
       search,
+      inputValue,
       isFetchingFirstPage,
       isFetchingNextPage,
       loadMoreUsers,
-      handleSearch,
+      handleSearchChange,
       resetSearch,
       refetchSearch,
     }),
@@ -107,10 +132,11 @@ export const FindAppointmentsProvider: FC<FindAppointmentsProviderProps> = ({
       users,
       hasNextPage,
       search,
+      inputValue,
       isFetchingFirstPage,
       isFetchingNextPage,
       loadMoreUsers,
-      handleSearch,
+      handleSearchChange,
       resetSearch,
       refetchSearch,
     ],

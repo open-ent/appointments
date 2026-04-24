@@ -195,6 +195,8 @@
   "appointments.toast.event.export.success": "Ihr Ereignis wurde erfolgreich heruntergeladen.",
   "appointments.toast.event.export.all.success": "Ihre Ereignisse wurden erfolgreich heruntergeladen.",
   "appointments.toast.event.export.error": "Beim Erstellen des Exports ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+  "appointments.toast.grid.link.404.error": "Zeitplan nicht gefunden: er wurde möglicherweise gelöscht, gesperrt oder hat keine verfügbaren Zeitfenster mehr",
+  "appointments.toast.grid.link.403.error": "Sie haben keine Berechtigung, auf diesen Zeitplan zuzugreifen.",
 
   "group.HeadTeacher": "Klassenlehrer von {0}",
   "group.Direction": "Direktoren von {0}",

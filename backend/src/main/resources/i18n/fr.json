@@ -196,6 +196,8 @@
   "appointments.toast.event.export.success": "Votre événement a bien été téléchargé.",
   "appointments.toast.event.export.all.success": "Vos événements ont bien été téléchargés.",
   "appointments.toast.event.export.error": "Une erreur est survenue lors de la génération de l'export. Veuillez réessayer.",
+  "appointments.toast.grid.link.404.error": "Grille introuvable : elle a peut-être été supprimée, suspendue ou n'a plus de créneau disponible",
+  "appointments.toast.grid.link.403.error": "Vous n'avez pas le droit d'accéder à cette grille",
 
   "group.HeadTeacher": "Professeurs principaux de {0}",
   "group.Direction": "Directeurs de {0}",

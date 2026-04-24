@@ -6,6 +6,7 @@ import {
   GetMyGridsPayload,
   GetTimeSlotsPayload,
   GridInfos,
+  IGridOwnerInfosProps,
   MyGrids,
   NameWithId,
   TimeSlots,
@@ -16,6 +17,8 @@ import {
   transformResponseToGridInfosResponse,
   transformResponseToMyGridsResponse,
 } from "./utils";
+import { t } from "~/i18n";
+import { toast } from "react-toastify";
 
 export const gridApi = emptySplitApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -69,6 +72,17 @@ export const gridApi = emptySplitApi.injectEndpoints({
       }),
       providesTags: ["Availability"],
     }),
+    getGridOwnerInfos: builder.query<IGridOwnerInfosProps, number>({
+      query: (gridId) => `/grids/${gridId}/owner`,
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (err) {
+          console.error("appointments.toast.grid.link.404.error", err);
+          toast.error(t("appointments.toast.grid.link.404.error"));
+        }
+      },
+    }),
     deleteGrid: builder.mutation<void, UpdateGridStatePayload>({
       query: ({ gridId, deleteAppointments }) => ({
         url: `/grids/${gridId}/delete`,
@@ -111,6 +125,7 @@ export const {
   useGetAvailableUserMinimalGridsQuery,
   useGetMinimalGridInfosByIdQuery,
   useGetTimeSlotsByGridIdAndDateQuery,
+  useGetGridOwnerInfosQuery,
   useDeleteGridMutation,
   useSuspendGridMutation,
   useRestoreGridMutation,

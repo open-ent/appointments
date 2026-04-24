@@ -16,6 +16,7 @@ import {
   WrapperUserCard,
 } from "./style";
 import { UserCardProps } from "./types";
+import { useGlobal } from "~/providers/GlobalProvider";
 
 export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
   ({ infos }, ref) => {
@@ -31,6 +32,7 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
 
     const { t } = useTranslation(APPOINTMENTS);
     const { handleOnClickCard } = useBookAppointmentModal();
+    const { setGridIdFromLink } = useGlobal();
 
     const displayNameRef = useRef<HTMLDivElement>(null);
     const functionsRef = useRef<HTMLDivElement>(null);
@@ -58,7 +60,10 @@ export const UserCard = forwardRef<HTMLDivElement, UserCardProps>(
       <WrapperUserCard
         isAvailable={isAvailable}
         ref={ref}
-        onClick={() => handleOnClickCard(isAvailable ? infos : null)}
+        onClick={() => {
+          setGridIdFromLink(null);
+          handleOnClickCard(isAvailable ? infos : null);
+        }}
       >
         <Box sx={pictureStyle}>
           <UserPicture picture={picture} />

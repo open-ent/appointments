@@ -2,12 +2,10 @@ package fr.openent.appointments.service;
 
 import fr.openent.appointments.enums.GridState;
 import fr.openent.appointments.model.database.Appointment;
-import fr.openent.appointments.model.response.GridWithDailySlots;
-import fr.openent.appointments.model.response.MinimalGrid;
-import fr.openent.appointments.model.response.ListGridsResponse;
+import fr.openent.appointments.model.response.*;
 import fr.openent.appointments.model.database.Grid;
-import fr.openent.appointments.model.response.MinimalGridInfos;
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.http.HttpServerRequest;
@@ -29,11 +27,11 @@ public interface GridService {
     Future<ListGridsResponse> getMyMinimalGrids(String userId, List<GridState> states, Long page, Long limit);
 
     /**
-     * Retrieves all grids associated with the current user.
+     * Retrieves all grids associated with the current user for linker.
      *
-     * @return A Future containing a JsonArray of grids.
+     * @return A Future containing a List of grids for linker.
      */
-    Future<List<Grid>> getMyGrids(String userId, List<GridState> states);
+    Future<List<LinkerGrid>> getMyGridsForLinker(String userId, String ownerName, List<GridState> states);
 
     /**
      * Retrieves all grids name associated with the current user.
@@ -151,4 +149,13 @@ public interface GridService {
      * @return A Future containing a List of user IDs who have shared a grid with the specified user.
      */
     Future<List<String>> getUserIdsWhoSharedAGridWithMe(UserInfos user);
+
+    /**
+     * Retrieves infos about the owner of the given grid.
+     *
+     * @param gridId The grid id.
+     * @param userGroupsIds The {@link List<String>} of connected user group ids.
+     * @return A Future containing grid owner infos.
+     */
+    Future<GridOwnerInfos> getGridOwnerInfos(Long gridId, List<String> userGroupsIds);
 }

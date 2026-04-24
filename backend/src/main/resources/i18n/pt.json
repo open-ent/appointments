@@ -194,6 +194,8 @@
   "appointments.toast.restore.grid.error": "Ocorreu um erro ao reativar a grade. Tente novamente.",
   "appointments.toast.event.export.all.success": "Os seus eventos foram transferidos com sucesso.",
   "appointments.toast.event.export.error": "Ocorreu um erro ao gerar a exportação. Por favor, tente novamente.",
+  "appointments.toast.grid.link.404.error": "Agenda não encontrada: pode ter sido eliminada, suspensa ou já não tem intervalos disponíveis",
+  "appointments.toast.grid.link.403.error": "Não tem permissão para aceder a esta agenda.",
 
   "group.HeadTeacher": "Professores principais de {0}",
   "group.Direction": "Diretores de {0}",
