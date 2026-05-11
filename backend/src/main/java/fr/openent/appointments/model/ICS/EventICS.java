@@ -81,8 +81,10 @@ public class EventICS {
     }
 
     private void appendIfPresent(StringBuilder sb, String key, String value) {
-        if (value != null && !value.isEmpty())
-            sb.append(key).append(":").append(value).append("\r\n");
+        if (value != null && !value.isEmpty()) {
+            String newValue = value.replace("\n", "\\n").replace("\r", "");
+            sb.append(key).append(":").append(newValue).append("\r\n");
+        }
     }
 
     private void appendDate(StringBuilder sb, String key, LocalDateTime dt) {

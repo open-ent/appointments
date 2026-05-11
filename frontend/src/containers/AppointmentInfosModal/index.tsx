@@ -140,6 +140,34 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 )}
               </Stack>
             </Box>
+            <Box sx={rowInfoStyle}>
+              <EventIcon sx={greyIconStyle} />
+              <Box maxWidth="90%">
+                <Typography variant="body1" color="text.primary">
+                  {t("appointments.my.appointment.infos.modal.date", {
+                    date: appointment.beginDate.format(TEXT_DATE_FORMAT),
+                    beginTime: appointment.beginDate.format(TIME_FORMAT),
+                    endTime: appointment.endDate.format(TIME_FORMAT),
+                  })}
+                </Typography>
+                {(appointment.state === APPOINTMENT_STATE.ACCEPTED ||
+                  appointment.state === APPOINTMENT_STATE.CANCELED) && (
+                  <Button
+                    color={"primary"}
+                    variant={"contained"}
+                    size={"small"}
+                    sx={{ fontSize: "13px", marginTop: "0.5rem" }}
+                    startIcon={<DownloadRoundedIcon />}
+                    loading={isExportingAppointments}
+                    onClick={() => {
+                      void handleExportSingleAppointment(appointment);
+                    }}
+                  >
+                    {t("appointments.event.export.one.button.title")}
+                  </Button>
+                )}
+              </Box>
+            </Box>
             {appointment.isVideoCall && (
               <Box sx={rowInfoStyle}>
                 <VideoCameraFrontIcon color="primary" />
@@ -161,32 +189,6 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                 </Box>
               </Box>
             )}
-            <Box sx={rowInfoStyle}>
-              <EventIcon sx={greyIconStyle} />
-              <Box maxWidth="90%">
-                <Typography variant="body1" color="text.primary">
-                  {t("appointments.my.appointment.infos.modal.date", {
-                    date: appointment.beginDate.format(TEXT_DATE_FORMAT),
-                    beginTime: appointment.beginDate.format(TIME_FORMAT),
-                    endTime: appointment.endDate.format(TIME_FORMAT),
-                  })}
-                </Typography>
-                {(appointment.state === APPOINTMENT_STATE.ACCEPTED ||
-                  appointment.state === APPOINTMENT_STATE.CANCELED) && (
-                  <Button
-                    color={"primary"}
-                    variant={"contained"}
-                    startIcon={<DownloadRoundedIcon />}
-                    loading={isExportingAppointments}
-                    onClick={() => {
-                      void handleExportSingleAppointment(appointment);
-                    }}
-                  >
-                    {t("appointments.event.export.one.button.title")}
-                  </Button>
-                )}
-              </Box>
-            </Box>
             {appointment.place && (
               <Box sx={rowInfoStyle}>
                 <PlaceIcon sx={greyIconStyle} />
