@@ -105,21 +105,25 @@ export const TOAST_CONFIG = {
 export const APPOINTMENT_STATE_VALUES = {
   [APPOINTMENT_STATE.CREATED]: {
     i18nKey: "appointments.pending",
+    commentI18nKey: "",
     color: "warning" as SvgIconProps["color"],
     listState: MY_APPOINTMENTS_LIST_STATE.PENDING,
   },
   [APPOINTMENT_STATE.ACCEPTED]: {
     i18nKey: "appointments.accepted",
+    commentI18nKey: "",
     color: "success" as SvgIconProps["color"],
     listState: MY_APPOINTMENTS_LIST_STATE.ACCEPTED,
   },
   [APPOINTMENT_STATE.REFUSED]: {
     i18nKey: "appointments.refused",
+    commentI18nKey: "appointments.my.appointment.infos.modal.comment.title.reject",
     color: "error" as SvgIconProps["color"],
     listState: MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED,
   },
   [APPOINTMENT_STATE.CANCELED]: {
     i18nKey: "appointments.canceled",
+    commentI18nKey: "appointments.my.appointment.infos.modal.comment.title.canceled",
     color: "error" as SvgIconProps["color"],
     listState: MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED,
   },

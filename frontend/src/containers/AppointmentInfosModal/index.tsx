@@ -118,11 +118,9 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                       fontWeight="bold"
                       color="text.primary"
                     >
-                      {t(
-                        "appointments.my.appointment.infos.modal.comment.title.canceled",
-                      )}
+                      {t(APPOINTMENT_STATE_VALUES[appointment.state].commentI18nKey)}
                     </Typography>
-                    <Typography fontSize="1.6rem" color="text.primary">
+                    <Typography sx={{ fontSize: "1.6rem", color: "text.primary", whiteSpace: "pre-wrap" }}>
                       {appointment.comment}
                     </Typography>
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
