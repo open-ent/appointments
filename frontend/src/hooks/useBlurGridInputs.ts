@@ -52,7 +52,7 @@ export const useBlurGridInputs = (
         : "",
     minutes: getMinuteDurationErrorValue(
       inputs.duration.minutes,
-      inputs.duration,
+      inputs.duration.hours,
     ),
   };
 

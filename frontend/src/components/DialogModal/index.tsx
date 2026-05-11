@@ -60,7 +60,7 @@ export const DialogModal: FC<DialogModalProps> = ({
         {title}
       </DialogTitle>
       <DialogContent>
-        <Stack gap={1}>
+        <Stack spacing={2}>
           <Typography
             variant="body1"
             component="div"
@@ -91,7 +91,7 @@ export const DialogModal: FC<DialogModalProps> = ({
           )}
 
           {askForComment && (
-            <Stack gap={1} mt={1}>
+            <Stack spacing={1}>
               <Typography>{commentDescription}</Typography>
               <TextField
                 fullWidth

@@ -50,11 +50,11 @@ export const SecondPageGridModal: FC = () => {
       </Box>
       <Box sx={itemStyle}>
         <Typography>{t("appointments.grid.slot.duration") + " *"}</Typography>
-        <Stack direction="row" gap={1} sx={{ alignItems: "center" }}>
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           <NumberField
             min={0}
             max={4}
-            defaultValue={0}
+            defaultValue={1}
             format={{ maximumFractionDigits: 0 }}
             allowWheelScrub
             value={inputs.duration.hours}
@@ -71,7 +71,7 @@ export const SecondPageGridModal: FC = () => {
           <NumberField
             min={0}
             max={55}
-            defaultValue={5}
+            defaultValue={0}
             step={5}
             format={{ maximumFractionDigits: 0 }}
             allowWheelScrub
@@ -85,16 +85,16 @@ export const SecondPageGridModal: FC = () => {
           />
           <Typography>{t("appointments.minutes")}</Typography>
         </Stack>
-        {!!durationErrors.hours ||
-          (!!durationErrors.minutes && (
-            <FormHelperText error>
-              {t(
+        {(!!durationErrors.hours || !!durationErrors.minutes) && (
+          <FormHelperText error>
+            {t(
+              durationErrors.hours === SLOT_DURATION_VALUE_ERROR ||
                 durationErrors.minutes === SLOT_DURATION_VALUE_ERROR
-                  ? SLOT_DURATION_VALUE_ERROR
-                  : SLOT_DURATION_OUTRANGE_ERROR,
-              )}
-            </FormHelperText>
-          ))}
+                ? SLOT_DURATION_VALUE_ERROR
+                : SLOT_DURATION_OUTRANGE_ERROR,
+            )}
+          </FormHelperText>
+        )}
       </Box>
       <Box sx={itemStyle}>
         <Typography>{t("appointments.grid.periodicity") + " *"}</Typography>

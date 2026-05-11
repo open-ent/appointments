@@ -154,7 +154,7 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
           value == 0 && inputs.duration.minutes == 0
             ? SLOT_DURATION_VALUE_ERROR
             : "",
-        minutes: prevInputs.duration.minutes,
+        minutes: getMinuteDurationErrorValue(inputs.duration.minutes, value),
       },
     }));
   };
@@ -169,8 +169,11 @@ export const useUpdateGridInputs: useUpdateGridInputsType = (
     setErrorInputs((prevInputs) => ({
       ...prevInputs,
       duration: {
-        hours: prevInputs.duration.hours,
-        minutes: getMinuteDurationErrorValue(value, inputs.duration),
+        hours:
+          inputs.duration.hours == 0 && value == 0
+            ? SLOT_DURATION_VALUE_ERROR
+            : "",
+        minutes: getMinuteDurationErrorValue(value, inputs.duration.hours),
       },
     }));
   };

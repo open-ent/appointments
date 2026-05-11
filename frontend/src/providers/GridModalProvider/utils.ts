@@ -37,8 +37,8 @@ export const initialGridModalInputs = (
     end: undefined,
   },
   duration: {
-    hours: 0,
-    minutes: 5,
+    hours: 1,
+    minutes: 0,
   },
   periodicity: PERIODICITY.WEEKLY,
   weekSlots: initialWeekSlots,

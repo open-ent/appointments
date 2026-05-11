@@ -6,6 +6,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import { DAY, HOUR, MINUTE } from "~/core/dayjs.const";
 import { TIMEPICKER_VIEW } from "~/core/enums";
 import { Time } from "~/core/models/Time";
+import { Slot } from "~/core/types";
 import { t } from "~/i18n";
 import { IDurationProps } from "~/providers/GridModalProvider/types";
 
@@ -58,6 +59,47 @@ export const getEndMinTime = (
   return beginTime.add(duration.hours, HOUR).add(duration.minutes, MINUTE);
 };
 
+const isCandidateInExistingSlot = (candidate: Dayjs, siblingsSlots: Slot[]) =>
+  siblingsSlots.some((slot) => {
+    const start = slot.begin.parseToDayjsOrDefault(null);
+    const end = slot.end.parseToDayjsOrDefault(null);
+    if (!start || !end) return false;
+    return (
+      (candidate.isSame(start) || candidate.isAfter(start)) &&
+      candidate.isBefore(end)
+    );
+  });
+
+export const shouldDisableThisStartValue = (
+  value: Dayjs,
+  siblingsSlots: Slot[],
+  view: TimeView,
+): boolean => {
+  switch (view.toString().toUpperCase()) {
+    case TIMEPICKER_VIEW.HOURS:
+      return Array.from({ length: 12 }, (_, i) => i * 5).every((m) =>
+        isCandidateInExistingSlot(value.minute(m), siblingsSlots),
+      );
+    case TIMEPICKER_VIEW.MINUTES:
+      return isCandidateInExistingSlot(value, siblingsSlots);
+    default:
+      return false;
+  }
+
+  // const nbBeginTimeMinutes = beginTime.getNbMinutesFromMidnight();
+  // const nbDurationMinutes = getNbMinutesOfduration(duration);
+  // const nbValueMinutes = getNbMinutesFromMidnight(value);
+
+  switch (view.toString().toUpperCase()) {
+    case TIMEPICKER_VIEW.HOURS:
+      return false;
+    case TIMEPICKER_VIEW.MINUTES:
+      return false;
+    default:
+      return false;
+  }
+};
+
 export const shouldDisableThisEndValue = (
   value: Dayjs,
   beginTime: Time,
@@ -104,7 +146,7 @@ export const getErrorHelperText = (
   return t("appointments.error.slot.time.end", {
     duration: `${duration.hours}h${duration.minutes
       .toString()
-      .padStart(2, "0")}min`,
+      .padStart(2, "0")}`,
     startTime: beginTime.parseToDisplayText(),
   });
 };

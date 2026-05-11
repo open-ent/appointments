@@ -118,9 +118,18 @@ export const AppointmentInfosModal: FC<AppointmentInfosModalProps> = ({
                       fontWeight="bold"
                       color="text.primary"
                     >
-                      {t(APPOINTMENT_STATE_VALUES[appointment.state].commentI18nKey)}
+                      {t(
+                        APPOINTMENT_STATE_VALUES[appointment.state]
+                          .commentI18nKey,
+                      )}
                     </Typography>
-                    <Typography sx={{ fontSize: "1.6rem", color: "text.primary", whiteSpace: "pre-wrap" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "1.6rem",
+                        color: "text.primary",
+                        whiteSpace: "pre-wrap",
+                      }}
+                    >
                       {appointment.comment}
                     </Typography>
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>

@@ -27,7 +27,7 @@ export const ExportAppointmentsModal: FC<IExportAppointmentsModalProps> = ({
         {t("appointments.event.export.all.modal.title")}
       </DialogTitle>
       <DialogContent>
-        <Stack gap={3}>
+        <Stack spacing={3}>
           {hasOnlyCancelled ? (
             <Typography
               dangerouslySetInnerHTML={{
@@ -35,7 +35,7 @@ export const ExportAppointmentsModal: FC<IExportAppointmentsModalProps> = ({
               }}
             />
           ) : (
-            <Stack gap={2}>
+            <Stack spacing={2}>
               <Stack>
                 <Typography
                   dangerouslySetInnerHTML={{

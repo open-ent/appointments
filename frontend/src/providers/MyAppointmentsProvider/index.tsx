@@ -250,7 +250,11 @@ export const MyAppointmentsProvider: FC<MyAppointmentsProviderProps> = ({
   );
 
   const withExportGuard = useCallback(
-    async (toastType: TOAST_TYPE, shouldToggleModal: boolean, fn: () => Promise<void>) => {
+    async (
+      toastType: TOAST_TYPE,
+      shouldToggleModal: boolean,
+      fn: () => Promise<void>,
+    ) => {
       try {
         if (shouldToggleModal) setIsExportingAppointments(true);
         await fn();

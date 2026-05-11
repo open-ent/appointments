@@ -117,13 +117,15 @@ export const APPOINTMENT_STATE_VALUES = {
   },
   [APPOINTMENT_STATE.REFUSED]: {
     i18nKey: "appointments.refused",
-    commentI18nKey: "appointments.my.appointment.infos.modal.comment.title.reject",
+    commentI18nKey:
+      "appointments.my.appointment.infos.modal.comment.title.reject",
     color: "error" as SvgIconProps["color"],
     listState: MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED,
   },
   [APPOINTMENT_STATE.CANCELED]: {
     i18nKey: "appointments.canceled",
-    commentI18nKey: "appointments.my.appointment.infos.modal.comment.title.canceled",
+    commentI18nKey:
+      "appointments.my.appointment.infos.modal.comment.title.canceled",
     color: "error" as SvgIconProps["color"],
     listState: MY_APPOINTMENTS_LIST_STATE.REJECTED_OR_CANCELED,
   },

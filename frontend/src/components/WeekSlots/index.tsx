@@ -86,7 +86,12 @@ export const WeekSlots: FC = () => {
               <Box>
                 <Box sx={slotsBoxStyle}>
                   {timeSlots.map((slot) => (
-                    <DailySlot key={slot.id} day={day} slot={slot} />
+                    <DailySlot
+                      key={slot.id}
+                      day={day}
+                      slot={slot}
+                      siblingsSlots={timeSlots.filter((s) => s !== slot)}
+                    />
                   ))}
                   {
                     <IconButton

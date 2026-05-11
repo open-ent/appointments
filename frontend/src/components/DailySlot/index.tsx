@@ -28,10 +28,11 @@ import {
   getErrorHelperText,
   getExtremumTimes,
   shouldDisableThisEndValue,
+  shouldDisableThisStartValue,
   shouldDisplayHelperText,
 } from "./utils";
 
-export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
+export const DailySlot: FC<DailySlotProps> = ({ day, slot, siblingsSlots }) => {
   const { t } = useTranslation(APPOINTMENTS);
   const {
     inputs: { duration },
@@ -49,7 +50,7 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
 
   return (
     <StyledDailySlotBox isSlotError={isSlotError}>
-      <Stack direction="row" gap={1} sx={{ width: "fit-content" }}>
+      <Stack direction="row" spacing={1} sx={{ width: "fit-content" }}>
         <Box sx={beginAndEndWrapperStyle}>
           <Box sx={beginAndEndBoxStyle}>
             <Typography noWrap width="20%">
@@ -59,6 +60,9 @@ export const DailySlot: FC<DailySlotProps> = ({ day, slot }) => {
               minTime={beginMin}
               maxTime={beginMax}
               defaultValue={beginMin}
+              shouldDisableTime={(value, view) =>
+                shouldDisableThisStartValue(value, siblingsSlots, view)
+              }
               value={slot.begin.parseToDayjsOrDefault(null)}
               onChange={(newValue) =>
                 handleSlotChange(day, slot, newValue, "begin")
