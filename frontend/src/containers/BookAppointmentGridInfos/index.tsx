@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 
 import {
   Box,
@@ -52,8 +52,11 @@ export const BookAppointmentGridInfos: FC<BookAppointmentGridInfosProps> = ({
   const { duration, videoCallLink, place, publicComment, documents } =
     gridInfos || {};
 
-  if (gridIdFromLink && grids?.find((grid) => grid.id === gridIdFromLink))
-    handleGridChange(gridIdFromLink);
+  useEffect(() => {
+    if (gridIdFromLink && grids?.find((grid) => grid.id === gridIdFromLink)) {
+      handleGridChange(gridIdFromLink);
+    }
+  }, [gridIdFromLink, grids, handleGridChange]);
 
   return (
     <Box sx={wrapperUserInfoStyle}>
