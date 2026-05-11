@@ -91,10 +91,13 @@ export const BookAppointmentModalProvider: FC<
   const [bookAppointment] = useBookAppointmentMutation();
   const { refetchSearch } = useFindAppointments();
 
-  const handleOnClickCard = useCallback((user: UserCardInfos | null) => {
-    setSelectedUser(user);
-    if (user) setIsModalOpen(true);
-  }, [setSelectedUser, setIsModalOpen]);
+  const handleOnClickCard = useCallback(
+    (user: UserCardInfos | null) => {
+      setSelectedUser(user);
+      if (user) setIsModalOpen(true);
+    },
+    [setSelectedUser, setIsModalOpen],
+  );
 
   const handleOnClickSlot = (slotId: number) => {
     setSelectedSlotId(slotId);
