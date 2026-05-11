@@ -79,7 +79,7 @@ export const GridCard: FC<GridCardProps> = ({ grid, size }) => {
 
   const handleCopyLink = async () => {
     try {
-      const link = "lien vers prise de RDV pour la grille sélectionnée"; //TODO update after #RDV-111
+      const link = `${window.location.origin}/appointments#/?gridId=${grid.id}`;
       await navigator.clipboard.writeText(link);
       toast.success(t(TOAST_VALUES.COPY_LINK.i18nKeySuccess));
     } catch (error) {
