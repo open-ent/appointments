@@ -58,7 +58,7 @@ public class DefaultGridRepository implements GridRepository {
 
         // Filtering by states
         if (gridStates != null && !gridStates.isEmpty()) {
-            query += " AND " + STATE + " IN " + Sql.listPrepared(gridStates);
+            query += " AND " + STATE + "::text IN " + Sql.listPrepared(gridStates);
             params.addAll(new JsonArray(gridStates.stream().map(GridState::getValue).collect(Collectors.toList())));
         }
 
@@ -83,7 +83,7 @@ public class DefaultGridRepository implements GridRepository {
         }
 
         if (gridStates != null && !gridStates.isEmpty()) {
-            queryBuilder.append(" AND ").append(STATE).append(" IN ")
+            queryBuilder.append(" AND ").append(STATE).append("::text IN ")
                         .append(Sql.listPrepared(gridStates.toArray()));
             params.addAll(new JsonArray(gridStates.stream().map(GridState::getValue).collect(Collectors.toList())));
         }
@@ -154,14 +154,14 @@ public class DefaultGridRepository implements GridRepository {
                 "AND NOT EXISTS ( " +
                 "    SELECT 1 FROM " + DB_APPOINTMENT_TABLE + " a " +
                 "    WHERE a.time_slot_id = ts.id " +
-                "      AND a.state IN " + Sql.listPrepared(availableAppointmentStates) +
+                "      AND a.state::text IN " + Sql.listPrepared(availableAppointmentStates) +
                 ") " +
                 "AND NOT EXISTS ( " +
                 "    SELECT 1 FROM " + DB_TIME_SLOT_TABLE + " ts2 " +
                 "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
                 "    WHERE ts2.deleted_at IS NOT NULL " +
                 "      AND a2.id IS NOT NULL " +
-                "      AND a2.state IN " + Sql.listPrepared(availableAppointmentStates) +
+                "      AND a2.state::text IN " + Sql.listPrepared(availableAppointmentStates) +
                 "      AND ts2.grid_id = ts.grid_id " +
                 "      AND ts2.begin_date = ts.end_date " +
                 "      AND ts2.end_date = ts.begin_date " +
@@ -184,7 +184,7 @@ public class DefaultGridRepository implements GridRepository {
     public Future<JsonArray> getGridsName (String userId) {
         Promise<JsonArray> promise = Promise.promise();
 
-        String query = "SELECT " + NAME + " FROM " + DB_GRID_TABLE + " WHERE " + OWNER_ID + " = ? AND " + STATE + " IN (?, ?)";
+        String query = "SELECT " + NAME + " FROM " + DB_GRID_TABLE + " WHERE " + OWNER_ID + " = ? AND " + STATE + "::text IN (?, ?)";
         JsonArray params = new JsonArray()
                 .add(userId)
                 .add(GridState.OPEN.getValue())
@@ -282,7 +282,7 @@ public class DefaultGridRepository implements GridRepository {
         boolean isEndDateUpdatable = endDate != null;
         boolean isPeriodicityUpdatable = periodicity != null;
 
-        String query = "UPDATE " + DB_GRID_TABLE + " SET " + UPDATING_DATE + " = ?, ";
+        String query = "UPDATE " + DB_GRID_TABLE + " SET " + UPDATING_DATE + " = ?::timestamp, ";
         if (isNameUpdatable) query += NAME + " = ?, ";
         if (isColorUpdatable) query += COLOR + " = ?, ";
         if (isVideoCallLinkUpdatable) query += VIDEO_CALL_LINK + " = ?, ";
@@ -290,8 +290,8 @@ public class DefaultGridRepository implements GridRepository {
         if (isDocumentsIdsUpdatable) query += DOCUMENTS_IDS + " = ?, ";
         if (isPublicCommentUpdatable) query += PUBLIC_COMMENT + " = ?, ";
         if (isTargetPublicIdsUpdatable) query += TARGET_PUBLIC_LIST_ID + " = ?, ";
-        if (isBeginDateUpdatable) query += BEGIN_DATE + " = ?, ";
-        if (isEndDateUpdatable) query += END_DATE + " = ?, ";
+        if (isBeginDateUpdatable) query += BEGIN_DATE + " = ?::date, ";
+        if (isEndDateUpdatable) query += END_DATE + " = ?::date, ";
         if (isPeriodicityUpdatable) query += PERIODICITY + " = ?, ";
         query = query.substring(0, query.length() - 2) + " WHERE " + ID + " = ? RETURNING *";
 
@@ -323,13 +323,13 @@ public class DefaultGridRepository implements GridRepository {
 
         List<String> availableAppointmentStates = AppointmentState.getAvailableStates();
 
-        String updateGridQuery = "UPDATE " + DB_GRID_TABLE + " SET " + STATE + " = ? WHERE id = ?";
+        String updateGridQuery = "UPDATE " + DB_GRID_TABLE + " SET " + STATE + " = ?::appointments.g_state WHERE id = ?";
         JsonArray gridParams = new JsonArray().add(state.name()).add(gridId);
 
-        String updateAppointmentsQuery = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ? " +
+        String updateAppointmentsQuery = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ?::appointments.a_state " +
                 "WHERE time_slot_id IN (SELECT id FROM " + DB_TIME_SLOT_TABLE + " WHERE grid_id = ?) AND " + STATE +
-                " IN " + Sql.listPrepared(availableAppointmentStates) + " RETURNING *";
-        JsonArray appointmentParams = new JsonArray().add(AppointmentState.CANCELED).add(gridId).addAll(new JsonArray(availableAppointmentStates));
+                "::text IN " + Sql.listPrepared(availableAppointmentStates) + " RETURNING *";
+        JsonArray appointmentParams = new JsonArray().add(AppointmentState.CANCELED.name()).add(gridId).addAll(new JsonArray(availableAppointmentStates));
 
         String errorMessage = "[Appointments@DefaultGridRepository::updateState] Fail to update grid state or associated appointments: ";
 
@@ -381,8 +381,9 @@ public class DefaultGridRepository implements GridRepository {
                 PUBLIC_COMMENT,
                 STATE);
 
-        String query = "INSERT INTO "+ DB_GRID_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
-                "VALUES " + Sql.listPrepared(sqlColumns) + " RETURNING *";
+        // Explicit casts required for typed columns (date, timestamp, interval, enum)
+        String query = "INSERT INTO " + DB_GRID_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
+                "VALUES (?, ?, ?, ?::date, ?::date, ?::timestamp, ?::timestamp, ?, ?::interval, ?, ?, ?, ?, ?, ?, ?::appointments.g_state) RETURNING *";
 
         GridState state = grid.getEndDate().isBefore(ChronoLocalDate.from(ZonedDateTime.now(ZoneId.of(FRENCH_TIME_ZONE)))) ? CLOSED : OPEN;
 
@@ -433,7 +434,7 @@ public class DefaultGridRepository implements GridRepository {
 
         // Filtering by states
         if (gridStates != null && !gridStates.isEmpty()) {
-            query += " WHERE " + STATE + " IN " + Sql.listPrepared(gridStates);
+            query += " WHERE " + STATE + "::text IN " + Sql.listPrepared(gridStates);
             params.addAll(new JsonArray(gridStates.stream().map(GridState::getValue).collect(Collectors.toList())));
         }
 

@@ -51,8 +51,8 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
         }
 
         List<String> sqlColumns = Arrays.asList(GRID_ID, BEGIN_DATE, END_DATE);
-        String query = "INSERT INTO "+ DB_TIME_SLOT_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
-                "VALUES " + Sql.listPrepared(sqlColumns) + " RETURNING *";
+        String query = "INSERT INTO " + DB_TIME_SLOT_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
+                "VALUES (?, ?::timestamp, ?::timestamp) RETURNING *";
 
         List<TransactionElement> transactionElements = new ArrayList<>();
         timeSlots.forEach(timeSlot -> {
@@ -89,14 +89,14 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                     "JOIN " + DB_GRID_TABLE + " g ON ts.grid_id = g.id " +
                     "JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
                     "WHERE g.owner_id IN " + Sql.listPrepared(ownersIds) +
-                    "AND g.state = ? " +
-                    "AND a.state = ? " +
+                    " AND g.state::text = ? " +
+                    "AND a.state::text = ? " +
                     "AND a.requester_id = ? " +
                     "AND ts.end_date < " + FRENCH_NOW +
                 ") " +
                 // Then we just pick the first ranked lines (ie the later appointment dates for each owner)
                 "SELECT " + END_DATE + ", " + OWNER_ID + " FROM ranked_timeslots " +
-                "WHERE row_num = 1" +
+                "WHERE row_num = 1 " +
                 "ORDER BY " + END_DATE + " DESC;";
 
         JsonArray params = new JsonArray()
@@ -139,14 +139,14 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                 "AND NOT EXISTS (" +
                 "    SELECT 1 FROM " + DB_APPOINTMENT_TABLE + " a " +
                 "    WHERE a.time_slot_id = ts.id " +
-                "    AND a.state IN " + Sql.listPrepared(availableAppointmentStates) +
+                "    AND a.state::text IN " + Sql.listPrepared(availableAppointmentStates) +
                 ")" +
                 "AND NOT EXISTS (" +
                 "    SELECT 1 FROM " + DB_TIME_SLOT_TABLE + " ts2 " +
                 "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
                 "    WHERE ts2.deleted_at IS NOT NULL " +
                 "      AND a2.id IS NOT NULL " +
-                "      AND a2.state IN " + Sql.listPrepared(availableAppointmentStates) +
+                "      AND a2.state::text IN " + Sql.listPrepared(availableAppointmentStates) +
                 "      AND ts2.grid_id = ts.grid_id " +
                 "      AND ts2.begin_date = ts.begin_date " +
                 "      AND ts2.end_date = ts.end_date" +
@@ -184,7 +184,7 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                 "LEFT JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
                 "WHERE " +
                     "ts.deleted_at is NULL " +
-                    "AND (a.id IS NULL OR a.state NOT IN " + Sql.listPrepared(availableAppointmentStates) + ")" +
+                    "AND (a.id IS NULL OR a.state::text NOT IN " + Sql.listPrepared(availableAppointmentStates) + ")" +
                     "AND ts.grid_id = ? " +
                     "AND ts.begin_date > ? " +
                     "AND NOT EXISTS (" +
@@ -192,7 +192,7 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                     "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
                     "    WHERE ts2.deleted_at IS NOT NULL " +
                     "      AND a2.id IS NOT NULL " +
-                    "      AND a2.state IN " + Sql.listPrepared(availableAppointmentStates) +
+                    "      AND a2.state::text IN " + Sql.listPrepared(availableAppointmentStates) +
                     "      AND ts2.grid_id = ts.grid_id " +
                     "      AND ts2.begin_date = ts.begin_date " +
                     "      AND ts2.end_date = ts.end_date" +

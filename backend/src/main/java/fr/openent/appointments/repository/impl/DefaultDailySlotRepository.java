@@ -42,8 +42,8 @@ public class DefaultDailySlotRepository implements DailySlotRepository {
         }
 
         List<String> sqlColumns = Arrays.asList(GRID_ID, DAY, BEGIN_TIME, END_TIME);
-        String query = "INSERT INTO "+ DB_DAILY_SLOT_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
-                "VALUES " + Sql.listPrepared(sqlColumns) + " RETURNING *";
+        String query = "INSERT INTO " + DB_DAILY_SLOT_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
+                "VALUES (?, ?::appointments.day, ?::time, ?::time) RETURNING *";
 
         List<TransactionElement> transactionElements = new ArrayList<>();
 

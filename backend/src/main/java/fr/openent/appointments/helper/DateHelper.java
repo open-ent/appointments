@@ -90,8 +90,8 @@ public class DateHelper {
         if (duration == null || duration.isEmpty()) return null;
 
         try {
-            // Case parse from front (ex : '01:00')
-            Pattern DURATION_PATTERN = Pattern.compile("^\\d+:\\d{2}$");
+            // Case 1: from frontend "01:00" or from PostgreSQL interval "00:05:00" (HH:MM or HH:MM:SS)
+            Pattern DURATION_PATTERN = Pattern.compile("^\\d+:\\d{2}(:\\d{2}(\\.\\d+)?)?$");
             if (!DURATION_PATTERN.matcher(duration).matches()) throw new NumberFormatException();
             String[] parts = duration.split(":");
             long hours = Long.parseLong(parts[0]);
@@ -99,12 +99,12 @@ public class DateHelper {
             return Duration.ofHours(hours).plusMinutes(minutes);
         } catch (NumberFormatException e1) {
             try {
-                // Case parse from database (ex : '0 years 0 mons 0 days 1 hours 0 mins 0.0 secs')
+                // Case 2: verbose PostgreSQL format (ex : '0 years 0 mons 0 days 1 hours 0 mins 0.0 secs')
                 String[] parts = duration.split(" ");
                 long hours = Long.parseLong(parts[6]); // Extract hours
                 long minutes = Long.parseLong(parts[8]); // Extract minutes
                 return Duration.ofHours(hours).plusMinutes(minutes);
-            } catch (NumberFormatException e2) {
+            } catch (Exception e2) {
                 return null;
             }
         }
