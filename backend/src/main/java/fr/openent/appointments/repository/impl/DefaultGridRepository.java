@@ -148,7 +148,7 @@ public class DefaultGridRepository implements GridRepository {
                 "JOIN " + DB_TIME_SLOT_TABLE + " ts ON ts.grid_id = g.id " +
                 "LEFT JOIN " + DB_APPOINTMENT_TABLE + " a ON a.time_slot_id = ts.id " +
                 "WHERE g.id IN " + Sql.listPrepared(gridsIds) + " " +
-                "AND g.state = ? " +
+                "AND g.state = ?::appointments.g_state " +
                 "AND ts.begin_date > " + FRENCH_NOW + " " +
                 "AND ts.deleted_at IS NULL " +
                 "AND NOT EXISTS ( " +
@@ -247,8 +247,8 @@ public class DefaultGridRepository implements GridRepository {
     public Future<JsonObject> closeAllPassedGrids() {
         Promise<JsonObject> promise = Promise.promise();
         
-        String query = "UPDATE " + DB_GRID_TABLE + " SET " + STATE + " = ? WHERE " + END_DATE + " < " + FRENCH_NOW;
-        JsonArray params = new JsonArray().add(CLOSED);
+        String query = "UPDATE " + DB_GRID_TABLE + " SET " + STATE + " = ?::appointments.g_state WHERE " + END_DATE + " < " + FRENCH_NOW;
+        JsonArray params = new JsonArray().add(CLOSED.getValue());
 
         String errorMessage = "[Appointments@DefaultGridRepository::closeAllPassedGrids] Fail to close passed grids : ";
         sql.prepared(query, params, SqlResult.validUniqueResultHandler(FutureHelper.handlerEither(promise, errorMessage)));

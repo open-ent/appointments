@@ -158,12 +158,12 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                 .addAll(new JsonArray(availableAppointmentStates));
 
         if (beginDate != null) {
-            query += "AND ts.begin_date >= ? ";
+            query += "AND ts.begin_date >= ?::date ";
             params.add(DateHelper.formatDate(beginDate));
         }
 
         if (endDate != null) {
-            query += "AND ts.end_date < ? ";
+            query += "AND ts.end_date < ?::date ";
             params.add(DateHelper.formatDate(endDate.plusDays(1)));
         }
 
@@ -186,7 +186,7 @@ public class DefaultTimeSlotRepository implements TimeSlotRepository {
                     "ts.deleted_at is NULL " +
                     "AND (a.id IS NULL OR a.state::text NOT IN " + Sql.listPrepared(availableAppointmentStates) + ")" +
                     "AND ts.grid_id = ? " +
-                    "AND ts.begin_date > ? " +
+                    "AND ts.begin_date > ?::date " +
                     "AND NOT EXISTS (" +
                     "    SELECT 1 FROM " + DB_TIME_SLOT_TABLE + " ts2 " +
                     "    JOIN " + DB_APPOINTMENT_TABLE + " a2 ON a2.time_slot_id = ts2.id " +
