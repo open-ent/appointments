@@ -7,9 +7,9 @@ import {
   useState,
 } from "react";
 
-import { isActionAvailable } from "@edifice.io/client";
+import { isActionAvailable } from "@open-ent/client";
 
-import { useUser } from "@edifice.io/react";
+import { useUser } from "@open-ent/react";
 import { useTranslation } from "react-i18next";
 import { APPOINTMENTS } from "~/core/constants";
 import { useStructure } from "~/hooks/useStructure";

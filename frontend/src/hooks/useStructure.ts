@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 
-import { useUser } from "@edifice.io/react";
+import { useUser } from "@open-ent/react";
 
 import { Structure } from "./types";
 

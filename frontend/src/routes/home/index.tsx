@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useCallback, useEffect, useState } from "react";
 
 import { Box, Tab, Tabs, Typography } from "@cgi-learning-hub/ui";
-import { ID } from "@edifice.io/client";
+import { ID } from "@open-ent/client";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 

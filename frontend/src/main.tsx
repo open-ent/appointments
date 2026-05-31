@@ -4,8 +4,8 @@ import {
   ThemeProvider as ThemeProviderCGI,
   ThemeProviderProps,
 } from "@cgi-learning-hub/theme";
-import "@edifice.io/bootstrap/dist/index.css";
-import { EdificeClientProvider, EdificeThemeProvider } from "@edifice.io/react";
+import "@open-ent/bootstrap/dist/index.css";
+import { EdificeClientProvider, EdificeThemeProvider } from "@open-ent/react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
