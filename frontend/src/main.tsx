@@ -81,7 +81,8 @@ const queryClient = new QueryClient({
 dayjs.locale("fr");
 
 const App = () => {
-  const { t } = useTranslation(APPOINTMENTS);
+  // Charge le namespace i18n de l'app (t n'est plus utilisé ici directement).
+  useTranslation(APPOINTMENTS);
   const { isTheme1D } = useTheme();
 
   useEffect(() => {
@@ -96,7 +97,10 @@ const App = () => {
       <Provider store={store}>
         <EdificeClientProvider
           params={{
-            app: t("appointments.title"),
+            // Code applicatif (préfixe de route), PAS le libellé traduit : le framework
+            // l'utilise comme currentApp pour /{app}/conf/public et le chargement i18n.
+            // « Rendez-vous » (titre FR) provoquait GET /Rendez-vous/conf/public -> 404.
+            app: APPOINTMENTS,
           }}
         >
           <EdificeThemeProvider>
