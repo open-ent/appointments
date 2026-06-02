@@ -115,3 +115,5 @@ dependency-reduced-pom.xml
 
 # Nx
 /frontend/.nx
+# build artifact
+*.tsbuildinfo
