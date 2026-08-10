@@ -19,6 +19,7 @@ import fr.wseduc.security.SecuredAction;
 
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
@@ -35,6 +36,7 @@ import fr.openent.appointments.security.ViewRight;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,11 +68,25 @@ public class GridController extends ControllerHelper {
         Long limit = ParamHelper.getParam(LIMIT, request, Long.class, false, "getMyGrids");
         if (request.response().ended()) return;
 
-        List<GridState> states = new JsonArray(request.params().get(STATES)).stream()
-                .filter(String.class::isInstance)
-                .map(String.class::cast)
-                .map(GridState::getGridState)
-                .collect(Collectors.toList());
+        // Garde défensive : le paramètre "states" est optionnel et fourni par le client.
+        // Absent, vide ou non-JSON, il ne doit pas provoquer d'erreur 500 (liste vide retenue).
+        String statesParam = request.params().get(STATES);
+        List<GridState> parsedStates;
+        if (statesParam == null || statesParam.trim().isEmpty()) {
+            parsedStates = Collections.emptyList();
+        } else {
+            try {
+                parsedStates = new JsonArray(statesParam).stream()
+                        .filter(String.class::isInstance)
+                        .map(String.class::cast)
+                        .map(GridState::getGridState)
+                        .collect(Collectors.toList());
+            } catch (DecodeException e) {
+                LogHelper.logError(this, "getMyGrids", "Paramètre states invalide, ignoré", e.getMessage());
+                parsedStates = Collections.emptyList();
+            }
+        }
+        final List<GridState> states = parsedStates;
 
         UserUtils.getAuthenticatedUserInfos(eb, request)
             .compose(user -> gridService.getMyMinimalGrids(user.getUserId(), states, page, limit))
