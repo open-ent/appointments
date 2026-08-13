@@ -4,7 +4,9 @@ import {
   ThemeProvider as ThemeProviderCGI,
   ThemeProviderProps,
 } from "@cgi-learning-hub/theme";
-import "@open-ent/bootstrap/dist/index.css";
+// Le bootstrap openent n'est plus bundlé : il est chargé au runtime via
+// <link href="/assets/themes/openent-bootstrap/index.css"> dans index.html
+// (cf. README-THEME). Permet de changer le look sans recompiler le module.
 import { EdificeClientProvider, EdificeThemeProvider } from "@open-ent/react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
