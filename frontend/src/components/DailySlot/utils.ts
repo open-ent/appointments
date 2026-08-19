@@ -49,7 +49,8 @@ export const getStartOptions = (
   duration: DURATION,
   currentSlot: Slot,
 ): Time[] => {
-  const intervalMinutes: number = DURATION_VALUES[duration].numberOfMinutes;
+  const intervalMinutes: number =
+    DURATION_VALUES[duration ?? DURATION.FIVE_MINUTES].numberOfMinutes;
 
   const possibleTimes: Time[] = generateTimeSlots(intervalMinutes, false);
 
@@ -113,7 +114,8 @@ export const getEndOptions = (
   duration: DURATION,
   currentSlot: Slot,
 ): Time[] => {
-  const intervalMinutes: number = DURATION_VALUES[duration].numberOfMinutes;
+  const intervalMinutes: number =
+    DURATION_VALUES[duration ?? DURATION.FIVE_MINUTES].numberOfMinutes;
 
   const possibleTimes: Time[] = generateTimeSlots(intervalMinutes, true);
 
