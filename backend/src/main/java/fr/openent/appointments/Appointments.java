@@ -3,6 +3,7 @@ package fr.openent.appointments;
 import fr.openent.appointments.config.AppConfig;
 import fr.openent.appointments.controller.*;
 import fr.openent.appointments.cron.ClosingCron;
+import fr.openent.appointments.eventbus.WorkflowHubGateway;
 import fr.openent.appointments.repository.RepositoryFactory;
 import fr.openent.appointments.service.ServiceFactory;
 import fr.wseduc.cron.CronTrigger;
@@ -47,6 +48,11 @@ public class Appointments extends BaseServer {
         addController(new TimeSlotController(serviceFactory));
         addController(new CommunicationController(serviceFactory));
         addController(new AppointmentController(serviceFactory));
+
+        // Bus applicatif : sert les grilles/créneaux d'un enseignant et réserve un rendez-vous
+        // au nom d'un module tiers déjà authentifié (WorkflowHub — démarche « Demande de
+        // rendez-vous avec un enseignant »). Cf. WorkflowHubGateway pour le contrat.
+        new WorkflowHubGateway(serviceFactory).register(eb);
 
         // CRON
         ClosingCron closingCron = new ClosingCron(serviceFactory);
