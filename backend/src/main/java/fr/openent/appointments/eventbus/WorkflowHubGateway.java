@@ -189,7 +189,11 @@ public class WorkflowHubGateway {
             return;
         }
         final boolean isVideoCall = Boolean.TRUE.equals(body.getBoolean("isVideoCall", false));
-        appointmentService.checkIfUserCanAccessTimeSlot(timeSlotId, userId, groupsIdsDe(body))
+        // Depuis appointments 1.6, l'accès se vérifie par les partages de grille à partir de
+        // UserInfos (identifiant + groupes) ; on reconstitue le minimum reçu par le bus.
+        final UserInfos demandeur = utilisateur(groupsIdsDe(body));
+        demandeur.setUserId(userId);
+        appointmentService.checkIfUserCanAccessTimeSlot(timeSlotId, demandeur)
                 .compose(canAccess -> {
                     if (!Boolean.TRUE.equals(canAccess)) {
                         return Future.failedFuture("appointments.rendezvous.creneau_inaccessible");
