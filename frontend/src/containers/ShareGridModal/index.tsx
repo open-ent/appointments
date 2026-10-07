@@ -1,4 +1,4 @@
-import { useUser } from "@edifice.io/react";
+import { useUser } from "@open-ent/react";
 import { FC } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";

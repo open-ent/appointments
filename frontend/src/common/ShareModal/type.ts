@@ -6,8 +6,8 @@ import {
   type ShareRightAction,
   type ShareRightWithVisibles,
   ShareSubject,
-} from "@edifice.io/client";
-import { OptionListItemType } from "@edifice.io/react";
+} from "@open-ent/client";
+import { OptionListItemType } from "@open-ent/react";
 import { UseMutationResult } from "@tanstack/react-query";
 import { Dispatch, HTMLAttributes, Key, SetStateAction } from "react";
 

@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useCallback, useEffect, useState } from "react";
 
 import { Box, Tab, Tabs, Typography } from "@cgi-learning-hub/ui";
-import { ID } from "@edifice.io/client";
+import { ID } from "@open-ent/client";
 import { useSearchParams } from "react-router-dom";
 
 import { AppointmentsIcon } from "~/components/SVG/AppointmentsIcon";

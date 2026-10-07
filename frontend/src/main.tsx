@@ -4,8 +4,10 @@ import {
   ThemeProvider as ThemeProviderCGI,
   ThemeProviderProps,
 } from "@cgi-learning-hub/theme";
-import "@edifice.io/bootstrap/dist/index.css";
-import { EdificeClientProvider, EdificeThemeProvider } from "@edifice.io/react";
+// Le bootstrap openent n'est plus bundlé : il est chargé au runtime via
+// <link href="/assets/themes/openent-bootstrap/index.css"> dans index.html
+// (cf. README-THEME). Permet de changer le look sans recompiler le module.
+import { EdificeClientProvider, EdificeThemeProvider } from "@open-ent/react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
@@ -81,7 +83,8 @@ const queryClient = new QueryClient({
 dayjs.locale("fr");
 
 const App = () => {
-  const { t } = useTranslation(APPOINTMENTS);
+  // Charge le namespace i18n de l'app (t n'est plus utilisé ici directement).
+  useTranslation(APPOINTMENTS);
   const { isTheme1D } = useTheme();
 
   useEffect(() => {
@@ -96,7 +99,10 @@ const App = () => {
       <Provider store={store}>
         <EdificeClientProvider
           params={{
-            app: t("appointments.title"),
+            // Code applicatif (préfixe de route), PAS le libellé traduit : le framework
+            // l'utilise comme currentApp pour /{app}/conf/public et le chargement i18n.
+            // « Rendez-vous » (titre FR) provoquait GET /Rendez-vous/conf/public -> 404.
+            app: APPOINTMENTS,
           }}
         >
           <EdificeThemeProvider>

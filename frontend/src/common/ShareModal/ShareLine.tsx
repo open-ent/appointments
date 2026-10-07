@@ -11,7 +11,7 @@ import {
   ShareRight,
   ShareRightAction,
   ShareRightActionDisplayName,
-} from "@edifice.io/client";
+} from "@open-ent/client";
 import { useTranslation } from "react-i18next";
 
 import { hasRight, showShareRightLine } from "./utils";

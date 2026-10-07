@@ -53,6 +53,9 @@ export default ({ mode }: { mode: string }) => {
 
   const build = {
     assetsDir: "public",
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
     rollupOptions: {
       output: {
         manualChunks: {
@@ -69,7 +72,28 @@ export default ({ mode }: { mode: string }) => {
     },
   };
 
-  const plugins = [react(), tsconfigPaths()];
+  // @cgi-learning-hub/ui externalise dayjs/react via un `__require` qui jette dans le navigateur.
+  // On remplace ces `__require("dayjs"|"react")` par de vrais imports ESM (en `pre`).
+  const fixCgiExternalRequire = {
+    name: "fix-cgi-external-require",
+    enforce: "pre" as const,
+    transform(code: string, id: string) {
+      if (
+        !id.includes("@cgi-learning-hub/ui") ||
+        !/__require\("(dayjs|react)"\)/.test(code)
+      ) {
+        return null;
+      }
+      const banner =
+        'import __cgiDayjs from "dayjs";\nimport __cgiReact from "react";\n';
+      const out = code
+        .replace(/__require\("dayjs"\)/g, "__cgiDayjs")
+        .replace(/__require\("react"\)/g, "__cgiReact");
+      return { code: banner + out, map: null };
+    },
+  };
+
+  const plugins = [fixCgiExternalRequire, react(), tsconfigPaths()];
 
   const server = {
     proxy,
@@ -89,7 +113,7 @@ export default ({ mode }: { mode: string }) => {
     setupFiles: "./src/tests/setup.ts",
     server: {
       deps: {
-        inline: ["@edifice.io/react"],
+        inline: ["@open-ent/react"],
       },
     },
   };
@@ -112,9 +136,19 @@ export default ({ mode }: { mode: string }) => {
         ),
         "@images": resolve(
           __dirname,
-          "node_modules/@edifice.io/bootstrap/dist/images",
+          "node_modules/@open-ent/bootstrap/dist/images",
         ),
       },
+      dedupe: [
+        "react",
+        "react-dom",
+        "@tanstack/react-query",
+        "react-i18next",
+        "i18next",
+        "@open-ent/client",
+        "@open-ent/react",
+        "@open-ent/bootstrap",
+      ],
     },
   });
 };

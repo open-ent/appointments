@@ -40,9 +40,8 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
             return promise.future();
         }
 
-        List<String> sqlColumns = Arrays.asList(TIME_SLOT_ID, REQUESTER_ID, STATE, IS_VIDEO_CALL);
-        String query = "INSERT INTO " + DB_APPOINTMENT_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
-                "VALUES " + Sql.listPrepared(sqlColumns) + " RETURNING *";
+        String query = "INSERT INTO " + DB_APPOINTMENT_TABLE + " (" + TIME_SLOT_ID + ", " + REQUESTER_ID + ", " + STATE + ", " + IS_VIDEO_CALL + ") " +
+                "VALUES (?, ?, ?::appointments.a_state, ?) RETURNING *";
 
         JsonArray params = new JsonArray()
                 .add(timeSlotId)
@@ -66,7 +65,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
 
         List<String> availableStates = AppointmentState.getAvailableStates();
 
-        String query = "SELECT * FROM " + DB_APPOINTMENT_TABLE + " WHERE " + TIME_SLOT_ID + " = ? AND " + STATE + " IN " + Sql.listPrepared(availableStates);
+        String query = "SELECT * FROM " + DB_APPOINTMENT_TABLE + " WHERE " + TIME_SLOT_ID + " = ? AND " + STATE + "::text IN " + Sql.listPrepared(availableStates);
 
         JsonArray params = new JsonArray()
                 .add(timeSlotId)
@@ -102,7 +101,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
 
         // Filter by states
         if (states != null && !states.isEmpty()) {
-            query += " AND a.state IN " + Sql.listPrepared(states);
+            query += " AND a.state::text IN " + Sql.listPrepared(states);
             params.addAll(new JsonArray(states.stream().map(AppointmentState::getValue).collect(Collectors.toList())));
         }
 
@@ -157,7 +156,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
             return promise.future();
         }
 
-        String query = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ? ";
+        String query = "UPDATE " + DB_APPOINTMENT_TABLE + " SET " + STATE + " = ?::appointments.a_state ";
         JsonArray params = new JsonArray().add(state.getValue());
 
         if (comment != null && !comment.isEmpty()) {
@@ -191,7 +190,7 @@ public class DefaultAppointmentRepository implements AppointmentRepository {
 
         // Filter by states
         if (states != null && !states.isEmpty()) {
-            query += " AND a.state IN " + Sql.listPrepared(states);
+            query += " AND a.state::text IN " + Sql.listPrepared(states);
             params.addAll(new JsonArray(states.stream().map(AppointmentState::getValue).collect(Collectors.toList())));
         }
 

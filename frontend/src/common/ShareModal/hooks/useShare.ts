@@ -3,8 +3,8 @@ import {
   type ShareRight,
   type ShareRightAction,
   type ShareRightActionDisplayName,
-} from "@edifice.io/client";
-import { useUser } from "@edifice.io/react";
+} from "@open-ent/client";
+import { useUser } from "@open-ent/react";
 import { useEffect, useReducer, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";

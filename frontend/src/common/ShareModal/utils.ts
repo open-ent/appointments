@@ -2,7 +2,7 @@ import {
   ShareRight,
   ShareRightAction,
   ShareRightActionDisplayName,
-} from "@edifice.io/client";
+} from "@open-ent/client";
 import { SearchState, ShareState } from "./type";
 
 export const hasRight = (

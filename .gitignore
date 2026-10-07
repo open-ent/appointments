@@ -115,3 +115,6 @@ dependency-reduced-pom.xml
 
 # Nx
 /frontend/.nx
+
+# Cache de build TypeScript incrémental
+*.tsbuildinfo

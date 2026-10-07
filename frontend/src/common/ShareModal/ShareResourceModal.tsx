@@ -18,7 +18,7 @@ import {
   TextField,
   Typography,
 } from "@cgi-learning-hub/ui";
-import { OptionListItemType, VisuallyHidden } from "@edifice.io/react";
+import { OptionListItemType, VisuallyHidden } from "@open-ent/react";
 import { ChangeEvent, SyntheticEvent, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -48,7 +48,7 @@ import { flexStartBoxStyle } from "~/styles/boxStyles";
 import { IShareResourceModalProps, SelectOptionProps } from "./type";
 import { ShareLine } from "./ShareLine";
 import { ShareNewBookmark } from "./ShareNewBookmark";
-import { ShareRight } from "@edifice.io/client";
+import { ShareRight } from "@open-ent/client";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 export const ShareResourceModal = ({

@@ -1,5 +1,5 @@
-import { Bookmark, odeServices } from "@edifice.io/client";
-import { useToggle } from "@edifice.io/react";
+import { Bookmark, odeServices } from "@open-ent/client";
+import { useToggle } from "@open-ent/react";
 import { useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";

@@ -114,7 +114,7 @@ public class DefaultGridRepositoryTest {
     public void testGetGridsWithUserIdAndGridStates(TestContext ctx) throws Exception {
         String expectedQuery = "SELECT * FROM " + SqlTables.DB_GRID_TABLE +
                             " WHERE " + Fields.OWNER_ID + " = ?" +
-                            " AND " + Fields.STATE + " IN (?,?)";
+                            " AND " + Fields.STATE + "::text IN (?,?)";
         
         JsonArray expectedParams = new JsonArray()
                 .add(TEST_USER_ID)
@@ -142,7 +142,7 @@ public class DefaultGridRepositoryTest {
         String expectedQuery = "SELECT * FROM " + SqlTables.DB_GRID_TABLE +
                             " WHERE " + Fields.OWNER_ID + " = ?" +
                             " AND " + Fields.NAME + " = ?" +
-                            " AND " + Fields.STATE + " IN (?,?)";
+                            " AND " + Fields.STATE + "::text IN (?,?)";
         
         JsonArray expectedParams = new JsonArray()
                 .add(TEST_USER_ID)
@@ -185,7 +185,7 @@ public class DefaultGridRepositoryTest {
                 COLOR, DURATION, PERIODICITY, VIDEO_CALL_LINK, PLACE, DOCUMENTS_IDS, PUBLIC_COMMENT, STATE);
 
         String expectedQuery = "INSERT INTO "+ DB_GRID_TABLE + " (" + String.join(", ", sqlColumns) + ") " +
-                "VALUES " + Sql.listPrepared(sqlColumns) + " RETURNING *";
+                "VALUES (?, ?, ?, ?::date, ?::date, ?::timestamp, ?::timestamp, ?, ?::interval, ?, ?, ?, ?, ?, ?, ?::appointments.g_state) RETURNING *";
 
         String frenchNow = ZonedDateTime.now(ZoneId.of(FRENCH_TIME_ZONE))
                 .format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_2));

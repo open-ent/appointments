@@ -39,3 +39,22 @@ main {
     }
   }
 }
+
+// Open ENT 1D (école primaire / CD16) : bandeau vert prairie #2ba84a + contenu
+// blanc, comme le design "one" de @open-ent/bootstrap. Le design-system CGI
+// masquait ce header en 1d (seule la règle "neo" 2d existait) -> pas de vert.
+// Sélecteur = celui du thème 1d de bootstrap ([data-product='1d'][data-theme='openent1d']).
+[data-product="1d"][data-theme="openent1d"] {
+  .header {
+    .navbar {
+      background: #2ba84a;
+
+      .navbar-text,
+      .navbar-title,
+      .nav-link,
+      .icon {
+        color: #fff;
+      }
+    }
+  }
+}

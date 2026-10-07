@@ -1,4 +1,4 @@
-import { useWorkspaceFile } from "@edifice.io/react";
+import { useWorkspaceFile } from "@open-ent/react";
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
