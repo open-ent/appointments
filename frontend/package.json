@@ -40,10 +40,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx}": [
-      "pnpm run format",
-      "pnpm run lint"
-    ]
+    "**/*.{ts,tsx}": ["prettier --write", "eslint --fix --no-warn-ignored"]
   },
   "dependencies": {
     "@cgi-learning-hub/icons": "1.13.0",
