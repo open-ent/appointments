@@ -69,10 +69,10 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
 
         String query =
                 "MATCH (s:Structure) " +
-                        "WHERE s.id IN {structuresIds} " +
+                        "WHERE s.id IN $structuresIds " +
                         "WITH collect(s.externalId) AS structuresExternalIds " +
 
-                        "UNWIND {usersIds} AS userId " +
+                        "UNWIND $usersIds AS userId " +
                         "MATCH (u:User {id: userId}) " +
 
                         "OPTIONAL MATCH (u)-[:USERBOOK]->(ub:UserBook) " +
@@ -100,10 +100,10 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
 
         String query =
                 "MATCH (s:Structure) " +
-                "WHERE s.id IN {structuresIds} " +
+                "WHERE s.id IN $structuresIds " +
                 "WITH collect(s.externalId) AS structuresExternalIds " +
 
-                "MATCH (u:User {id: {userId}}) " +
+                "MATCH (u:User {id: $userId}) " +
                 "OPTIONAL MATCH (u)-[:USERBOOK]->(ub:UserBook) " +
                 "WITH u, ub, [func IN u.functions WHERE split(func, \"$\")[0] IN structuresExternalIds] AS filteredFunctions " +
                 "RETURN u.id AS id, u.displayName AS displayName, filteredFunctions AS functions, ub.picture AS picture, u.profiles as profiles;";
@@ -116,14 +116,14 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
     }
 
     private String getQueryUsersICanCommunicateWithFilterByRight() {
-        return  "MATCH (me:User {id: {userId}}) " +
-                "MATCH (otherUser:User)-[:IN]->(:Group)-[:AUTHORIZED]->(:Role)-[:AUTHORIZE]->(:WorkflowAction {name: {right}}) " +
+        return  "MATCH (me:User {id: $userId}) " +
+                "MATCH (otherUser:User)-[:IN]->(:Group)-[:AUTHORIZED]->(:Role)-[:AUTHORIZE]->(:WorkflowAction {name: $right}) " +
                 "MATCH (me)-[:IN]->(gMe:Group) " +
                 "MATCH (gMe)-[:COMMUNIQUE]->(gShared:Group)<-[:IN]-(otherUser) " +
                 "RETURN DISTINCT otherUser.id AS id, otherUser.name AS name " +
                 "UNION " +
-                "MATCH (me:User {id: {userId}}) " +
-                "MATCH (otherUser:User)-[:IN]->(:Group)-[:AUTHORIZED]->(:Role)-[:AUTHORIZE]->(:WorkflowAction {name: {right}}) " +
+                "MATCH (me:User {id: $userId}) " +
+                "MATCH (otherUser:User)-[:IN]->(:Group)-[:AUTHORIZED]->(:Role)-[:AUTHORIZE]->(:WorkflowAction {name: $right}) " +
                 "MATCH (me)-[:COMMUNIQUE]->(gShared:Group)<-[:IN]-(otherUser) " +
                 "RETURN DISTINCT otherUser.id AS id, otherUser.name AS name";
     }
@@ -132,7 +132,7 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
     public Future<Optional<NeoStructure>> getStructure(String structureId){
         Promise<Optional<NeoStructure>> promise = Promise.promise();
 
-        String query = "MATCH (s:Structure {id: {structureId}}) " +
+        String query = "MATCH (s:Structure {id: $structureId}) " +
                 "RETURN s.id as id, s.name as name;";
 
         JsonObject params = new JsonObject().put(CAMEL_STRUCTURE_ID, structureId);
@@ -148,7 +148,7 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
         Promise<List<NeoGroup>> promise = Promise.promise();
 
         String query = "MATCH (g:Group) " +
-                "WHERE g.id IN {groupsIds} " +
+                "WHERE g.id IN $groupsIds " +
                 "RETURN g.id as id, g.name as name;";
         JsonObject params = new JsonObject().put(CAMEL_GROUPS_IDS, new JsonArray(groupIds));
 
@@ -163,7 +163,7 @@ public class DefaultCommunicationRepository implements CommunicationRepository {
         Promise<List<NeoUser>> promise = Promise.promise();
 
         String query = "MATCH (u:User) " +
-                        "WHERE u.id IN {usersIds} " +
+                        "WHERE u.id IN $usersIds " +
                         "RETURN u.id AS id, u.displayName AS displayName;";
 
         JsonObject params = new JsonObject().put(CAMEL_USERS_IDS, usersIds);
