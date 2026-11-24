@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Comme les autres modules React : fichiers indexés formatés et vérifiés (lint-staged), puis build complet.
+cd frontend && pnpm run pre-commit && pnpm run build
